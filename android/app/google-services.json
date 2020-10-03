@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "691892152218",
+    "firebase_url": "https://angadi-9c0e9.firebaseio.com",
+    "project_id": "angadi-9c0e9",
+    "storage_bucket": "angadi-9c0e9.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:691892152218:android:cb40689cc4f74a2aafbc23",
+        "android_client_info": {
+          "package_name": "com.axactstudios.angadi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "691892152218-5g6628i0434rscb2961phu1c029stjst.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBa-Sd94qKwxYtD_UazgszUbxKjRwKvdsc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "691892152218-5g6628i0434rscb2961phu1c029stjst.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
