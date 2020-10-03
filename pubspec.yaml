@@ -34,6 +34,7 @@ dependencies:
   animations: ^1.0.0+5
   flutter_rating_bar: ^3.0.1+1
   flutter_feather_icons: ^1.0.3
+#  cloud_firestore: ^0.14.1+2
 
 
 dev_dependencies:
@@ -46,8 +47,6 @@ dev_dependencies:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://www.dartlang.org/tools/pub/pubspec
-
-# The following section is specific to Flutter.
 flutter:
 
   # The following line ensures that the Material Icons font is
@@ -59,3 +58,39 @@ flutter:
   # assets:
   #  - assets/images/a_dot_burr.jpeg
   #  - assets/images/a_dot_ham.jpeg
+  assets:
+    - assets/images/
+
+  # To add custom fonts to your application, add a fonts section here,
+  # in this "flutter" section. Each entry in this list should have a
+  # "family" key with the font family name, and a "fonts" key with a
+  # list giving the asset and other descriptors for the font. For
+  # example:
+  # fonts:
+  #   - family: Schyler
+  #     fonts:
+  #       - asset: assets/fonts/Schyler-Regular.ttf
+  #       - asset: assets/fonts/Schyler-Italic.ttf
+  #         style: italic
+  #   - family: Trajan Pro
+  #     fonts:
+  #       - asset: assets/fonts/TrajanPro.ttf
+  #       - asset: assets/fonts/TrajanPro_Bold.ttf
+  #         weight: 700
+
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.io/custom-fonts/#from-packages
+  fonts:
+    - family: Josefin Sans
+      fonts:
+        - asset: assets/fonts/.15623.otf
+          weight: 700
+        - asset: assets/fonts/.15627.otf
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/.15510.otf
+        - asset: assets/fonts/.15498.otf
+          weight: 700
+    - family: .AppleSystemUIFont
+      fonts:
+        - asset: assets/fonts/SFNS.ttf

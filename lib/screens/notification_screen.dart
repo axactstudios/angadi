@@ -1,83 +1,88 @@
 import 'package:flutter/material.dart';
 import 'package:angadi/values/values.dart';
 
-class NotificationsScreen extends StatelessWidget {
+class NotificationsScreen extends StatefulWidget {
   static const int TAB_NO = 2;
 
   NotificationsScreen({Key key}) : super(key: key);
 
+  @override
+  _NotificationsScreenState createState() => _NotificationsScreenState();
+}
+
+class _NotificationsScreenState extends State<NotificationsScreen> {
   List<NotificationInfo> notifications = [
     NotificationInfo(
-      imageUrl: ImagePath.branson,
-      title: "Branson Hawkins",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
       time: "5:30 am",
-      subtitle: "Started following you",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.juliet,
-      title: "Juliet Hooper",
-      time: "Yesterday",
-      subtitle: "Checked in at Happy Bones",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.andy,
-      title: "Osei Andy",
-      time: "Yesterday",
-      subtitle: "Started following you",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.anabel,
-      title: "Anabel Leach",
-      time: "26/05/2019",
-      subtitle: "Checked in at Uncle Booons",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.ashlee,
-      title: "Ashlee Rollins",
-      time: "26/05/2019",
-      subtitle: "Started following you",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.duke,
-      title: "Duke Carter",
-      time: "16/05/2019",
-      subtitle: "Checked in at Miller's Cafe",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.deven,
-      title: "Deven Berry",
-      time: "26/05/2019",
-      subtitle: "Started following you",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.branson,
-      title: "Filip Hracek",
-      time: "26/05/2019",
-      subtitle: "Checked in at McDonald's",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.duke,
-      title: "John Mark",
-      time: "6:30 pm",
-      subtitle: "Started following you",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.ashlee,
-      title: "Emily Fortuna",
-      time: "06/08/2019",
-      subtitle: "Checked in at KFC",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.anabel,
-      title: "Attaa Adwoa",
-      time: "09/09/2019",
-      subtitle: "Started following you",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
     NotificationInfo(
-      imageUrl: ImagePath.andy,
-      title: "David Legend",
-      time: "19/11/2019",
-      subtitle: "Checked in at Vancouver Cafe",
+      // imageUrl: ImagePath.branson,
+      title: "Order No:- 23465",
+      time: "5:30 am",
+      subtitle: "Order is being Prepared",
     ),
   ];
 
@@ -103,7 +108,7 @@ class NotificationsScreen extends StatelessWidget {
             itemCount: notifications.length,
             itemBuilder: (BuildContext context, int index) {
               return ListTile(
-                leading: Image.asset(notifications[index].imageUrl),
+                // leading: Image.asset(notifications[index].imageUrl),
                 onTap: () {},
                 title: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,

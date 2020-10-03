@@ -90,7 +90,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        'Distance (km)',
+                        'Price',
                         style: subTitleTextStyle,
                       ),
                       SizedBox(height: 60.0),
@@ -109,7 +109,7 @@ class _FilterScreenState extends State<FilterScreen> {
                         child: Slider(
 //                          label: '$initialSliderValue players',
                             min: 0,
-                            max: 100,
+                            max: 2000,
                             value: initialSliderValue,
                             onChanged: (value) {
                               setState(() {
@@ -130,7 +130,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           Container(
                             margin: EdgeInsets.only(right: 24),
                             child: Text(
-                              '100',
+                              '2000',
                               style: lightTextStyle,
                             ),
                           ),

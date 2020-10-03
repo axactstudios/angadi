@@ -5,6 +5,8 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 
+import '../routes/router.dart';
+
 class CategoryDetailScreen extends StatelessWidget {
   CategoryDetailScreen({
     @required this.categoryName,
@@ -119,13 +121,24 @@ class CategoryDetailScreen extends StatelessWidget {
                   return Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
+                      onTap: () => R.Router.navigator.pushNamed(
+                        R.Router.restaurantDetailsScreen,
+                        arguments: RestaurantDetails(
+                          imagePath: 'https://picsum.photos/200',
+                          restaurantName: 'Hamburger',
+                          restaurantAddress: 'Created with exotic ingredients',
+                          rating: ratings[index],
+                          category: category[index],
+                          // distance: distance[i],
+                        ),
+                      ),
                       imagePath: categoryDetailImagePaths[index],
                       status: status[index],
-                      cardTitle: restaurantNames[index],
+                      cardTitle: 'Hamburger',
                       rating: ratings[index],
                       category: category[index],
                       distance: distance[index],
-                      address: addresses[index],
+                      address: 'Created with exotic ingredients',
                     ),
                   );
                 },

@@ -24,10 +24,13 @@ class ImagePath {
   static const String activeHomeIcon = "$imageDir/home_icon_selected.png";
   static const String activeHomeIcon2 = "$imageDir/home_icon_selected_2.png";
   static const String notificationIcon = "$imageDir/notification_icon.png";
-  static const String activeNotificationIcon = "$imageDir/notification_icon_selected.png";
-  static const String bookmarksIcon = "$imageDir/bookmarks_icon.png";
-  static const String activeBookmarksIcon = "$imageDir/bookmarks_icon_selected.png";
-  static const String activeBookmarksIcon2 = "$imageDir/bookmarks_icon_selected_2.png";
+  static const String activeNotificationIcon =
+      "$imageDir/notification_icon_selected.png";
+  static const String bookmarksIcon = "$imageDir/shopping_cart.png";
+  static const String activeBookmarksIcon =
+      "$imageDir/bookmarks_icon_selected.png";
+  static const String activeBookmarksIcon2 =
+      "$imageDir/shopping_cart_active.png";
   static const String starIcon = "$imageDir/star_icon.png";
   static const String closeIcon = "$imageDir/close_icon.png";
   static const String searchIconBlue = "$imageDir/search_icon_blue.png";
@@ -59,7 +62,6 @@ class ImagePath {
   static const String doughnuts = "$imageDir/doughnuts.png";
   static const String strawberries = "$imageDir/strawberries.png";
 
-
   static const String friends1 = "$imageDir/friends_1.png";
   static const String friends2 = "$imageDir/friends_2.png";
   static const String friends3 = "$imageDir/friends_3.png";
@@ -68,7 +70,6 @@ class ImagePath {
   static const String profile2 = "$imageDir/profile_2.png";
   static const String profile3 = "$imageDir/profile_3.png";
   static const String profile4 = "$imageDir/profile_4.png";
-
 
   static const String cardImage1 = "$imageDir/card_image_1.png";
   static const String cardImage2 = "$imageDir/card_image_2.png";
@@ -94,5 +95,3 @@ class ImagePath {
   //Svg Icons
 //  static const String shareIcon = "$imageDir/share.svg";
 }
-
-

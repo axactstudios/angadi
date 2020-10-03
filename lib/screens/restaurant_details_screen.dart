@@ -72,7 +72,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                     Stack(
                       children: <Widget>[
                         Positioned(
-                          child: Image.asset(
+                          child: Image.network(
                             restaurantDetails.imagePath,
                             width: MediaQuery.of(context).size.width,
                             height: heightOfStack,
@@ -115,75 +115,75 @@ class RestaurantDetailsScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Positioned(
-                          top: aPieceOfTheHeightOfStack,
-                          left: 24,
-                          right: 24 - 0.5,
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(24.0),
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                              child: Container(
-                                padding: EdgeInsets.symmetric(vertical: 4.0),
-                                decoration: fullDecorations,
-                                child: Row(
-                                  children: <Widget>[
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 8.0),
-                                      width:
-                                          (MediaQuery.of(context).size.width /
-                                                  2) -
-                                              24,
-//                                      decoration: leftSideDecorations,
-                                      child: Row(
-                                        children: <Widget>[
-                                          SizedBox(width: 4.0),
-                                          Image.asset(ImagePath.callIcon),
-                                          SizedBox(width: 8.0),
-                                          Text(
-                                            '+233 549546967',
-                                            style: Styles.normalTextStyle,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                    IntrinsicHeight(
-                                      child: VerticalDivider(
-                                        width: 0.5,
-                                        thickness: 3.0,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                    Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 8.0, vertical: 8.0),
-//                                      width:
-//                                      (MediaQuery
-//                                          .of(context)
-//                                          .size
-//                                          .width /
-//                                          2) -
-//                                          24,
-//                                      decoration: rightSideDecorations,
-                                      child: Row(
-                                        children: <Widget>[
-                                          SizedBox(width: 4.0),
-                                          Image.asset(ImagePath.directionIcon),
-                                          SizedBox(width: 8.0),
-                                          Text(
-                                            'Direction',
-                                            style: Styles.normalTextStyle,
-                                          )
-                                        ],
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        )
+//                         Positioned(
+//                           top: aPieceOfTheHeightOfStack,
+//                           left: 24,
+//                           right: 24 - 0.5,
+//                           child: ClipRRect(
+//                             borderRadius: BorderRadius.circular(24.0),
+//                             child: BackdropFilter(
+//                               filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+//                               child: Container(
+//                                 padding: EdgeInsets.symmetric(vertical: 4.0),
+//                                 decoration: fullDecorations,
+//                                 child: Row(
+//                                   children: <Widget>[
+//                                     Container(
+//                                       padding: EdgeInsets.symmetric(
+//                                           horizontal: 8.0, vertical: 8.0),
+//                                       width:
+//                                           (MediaQuery.of(context).size.width /
+//                                                   2) -
+//                                               24,
+// //                                      decoration: leftSideDecorations,
+//                                       child: Row(
+//                                         children: <Widget>[
+//                                           SizedBox(width: 4.0),
+//                                           Image.asset(ImagePath.callIcon),
+//                                           SizedBox(width: 8.0),
+//                                           Text(
+//                                             '+233 549546967',
+//                                             style: Styles.normalTextStyle,
+//                                           )
+//                                         ],
+//                                       ),
+//                                     ),
+//                                     IntrinsicHeight(
+//                                       child: VerticalDivider(
+//                                         width: 0.5,
+//                                         thickness: 3.0,
+//                                         color: Colors.red,
+//                                       ),
+//                                     ),
+//                                     Container(
+//                                       padding: EdgeInsets.symmetric(
+//                                           horizontal: 8.0, vertical: 8.0),
+// //                                      width:
+// //                                      (MediaQuery
+// //                                          .of(context)
+// //                                          .size
+// //                                          .width /
+// //                                          2) -
+// //                                          24,
+// //                                      decoration: rightSideDecorations,
+//                                       child: Row(
+//                                         children: <Widget>[
+//                                           SizedBox(width: 4.0),
+//                                           Image.asset(ImagePath.directionIcon),
+//                                           SizedBox(width: 8.0),
+//                                           Text(
+//                                             'Direction',
+//                                             style: Styles.normalTextStyle,
+//                                           )
+//                                         ],
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ),
+//                             ),
+//                           ),
+//                         )
                       ],
                     ),
                     Container(
@@ -217,15 +217,6 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                           Radius.circular(8.0)),
                                     ),
                                   ),
-                                  SizedBox(width: 4.0),
-                                  CardTags(
-                                    title: restaurantDetails.distance,
-                                    decoration: BoxDecoration(
-                                      color: Color.fromARGB(255, 132, 141, 255),
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(8.0)),
-                                    ),
-                                  ),
                                   Spacer(flex: 1),
                                   Ratings(restaurantDetails.rating)
                                 ],
@@ -235,50 +226,50 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                 restaurantDetails.restaurantAddress,
                                 style: addressTextStyle,
                               ),
-                              SizedBox(height: 8.0),
-                              RichText(
-                                text: TextSpan(
-                                  style: openingTimeTextStyle,
-                                  children: [
-                                    TextSpan(text: "Open Now "),
-                                    TextSpan(
-                                        text: "daily time ",
-                                        style: addressTextStyle),
-                                    TextSpan(text: "9:30 am to 11:30 am "),
-                                  ],
-                                ),
-                              )
+                              // SizedBox(height: 8.0),
+                              // RichText(
+                              //   text: TextSpan(
+                              //     style: openingTimeTextStyle,
+                              //     children: [
+                              //       TextSpan(text: "Open Now "),
+                              //       TextSpan(
+                              //           text: "daily time ",
+                              //           style: addressTextStyle),
+                              //       TextSpan(text: "9:30 am to 11:30 am "),
+                              //     ],
+                              //   ),
+                              // )
                             ],
                           ),
-                          SpaceH24(),
-                          HeadingRow(
-                            title: StringConst.MENU_AND_PHOTOS,
-                            number: StringConst.SEE_ALL_32,
-                            onTapOfNumber: () => R.Router.navigator
-                                .pushNamed(R.Router.menuPhotosScreen),
-                          ),
-                          SizedBox(height: 16.0),
-                          Container(
-                            height: 120,
-                            width: MediaQuery.of(context).size.width,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: 4,
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  margin: EdgeInsets.only(right: 12.0),
-                                  decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8))),
-                                  child: Image.asset(
-                                    menuPhotosImagePaths[index],
-                                    fit: BoxFit.fill,
-                                    width: 160,
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
+                          // SpaceH24(),
+                          // HeadingRow(
+                          //   title: StringConst.MENU_AND_PHOTOS,
+                          //   number: StringConst.SEE_ALL_32,
+                          //   onTapOfNumber: () => R.Router.navigator
+                          //       .pushNamed(R.Router.menuPhotosScreen),
+                          // ),
+                          // SizedBox(height: 16.0),
+                          // Container(
+                          //   height: 120,
+                          //   width: MediaQuery.of(context).size.width,
+                          //   child: ListView.builder(
+                          //     scrollDirection: Axis.horizontal,
+                          //     itemCount: 4,
+                          //     itemBuilder: (context, index) {
+                          //       return Container(
+                          //         margin: EdgeInsets.only(right: 12.0),
+                          //         decoration: BoxDecoration(
+                          //             borderRadius:
+                          //                 BorderRadius.all(Radius.circular(8))),
+                          //         child: Image.asset(
+                          //           menuPhotosImagePaths[index],
+                          //           fit: BoxFit.fill,
+                          //           width: 160,
+                          //         ),
+                          //       );
+                          //     },
+                          //   ),
+                          // ),
                           SpaceH24(),
                           HeadingRow(
                             title: StringConst.REVIEWS_AND_RATINGS,
@@ -298,14 +289,14 @@ class RestaurantDetailsScreen extends StatelessWidget {
                 ),
               ),
               angadiButton(
-                'Rate Your Experience ',
+                'Add to Cart ',
                 onTap: () =>
                     R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
                 buttonHeight: 65,
                 buttonWidth: MediaQuery.of(context).size.width,
                 decoration: Decorations.customHalfCurvedButtonDecoration(
-                  topleftRadius: Sizes.RADIUS_24,
-                  topRightRadius: Sizes.RADIUS_24,
+                  topleftRadius: Sizes.RADIUS_14,
+                  topRightRadius: Sizes.RADIUS_14,
                 ),
               ),
             ],

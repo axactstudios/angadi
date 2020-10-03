@@ -3,45 +3,45 @@ import 'package:angadi/values/values.dart';
 
 import 'card_tags.dart';
 
-class FoodyBiteCard extends StatelessWidget {
-  final String status;
-  final String rating;
+class OfferCard extends StatelessWidget {
+  // final String status;
+  // final String rating;
   final String imagePath;
   final String cardTitle;
-  final String category;
-  final String distance;
-  final String address;
+  // final String category;
+  // final String distance;
+  final String details;
   final GestureTapCallback onTap;
-  final bool bookmark;
-  final bool isThereStatus;
-  final bool isThereRatings;
+  // final bool bookmark;
+  // final bool isThereStatus;
+  // final bool isThereRatings;
   final double tagRadius;
   final double width;
   final double cardHeight;
   final double imageHeight;
   final double cardElevation;
   final double ratingsAndStatusCardElevation;
-  final List<String> followersImagePath;
+  // final List<String> followersImagePath;
 
-  FoodyBiteCard({
-    this.status = "OPEN",
-    this.rating = "4.5",
+  OfferCard({
+    // this.status = "OPEN",
+    // this.rating = "4.5",
     this.imagePath,
     this.cardTitle,
-    this.category,
-    this.distance,
-    this.address,
+    // this.category,
+    // this.distance,
+    this.details,
     this.width = 340.0,
-    this.cardHeight = 280.0,
-    this.imageHeight = 180.0,
+    this.cardHeight = 240.0,
+    this.imageHeight = 190.0,
     this.tagRadius = 8.0,
     this.onTap,
-    this.isThereStatus = true,
-    this.isThereRatings = true,
-    this.bookmark = false,
+    // this.isThereStatus = true,
+    // this.isThereRatings = true,
+    // this.bookmark = false,
     this.cardElevation = 4.0,
     this.ratingsAndStatusCardElevation = 8.0,
-    this.followersImagePath,
+    // this.followersImagePath,
   });
 
   @override
@@ -63,7 +63,7 @@ class FoodyBiteCard extends StatelessWidget {
                   children: <Widget>[
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4),
-                      child: Image.asset(
+                      child: Image.network(
                         imagePath,
                         width: MediaQuery.of(context).size.width,
                         height: imageHeight,
@@ -89,18 +89,18 @@ class FoodyBiteCard extends StatelessWidget {
                                 ),
                               ),
                               SizedBox(width: Sizes.WIDTH_4),
-                              CardTags(
-                                title: category,
-                                decoration: BoxDecoration(
-                                  gradient: Gradients.secondaryGradient,
-                                  boxShadow: [
-                                    Shadows.secondaryShadow,
-                                  ],
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(tagRadius),
-                                  ),
-                                ),
-                              ),
+                              // CardTags(
+                              //   title: category,
+                              //   decoration: BoxDecoration(
+                              //     gradient: Gradients.secondaryGradient,
+                              //     boxShadow: [
+                              //       Shadows.secondaryShadow,
+                              //     ],
+                              //     borderRadius: BorderRadius.all(
+                              //       Radius.circular(tagRadius),
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                           SizedBox(height: 12.0),
@@ -109,8 +109,9 @@ class FoodyBiteCard extends StatelessWidget {
                               Align(
                                 alignment: Alignment.topLeft,
                                 child: Container(
+                                  width: width * 0.8,
                                   child: Text(
-                                    address,
+                                    details,
                                     textAlign: TextAlign.left,
                                     style: Styles.customNormalTextStyle(
                                       color: AppColors.accentText,
@@ -124,46 +125,6 @@ class FoodyBiteCard extends StatelessWidget {
                         ],
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Positioned(
-                left: 16.0,
-                right: 16.0,
-                top: 8.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    isThereRatings
-                        ? Card(
-                            elevation: ratingsAndStatusCardElevation,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: Sizes.WIDTH_8,
-                                vertical: Sizes.WIDTH_4,
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
-                                  Image.asset(
-                                    ImagePath.starIcon,
-                                    height: Sizes.WIDTH_14,
-                                    width: Sizes.WIDTH_14,
-                                  ),
-                                  SizedBox(width: Sizes.WIDTH_4),
-                                  Text(
-                                    rating,
-                                    style: Styles.customTitleTextStyle(
-                                      color: AppColors.headingText,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: Sizes.TEXT_SIZE_14,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          )
-                        : Container(),
                   ],
                 ),
               ),

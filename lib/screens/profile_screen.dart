@@ -43,26 +43,26 @@ class ProfileScreen extends StatelessWidget {
                       style: Styles.foodyBiteSubtitleTextStyle),
                 ],
               ),
-              SpaceH24(),
-              IntrinsicHeight(
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    detail(number: "250", text: "Reviews"),
-                    VerticalDivider(
-                      width: Sizes.WIDTH_40,
-                      thickness: 1.0,
-                    ),
-                    detail(number: "100k", text: "Followers"),
-                    VerticalDivider(
-                      width: Sizes.WIDTH_40,
-                      thickness: 1.0,
-                    ),
-                    detail(number: "30", text: "Following"),
-                    SpaceH24(),
-                  ],
-                ),
-              ),
+              // SpaceH24(),
+              // IntrinsicHeight(
+              //   child: Row(
+              //     mainAxisAlignment: MainAxisAlignment.center,
+              //     children: <Widget>[
+              //       detail(number: "250", text: "Reviews"),
+              //       VerticalDivider(
+              //         width: Sizes.WIDTH_40,
+              //         thickness: 1.0,
+              //       ),
+              //       detail(number: "100k", text: "Followers"),
+              //       VerticalDivider(
+              //         width: Sizes.WIDTH_40,
+              //         thickness: 1.0,
+              //       ),
+              //       detail(number: "30", text: "Following"),
+              //       SpaceH24(),
+              //     ],
+              //   ),
+              // ),
               SpaceH24(),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -100,31 +100,34 @@ class ProfileScreen extends StatelessWidget {
                 thickness: 3.0,
                 color: Colors.grey[200],
               ),
-              Column(
-                children: <Widget>[
-                  FoodyBiteCard(
-                    imagePath: ImagePath.dinnerIsServed,
-                    status: StringConst.STATUS_OPEN,
-                    cardTitle: "Gramercy Tavern",
-                    category: StringConst.ITALIAN,
-                    distance: "12 km",
-                    address: "394 Broome St, New York, NY 10013, USA",
-                    isThereStatus: false,
-                    onTap: () {},
-                  ),
-                  SpaceH16(),
-                  FoodyBiteCard(
-                    imagePath: ImagePath.breakfastInBed,
-                    status: StringConst.STATUS_OPEN,
-                    cardTitle: "Happy Bones",
-                    category: StringConst.ITALIAN,
-                    distance: "12 km",
-                    address: "394 Broome St, New York, NY 10013, USA",
-                    isThereStatus: false,
-                    onTap: () {},
-                  ),
-                ],
-              ),
+              // Column(
+              //   children: <Widget>[
+              //     FoodyBiteCard(
+              //       imagePath: ImagePath.dinnerIsServed,
+              //       status: StringConst.STATUS_OPEN,
+              //       cardTitle: "Gramercy Tavern",
+              //       category: StringConst.ITALIAN,
+              //       distance: "12 km",
+              //       address: "394 Broome St, New York, NY 10013, USA",
+              //       isThereStatus: false,
+              //       onTap: () {},
+              //     ),
+              //     SpaceH16(),
+              //     FoodyBiteCard(
+              //       imagePath: ImagePath.breakfastInBed,
+              //       status: StringConst.STATUS_OPEN,
+              //       cardTitle: "Happy Bones",
+              //       category: StringConst.ITALIAN,
+              //       distance: "12 km",
+              //       address: "394 Broome St, New York, NY 10013, USA",
+              //       isThereStatus: false,
+              //       onTap: () {},
+              //     ),
+              //   ],
+              // ),
+              Expanded(
+                child: Center(child: Text('No Recent Orders')),
+              )
             ],
           ),
         ));

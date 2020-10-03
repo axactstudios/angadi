@@ -6,9 +6,14 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 
-class BookmarksScreen extends StatelessWidget {
+class BookmarksScreen extends StatefulWidget {
   static const int TAB_NO = 1;
 
+  @override
+  _BookmarksScreenState createState() => _BookmarksScreenState();
+}
+
+class _BookmarksScreenState extends State<BookmarksScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +21,7 @@ class BookmarksScreen extends StatelessWidget {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          'My Favourite',
+          'My Cart',
           style: Styles.customTitleTextStyle(
             color: AppColors.headingText,
             fontWeight: FontWeight.w600,
@@ -24,15 +29,28 @@ class BookmarksScreen extends StatelessWidget {
           ),
         ),
         actions: <Widget>[
-          Container(
-            margin: EdgeInsets.only(right: Sizes.MARGIN_16),
-            child: InkWell(
-              onTap: () {},
-              child: Image.asset(
-                ImagePath.searchIconBlue,
-                color: AppColors.headingText,
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: Color(0xFF5563FB),
+                    borderRadius: BorderRadius.all(Radius.circular(5))),
+                margin: EdgeInsets.only(right: Sizes.MARGIN_16),
+                child: InkWell(
+                  onTap: () {},
+                  child: Container(
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Text(
+                        'Checkout',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
               ),
-            ),
+            ],
           ),
         ],
       ),
@@ -64,12 +82,12 @@ class BookmarksScreen extends StatelessWidget {
                   ),
                   imagePath: imagePaths[index],
                   status: status[index],
-                  cardTitle: restaurantNames[index],
+                  cardTitle: 'Hamburger',
                   rating: ratings[index],
                   bookmark: true,
                   category: category[index],
                   distance: distance[index],
-                  address: addresses[index],
+                  address: 'Made with exotic ingredients',
                 ),
               );
             },

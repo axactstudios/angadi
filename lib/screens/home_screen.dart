@@ -1,3 +1,4 @@
+import 'package:angadi/widgets/offer_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:angadi/routes/router.dart';
@@ -9,12 +10,52 @@ import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/heading_row.dart';
 import 'package:angadi/widgets/search_input_field.dart';
 
-class HomeScreen extends StatelessWidget {
+import '../routes/router.gr.dart';
+import '../values/values.dart';
+
+class HomeScreen extends StatefulWidget {
   static const int TAB_NO = 0;
 
   HomeScreen({Key key}) : super(key: key);
 
+  @override
+  _HomeScreenState createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   TextEditingController controller = TextEditingController();
+
+  List<Widget> trending = new List();
+  @override
+  void initState() {
+    // TODO: implement initState
+    for (int i = 0; i < 4; i++) {
+      trending.add(Container(
+        margin: EdgeInsets.only(right: 4.0),
+        child: FoodyBiteCard(
+          onTap: () => R.Router.navigator.pushNamed(
+            R.Router.restaurantDetailsScreen,
+            arguments: RestaurantDetails(
+              imagePath: 'https://picsum.photos/200',
+              restaurantName: 'Hamburger',
+              restaurantAddress: 'Created with exotic ingredients',
+              rating: ratings[i],
+              category: category[i],
+              distance: distance[i],
+            ),
+          ),
+          imagePath: imagePaths[i],
+          status: '90% OFF',
+          cardTitle: 'Hamburger',
+          rating: ratings[i],
+          category: category[i],
+          distance: '',
+          address: 'Created with exotic ingredients',
+        ),
+      ));
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +96,8 @@ class HomeScreen extends StatelessWidget {
               ),
               SizedBox(height: 16.0),
               HeadingRow(
-                title: StringConst.DISHES,
-                number: StringConst.SEE_ALL_45,
+                title: StringConst.OFFERS,
+                number: '',
                 onTapOfNumber: () => R.Router.navigator
                     .pushNamed(R.Router.trendingRestaurantsScreen),
               ),
@@ -70,25 +111,15 @@ class HomeScreen extends StatelessWidget {
                     itemBuilder: (context, index) {
                       return Container(
                         margin: EdgeInsets.only(right: 4.0),
-                        child: FoodyBiteCard(
-                          onTap: () => R.Router.navigator.pushNamed(
-                            R.Router.restaurantDetailsScreen,
-                            arguments: RestaurantDetails(
-                              imagePath: imagePaths[index],
-                              restaurantName: restaurantNames[index],
-                              restaurantAddress: addresses[index],
-                              rating: ratings[index],
-                              category: category[index],
-                              distance: distance[index],
-                            ),
-                          ),
-                          imagePath: imagePaths[index],
-                          status: '90% OFF',
-                          cardTitle: 'Hamburger',
-                          rating: ratings[index],
-                          category: category[index],
-                          distance: '',
-                          address: 'Created with exotic ingredients',
+                        child: OfferCard(
+                          onTap: () {},
+                          imagePath: 'https://picsum.photos/200',
+                          // status: '90% OFF',
+                          cardTitle: '25% Off',
+                          // rating: ratings[index],
+                          // category: category[index],
+                          // distance: '',
+                          details: 'Get 25% off on all the dishes',
                         ),
                       );
                     }),
@@ -113,25 +144,48 @@ class HomeScreen extends StatelessWidget {
                         imagePath: categoryImagePaths[index],
                         gradient: gradients[index],
                         category: category[index],
+                        onTap: () => R.Router.navigator.pushNamed(
+                          R.Router.categoryDetailScreen,
+                          arguments: CategoryDetailScreenArguments(
+                            categoryName: category[index],
+                            imagePath: categoryListImagePaths[index],
+                            selectedCategory: index,
+                            numberOfCategories: categoryListImagePaths.length,
+                            gradient: gradients[index],
+                          ),
+                        ),
                       ),
                     );
                   },
                 ),
               ),
+              // SizedBox(height: 16.0),
+              // HeadingRow(
+              //   title: StringConst.FRIENDS,
+              //   number: StringConst.SEE_ALL_56,
+              //   onTapOfNumber: () => R.Router.navigator.pushNamed(
+              //     R.Router.findFriendsScreen,
+              //   ),
+              // ),
+              // SizedBox(height: 16.0),
+              // Row(
+              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              //   children: createUserProfilePhotos(numberOfProfilePhotos: 6),
+              // ),
               SizedBox(height: 16.0),
               HeadingRow(
-                title: StringConst.FRIENDS,
-                number: StringConst.SEE_ALL_56,
-                onTapOfNumber: () => R.Router.navigator.pushNamed(
-                  R.Router.findFriendsScreen,
+                title: StringConst.DISHES,
+                number: StringConst.SEE_ALL_45,
+                onTapOfNumber: () => R.Router.navigator
+                    .pushNamed(R.Router.trendingRestaurantsScreen),
+              ),
+              SizedBox(height: 16.0),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: ListView(
+                  children: trending,
                 ),
-              ),
-              SizedBox(height: 16.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: createUserProfilePhotos(numberOfProfilePhotos: 6),
-              ),
-              SizedBox(height: 16.0),
+              )
             ],
           ),
         ),
