@@ -60,13 +60,13 @@ class _FilterScreenState extends State<FilterScreen> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(top: 24.0, left: 8.0, right: 8.0),
-            child: SingleChildScrollView(
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              margin: EdgeInsets.only(top: 24.0, left: 8.0, right: 8.0),
               child: Column(
                 children: <Widget>[
                   Row(
@@ -145,38 +145,38 @@ class _FilterScreenState extends State<FilterScreen> {
                 ],
               ),
             ),
-          ),
-          Row(
-            children: <Widget>[
-              angadiButton(
-                'Reset',
-                buttonHeight: 65,
-                buttonWidth: (MediaQuery.of(context).size.width / 2) - 0.25,
-                decoration: Decorations.customHalfCurvedButtonDecoration(
-                  topleftRadius: Sizes.RADIUS_24,
+            Row(
+              children: <Widget>[
+                angadiButton(
+                  'Reset',
+                  buttonHeight: 65,
+                  buttonWidth: (MediaQuery.of(context).size.width / 2) - 0.25,
+                  decoration: Decorations.customHalfCurvedButtonDecoration(
+                    topleftRadius: Sizes.RADIUS_24,
+                  ),
+                  buttonTextStyle: buttonTextStyle,
                 ),
-                buttonTextStyle: buttonTextStyle,
-              ),
-              IntrinsicHeight(
-                child: VerticalDivider(
-                  width: 0.5,
-                  thickness: 1.0,
+                IntrinsicHeight(
+                  child: VerticalDivider(
+                    width: 0.5,
+                    thickness: 1.0,
+                  ),
                 ),
-              ),
-              angadiButton(
-                'Apply',
-                onTap: () => R.Router.navigator
-                    .pushNamed(R.Router.trendingRestaurantsScreen),
-                buttonHeight: 65,
-                buttonWidth: (MediaQuery.of(context).size.width / 2) - 0.25,
-                decoration: Decorations.customHalfCurvedButtonDecoration(
-                  topRightRadius: Sizes.RADIUS_24,
+                angadiButton(
+                  'Apply',
+                  onTap: () => R.Router.navigator
+                      .pushNamed(R.Router.trendingRestaurantsScreen),
+                  buttonHeight: 65,
+                  buttonWidth: (MediaQuery.of(context).size.width / 2) - 0.25,
+                  decoration: Decorations.customHalfCurvedButtonDecoration(
+                    topRightRadius: Sizes.RADIUS_24,
+                  ),
+                  buttonTextStyle: buttonTextStyle,
                 ),
-                buttonTextStyle: buttonTextStyle,
-              ),
-            ],
-          )
-        ],
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

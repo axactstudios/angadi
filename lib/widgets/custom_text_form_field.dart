@@ -17,6 +17,7 @@ class CustomTextFormField extends StatelessWidget {
   final Color enabledBorderColor;
   final Color fillColor;
   final bool filled;
+  final TextEditingController controller;
   final bool obscured;
   final bool hasPrefixIcon;
   final int maxLines;
@@ -40,12 +41,14 @@ class CustomTextFormField extends StatelessWidget {
     this.fillColor = AppColors.fillColor,
     this.filled = true,
     this.obscured = false,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       child: TextFormField(
+        controller: controller,
         style: textFormFieldStyle,
         maxLines: maxLines,
         decoration: InputDecoration(

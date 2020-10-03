@@ -2,9 +2,9 @@ part of values;
 
 class StringConst {
   //strings
-  static const String APP_NAME = "FoodyByte";
+  static const String APP_NAME = "Angadi";
 
-  static const String FOODY_BITE = "Foodybite";
+  static const String FOODY_BITE = "Angadi";
   static const String FORGOT_PASSWORD_QUESTION = "Forgot Password?";
   static const String HAVE_AN_ACCOUNT_QUESTION = "Already have an account?";
   static const String FORGOT_PASSWORD = "Forgot Password";
@@ -24,8 +24,9 @@ class StringConst {
   static const String REGISTER = "Register";
   static const String TURN_GPS = "Turn On GPS";
   static const String TURN_GPS_DESCRIPTION =
-      "Please turn on your GPS to find out better restaurant suggestionsnear you.";
-  static const String HELLO_MESSAGE = "Hi David,";
+      "Please turn on your GPS to find out popular dish suggestionsnear you.";
+  // ignore: non_constant_identifier_names
+  static String HELLO_MESSAGE = "Hi $n,";
   static const String WELCOME_MESSAGE = "Welcome to";
   static const String SEND = "Send";
   static const String TRENDING_RESTAURANTS = "Trending Restaurants";

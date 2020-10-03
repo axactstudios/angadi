@@ -4,8 +4,46 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/dark_overlay.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:location/location.dart';
 
-class SetLocationScreen extends StatelessWidget {
+class SetLocationScreen extends StatefulWidget {
+  final String name;
+  SetLocationScreen(this.name);
+  @override
+  _SetLocationScreenState createState() => _SetLocationScreenState();
+}
+
+class _SetLocationScreenState extends State<SetLocationScreen> {
+  Location location = new Location();
+
+  bool _serviceEnabled;
+  PermissionStatus _permissionGranted;
+  LocationData _locationData;
+  getLocation() async {
+    _serviceEnabled = await location.serviceEnabled();
+    if (!_serviceEnabled) {
+      _serviceEnabled = await location.requestService();
+      if (!_serviceEnabled) {
+        return;
+      }
+    }
+
+    _permissionGranted = await location.hasPermission();
+    if (_permissionGranted == PermissionStatus.denied) {
+      _permissionGranted = await location.requestPermission();
+      if (_permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    _locationData = await location.getLocation();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var heightOfScreen = MediaQuery.of(context).size.height;
@@ -83,10 +121,13 @@ class SetLocationScreen extends StatelessWidget {
                     angadiButton(
                       StringConst.TURN_GPS,
                       buttonWidth: widthOfScreen,
-                      onTap: () => R.Router.navigator.pushNamedAndRemoveUntil(
-                        R.Router.rootScreen,
-                        (Route<dynamic> route) => false,
-                      ),
+                      onTap: () {
+                        getLocation();
+                        R.Router.navigator.pushNamedAndRemoveUntil(
+                          R.Router.rootScreen,
+                          (Route<dynamic> route) => false,
+                        );
+                      },
                     ),
                     Spacer(),
                   ],
@@ -101,10 +142,12 @@ class SetLocationScreen extends StatelessWidget {
 
   Widget _buildSkipButton() {
     return InkWell(
-      onTap: () => R.Router.navigator.pushNamedAndRemoveUntil(
-        R.Router.rootScreen,
-        (Route<dynamic> route) => false,
-      ),
+      onTap: () {
+        R.Router.navigator.pushNamedAndRemoveUntil(
+          R.Router.rootScreen,
+          (Route<dynamic> route) => false,
+        );
+      },
       child: Container(
         width: 80,
         height: 40,

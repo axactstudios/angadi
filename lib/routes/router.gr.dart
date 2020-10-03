@@ -35,6 +35,8 @@ import 'package:angadi/screens/change_language_screen.dart';
 import 'package:angadi/screens/edit_profile_screen.dart';
 import 'package:angadi/screens/new_review_screen.dart';
 
+String n;
+
 class Router {
   static const loginScreen = '/';
   static const splashScreen = '/splash-screen';
@@ -88,7 +90,7 @@ class Router {
         );
       case Router.setLocationScreen:
         return CupertinoPageRoute<dynamic>(
-          builder: (_) => SetLocationScreen(),
+          builder: (_) => SetLocationScreen(n),
           settings: settings,
         );
       case Router.homeScreen:

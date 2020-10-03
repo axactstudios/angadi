@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
@@ -5,8 +7,16 @@ import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/dark_overlay.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class ForgotPasswordScreen extends StatelessWidget {
+class ForgotPasswordScreen extends StatefulWidget {
+  @override
+  _ForgotPasswordScreenState createState() => _ForgotPasswordScreenState();
+}
+
+class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  TextEditingController mail = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var heightOfScreen = MediaQuery.of(context).size.height;
@@ -58,6 +68,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                           hasPrefixIcon: true,
                           prefixIconImagePath: ImagePath.emailIcon,
                           hintText: StringConst.HINT_TEXT_EMAIL,
+                          controller: mail,
                         ),
                       ),
                       SizedBox(height: Sizes.HEIGHT_180),
@@ -65,12 +76,10 @@ class ForgotPasswordScreen extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(
                           horizontal: Sizes.MARGIN_16,
                         ),
-                        child: angadiButton(
-                          StringConst.SEND,
-                          buttonWidth: widthOfScreen,
-                          onTap: () => R.Router.navigator
-                              .pushReplacementNamed(R.Router.loginScreen),
-                        ),
+                        child: angadiButton(StringConst.SEND,
+                            buttonWidth: widthOfScreen, onTap: () async {
+                          await sendResetLink();
+                        }),
                       )
                     ],
                   ),
@@ -110,5 +119,36 @@ class ForgotPasswordScreen extends StatelessWidget {
         Spacer(),
       ],
     );
+  }
+
+  FirebaseAuth mAuth = FirebaseAuth.instance;
+  sendResetLink() async {
+    await mAuth
+        .sendPasswordResetEmail(email: mail.text)
+        .then((AuthResult) async {
+      Fluttertoast.showToast(
+          msg: 'Reset link has been sent!', toastLength: Toast.LENGTH_SHORT);
+      R.Router.navigator.pushReplacementNamed(R.Router.loginScreen);
+    }).catchError((err) {
+      print(err);
+      if (err.code == "ERROR_USER_NOT_FOUND") {
+        showCupertinoDialog(
+            context: context,
+            builder: (context) {
+              return CupertinoAlertDialog(
+                title: Text(
+                    'This email is not yet registered. Please sign up first.'),
+                actions: <Widget>[
+                  CupertinoDialogAction(
+                    child: Text('OK'),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  )
+                ],
+              );
+            });
+      }
+    });
   }
 }

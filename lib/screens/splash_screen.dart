@@ -109,7 +109,7 @@ class _SplashScreenState extends State<SplashScreen>
                   child: AnimatedBuilder(
                     animation: _textController,
                     child: Text(
-                      'FoodyBite',
+                      'Angadi',
                       style: Styles.customTitleTextStyle(
                         color: AppColors.primaryText,
                       ),

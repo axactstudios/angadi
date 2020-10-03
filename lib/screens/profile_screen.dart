@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
@@ -5,10 +7,21 @@ import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
 
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   static const int TAB_NO = 3;
 
   ProfileScreen({Key key}) : super(key: key);
+
+  @override
+  _ProfileScreenState createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+  @override
+  void initState() {
+    getUserDetails();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -32,14 +45,17 @@ class ProfileScreen extends StatelessWidget {
               Column(
                 children: <Widget>[
                   CircleAvatar(
-                    backgroundImage: AssetImage(ImagePath.andy),
+                    backgroundImage: url == null
+                        ? AssetImage(ImagePath.andy)
+                        : NetworkImage(url),
                     minRadius: Sizes.RADIUS_60,
                     maxRadius: Sizes.RADIUS_60,
                   ),
                   SpaceH8(),
-                  Text('John Williams', style: Styles.foodyBiteTitleTextStyle),
+                  Text(name == null ? 'John Williams' : name,
+                      style: Styles.foodyBiteTitleTextStyle),
                   SpaceH8(),
-                  Text('john.williams@gmail.com',
+                  Text(email == null ? 'john.williams@gmail.com' : email,
                       style: Styles.foodyBiteSubtitleTextStyle),
                 ],
               ),
@@ -125,9 +141,7 @@ class ProfileScreen extends StatelessWidget {
               //     ),
               //   ],
               // ),
-              Expanded(
-                child: Center(child: Text('No Recent Orders')),
-              )
+              Center(child: Text('No Recent Orders'))
             ],
           ),
         ));
@@ -149,5 +163,23 @@ class ProfileScreen extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String name, email, url;
+  getUserDetails() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection('Users')
+        .where('id', isEqualTo: user.uid)
+        .getDocuments()
+        .then((value) {
+      value.documents.forEach((element) {
+        setState(() {
+          name = element['Name'];
+          email = element['mail'];
+          url = element['pUrl'];
+        });
+      });
+    });
   }
 }
