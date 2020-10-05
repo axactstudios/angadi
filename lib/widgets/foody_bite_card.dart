@@ -63,7 +63,7 @@ class FoodyBiteCard extends StatelessWidget {
                   children: <Widget>[
                     ClipRRect(
                       borderRadius: BorderRadius.circular(4),
-                      child: Image.asset(
+                      child: Image.network(
                         imagePath,
                         width: MediaQuery.of(context).size.width,
                         height: imageHeight,
@@ -104,22 +104,18 @@ class FoodyBiteCard extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 12.0),
-                          Row(
-                            children: <Widget>[
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Container(
-                                  child: Text(
-                                    address,
-                                    textAlign: TextAlign.left,
-                                    style: Styles.customNormalTextStyle(
-                                      color: AppColors.accentText,
-                                      fontSize: Sizes.TEXT_SIZE_14,
-                                    ),
-                                  ),
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: Container(
+                              child: Text(
+                                address,
+                                textAlign: TextAlign.left,
+                                style: Styles.customNormalTextStyle(
+                                  color: AppColors.accentText,
+                                  fontSize: Sizes.TEXT_SIZE_14,
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ],
                       ),

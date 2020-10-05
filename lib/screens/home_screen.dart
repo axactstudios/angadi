@@ -1,4 +1,6 @@
+import 'package:angadi/classes/dish.dart';
 import 'package:angadi/widgets/offer_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:angadi/routes/router.dart';
@@ -29,165 +31,195 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     // TODO: implement initState
-    for (int i = 0; i < 4; i++) {
-      trending.add(Container(
-        margin: EdgeInsets.only(right: 4.0),
-        child: FoodyBiteCard(
-          onTap: () => R.Router.navigator.pushNamed(
-            R.Router.restaurantDetailsScreen,
-            arguments: RestaurantDetails(
-              imagePath: 'https://picsum.photos/200',
-              restaurantName: 'Hamburger',
-              restaurantAddress: 'Created with exotic ingredients',
-              rating: ratings[i],
-              category: category[i],
-              distance: distance[i],
-            ),
-          ),
-          imagePath: imagePaths[i],
-          status: '90% OFF',
-          cardTitle: 'Hamburger',
-          rating: ratings[i],
-          category: category[i],
-          distance: '',
-          address: 'Created with exotic ingredients',
-        ),
-      ));
-    }
+
     super.initState();
   }
 
+  List<Dish> dishes = new List<Dish>();
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        FocusScopeNode currentFocus = FocusScope.of(context);
-        if (!currentFocus.hasPrimaryFocus) {
-          currentFocus.unfocus();
-        }
-      },
-      child: Scaffold(
-        body: Container(
-          margin: EdgeInsets.symmetric(
-            horizontal: Sizes.MARGIN_16,
-            vertical: Sizes.MARGIN_8,
-          ),
-          child: ListView(
-            children: <Widget>[
-              FoodyBiteSearchInputField(
-                ImagePath.searchIcon,
-                controller: controller,
-                textFormFieldStyle:
-                    Styles.customNormalTextStyle(color: AppColors.accentText),
-                hintText: StringConst.HINT_TEXT_HOME_SEARCH_BAR,
-                hintTextStyle:
-                    Styles.customNormalTextStyle(color: AppColors.accentText),
-                suffixIconImagePath: ImagePath.settingsIcon,
-                borderWidth: 0.0,
-                onTapOfLeadingIcon: () => R.Router.navigator.pushNamed(
-                  R.Router.searchResultsScreen,
-                  arguments: SearchValue(
-                    controller.text,
+    return Scaffold(
+      body: GestureDetector(
+        onTap: () {
+          FocusScopeNode currentFocus = FocusScope.of(context);
+          if (!currentFocus.hasPrimaryFocus) {
+            currentFocus.unfocus();
+          }
+        },
+        child: StreamBuilder(
+          stream: Firestore.instance.collection('Dishes').snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+            if (snap.hasData && !snap.hasError && snap.data != null) {
+              dishes.clear();
+              trending.clear();
+              for (int i = 0; i < snap.data.documents.length; i++) {
+//              print(snap.data.documents[i]['url']);
+                dishes.add(Dish(
+                    name: snap.data.documents[i]['name'],
+                    category: snap.data.documents[i]['category'],
+                    rating: snap.data.documents[i]['rating'],
+                    price: snap.data.documents[i]['price'],
+                    desc: snap.data.documents[i]['description'],
+                    url: snap.data.documents[i]['url']));
+                print(snap.data.documents[i]['name']);
+                trending.add(Container(
+                  margin: EdgeInsets.only(right: 4.0),
+                  child: FoodyBiteCard(
+                    onTap: () => R.Router.navigator.pushNamed(
+                      R.Router.restaurantDetailsScreen,
+                      arguments: RestaurantDetails(
+                        imagePath: snap.data.documents[i]['url'],
+                        restaurantName: snap.data.documents[i]['name'],
+                        restaurantAddress: snap.data.documents[i]
+                            ['description'],
+                        rating: snap.data.documents[i]['rating'],
+                        category: snap.data.documents[i]['category'],
+                      ),
+                    ),
+                    imagePath: snap.data.documents[i]['url'],
+                    cardTitle: snap.data.documents[i]['name'],
+                    rating: snap.data.documents[i]['rating'],
+                    category: snap.data.documents[i]['category'],
+//                  distance: '',
+                    address: snap.data.documents[i]['description'],
                   ),
+                ));
+              }
+
+              return Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: Sizes.MARGIN_16,
+                  vertical: Sizes.MARGIN_8,
                 ),
-                onTapOfSuffixIcon: () =>
-                    R.Router.navigator.pushNamed(R.Router.filterScreen),
-                borderStyle: BorderStyle.solid,
-              ),
-              SizedBox(height: 16.0),
-              HeadingRow(
-                title: StringConst.OFFERS,
-                number: '',
-                onTapOfNumber: () => R.Router.navigator
-                    .pushNamed(R.Router.trendingRestaurantsScreen),
-              ),
-              SizedBox(height: 16.0),
-              Container(
-                height: 280,
-                width: MediaQuery.of(context).size.width,
-                child: ListView.builder(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: 4,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        margin: EdgeInsets.only(right: 4.0),
-                        child: OfferCard(
-                          onTap: () {},
-                          imagePath: 'https://picsum.photos/200',
-                          // status: '90% OFF',
-                          cardTitle: '25% Off',
-                          // rating: ratings[index],
-                          // category: category[index],
-                          // distance: '',
-                          details: 'Get 25% off on all the dishes',
-                        ),
-                      );
-                    }),
-              ),
-              SizedBox(height: 16.0),
-              HeadingRow(
-                title: StringConst.CATEGORY,
-                number: StringConst.SEE_ALL_9,
-                onTapOfNumber: () =>
-                    R.Router.navigator.pushNamed(R.Router.categoriesScreen),
-              ),
-              SizedBox(height: 16.0),
-              Container(
-                height: 100,
-                child: ListView.builder(
-                  scrollDirection: Axis.horizontal,
-                  itemCount: categoryImagePaths.length,
-                  itemBuilder: (context, index) {
-                    return Container(
-                      margin: EdgeInsets.only(right: 8.0),
-                      child: FoodyBiteCategoryCard(
-                        imagePath: categoryImagePaths[index],
-                        gradient: gradients[index],
-                        category: category[index],
-                        onTap: () => R.Router.navigator.pushNamed(
-                          R.Router.categoryDetailScreen,
-                          arguments: CategoryDetailScreenArguments(
-                            categoryName: category[index],
-                            imagePath: categoryListImagePaths[index],
-                            selectedCategory: index,
-                            numberOfCategories: categoryListImagePaths.length,
-                            gradient: gradients[index],
-                          ),
+                child: ListView(
+                  children: <Widget>[
+                    FoodyBiteSearchInputField(
+                      ImagePath.searchIcon,
+                      controller: controller,
+                      textFormFieldStyle: Styles.customNormalTextStyle(
+                          color: AppColors.accentText),
+                      hintText: StringConst.HINT_TEXT_HOME_SEARCH_BAR,
+                      hintTextStyle: Styles.customNormalTextStyle(
+                          color: AppColors.accentText),
+                      suffixIconImagePath: ImagePath.settingsIcon,
+                      borderWidth: 0.0,
+                      onTapOfLeadingIcon: () => R.Router.navigator.pushNamed(
+                        R.Router.searchResultsScreen,
+                        arguments: SearchValue(
+                          controller.text,
                         ),
                       ),
-                    );
-                  },
+                      onTapOfSuffixIcon: () =>
+                          R.Router.navigator.pushNamed(R.Router.filterScreen),
+                      borderStyle: BorderStyle.solid,
+                    ),
+                    SizedBox(height: 16.0),
+                    HeadingRow(
+                      title: StringConst.OFFERS,
+                      number: '',
+                      onTapOfNumber: () => R.Router.navigator
+                          .pushNamed(R.Router.trendingRestaurantsScreen),
+                    ),
+                    SizedBox(height: 16.0),
+                    Container(
+                      height: 280,
+                      width: MediaQuery.of(context).size.width,
+                      child: ListView.builder(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: 4,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              margin: EdgeInsets.only(right: 4.0),
+                              child: OfferCard(
+                                onTap: () {},
+                                imagePath:
+                                    'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/offer.png?alt=media&token=6d97612a-c35a-4d39-911f-e101dfe821bd',
+                                // status: '90% OFF',
+                                cardTitle: '25% Off',
+                                // rating: ratings[index],
+                                // category: category[index],
+                                // distance: '',
+                                details: 'Get 25% off on all the dishes',
+                              ),
+                            );
+                          }),
+                    ),
+                    SizedBox(height: 16.0),
+                    HeadingRow(
+                      title: StringConst.CATEGORY,
+                      number: StringConst.SEE_ALL_9,
+                      onTapOfNumber: () => R.Router.navigator
+                          .pushNamed(R.Router.categoriesScreen),
+                    ),
+                    SizedBox(height: 16.0),
+                    Container(
+                      height: 100,
+                      child: ListView.builder(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: categoryImagePaths.length,
+                        itemBuilder: (context, index) {
+                          return Container(
+                            margin: EdgeInsets.only(right: 8.0),
+                            child: FoodyBiteCategoryCard(
+                              imagePath: categoryImagePaths[index],
+                              gradient: gradients[index],
+                              category: category[index],
+                              onTap: () => R.Router.navigator.pushNamed(
+                                R.Router.categoryDetailScreen,
+                                arguments: CategoryDetailScreenArguments(
+                                  categoryName: category[index],
+                                  imagePath: categoryListImagePaths[index],
+                                  selectedCategory: index,
+                                  numberOfCategories:
+                                      categoryListImagePaths.length,
+                                  gradient: gradients[index],
+                                ),
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    // SizedBox(height: 16.0),
+                    // HeadingRow(
+                    //   title: StringConst.FRIENDS,
+                    //   number: StringConst.SEE_ALL_56,
+                    //   onTapOfNumber: () => R.Router.navigator.pushNamed(
+                    //     R.Router.findFriendsScreen,
+                    //   ),
+                    // ),
+                    // SizedBox(height: 16.0),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: createUserProfilePhotos(numberOfProfilePhotos: 6),
+                    // ),
+                    SizedBox(height: 16.0),
+                    HeadingRow(
+                      title: StringConst.DISHES,
+                      number: StringConst.SEE_ALL_45,
+                      onTapOfNumber: () => R.Router.navigator
+                          .pushNamed(R.Router.trendingRestaurantsScreen),
+                    ),
+                    SizedBox(height: 16.0),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.7,
+                      child: trending.length != 0
+                          ? ListView(
+                              children: trending,
+                            )
+                          : Container(),
+                    )
+                  ],
                 ),
-              ),
-              // SizedBox(height: 16.0),
-              // HeadingRow(
-              //   title: StringConst.FRIENDS,
-              //   number: StringConst.SEE_ALL_56,
-              //   onTapOfNumber: () => R.Router.navigator.pushNamed(
-              //     R.Router.findFriendsScreen,
-              //   ),
-              // ),
-              // SizedBox(height: 16.0),
-              // Row(
-              //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              //   children: createUserProfilePhotos(numberOfProfilePhotos: 6),
-              // ),
-              SizedBox(height: 16.0),
-              HeadingRow(
-                title: StringConst.DISHES,
-                number: StringConst.SEE_ALL_45,
-                onTapOfNumber: () => R.Router.navigator
-                    .pushNamed(R.Router.trendingRestaurantsScreen),
-              ),
-              SizedBox(height: 16.0),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: ListView(
-                  children: trending,
-                ),
-              )
-            ],
-          ),
+              );
+            } else
+              return Container(
+                  child: Center(
+                      child: Text(
+                "No Data",
+                style: TextStyle(color: Colors.black),
+              )));
+          },
         ),
       ),
     );

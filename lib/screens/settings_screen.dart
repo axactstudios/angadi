@@ -56,11 +56,11 @@ class SettingsScreen extends StatelessWidget {
                   onTap: () => R.Router.navigator
                       .pushNamed(R.Router.changePasswordScreen),
                 ),
-                SettingsListTile(
-                  title: "Change Language",
-                  onTap: () => R.Router.navigator
-                      .pushNamed(R.Router.changeLanguageScreen),
-                )
+//                SettingsListTile(
+//                  title: "Change Language",
+//                  onTap: () => R.Router.navigator
+//                      .pushNamed(R.Router.changeLanguageScreen),
+//                )
               ],
             ).toList(),
           )

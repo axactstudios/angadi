@@ -45,7 +45,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 children: <Widget>[
                   CircleAvatar(
                     backgroundImage: url == null
-                        ? AssetImage(ImagePath.andy)
+                        ? AssetImage(ImagePath.branson)
                         : NetworkImage(url),
                     minRadius: Sizes.RADIUS_60,
                     maxRadius: Sizes.RADIUS_60,

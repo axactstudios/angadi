@@ -62,10 +62,6 @@ class ImagePath {
   static const String doughnuts = "$imageDir/doughnuts.png";
   static const String strawberries = "$imageDir/strawberries.png";
 
-  static const String friends1 = "$imageDir/friends_1.png";
-  static const String friends2 = "$imageDir/friends_2.png";
-  static const String friends3 = "$imageDir/friends_3.png";
-  static const String friends4 = "$imageDir/friends_4.png";
   static const String profile1 = "$imageDir/profile_1.png";
   static const String profile2 = "$imageDir/profile_2.png";
   static const String profile3 = "$imageDir/profile_3.png";
@@ -76,14 +72,7 @@ class ImagePath {
 
   //Users
   static const String branson = "$imageDir/branson.png";
-  static const String juliet = "$imageDir/juliet.png";
-  static const String andy = "$imageDir/andy.png";
-  static const String anabel = "$imageDir/anabel.png";
-  static const String ashlee = "$imageDir/ashlee.png";
-  static const String duke = "$imageDir/duke.png";
-  static const String deven = "$imageDir/deven.png";
-  static const String john = "$imageDir/john.png";
-//  static const String briana = "$imageDir/briana.jpg";
+
   //Categories
   static const String italian = "$imageDir/italian.png";
   static const String chinese = "$imageDir/chinese.png";

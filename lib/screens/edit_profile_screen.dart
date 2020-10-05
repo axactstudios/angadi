@@ -57,7 +57,7 @@ class EditProfileScreen extends StatelessWidget {
                 children: <Widget>[
                   Positioned(
                     child: CircleAvatar(
-                      backgroundImage: AssetImage(ImagePath.andy),
+                      backgroundImage: AssetImage(ImagePath.branson),
                       minRadius: 70.0,
                       maxRadius: 70.0,
                     ),

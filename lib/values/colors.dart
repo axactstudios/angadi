@@ -1,13 +1,12 @@
-
 part of values;
 
-
 class AppColors {
-  static const Color primaryColor = Color.fromARGB(255, 255, 255, 255); //Color(0xFFFFFFFF)
+  static const Color primaryColor =
+      Color.fromARGB(255, 255, 255, 255); //Color(0xFFFFFFFF)
   static const Color secondaryColor = Color.fromARGB(255, 246, 247, 255);
   static const Color ternaryBackground = Color.fromARGB(255, 238, 247, 255);
   static const Color primaryElement = Color.fromARGB(255, 255, 255, 255);
-  static const Color secondaryElement = Color.fromARGB(255, 86, 99, 255);
+  static const Color secondaryElement = Color.fromARGB(255, 255, 176, 0);
   static const Color accentElement = Color.fromARGB(255, 186, 192, 203);
   static const Color primaryText = Color.fromARGB(255, 62, 63, 104);
   static const Color secondaryText = Color.fromARGB(255, 255, 255, 255);
@@ -39,7 +38,7 @@ class AppColors {
   static const Color greyShade1 = Color(0xFFE8E8E8);
   //indigo
   static const Color indigo = Color(0xFF8A98BA);
-  static const Color indigoShade1 = Color.fromRGBO( 34, 36, 85, 0.5);
+  static const Color indigoShade1 = Color.fromRGBO(34, 36, 85, 0.5);
   //purple
   static const Color purple = Color(0xFFF6F7FF);
   static const Color purpleShade1 = Color(0xFFE6E7FF);

@@ -1,3 +1,4 @@
+import 'package:angadi/utils/my_shared_prefs.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -168,6 +169,8 @@ class _LoginScreenState extends State<LoginScreen> {
       FirebaseUser user = await FirebaseAuth.instance.currentUser();
 
       if (user.isEmailVerified) {
+        MySharedPreferences msp = new MySharedPreferences();
+        msp.saveText('status', 'loggedin');
         R.Router.navigator.pushNamedAndRemoveUntil(
           R.Router.rootScreen,
           (Route<dynamic> route) => false,

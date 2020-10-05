@@ -16,7 +16,7 @@ class CardTags extends StatelessWidget {
       child: Opacity(
         opacity: 0.8,
         child: Container(
-          width: 40,
+          width: 80,
           height: 14,
           decoration: decoration,
           child: Center(

@@ -149,15 +149,27 @@ class _RootScreenState extends State<RootScreen>
                   bottomNavigationIcon(
                     destination: HomeScreen(),
                     currentTab: HomeScreen.TAB_NO,
-                    activeIcon: ImagePath.activeHomeIcon2,
-                    nonActiveIcon: ImagePath.homeIcon,
+                    activeIcon: Icon(
+                      Icons.home,
+                      color: AppColors.secondaryElement,
+                    ),
+                    nonActiveIcon: Icon(
+                      Icons.home_outlined,
+                      color: AppColors.secondaryElement,
+                    ),
                   ),
                   SizedBox(width: 40),
                   bottomNavigationIcon(
                     destination: BookmarksScreen(),
                     currentTab: BookmarksScreen.TAB_NO,
-                    activeIcon: ImagePath.activeBookmarksIcon2,
-                    nonActiveIcon: ImagePath.bookmarksIcon,
+                    activeIcon: Icon(
+                      Icons.shopping_cart,
+                      color: AppColors.secondaryElement,
+                    ),
+                    nonActiveIcon: Icon(
+                      Icons.shopping_cart_outlined,
+                      color: AppColors.secondaryElement,
+                    ),
                   ),
                 ],
               ),
@@ -169,15 +181,27 @@ class _RootScreenState extends State<RootScreen>
                   bottomNavigationIcon(
                     destination: NotificationsScreen(),
                     currentTab: NotificationsScreen.TAB_NO,
-                    activeIcon: ImagePath.activeNotificationIcon,
-                    nonActiveIcon: ImagePath.notificationIcon,
+                    activeIcon: Icon(
+                      Icons.notifications,
+                      color: AppColors.secondaryElement,
+                    ),
+                    nonActiveIcon: Icon(
+                      Icons.notifications_none,
+                      color: AppColors.secondaryElement,
+                    ),
                   ),
                   SizedBox(width: 40),
                   bottomNavigationIcon(
                     destination: ProfileScreen(),
                     currentTab: ProfileScreen.TAB_NO,
-                    activeIcon: ImagePath.activePersonIcon,
-                    nonActiveIcon: ImagePath.personGreyIcon,
+                    activeIcon: Icon(
+                      Icons.settings,
+                      color: AppColors.secondaryElement,
+                    ),
+                    nonActiveIcon: Icon(
+                      Icons.settings_outlined,
+                      color: AppColors.secondaryElement,
+                    ),
                   ),
                 ],
               )
@@ -191,8 +215,8 @@ class _RootScreenState extends State<RootScreen>
   Widget bottomNavigationIcon({
     @required Widget destination,
     @required int currentTab,
-    @required String activeIcon,
-    @required String nonActiveIcon,
+    @required Icon activeIcon,
+    @required Icon nonActiveIcon,
   }) {
     return InkWell(
       onTap: () {
@@ -204,11 +228,8 @@ class _RootScreenState extends State<RootScreen>
         changeScreen(currentScreen: destination, currentTab: currentTab);
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Image.asset(
-          (this.currentTab == currentTab) ? activeIcon : nonActiveIcon,
-        ),
-      ),
+          padding: const EdgeInsets.all(8.0),
+          child: (this.currentTab == currentTab) ? activeIcon : nonActiveIcon),
     );
   }
 }

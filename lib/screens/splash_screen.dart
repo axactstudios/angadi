@@ -1,3 +1,4 @@
+import 'package:angadi/utils/my_shared_prefs.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
@@ -56,11 +57,20 @@ class _SplashScreenState extends State<SplashScreen>
 
   void textControllerListener() {
     if (_textController.status == AnimationStatus.completed) {
-      Future.delayed(Duration(milliseconds: 1000), () {
-        R.Router.navigator.pushNamedAndRemoveUntil(
-          R.Router.loginScreen,
-          (Route<dynamic> route) => false,
-        );
+      Future.delayed(Duration(milliseconds: 1000), () async {
+        MySharedPreferences msp = new MySharedPreferences();
+        String status = await msp.getText('status');
+        if (status == 'loggedin') {
+          R.Router.navigator.pushNamedAndRemoveUntil(
+            R.Router.rootScreen,
+            (Route<dynamic> route) => false,
+          );
+        } else {
+          R.Router.navigator.pushNamedAndRemoveUntil(
+            R.Router.loginScreen,
+            (Route<dynamic> route) => false,
+          );
+        }
       });
     }
   }

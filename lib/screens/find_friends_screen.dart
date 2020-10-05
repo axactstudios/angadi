@@ -53,13 +53,13 @@ class FindFriendsScreen extends StatelessWidget {
             ),
           ),
           FriendsListTile(
-            imageUrl: ImagePath.anabel,
+            imageUrl: ImagePath.branson,
             title: "Anabel",
             subtitle: "50 reviews",
             buttonText: "Follow",
           ),
           FriendsListTile(
-            imageUrl: ImagePath.andy,
+            imageUrl: ImagePath.branson,
             title: "Andy",
             subtitle: "12 reviews",
             buttonText: "Unfollow",
@@ -72,7 +72,7 @@ class FindFriendsScreen extends StatelessWidget {
             buttonText: "Follow",
           ),
           FriendsListTile(
-            imageUrl: ImagePath.juliet,
+            imageUrl: ImagePath.branson,
             title: "Juliet",
             subtitle: "34 reviews",
             buttonText: "Unfollow",
@@ -119,19 +119,19 @@ class FindFriendsScreen extends StatelessWidget {
             buttonText: "Follow",
           ),
           FriendsListTile(
-            imageUrl: ImagePath.deven,
+            imageUrl: ImagePath.branson,
             title: "Deven",
             subtitle: "43 reviews",
             buttonText: "Follow",
           ),
           FriendsListTile(
-            imageUrl: ImagePath.duke,
+            imageUrl: ImagePath.branson,
             title: "Duke",
             subtitle: "92 reviews",
             buttonText: "Follow",
           ),
           FriendsListTile(
-            imageUrl: ImagePath.ashlee,
+            imageUrl: ImagePath.branson,
             title: "Ashlee",
             subtitle: "89 reviews",
             buttonText: "Follow",

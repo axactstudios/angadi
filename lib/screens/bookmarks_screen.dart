@@ -34,7 +34,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                    color: Color(0xFF5563FB),
+                    color: AppColors.secondaryElement,
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 margin: EdgeInsets.only(right: Sizes.MARGIN_16),
                 child: InkWell(
@@ -80,9 +80,10 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                       distance: distance[index],
                     ),
                   ),
-                  imagePath: imagePaths[index],
+                  imagePath:
+                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
                   status: status[index],
-                  cardTitle: 'Hamburger',
+                  cardTitle: 'Puliyodarai Paste',
                   rating: ratings[index],
                   bookmark: true,
                   category: category[index],
