@@ -90,10 +90,11 @@ class SearchValue {
 }
 
 class ReviewRating {
-  final String value;
+  final String name;
 
-  ReviewRating(this.value);
+  ReviewRating(this.name);
 }
+
 class RestaurantDetails {
   String url;
   String name;

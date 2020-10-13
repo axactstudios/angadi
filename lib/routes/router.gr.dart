@@ -166,7 +166,7 @@ class Router {
         final typedArgs = args as ReviewRating;
 
         return CupertinoPageRoute<dynamic>(
-          builder: (_) => ReviewRatingScreen(),
+          builder: (_) => ReviewRatingScreen(typedArgs),
           settings: settings,
         );
       case Router.addRatingsScreen:

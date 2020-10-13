@@ -1,3 +1,4 @@
+import 'package:angadi/routes/router.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -5,8 +6,8 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/ratings_widget.dart';
 
 class ReviewRatingScreen extends StatefulWidget {
-  String name;
-  ReviewRatingScreen(this.name);
+  ReviewRating reviewRating;
+  ReviewRatingScreen(this.reviewRating);
   @override
   _ReviewRatingScreenState createState() => _ReviewRatingScreenState();
 }
@@ -24,6 +25,21 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
   );
   List<Widget> reviews = [];
 
+  TextStyle addressTextStyle = Styles.customNormalTextStyle(
+    color: AppColors.accentText,
+    fontSize: Sizes.TEXT_SIZE_14,
+  );
+
+  TextStyle openingTimeTextStyle = Styles.customNormalTextStyle(
+    color: Colors.red,
+    fontSize: Sizes.TEXT_SIZE_14,
+  );
+
+  TextStyle subHeadingTextStyle = Styles.customTitleTextStyle(
+    color: AppColors.headingText,
+    fontWeight: FontWeight.w600,
+    fontSize: Sizes.TEXT_SIZE_18,
+  );
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -55,7 +71,7 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
 
               for (int i = 0; i < snap.data.documents.length; i++) {
                 if (snap.data.documents[i]['dishName'] ==
-                    widget.restaurantDetail.name) {
+                    widget.reviewRating.name) {
                   reviews.add(ListTile(
                     leading: Image.network(snap.data.documents[i]['userImage']),
                     title: Row(
@@ -76,7 +92,7 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
                   ));
                 }
               }
-              return recents.length != 0
+              return reviews.length != 0
                   ? ListView(
                       children: reviews,
                     )

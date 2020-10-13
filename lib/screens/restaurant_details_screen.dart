@@ -322,8 +322,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           HeadingRow(
                             title: StringConst.REVIEWS_AND_RATINGS,
                             number: 'See All (${reviews.length})',
-                            onTapOfNumber: () => R.Router.navigator
-                                .pushNamed(R.Router.reviewRatingScreen),
+                            onTapOfNumber: () => R.Router.navigator.pushNamed(
+                                R.Router.reviewRatingScreen,
+                                arguments:
+                                    ReviewRating(widget.restaurantDetail.name)),
                           ),
                           SizedBox(height: 16.0),
                           StreamBuilder(
