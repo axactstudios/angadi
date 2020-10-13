@@ -1,5 +1,10 @@
 import 'dart:ui';
 
+import 'package:angadi/classes/cart.dart';
+import 'package:angadi/routes/router.gr.dart';
+import 'package:angadi/services/database_helper.dart';
+import 'package:angadi/widgets/category_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:angadi/routes/router.dart';
@@ -12,11 +17,33 @@ import 'package:angadi/widgets/heading_row.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/ratings_widget.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class RestaurantDetailsScreen extends StatelessWidget {
-  final RestaurantDetails restaurantDetails;
+class RestaurantDetailsScreen extends StatefulWidget {
+  RestaurantDetails restaurantDetail;
+  RestaurantDetailsScreen(this.restaurantDetail);
 
-  RestaurantDetailsScreen({@required this.restaurantDetails});
+  @override
+  _RestaurantDetailsScreenState createState() =>
+      _RestaurantDetailsScreenState();
+}
+
+class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
+  final dbHelper = DatabaseHelper.instance;
+  Cart item;
+  int newQty, length = 0;
+
+  getCartLength() async {
+    int x = await dbHelper.queryRowCount();
+    length = x;
+    setState(() {
+      print('Length Updated');
+      length;
+    });
+  }
+
+  List<Widget> reviews = [];
+  List<Widget> recents = [];
 
   TextStyle addressTextStyle = Styles.customNormalTextStyle(
     color: AppColors.accentText,
@@ -41,19 +68,40 @@ class RestaurantDetailsScreen extends StatelessWidget {
     topRightRadius: 24,
     bottomRightRadius: 24,
   );
+
   BoxDecoration leftSideDecorations =
       Decorations.customHalfCurvedButtonDecoration(
     color: Colors.black.withOpacity(0.1),
     topleftRadius: 24,
     bottomleftRadius: 24,
   );
-
+  bool check = false;
   BoxDecoration rightSideDecorations =
       Decorations.customHalfCurvedButtonDecoration(
     color: Colors.black.withOpacity(0.1),
     topRightRadius: 24,
     bottomRightRadius: 24,
   );
+  void checkInCart() async {
+    var temp = await _query(widget.restaurantDetail.name);
+    print(temp);
+    if (temp == null)
+      setState(() {
+        check = false;
+      });
+    else
+      setState(() {
+        print('Item already exists');
+        check = true;
+      });
+  }
+
+  @override
+  void initState() {
+    getCartLength();
+    checkInCart();
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -73,7 +121,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                       children: <Widget>[
                         Positioned(
                           child: Image.network(
-                            restaurantDetails.imagePath,
+                            widget.restaurantDetail.url,
                             width: MediaQuery.of(context).size.width,
                             height: heightOfStack,
                             fit: BoxFit.cover,
@@ -197,7 +245,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                               Row(
                                 children: <Widget>[
                                   Text(
-                                    restaurantDetails.restaurantName,
+                                    widget.restaurantDetail.name,
                                     textAlign: TextAlign.left,
                                     style: Styles.customTitleTextStyle(
                                       color: AppColors.headingText,
@@ -207,7 +255,7 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                   ),
                                   SizedBox(width: 4.0),
                                   CardTags(
-                                    title: restaurantDetails.category,
+                                    title: widget.restaurantDetail.category,
                                     decoration: BoxDecoration(
                                       gradient: Gradients.secondaryGradient,
                                       boxShadow: [
@@ -218,12 +266,12 @@ class RestaurantDetailsScreen extends StatelessWidget {
                                     ),
                                   ),
                                   Spacer(flex: 1),
-                                  Ratings(restaurantDetails.rating)
+                                  Ratings(widget.restaurantDetail.rating)
                                 ],
                               ),
                               SizedBox(height: 16.0),
                               Text(
-                                restaurantDetails.restaurantAddress,
+                                widget.restaurantDetail.desc,
                                 style: addressTextStyle,
                               ),
                               // SizedBox(height: 8.0),
@@ -273,32 +321,153 @@ class RestaurantDetailsScreen extends StatelessWidget {
                           SpaceH24(),
                           HeadingRow(
                             title: StringConst.REVIEWS_AND_RATINGS,
-                            number: StringConst.SEE_ALL_32,
+                            number: 'See All (${reviews.length})',
                             onTapOfNumber: () => R.Router.navigator
                                 .pushNamed(R.Router.reviewRatingScreen),
                           ),
                           SizedBox(height: 16.0),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: createUserListTiles(numberOfUsers: 5),
-                          )
+                          StreamBuilder(
+                            stream: Firestore.instance
+                                .collection('Reviews')
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snap) {
+                              if (snap.hasData &&
+                                  !snap.hasError &&
+                                  snap.data != null) {
+                                reviews.clear();
+                                recents.clear();
+
+                                for (int i = 0;
+                                    i < snap.data.documents.length;
+                                    i++) {
+                                  if (snap.data.documents[i]['dishName'] ==
+                                      widget.restaurantDetail.name) {
+                                    reviews.add(ListTile(
+                                      leading: Image.network(
+                                          snap.data.documents[i]['userImage']),
+                                      title: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: <Widget>[
+                                          Text(
+                                            snap.data.documents[i]['userName'],
+                                            style: subHeadingTextStyle,
+                                          ),
+                                          Ratings(
+                                              snap.data.documents[i]['rating']),
+                                        ],
+                                      ),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 0),
+                                      subtitle: Text(
+                                        snap.data.documents[i]['details'],
+                                        style: addressTextStyle,
+                                      ),
+                                    ));
+                                    if (i < 5) {
+                                      recents.add(ListTile(
+                                        leading: Image.network(snap
+                                            .data.documents[i]['userImage']),
+                                        title: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: <Widget>[
+                                            Text(
+                                              snap.data.documents[i]
+                                                  ['userName'],
+                                              style: subHeadingTextStyle,
+                                            ),
+                                            Ratings(snap.data.documents[i]
+                                                ['rating']),
+                                          ],
+                                        ),
+                                        contentPadding:
+                                            EdgeInsets.symmetric(horizontal: 0),
+                                        subtitle: Text(
+                                          snap.data.documents[i]['details'],
+                                          style: addressTextStyle,
+                                        ),
+                                      ));
+                                    }
+                                  }
+                                }
+                                return recents.length != 0
+                                    ? Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: recents,
+                                      )
+                                    : Container();
+                              } else
+                                return Container(
+                                    child: Center(
+                                        child: Text(
+                                  "No Data",
+                                  style: TextStyle(color: Colors.black),
+                                )));
+                            },
+                          ),
                         ],
                       ),
                     )
                   ],
                 ),
               ),
-              angadiButton(
-                'Add to Cart ',
-                onTap: () =>
-                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                buttonHeight: 65,
-                buttonWidth: MediaQuery.of(context).size.width,
-                decoration: Decorations.customHalfCurvedButtonDecoration(
-                  topleftRadius: Sizes.RADIUS_14,
-                  topRightRadius: Sizes.RADIUS_14,
-                ),
-              ),
+              check == false
+                  ? angadiButton(
+                      'Add to Cart ',
+                      onTap: () async {
+//                  await dbHelper.onCreate();
+//                  int l = await dbHelper.check(widget.restaurantDetail.name);
+//                  print(l);
+                        var temp = await _query(widget.restaurantDetail.name);
+                        print(temp);
+                        if (temp == null)
+                          addToCart(
+                              name: widget.restaurantDetail.name,
+                              imgUrl: widget.restaurantDetail.url,
+                              price: widget.restaurantDetail.price,
+                              qty: 1);
+                        else
+                          setState(() {
+                            print('Item already exists');
+                            check = true;
+                          });
+                      },
+//                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
+                      buttonHeight: 65,
+                      buttonWidth: MediaQuery.of(context).size.width,
+                      decoration: Decorations.customHalfCurvedButtonDecoration(
+                        topleftRadius: Sizes.RADIUS_14,
+                        topRightRadius: Sizes.RADIUS_14,
+                      ),
+                    )
+                  : angadiButton(
+                      'Already in Cart ',
+                      onTap: () async {
+//                  await dbHelper.onCreate();
+//                  int l = await dbHelper.check(widget.restaurantDetail.name);
+//                  print(l);
+//               var temp = await _query(widget.restaurantDetail.name);
+//               print(temp);
+//               if (temp == null)
+//
+//               else
+//                 setState(() {
+//                   print('Item already exists');
+//                   check = true;
+//                 });
+                      },
+//                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
+                      buttonHeight: 65,
+                      buttonWidth: MediaQuery.of(context).size.width,
+                      decoration:
+                          Decorations.customHalfCurvedButtonDecorationGrey(
+                        topleftRadius: Sizes.RADIUS_14,
+                        topRightRadius: Sizes.RADIUS_14,
+                      ),
+                    ),
             ],
           ),
         ),
@@ -360,5 +529,65 @@ class RestaurantDetailsScreen extends StatelessWidget {
       ));
     });
     return userListTiles;
+  }
+
+  void addToCart({String name, String imgUrl, String price, int qty}) async {
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnProductName: name,
+      DatabaseHelper.columnImageUrl: imgUrl,
+      DatabaseHelper.columnPrice: price,
+      DatabaseHelper.columnQuantity: qty
+    };
+    Cart item = Cart.fromMap(row);
+    final id = await dbHelper.insert(item);
+    Fluttertoast.showToast(
+        msg: 'Added to cart', toastLength: Toast.LENGTH_SHORT);
+    setState(() {
+      check = true;
+    });
+    getCartLength();
+  }
+
+  Future<Cart> _query(String name) async {
+    final allRows = await dbHelper.queryRows(name);
+    print(allRows);
+    allRows.forEach((row) => item = Cart.fromMap(row));
+    setState(() {
+      item;
+      print(item);
+      print('Updated');
+    });
+    return item;
+  }
+
+  void updateItem(
+      {int id,
+      String name,
+      String imgUrl,
+      String price,
+      int qty,
+      String details}) async {
+    // row to update
+    Cart item = Cart(id, name, imgUrl, price, qty);
+    final rowsAffected = await dbHelper.update(item);
+    _query(name);
+    Fluttertoast.showToast(msg: 'Updated', toastLength: Toast.LENGTH_SHORT);
+    setState(() {
+      _query(item.productName);
+      print('Updated');
+      item;
+    });
+    getCartLength();
+  }
+
+  void removeItem(String name) async {
+    // Assuming that the number of rows is the id for the last row.
+    final rowsDeleted = await dbHelper.delete(name);
+    _query(name);
+    setState(() {
+      print('Updated');
+      item;
+    });
+    getCartLength();
   }
 }

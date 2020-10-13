@@ -140,7 +140,7 @@ class Router {
         }
         final typedArgs = args as RestaurantDetails;
         return CupertinoPageRoute<dynamic>(
-          builder: (_) => RestaurantDetailsScreen(restaurantDetails: typedArgs),
+          builder: (_) => RestaurantDetailsScreen(typedArgs),
           settings: settings,
         );
       case Router.bookmarksScreen:
@@ -163,6 +163,8 @@ class Router {
           settings: settings,
         );
       case Router.reviewRatingScreen:
+        final typedArgs = args as ReviewRating;
+
         return CupertinoPageRoute<dynamic>(
           builder: (_) => ReviewRatingScreen(),
           settings: settings,

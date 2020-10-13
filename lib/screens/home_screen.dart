@@ -11,7 +11,6 @@ import 'package:angadi/widgets/category_card.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/heading_row.dart';
 import 'package:angadi/widgets/search_input_field.dart';
-
 import '../routes/router.gr.dart';
 import '../values/values.dart';
 
@@ -28,6 +27,8 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController controller = TextEditingController();
 
   List<Widget> trending = new List();
+  List<Widget> categories = new List();
+
   @override
   void initState() {
     // TODO: implement initState
@@ -62,28 +63,27 @@ class _HomeScreenState extends State<HomeScreen> {
                     desc: snap.data.documents[i]['description'],
                     url: snap.data.documents[i]['url']));
                 print(snap.data.documents[i]['name']);
-                trending.add(Container(
-                  margin: EdgeInsets.only(right: 4.0),
-                  child: FoodyBiteCard(
-                    onTap: () => R.Router.navigator.pushNamed(
-                      R.Router.restaurantDetailsScreen,
-                      arguments: RestaurantDetails(
-                        imagePath: snap.data.documents[i]['url'],
-                        restaurantName: snap.data.documents[i]['name'],
-                        restaurantAddress: snap.data.documents[i]
-                            ['description'],
-                        rating: snap.data.documents[i]['rating'],
-                        category: snap.data.documents[i]['category'],
-                      ),
+                if (i < 5)
+                  trending.add(Container(
+                    margin: EdgeInsets.only(right: 4.0),
+                    child: FoodyBiteCard(
+                      onTap: () => R.Router.navigator
+                          .pushNamed(R.Router.restaurantDetailsScreen,
+                              arguments: RestaurantDetails(
+                                url: snap.data.documents[i]['url'],
+                                name: snap.data.documents[i]['name'],
+                                desc: snap.data.documents[i]['description'],
+                                category: snap.data.documents[i]['category'],
+                                rating: snap.data.documents[i]['rating'],
+                                price: snap.data.documents[i]['price'],
+                              )),
+                      imagePath: snap.data.documents[i]['url'],
+                      cardTitle: snap.data.documents[i]['name'],
+                      rating: snap.data.documents[i]['rating'],
+                      category: snap.data.documents[i]['category'],
+                      address: snap.data.documents[i]['description'],
                     ),
-                    imagePath: snap.data.documents[i]['url'],
-                    cardTitle: snap.data.documents[i]['name'],
-                    rating: snap.data.documents[i]['rating'],
-                    category: snap.data.documents[i]['category'],
-//                  distance: '',
-                    address: snap.data.documents[i]['description'],
-                  ),
-                ));
+                  ));
               }
 
               return Container(
@@ -147,36 +147,66 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 16.0),
                     HeadingRow(
                       title: StringConst.CATEGORY,
-                      number: StringConst.SEE_ALL_9,
+                      number: '',
                       onTapOfNumber: () => R.Router.navigator
                           .pushNamed(R.Router.categoriesScreen),
                     ),
                     SizedBox(height: 16.0),
                     Container(
                       height: 100,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: categoryImagePaths.length,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            margin: EdgeInsets.only(right: 8.0),
-                            child: FoodyBiteCategoryCard(
-                              imagePath: categoryImagePaths[index],
-                              gradient: gradients[index],
-                              category: category[index],
-                              onTap: () => R.Router.navigator.pushNamed(
-                                R.Router.categoryDetailScreen,
-                                arguments: CategoryDetailScreenArguments(
-                                  categoryName: category[index],
-                                  imagePath: categoryListImagePaths[index],
-                                  selectedCategory: index,
-                                  numberOfCategories:
-                                      categoryListImagePaths.length,
-                                  gradient: gradients[index],
+                      child: StreamBuilder(
+                        stream: Firestore.instance
+                            .collection('Categories')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snap) {
+                          if (snap.hasData &&
+                              !snap.hasError &&
+                              snap.data != null) {
+                            categories.clear();
+
+                            for (int i = 0;
+                                i < snap.data.documents.length;
+                                i++) {
+                              categories.add(Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 8.0),
+                                child: FoodyBiteCategoryCard(
+                                  imagePath: snap.data.documents[i]['imageURL'],
+                                  gradient: gradients[i],
+                                  category: snap.data.documents[i]['catName'],
+                                  onTap: () {
+                                    print(
+                                        '---------==========${snap.data.documents[i]['imageURL']}');
+                                    R.Router.navigator.pushNamed(
+                                      R.Router.categoryDetailScreen,
+                                      arguments: CategoryDetailScreenArguments(
+                                        categoryName: snap.data.documents[i]
+                                            ['catName'],
+                                        imagePath: snap.data.documents[i]
+                                            ['imageURL'],
+                                        selectedCategory: i,
+                                        numberOfCategories:
+                                            snap.data.documents.length,
+                                        gradient: gradients[i],
+                                      ),
+                                    );
+                                  },
                                 ),
-                              ),
-                            ),
-                          );
+                              ));
+                            }
+                            return categories.length != 0
+                                ? ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: categories,
+                                  )
+                                : Container();
+                          } else
+                            return Container(
+                                child: Center(
+                                    child: Text(
+                              "No Data",
+                              style: TextStyle(color: Colors.black),
+                            )));
                         },
                       ),
                     ),
@@ -196,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 16.0),
                     HeadingRow(
                       title: StringConst.DISHES,
-                      number: StringConst.SEE_ALL_45,
+                      number: '',
                       onTapOfNumber: () => R.Router.navigator
                           .pushNamed(R.Router.trendingRestaurantsScreen),
                     ),

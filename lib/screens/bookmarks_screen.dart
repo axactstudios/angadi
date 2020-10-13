@@ -1,3 +1,7 @@
+import 'package:angadi/classes/cart.dart';
+import 'package:angadi/services/database_helper.dart';
+import 'package:angadi/widgets/cart_card.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -5,6 +9,7 @@ import 'package:angadi/values/data.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class BookmarksScreen extends StatefulWidget {
   static const int TAB_NO = 1;
@@ -14,6 +19,47 @@ class BookmarksScreen extends StatefulWidget {
 }
 
 class _BookmarksScreenState extends State<BookmarksScreen> {
+  List<Cart> cartItems = [];
+  final dbHelper = DatabaseHelper.instance;
+//  final dbRef = FirebaseDatabase.instance.reference();
+  FirebaseAuth mAuth = FirebaseAuth.instance;
+  int newQty;
+  void getAllItems() async {
+    final allRows = await dbHelper.queryAllRows();
+    cartItems.clear();
+    allRows.forEach((row) => cartItems.add(Cart.fromMap(row)));
+    setState(() {
+//      print(cartItems[1]);
+    });
+  }
+
+  void updateItem(
+      {int id,
+      String name,
+      String imgUrl,
+      String price,
+      int qty,
+      String details}) async {
+    // row to update
+    Cart item = Cart(id, name, imgUrl, price, qty);
+    final rowsAffected = await dbHelper.update(item);
+    Fluttertoast.showToast(msg: 'Updated', toastLength: Toast.LENGTH_SHORT);
+    getAllItems();
+  }
+
+  void removeItem(String name) async {
+    // Assuming that the number of rows is the id for the last row.
+    final rowsDeleted = await dbHelper.delete(name);
+    getAllItems();
+    Fluttertoast.showToast(
+        msg: 'Removed from cart', toastLength: Toast.LENGTH_SHORT);
+  }
+
+  @override
+  void initState() {
+    getAllItems();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,33 +108,195 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
           ),
           child: ListView.separated(
             scrollDirection: Axis.vertical,
-            itemCount: 4,
+            itemCount: cartItems.length,
             separatorBuilder: (context, index) {
               return SpaceH8();
             },
             itemBuilder: (context, index) {
               return Container(
-                child: FoodyBiteCard(
-                  onTap: () => R.Router.navigator.pushNamed(
-                    R.Router.restaurantDetailsScreen,
-                    arguments: RestaurantDetails(
-                      imagePath: imagePaths[index],
-                      restaurantName: restaurantNames[index],
-                      restaurantAddress: addresses[index],
-                      rating: ratings[index],
-                      category: category[index],
-                      distance: distance[index],
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.9,
+                  height: 281,
+                  child: Card(
+                    elevation: 4,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Stack(
+                      children: <Widget>[
+                        Positioned(
+                          child: Column(
+                            children: <Widget>[
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(4),
+                                child: Image.network(
+                                  cartItems[index].imgUrl,
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 180,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              Container(
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: Sizes.MARGIN_16,
+                                  vertical: Sizes.MARGIN_16,
+                                ),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    Column(
+                                      children: <Widget>[
+                                        Text(
+                                          cartItems[index].productName,
+                                          textAlign: TextAlign.left,
+                                          style: Styles.customTitleTextStyle(
+                                            color: AppColors.headingText,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: Sizes.TEXT_SIZE_20,
+                                          ),
+                                        ),
+                                        SizedBox(height: 12.0),
+                                      ],
+                                    ),
+                                    Align(
+                                      alignment: Alignment.center,
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          InkWell(
+                                            onTap: () {
+                                              newQty = cartItems[index].qty + 1;
+                                              updateItem(
+                                                  id: cartItems[index].id,
+                                                  name: cartItems[index]
+                                                      .productName,
+                                                  imgUrl:
+                                                      cartItems[index].imgUrl,
+                                                  price: cartItems[index].price,
+                                                  qty: newQty);
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: Icon(
+                                                Icons.add_box,
+                                                color: Colors.white,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.07,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          Container(
+                                            decoration: BoxDecoration(
+                                                border: Border.all(
+                                                    color: Colors.black,
+                                                    width: 1)),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(4.0),
+                                              child: Text(
+                                                cartItems[index].qty.toString(),
+                                                textAlign: TextAlign.left,
+                                                style: Styles
+                                                    .customNormalTextStyle(
+                                                  color: AppColors.accentText,
+                                                  fontSize: Sizes.TEXT_SIZE_14,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 5,
+                                          ),
+                                          InkWell(
+                                            onTap: () {
+                                              if (cartItems[index].qty == 1) {
+                                                removeItem(cartItems[index]
+                                                    .productName);
+                                              } else {
+                                                var newQty =
+                                                    cartItems[index].qty - 1;
+                                                updateItem(
+                                                    id: cartItems[index].id,
+                                                    name: cartItems[index]
+                                                        .productName,
+                                                    imgUrl:
+                                                        cartItems[index].imgUrl,
+                                                    price:
+                                                        cartItems[index].price,
+                                                    qty: newQty);
+                                              }
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                color: Colors.grey,
+                                                borderRadius:
+                                                    BorderRadius.circular(6),
+                                              ),
+                                              child: Icon(
+                                                Icons.indeterminate_check_box,
+                                                color: Colors.white,
+                                                size: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.07,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    InkWell(
+                                        onTap: () {
+                                          removeItem(
+                                              cartItems[index].productName);
+                                        },
+                                        child: Icon(Icons.delete))
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Positioned(
+                          left: 16.0,
+                          right: 16.0,
+                          top: 8.0,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: <Widget>[
+                              Card(
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: Sizes.WIDTH_8,
+                                    vertical: Sizes.WIDTH_4,
+                                  ),
+                                  child: Text(
+                                    'Rs. ${cartItems[index].price}',
+                                    style: Styles.customTitleTextStyle(
+                                      color: AppColors.headingText,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: Sizes.TEXT_SIZE_14,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  imagePath:
-                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
-                  status: status[index],
-                  cardTitle: 'Puliyodarai Paste',
-                  rating: ratings[index],
-                  bookmark: true,
-                  category: category[index],
-                  distance: distance[index],
-                  address: 'Made with exotic ingredients',
                 ),
               );
             },

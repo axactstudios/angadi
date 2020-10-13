@@ -1,9 +1,17 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/ratings_widget.dart';
 
-class ReviewRatingScreen extends StatelessWidget {
+class ReviewRatingScreen extends StatefulWidget {
+  String name;
+  ReviewRatingScreen(this.name);
+  @override
+  _ReviewRatingScreenState createState() => _ReviewRatingScreenState();
+}
+
+class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
   TextStyle subTitleTextStyle = Styles.customNormalTextStyle(
     color: AppColors.accentText,
     fontSize: Sizes.TEXT_SIZE_14,
@@ -14,6 +22,7 @@ class ReviewRatingScreen extends StatelessWidget {
     fontWeight: FontWeight.w600,
     fontSize: Sizes.TEXT_SIZE_18,
   );
+  List<Widget> reviews = [];
 
   @override
   Widget build(BuildContext context) {
@@ -38,8 +47,48 @@ class ReviewRatingScreen extends StatelessWidget {
         ),
       ),
       body: Container(
-        child: ListView(
-          children: createUserListTiles(numberOfUsers: 10),
+        child: StreamBuilder(
+          stream: Firestore.instance.collection('Reviews').snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+            if (snap.hasData && !snap.hasError && snap.data != null) {
+              reviews.clear();
+
+              for (int i = 0; i < snap.data.documents.length; i++) {
+                if (snap.data.documents[i]['dishName'] ==
+                    widget.restaurantDetail.name) {
+                  reviews.add(ListTile(
+                    leading: Image.network(snap.data.documents[i]['userImage']),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        Text(
+                          snap.data.documents[i]['userName'],
+                          style: subHeadingTextStyle,
+                        ),
+                        Ratings(snap.data.documents[i]['rating']),
+                      ],
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                    subtitle: Text(
+                      snap.data.documents[i]['details'],
+                      style: addressTextStyle,
+                    ),
+                  ));
+                }
+              }
+              return recents.length != 0
+                  ? ListView(
+                      children: reviews,
+                    )
+                  : Container();
+            } else
+              return Container(
+                  child: Center(
+                      child: Text(
+                "No Data",
+                style: TextStyle(color: Colors.black),
+              )));
+          },
         ),
       ),
     );

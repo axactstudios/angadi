@@ -56,16 +56,19 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           itemBuilder: (context, index) {
             return Container(
               child: FoodyBiteCategoryCard(
-                onTap: () => R.Router.navigator.pushNamed(
-                  R.Router.categoryDetailScreen,
-                  arguments: CategoryDetailScreenArguments(
-                    categoryName: category[index],
-                    imagePath: categoryListImagePaths[index],
-                    selectedCategory: index,
-                    numberOfCategories: categoryListImagePaths.length,
-                    gradient: gradients[index],
-                  ),
-                ),
+                onTap: () {
+                  print('L');
+                  R.Router.navigator.pushNamed(
+                    R.Router.categoryDetailScreen,
+                    arguments: CategoryDetailScreenArguments(
+                      categoryName: category[index],
+                      imagePath: categoryListImagePaths[index],
+                      selectedCategory: index,
+                      numberOfCategories: categoryListImagePaths.length,
+                      gradient: gradients[index],
+                    ),
+                  );
+                },
                 width: MediaQuery.of(context).size.width,
                 imagePath: categoryListImagePaths[index],
                 gradient: gradients[index],

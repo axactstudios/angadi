@@ -57,12 +57,12 @@ class SearchResultsScreen extends StatelessWidget {
                         onTap: () => R.Router.navigator.pushNamed(
                           R.Router.restaurantDetailsScreen,
                           arguments: RestaurantDetails(
-                            imagePath: imagePaths[index],
-                            restaurantName: restaurantNames[index],
-                            restaurantAddress: addresses[index],
-                            rating: ratings[index],
-                            category: category[index],
-                            distance: distance[index],
+                            url: 'snap.data.documents[i][',
+                            name: 'Hamburger',
+                            desc: 'Description',
+                            category: 'Category',
+                            rating: 'Rating',
+                            price: 'Price',
                           ),
                         ),
                         imagePath: imagePaths[index],

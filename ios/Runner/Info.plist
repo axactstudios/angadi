@@ -19,6 +19,8 @@
         		</array>
         	</dict>
         </array>
+        <key>NSLocalizedDescription</key>
+                    <string>This app requires access to the local storage.</string>
         <key>NSPhotoLibraryUsageDescription</key>
             <string>This app requires access to the photo library.</string>
             <key>NSMicrophoneUsageDescription</key>

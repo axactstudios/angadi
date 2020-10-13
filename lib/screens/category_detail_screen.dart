@@ -1,3 +1,5 @@
+import 'package:angadi/classes/dish.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/data.dart';
@@ -7,7 +9,7 @@ import 'package:angadi/widgets/spaces.dart';
 
 import '../routes/router.dart';
 
-class CategoryDetailScreen extends StatelessWidget {
+class CategoryDetailScreen extends StatefulWidget {
   CategoryDetailScreen({
     @required this.categoryName,
     @required this.imagePath,
@@ -23,14 +25,20 @@ class CategoryDetailScreen extends StatelessWidget {
   final Gradient gradient;
 
   @override
+  _CategoryDetailScreenState createState() => _CategoryDetailScreenState();
+}
+
+class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
+  @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     var widthOfScreen = MediaQuery.of(context).size.width;
     var marginBetweenPills = 4;
     var marginAroundPills = 92;
-    var margin =
-        marginAroundPills + ((numberOfCategories - 1) * marginBetweenPills);
-    var widthOfEachPill = (widthOfScreen - margin) / numberOfCategories;
+    var margin = marginAroundPills +
+        ((widget.numberOfCategories - 1) * marginBetweenPills);
+    var widthOfEachPill = (widthOfScreen - margin) / widget.numberOfCategories;
+    List<Dish> dishes = new List<Dish>();
 
     return Scaffold(
       appBar: PreferredSize(
@@ -40,8 +48,8 @@ class CategoryDetailScreen extends StatelessWidget {
           flexibleSpace: Stack(
             children: <Widget>[
               Positioned(
-                child: Image.asset(
-                  imagePath,
+                child: Image.network(
+                  widget.imagePath,
                   width: MediaQuery.of(context).size.width,
                   height: 130,
                   fit: BoxFit.cover,
@@ -52,7 +60,7 @@ class CategoryDetailScreen extends StatelessWidget {
                   opacity: 0.85,
                   child: Container(
                     decoration: BoxDecoration(
-                      gradient: gradient,
+                      gradient: widget.gradient,
                     ),
                   ),
                 ),
@@ -73,7 +81,7 @@ class CategoryDetailScreen extends StatelessWidget {
                             ),
                             Spacer(flex: 1),
                             Text(
-                              categoryName,
+                              widget.categoryName,
                               style: textTheme.title.copyWith(
                                 fontSize: Sizes.TEXT_SIZE_22,
                                 color: AppColors.white,
@@ -88,7 +96,7 @@ class CategoryDetailScreen extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: generatePills(
-                              numberOfPills: numberOfCategories,
+                              numberOfPills: widget.numberOfCategories,
                               widthOfPill: widthOfEachPill,
                             ),
                           ),
@@ -109,42 +117,70 @@ class CategoryDetailScreen extends StatelessWidget {
           right: Sizes.MARGIN_16,
           top: Sizes.MARGIN_16,
         ),
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView.separated(
-                itemCount: categoryDetailImagePaths.length,
-                separatorBuilder: (context, index) {
-                  return SpaceH8();
-                },
-                itemBuilder: (context, index) {
-                  return Container(
-                    margin: EdgeInsets.only(right: 4.0),
-                    child: FoodyBiteCard(
-                      onTap: () => R.Router.navigator.pushNamed(
-                        R.Router.restaurantDetailsScreen,
-                        arguments: RestaurantDetails(
-                          imagePath: 'https://picsum.photos/200',
-                          restaurantName: 'Hamburger',
-                          restaurantAddress: 'Created with exotic ingredients',
-                          rating: ratings[index],
-                          category: category[index],
-                          // distance: distance[i],
-                        ),
-                      ),
-                      imagePath: categoryDetailImagePaths[index],
-                      status: status[index],
-                      cardTitle: 'Hamburger',
-                      rating: ratings[index],
-                      category: category[index],
-                      distance: distance[index],
-                      address: 'Created with exotic ingredients',
+        child: StreamBuilder(
+          stream: Firestore.instance.collection('Dishes').snapshots(),
+          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+            if (snap.hasData && !snap.hasError && snap.data != null) {
+              dishes.clear();
+
+              for (int i = 0; i < snap.data.documents.length; i++) {
+//              print(snap.data.documents[i]['url']);
+                if (snap.data.documents[i]['category'] == widget.categoryName)
+                  dishes.add(Dish(
+                      name: snap.data.documents[i]['name'],
+                      category: snap.data.documents[i]['category'],
+                      rating: snap.data.documents[i]['rating'],
+                      price: snap.data.documents[i]['price'],
+                      desc: snap.data.documents[i]['description'],
+                      url: snap.data.documents[i]['url']));
+                print(snap.data.documents[i]['name']);
+              }
+
+              return Column(
+                children: <Widget>[
+                  Expanded(
+                    child: ListView.separated(
+                      itemCount: dishes.length,
+                      separatorBuilder: (context, index) {
+                        return SpaceH8();
+                      },
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: EdgeInsets.only(right: 4.0),
+                          child: FoodyBiteCard(
+                            onTap: () => R.Router.navigator.pushNamed(
+                              R.Router.restaurantDetailsScreen,
+                              arguments: RestaurantDetails(
+                                url: dishes[index].url,
+                                name: dishes[index].name,
+                                desc: dishes[index].desc,
+                                category: dishes[index].category,
+                                rating: dishes[index].rating,
+                                price: dishes[index].price,
+                              ),
+                            ),
+                            imagePath: dishes[index].url,
+//                            status: status[index],
+                            cardTitle: dishes[index].name,
+                            rating: dishes[index].rating,
+                            category: dishes[index].category,
+//                            distance: distance[index],
+                            address: dishes[index].desc,
+                          ),
+                        );
+                      },
                     ),
-                  );
-                },
-              ),
-            ),
-          ],
+                  ),
+                ],
+              );
+            } else
+              return Container(
+                  child: Center(
+                      child: Text(
+                "No Data",
+                style: TextStyle(color: Colors.black),
+              )));
+          },
         ),
       ),
     );
@@ -159,7 +195,7 @@ class CategoryDetailScreen extends StatelessWidget {
       pills.add(
         Pill(
           width: widthOfPill,
-          color: (index == selectedCategory)
+          color: (index == widget.selectedCategory)
               ? AppColors.white
               : AppColors.whiteShade_50,
           marginRight:

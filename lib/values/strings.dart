@@ -37,8 +37,8 @@ class StringConst {
   static const String PREVIEW = "Preview";
   static const String REVIEWS_AND_RATINGS = "Reviews & Ratings";
   static const String SEE_ALL_32 = "See all (32)";
-  static const String SEE_ALL_45 = "See all (45)";
-  static const String SEE_ALL_9 = "See all (9)";
+  static const String SEE_ALL_45 = "See all (10)";
+  static const String SEE_ALL_9 = "See all (1)";
   static const String SEE_ALL_56 = "See all (56)";
   static const String CREATE_NEW_ACCOUNT = "Create New Account";
   static const String STATUS_OPEN = "OPEN";

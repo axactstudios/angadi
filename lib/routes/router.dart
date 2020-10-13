@@ -89,22 +89,27 @@ class SearchValue {
   SearchValue(this.value);
 }
 
-class RestaurantDetails {
-  final String imagePath;
-  final String restaurantName;
-  final String restaurantAddress;
-  final String category;
-  final String distance;
-  final String rating;
+class ReviewRating {
+  final String value;
 
-  RestaurantDetails({
-    @required this.imagePath,
-    @required this.restaurantName,
-    @required this.restaurantAddress,
-    @required this.category,
-    @required this.distance,
-    @required this.rating,
-  });
+  ReviewRating(this.value);
+}
+class RestaurantDetails {
+  String url;
+  String name;
+  String desc;
+  String category;
+  String rating;
+
+  String price;
+
+  RestaurantDetails(
+      {@required this.url,
+      @required this.name,
+      @required this.desc,
+      @required this.category,
+      @required this.rating,
+      @required this.price});
 }
 
 class CurrentScreen {

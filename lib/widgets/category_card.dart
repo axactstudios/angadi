@@ -41,7 +41,7 @@ class FoodyBiteCategoryCard extends StatelessWidget {
             Positioned(
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(borderRadius),
-                child: Image.asset(
+                child: Image.network(
                   imagePath,
                   width: width,
                   height: height,
