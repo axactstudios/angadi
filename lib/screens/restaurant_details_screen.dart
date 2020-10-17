@@ -100,12 +100,25 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   void initState() {
     getCartLength();
     checkInCart();
+    update();
     super.initState();
+  }
+
+  var l = 0;
+  void update() {
+    if (1 == 1) {
+      setState(() {
+        print(l);
+        l = reviews.length;
+      });
+      print(l);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
 //    final RestaurantDetails args = ModalRoute.of(context).settings.arguments;
+
     var heightOfStack = MediaQuery.of(context).size.height / 2.8;
     var aPieceOfTheHeightOfStack = heightOfStack - heightOfStack / 3.5;
     return Scaffold(
@@ -321,7 +334,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           SpaceH24(),
                           HeadingRow(
                             title: StringConst.REVIEWS_AND_RATINGS,
-                            number: 'See All (${reviews.length})',
+                            number: 'See All Reviews',
                             onTapOfNumber: () => R.Router.navigator.pushNamed(
                                 R.Router.reviewRatingScreen,
                                 arguments:
@@ -367,6 +380,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                         style: addressTextStyle,
                                       ),
                                     ));
+                                    l = reviews.length;
                                     if (i < 5) {
                                       recents.add(ListTile(
                                         leading: Image.network(snap

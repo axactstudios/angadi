@@ -93,8 +93,11 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
                 }
               }
               return reviews.length != 0
-                  ? ListView(
-                      children: reviews,
+                  ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: ListView(
+                        children: reviews,
+                      ),
                     )
                   : Container();
             } else
