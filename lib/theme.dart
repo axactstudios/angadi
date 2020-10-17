@@ -87,6 +87,7 @@ ThemeData buildLightTheme(BuildContext context) {
     splashFactory: InkRipple.splashFactory,
     accentColor: secondaryColor,
     canvasColor: Colors.white,
+    timePickerTheme: TimePickerThemeData(backgroundColor: Colors.blueGrey),
     bottomAppBarColor: Colors.white,
     scaffoldBackgroundColor: Colors.white,
     backgroundColor: Colors.white,

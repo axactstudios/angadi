@@ -11,6 +11,8 @@ import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
+import 'checkout.dart';
+
 class BookmarksScreen extends StatefulWidget {
   static const int TAB_NO = 1;
 
@@ -94,7 +96,12 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 margin: EdgeInsets.only(right: Sizes.MARGIN_16),
                 child: InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.push(context,
+                        MaterialPageRoute(builder: (BuildContext context) {
+                      return Checkout();
+                    }));
+                  },
                   child: Container(
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
