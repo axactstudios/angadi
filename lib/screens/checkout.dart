@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 
+import 'order_placed.dart';
+
 class Checkout extends StatefulWidget {
   @override
   _CheckoutState createState() => _CheckoutState();
@@ -506,6 +508,9 @@ class _CheckoutState extends State<Checkout> {
       print(orderType);
     });
     Navigator.of(context).pop();
+    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
+      return OrderPlaced();
+    }));
   }
 
   showAlertDialog(BuildContext context) {
