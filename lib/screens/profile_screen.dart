@@ -22,6 +22,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     super.initState();
   }
 
+  List<Order> orders = List<Order>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -140,7 +142,165 @@ class _ProfileScreenState extends State<ProfileScreen> {
               //     ),
               //   ],
               // ),
-              Center(child: Text('No Recent Orders'))
+              Container(
+                height: MediaQuery.of(context).size.height * 0.7,
+                child: StreamBuilder(
+                  stream: Firestore.instance.collection('Orders').snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snap) {
+                    if (snap.hasData && !snap.hasError && snap.data != null) {
+                      orders.clear();
+
+                      for (int i = 0; i < snap.data.documents.length; i++) {
+                        print(snap.data.documents[i]['Prices'].toString());
+                        orders.add(Order(
+                            prices: snap.data.documents[i]['Price'],
+                            items: snap.data.documents[i]['Items'],
+                            total: snap.data.documents[i]['GrandTotal'],
+                            quantities: snap.data.documents[i]['Qty'],
+                            status: snap.data.documents[i]['Status'],
+                            timestamp:
+                                snap.data.documents[i]['TimeStamp'].toString(),
+                            type: snap.data.documents[i]['Type']));
+                      }
+                      return orders.length != 0
+                          ? ListView.builder(
+                              itemCount: orders.length,
+                              itemBuilder: (context, index) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: AppColors.secondaryElement,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(10))),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Column(
+                                        children: [
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text('Status - '),
+                                              Text(orders[index]
+                                                  .status
+                                                  .toString()),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            children: [
+                                              Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.3,
+                                                  child: Center(
+                                                      child: Text('Name'))),
+                                              Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.3,
+                                                  child: Center(
+                                                      child: Text('Quantity'))),
+                                              Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.3,
+                                                  child: Center(
+                                                      child: Text('Price'))),
+                                            ],
+                                          ),
+                                          Container(
+                                            height: 50.0 *
+                                                orders[index].items.length,
+                                            child: ListView.builder(
+                                                itemCount:
+                                                    orders[index].items.length,
+                                                itemBuilder: (context, i) {
+                                                  return Row(
+                                                    // mainAxisAlignment:
+                                                    //     MainAxisAlignment
+                                                    //         .spaceEvenly,
+                                                    children: [
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.3,
+                                                        child: Center(
+                                                          child: Text(
+                                                            orders[index]
+                                                                .items[i]
+                                                                .toString(),
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.3,
+                                                        child: Center(
+                                                          child: Text(
+                                                              orders[index]
+                                                                  .quantities[i]
+                                                                  .toString()),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.3,
+                                                        child: Center(
+                                                          child: Text(
+                                                              orders[index]
+                                                                  .prices[i]
+                                                                  .toString()),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  );
+                                                }),
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Text('Amount - '),
+                                              Text(orders[index].total),
+                                            ],
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              })
+                          : Container();
+                    } else
+                      return Container(
+                          child: Center(
+                              child: Text(
+                        "No Data",
+                        style: TextStyle(color: Colors.black),
+                      )));
+                  },
+                ),
+              )
             ],
           ),
         ));
@@ -181,4 +341,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       });
     });
   }
+}
+
+class Order {
+  String total, type, status, timestamp;
+  List items, prices, quantities;
+  Order(
+      {this.prices,
+      this.quantities,
+      this.items,
+      this.type,
+      this.status,
+      this.total,
+      this.timestamp});
 }

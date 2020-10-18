@@ -371,12 +371,26 @@ class _CheckoutState extends State<Checkout> {
   var docID;
   placeOrder(orderType) async {
     await getUserDetails();
+    List items = [];
+    List prices = [];
+    List quantities = [];
+    for (var v in cartItems) {
+      print(v.productName);
+      items.add(v.productName);
+      prices.add(v.price);
+      quantities.add(v.qty);
+    }
     final databaseReference = Firestore.instance;
     orderType == 'Delivery'
         ? await databaseReference.collection('Orders').add({
+            'Items': items,
+            'Price': prices,
+            'Qty': quantities,
             'Type': orderType,
             'UserID': user.uid,
             'Address': addressController.text,
+            'TimeStamp': DateTime.now(),
+            'Status': 'Not Delivered',
             'Notes':
                 notesController.text != null ? notesController.text : 'None',
             'GrandTotal':
@@ -388,8 +402,14 @@ class _CheckoutState extends State<Checkout> {
           })
         : orderType == 'Takeaway'
             ? await databaseReference.collection('Orders').add({
+                'Items': items,
+                'Price': prices,
+                'Qty': quantities,
                 'Type': orderType,
                 'UserID': user.uid,
+                // 'Status':'${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
+                'TimeStamp': DateTime.now(),
+                'Status': 'Not Delivered',
                 'GrandTotal':
                     ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
               }).then((value) {
@@ -398,9 +418,14 @@ class _CheckoutState extends State<Checkout> {
                 });
               })
             : await databaseReference.collection('Orders').add({
+                'Items': items,
+                'Price': prices,
+                'Qty': quantities,
                 'Type': orderType,
                 'UserID': user.uid,
                 'Address': addressController.text,
+                'TimeStamp': DateTime.now(),
+                'Status': 'Not Delivered',
                 'DeliveryTime': selectedTime.format(context).toString(),
                 'Notes': notesController.text != null
                     ? notesController.text
@@ -412,23 +437,23 @@ class _CheckoutState extends State<Checkout> {
                   docID = value.documentID;
                 });
               });
-    for (int i = 0; i < cartItems.length; i++) {
-      await databaseReference
-          .collection('Orders')
-          .document(docID)
-          .collection('Items')
-          .add({
-        'ItemName': cartItems[i].productName,
-        'Price': cartItems[i].price,
-        'Quantity': cartItems[i].qty,
-        'ImageURL': cartItems[i].imgUrl
-      });
-    }
+    // for (int i = 0; i < cartItems.length; i++) {
+    //   await databaseReference
+    //       .collection('Orders')
+    //       .document(docID)
+    //       .collection('Items')
+    //       .add({
+    //     'ItemName': cartItems[i].productName,
+    //     'Price': cartItems[i].price,
+    //     'Quantity': cartItems[i].qty,
+    //     'ImageURL': cartItems[i].imgUrl
+    //   });
+    // }
     setState(() {
       print(orderType);
     });
     Navigator.of(context).pop();
-    removeAll();
+    // removeAll();
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
       return OrderPlaced(Bill(), docID);

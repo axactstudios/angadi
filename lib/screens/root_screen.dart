@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
-import 'package:angadi/routes/router.gr.dart';
 import 'package:angadi/screens/new_review_screen.dart';
 import 'package:angadi/screens/profile_screen.dart';
 import 'package:angadi/values/values.dart';
@@ -154,7 +153,7 @@ class _RootScreenState extends State<RootScreen>
                       color: AppColors.secondaryElement,
                     ),
                     nonActiveIcon: Icon(
-                      Icons.home_outlined,
+                      Icons.outlined_flag,
                       color: AppColors.secondaryElement,
                     ),
                   ),
@@ -167,7 +166,7 @@ class _RootScreenState extends State<RootScreen>
                       color: AppColors.secondaryElement,
                     ),
                     nonActiveIcon: Icon(
-                      Icons.shopping_cart_outlined,
+                      Icons.outlined_flag,
                       color: AppColors.secondaryElement,
                     ),
                   ),
@@ -199,7 +198,7 @@ class _RootScreenState extends State<RootScreen>
                       color: AppColors.secondaryElement,
                     ),
                     nonActiveIcon: Icon(
-                      Icons.settings_outlined,
+                      Icons.outlined_flag,
                       color: AppColors.secondaryElement,
                     ),
                   ),

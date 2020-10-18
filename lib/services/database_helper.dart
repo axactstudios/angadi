@@ -76,21 +76,16 @@ class DatabaseHelper {
     });
   }
 
-  // All of the rows are returned as a list of maps, where each map is
-  // a key-value list of columns.
   Future<List<Map<String, dynamic>>> queryAllRows() async {
     Database db = await instance.database;
     return await db.query(table);
   }
 
-  // Queries rows based on the argument received
   Future<List<Map<String, dynamic>>> queryRows(name) async {
     Database db = await instance.database;
     return await db.query(table, where: "$columnProductName LIKE '%$name%'");
   }
 
-  // All of the methods (insert, query, update, delete) can also be done using
-  // raw SQL commands. This method uses a raw query to give the row count.
   Future<int> queryRowCount() async {
     Database db = await instance.database;
     return Sqflite.firstIntValue(
@@ -103,8 +98,6 @@ class DatabaseHelper {
         'SELECT COUNT(*) FROM $table WHERE $columnProductName = $name'));
   }
 
-  // We are assuming here that the id column in the map is set. The other
-  // column values will be used to update the row.
   Future<int> update(Cart item) async {
     Database db = await instance.database;
     String productName = item.toMap()['productName'];
