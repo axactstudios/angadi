@@ -169,25 +169,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               itemBuilder: (context, index) {
                                 return Padding(
                                   padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        color: AppColors.secondaryElement,
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(10))),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
+                                  child: Card(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(10))),
                                       child: Column(
                                         children: [
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Text('Status - '),
-                                              Text(orders[index]
-                                                  .status
-                                                  .toString()),
-                                            ],
-                                          ),
                                           SizedBox(
                                             height: 10,
                                           ),
@@ -219,7 +207,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             ],
                                           ),
                                           Container(
-                                            height: 50.0 *
+                                            height: 40.0 *
                                                 orders[index].items.length,
                                             child: ListView.builder(
                                                 itemCount:
@@ -280,10 +268,51 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceAround,
                                             children: [
-                                              Text('Amount - '),
-                                              Text(orders[index].total),
+                                              Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.45,
+                                                  child: Center(
+                                                      child: Text('Amount-'))),
+                                              Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.45,
+                                                  child: Center(
+                                                    child: Text(
+                                                        orders[index].total),
+                                                  )),
                                             ],
-                                          )
+                                          ),
+                                          Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: [
+                                              Container(
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.45,
+                                                  child: Center(
+                                                      child: Text('Status-'))),
+                                              Container(
+                                                width: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.45,
+                                                child: Center(
+                                                  child: Text(orders[index]
+                                                      .status
+                                                      .toString()),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(
+                                            height: 10,
+                                          ),
                                         ],
                                       ),
                                     ),
