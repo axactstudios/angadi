@@ -416,7 +416,7 @@ class _CheckoutState extends State<Checkout> {
             'UserID': user.uid,
             'Address': addressController.text,
             'TimeStamp': DateTime.now(),
-            'Status': 'Order Placed',
+            'Status': 'Awaiting Confirmation',
             'Notes':
                 notesController.text != null ? notesController.text : 'None',
             'GrandTotal':
@@ -435,7 +435,7 @@ class _CheckoutState extends State<Checkout> {
                 'UserID': user.uid,
                 // 'Status':'${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
                 'TimeStamp': DateTime.now(),
-                'Status': 'Order Placed',
+                'Status': 'Awaiting Confirmation',
                 'GrandTotal':
                     ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
               }).then((value) {
@@ -451,7 +451,7 @@ class _CheckoutState extends State<Checkout> {
                 'UserID': user.uid,
                 'Address': addressController.text,
                 'TimeStamp': DateTime.now(),
-                'Status': 'Order Placed',
+                'Status': 'Awaiting Confirmation',
                 'DeliveryTime': selectedTime.format(context).toString(),
                 'Notes': notesController.text != null
                     ? notesController.text
@@ -463,6 +463,14 @@ class _CheckoutState extends State<Checkout> {
                   docID = value.documentID;
                 });
               });
+    await databaseReference.collection('Notifications').add({
+      'UserID': user.uid,
+      'OrderID': docID,
+      'Notification': 'Order Placed. Awaiting restaurant confirmation.',
+      'TimeStamp': DateTime.now(),
+      'Type': orderType,
+      'GrandTotal': ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
+    });
     // for (int i = 0; i < cartItems.length; i++) {
     //   await databaseReference
     //       .collection('Orders')
@@ -479,7 +487,7 @@ class _CheckoutState extends State<Checkout> {
       print(orderType);
     });
     Navigator.of(context).pop();
-    // removeAll();
+    removeAll();
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
       return OrderPlaced(Bill(), docID);

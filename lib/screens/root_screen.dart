@@ -153,7 +153,7 @@ class _RootScreenState extends State<RootScreen>
                       color: AppColors.secondaryElement,
                     ),
                     nonActiveIcon: Icon(
-                      Icons.outlined_flag,
+                      Icons.home_outlined,
                       color: AppColors.secondaryElement,
                     ),
                   ),
@@ -166,7 +166,7 @@ class _RootScreenState extends State<RootScreen>
                       color: AppColors.secondaryElement,
                     ),
                     nonActiveIcon: Icon(
-                      Icons.outlined_flag,
+                      Icons.shopping_cart_outlined,
                       color: AppColors.secondaryElement,
                     ),
                   ),
@@ -198,7 +198,7 @@ class _RootScreenState extends State<RootScreen>
                       color: AppColors.secondaryElement,
                     ),
                     nonActiveIcon: Icon(
-                      Icons.outlined_flag,
+                      Icons.settings_outlined,
                       color: AppColors.secondaryElement,
                     ),
                   ),
