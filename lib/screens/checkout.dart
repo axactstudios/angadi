@@ -1,4 +1,5 @@
 import 'package:angadi/classes/cart.dart';
+import 'package:angadi/screens/offers_screen.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
@@ -235,19 +236,43 @@ class _CheckoutState extends State<Checkout> {
                   ),
                 ),
                 Bill(),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('No promo code applied!'),
-                    InkWell(
-                      onTap: () {},
-                      child: Text(
-                        ' Apply Promo Code',
-                        style: TextStyle(color: Colors.blue),
+                discount == null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('No promo code applied!'),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return ApplyOffers();
+                              }));
+                            },
+                            child: Text(
+                              ' Apply Promo Code',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${discount.discount}% off promo code applied!'),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return ApplyOffers();
+                              }));
+                            },
+                            child: Text(
+                              ' Change',
+                              style: TextStyle(color: Colors.blue),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
                 type != 'Takeaway'
                     ? Padding(
                         padding: const EdgeInsets.only(
@@ -606,7 +631,8 @@ class _CheckoutState extends State<Checkout> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text('Rs. 0'),
+                  Text(
+                      'Rs. ${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}'),
                 ],
               ),
               Row(
@@ -643,7 +669,7 @@ class _CheckoutState extends State<Checkout> {
                     width: 10,
                   ),
                   Text(
-                      'Rs. ${((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2)}'),
+                      'Rs. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)}'),
                 ],
               ),
               SizedBox(

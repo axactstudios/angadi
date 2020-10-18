@@ -1,4 +1,5 @@
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/classes/offer.dart';
 import 'package:angadi/widgets/offer_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:angadi/widgets/heading_row.dart';
 import 'package:angadi/widgets/search_input_field.dart';
 import '../routes/router.gr.dart';
 import '../values/values.dart';
+import 'checkout.dart';
 
 var cat, money, rat;
 
@@ -39,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Dish> dishes = new List<Dish>();
+  List<Offer> offers = new List<Offer>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -123,29 +126,58 @@ class _HomeScreenState extends State<HomeScreen> {
                           .pushNamed(R.Router.trendingRestaurantsScreen),
                     ),
                     SizedBox(height: 16.0),
-                    Container(
-                      height: 280,
-                      width: MediaQuery.of(context).size.width,
-                      child: ListView.builder(
-                          scrollDirection: Axis.horizontal,
-                          itemCount: 4,
-                          itemBuilder: (context, index) {
+                    StreamBuilder(
+                        stream:
+                            Firestore.instance.collection('Offers').snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snap) {
+                          if (snap.hasData &&
+                              !snap.hasError &&
+                              snap.data != null) {
+                            offers.clear();
+                            for (int i = 0;
+                                i < snap.data.documents.length;
+                                i++) {
+                              offers.add(Offer(
+                                  snap.data.documents[i]['Title'],
+                                  snap.data.documents[i]['Subtitle'],
+                                  snap.data.documents[i]['ImageURL'],
+                                  snap.data.documents[i]
+                                      ['discountPercentage']));
+                            }
+
                             return Container(
-                              margin: EdgeInsets.only(right: 4.0),
-                              child: OfferCard(
-                                onTap: () {},
-                                imagePath:
-                                    'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/offer.png?alt=media&token=6d97612a-c35a-4d39-911f-e101dfe821bd',
-                                // status: '90% OFF',
-                                cardTitle: '25% Off',
-                                // rating: ratings[index],
-                                // category: category[index],
-                                // distance: '',
-                                details: 'Get 25% off on all the dishes',
-                              ),
+                              height: 280,
+                              width: MediaQuery.of(context).size.width,
+                              child: ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: offers.length,
+                                  itemBuilder: (context, index) {
+                                    return Container(
+                                      margin: EdgeInsets.only(right: 4.0),
+                                      child: OfferCard(
+                                        onTap: () {
+                                          Navigator.push(context,
+                                              MaterialPageRoute(builder:
+                                                  (BuildContext context) {
+                                            return Checkout();
+                                          }));
+                                        },
+                                        imagePath: offers[index].imageURL,
+                                        // status: '90% OFF',
+                                        cardTitle: offers[index].title,
+                                        // rating: ratings[index],
+                                        // category: category[index],
+                                        // distance: '',
+                                        details: offers[index].subtitle,
+                                      ),
+                                    );
+                                  }),
                             );
-                          }),
-                    ),
+                          } else {
+                            return Container();
+                          }
+                        }),
                     SizedBox(height: 16.0),
                     HeadingRow(
                       title: StringConst.CATEGORY,
