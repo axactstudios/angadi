@@ -208,87 +208,7 @@ class _CheckoutState extends State<Checkout> {
                     number: '',
                   ),
                 ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Text('Sub Total'),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.1846,
-                              ),
-                              Text(':'),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text('Rs. ${totalAmount().toString()}')
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text('Discount'),
-                              SizedBox(
-                                width: MediaQuery.of(context).size.width * 0.2,
-                              ),
-                              Text(':'),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text('Rs. 0'),
-                            ],
-                          ),
-                          Row(
-                            children: [
-                              Text('Taxes and Charges'),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(':'),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                  'Rs. ${(totalAmount() * 0.18).toStringAsFixed(2)}'),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            height: 0.5,
-                            color: Colors.black,
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Row(
-                            children: [
-                              Text('Grand Total'),
-                              SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.147,
-                              ),
-                              Text(':'),
-                              SizedBox(
-                                width: 10,
-                              ),
-                              Text(
-                                  'Rs. ${((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2)}'),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                Bill(),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -389,7 +309,7 @@ class _CheckoutState extends State<Checkout> {
                                                           FontWeight.bold),
                                                 )
                                               : Text(
-                                                  'Sorry we do not deliver after 11:00 PM. Click to choose another time.',
+                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
                                                   style: TextStyle(
                                                       color: Colors.red,
                                                       fontWeight:
@@ -508,8 +428,10 @@ class _CheckoutState extends State<Checkout> {
       print(orderType);
     });
     Navigator.of(context).pop();
-    Navigator.push(context, MaterialPageRoute(builder: (BuildContext context) {
-      return OrderPlaced();
+    removeAll();
+    Navigator.pushReplacement(context,
+        MaterialPageRoute(builder: (BuildContext context) {
+      return OrderPlaced(Bill(), docID);
     }));
   }
 
@@ -543,6 +465,15 @@ class _CheckoutState extends State<Checkout> {
         return alert;
       },
     );
+  }
+
+  void removeAll() async {
+    // Assuming that the number of rows is the id for the last row.
+    for (var v in cartItems) {
+      final rowsDeleted = await dbHelper.delete(v.productName);
+    }
+
+    getAllItems();
   }
 
   final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
@@ -583,5 +514,86 @@ class _CheckoutState extends State<Checkout> {
     } catch (e) {
       print(e);
     }
+  }
+
+  Widget Bill() {
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Card(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  Text('Sub Total'),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.1846,
+                  ),
+                  Text(':'),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Rs. ${totalAmount().toString()}')
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Discount'),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.2,
+                  ),
+                  Text(':'),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Rs. 0'),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Taxes and Charges'),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(':'),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text('Rs. ${(totalAmount() * 0.18).toStringAsFixed(2)}'),
+                ],
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Container(
+                height: 0.5,
+                color: Colors.black,
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                children: [
+                  Text('Grand Total'),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.147,
+                  ),
+                  Text(':'),
+                  SizedBox(
+                    width: 10,
+                  ),
+                  Text(
+                      'Rs. ${((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2)}'),
+                ],
+              ),
+              SizedBox(
+                height: 10,
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 }
