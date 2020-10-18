@@ -91,30 +91,39 @@ class _CheckoutState extends State<Checkout> {
             child: Column(
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    Radio(
-                        activeColor: AppColors.secondaryElement,
-                        value: 'Delivery',
-                        groupValue: type,
-                        onChanged: (value) {
-                          setState(() {
-                            type = value;
-                          });
-                        }),
-                    Text('Delivery'),
-                    SizedBox(
-                      width: 1,
+                    Container(
+                      child: Radio(
+                          activeColor: AppColors.secondaryElement,
+                          value: 'Delivery',
+                          groupValue: type,
+                          onChanged: (value) {
+                            setState(() {
+                              type = value;
+                            });
+                          }),
                     ),
-                    Radio(
-                        activeColor: AppColors.secondaryElement,
-                        value: 'Takeaway',
-                        groupValue: type,
-                        onChanged: (value) {
-                          setState(() {
-                            type = value;
-                          });
-                        }),
-                    Text('Takeaway'),
+                    Text(
+                      'Delivery',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    Container(
+                      height: 6,
+                      child: Radio(
+                          activeColor: AppColors.secondaryElement,
+                          value: 'Takeaway',
+                          groupValue: type,
+                          onChanged: (value) {
+                            setState(() {
+                              type = value;
+                            });
+                          }),
+                    ),
+                    Text(
+                      'Takeaway',
+                      style: TextStyle(fontSize: 15),
+                    ),
                     SizedBox(
                       width: 1,
                     ),
@@ -127,7 +136,12 @@ class _CheckoutState extends State<Checkout> {
                             type = value;
                           });
                         }),
-                    Text('Schedule Delivery'),
+                    Container(
+                        width: MediaQuery.of(context).size.width * 0.2,
+                        child: Text(
+                          'Schedule Delivery',
+                          style: TextStyle(fontSize: 15),
+                        )),
                   ],
                 ),
                 SizedBox(
@@ -158,16 +172,28 @@ class _CheckoutState extends State<Checkout> {
                                 SizedBox(
                                   width: 15,
                                 ),
-                                Text(cartItems[i].productName),
-                                SizedBox(
-                                  width: 10,
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                  child: Text(
+                                    cartItems[i].productName,
+                                    style: TextStyle(fontSize: 15),
+                                  ),
                                 ),
-                                Text('Qty: ${cartItems[i].qty.toString()}'),
                                 SizedBox(
                                   width: 10,
                                 ),
                                 Text(
-                                    'Price: Rs. ${cartItems[i].price.toString()}'),
+                                  'Qty: ${cartItems[i].qty.toString()}',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Price: Rs. ${cartItems[i].price.toString()}',
+                                  style: TextStyle(fontSize: 15),
+                                )
                               ],
                             ),
                           ),
@@ -390,7 +416,7 @@ class _CheckoutState extends State<Checkout> {
             'UserID': user.uid,
             'Address': addressController.text,
             'TimeStamp': DateTime.now(),
-            'Status': 'Not Delivered',
+            'Status': 'Order Placed',
             'Notes':
                 notesController.text != null ? notesController.text : 'None',
             'GrandTotal':
@@ -409,7 +435,7 @@ class _CheckoutState extends State<Checkout> {
                 'UserID': user.uid,
                 // 'Status':'${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
                 'TimeStamp': DateTime.now(),
-                'Status': 'Not Delivered',
+                'Status': 'Order Placed',
                 'GrandTotal':
                     ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
               }).then((value) {
@@ -425,7 +451,7 @@ class _CheckoutState extends State<Checkout> {
                 'UserID': user.uid,
                 'Address': addressController.text,
                 'TimeStamp': DateTime.now(),
-                'Status': 'Not Delivered',
+                'Status': 'Order Placed',
                 'DeliveryTime': selectedTime.format(context).toString(),
                 'Notes': notesController.text != null
                     ? notesController.text

@@ -1,12 +1,62 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:path/path.dart' as p;
+
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/custom_app_bar.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 
-class EditProfileScreen extends StatelessWidget {
+class EditProfileScreen extends StatefulWidget {
+  @override
+  _EditProfileScreenState createState() => _EditProfileScreenState();
+}
+
+class _EditProfileScreenState extends State<EditProfileScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    getUserDetails();
+    super.initState();
+  }
+
+  final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
+
+  String name, email, url;
+  getUserDetails() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    print('================$user');
+    Firestore.instance
+        .collection('Users')
+        .where('id', isEqualTo: user.uid)
+        .getDocuments()
+        .then((value) {
+      value.documents.forEach((element) {
+        setState(() {
+          name = element['Name'];
+          email = element['mail'];
+          url = element['pUrl'];
+          nameCtrl.text = name;
+          emailCtrl.text = email;
+        });
+      });
+    });
+    await print('=====${nameCtrl.text}');
+  }
+
+  TextEditingController nameCtrl = new TextEditingController(),
+      emailCtrl = new TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
@@ -23,6 +73,7 @@ class EditProfileScreen extends StatelessWidget {
         }
       },
       child: Scaffold(
+        key: _scaffoldKey,
         appBar: PreferredSize(
           preferredSize: Size.fromHeight(56.0),
           child: CustomAppBar(
@@ -57,7 +108,8 @@ class EditProfileScreen extends StatelessWidget {
                 children: <Widget>[
                   Positioned(
                     child: CircleAvatar(
-                      backgroundImage: AssetImage(ImagePath.branson),
+                      backgroundImage: NetworkImage(
+                          url == null ? 'https://picsum.photos/200' : url),
                       minRadius: 70.0,
                       maxRadius: 70.0,
                     ),
@@ -65,9 +117,14 @@ class EditProfileScreen extends StatelessWidget {
                   Positioned(
                     left: 90,
                     top: 94,
-                    child: Image.asset(
-                      ImagePath.uploadIcon,
-                      fit: BoxFit.cover,
+                    child: InkWell(
+                      onTap: () {
+                        filePicker(context, this, _scaffoldKey);
+                      },
+                      child: Image.asset(
+                        ImagePath.uploadIcon,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
                 ],
@@ -77,28 +134,35 @@ class EditProfileScreen extends StatelessWidget {
                 hasPrefixIcon: true,
                 prefixIconImagePath: ImagePath.personIcon,
                 textFormFieldStyle: textFormFieldTextStyle,
-                hintText: "John Williams",
+                hintText: "Name",
                 prefixIconColor: AppColors.secondaryElement,
                 hintTextStyle: hintTextStyle,
                 borderStyle: BorderStyle.solid,
                 borderWidth: Sizes.WIDTH_1,
+                controller: nameCtrl,
               ),
               SpaceH20(),
               CustomTextFormField(
                 hasPrefixIcon: true,
                 prefixIconImagePath: ImagePath.emailIcon,
                 textFormFieldStyle: textFormFieldTextStyle,
-                hintText: "john.williams@gmail.com",
+                hintText: "Email",
                 hintTextStyle: hintTextStyle,
                 borderStyle: BorderStyle.solid,
                 borderWidth: Sizes.WIDTH_1,
+                controller: emailCtrl,
                 prefixIconColor: AppColors.secondaryElement,
               ),
               Spacer(flex: 1),
-              angadiButton(
-                "Update",
-                buttonWidth: MediaQuery.of(context).size.width,
-                onTap: () => R.Router.navigator.pop(),
+              InkWell(
+                onTap: () {
+                  _updateUser();
+                },
+                child: angadiButton(
+                  "Update",
+                  buttonWidth: MediaQuery.of(context).size.width,
+                  onTap: () => R.Router.navigator.pop(),
+                ),
               ),
               Spacer(flex: 1),
             ],
@@ -106,5 +170,121 @@ class EditProfileScreen extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  File file;
+  ProgressDialog pr;
+
+  bool _isLoading = false;
+
+  double _progress = 0;
+
+  String fileName = '';
+  void _uploadFile(File file, String filename, context, state, key) async {
+    final FirebaseStorage _storage =
+        FirebaseStorage(storageBucket: 'gs://angadi-9c0e9.appspot.com/');
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    StorageReference storageReference;
+    storageReference = _storage
+        .ref()
+        .child("Users/${DateTime.now().millisecondsSinceEpoch}/profileImage");
+
+    final StorageUploadTask uploadTask = storageReference.putFile(file);
+    pr = ProgressDialog(
+      context,
+      type: ProgressDialogType.Download,
+      textDirection: TextDirection.ltr,
+      isDismissible: false,
+    );
+    pr.style(
+      progressWidget: CircularProgressIndicator(),
+      message: 'Uploading photo...',
+      borderRadius: 10.0,
+      backgroundColor: Colors.white,
+      elevation: 10.0,
+      insetAnimCurve: Curves.easeInOut,
+      progress: 0.0,
+      progressWidgetAlignment: Alignment.center,
+      maxProgress: 100.0,
+      progressTextStyle: TextStyle(
+          color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+      messageTextStyle: TextStyle(
+          color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600),
+    );
+    await pr.show();
+    uploadTask.events.listen((event) {
+      state.setState(() {
+        _isLoading = true;
+        _progress = (event.snapshot.bytesTransferred.toDouble() /
+                event.snapshot.totalByteCount.toDouble()) *
+            100;
+        print('${_progress.toStringAsFixed(2)}%');
+        pr.update(
+          progress: double.parse(_progress.toStringAsFixed(2)),
+          maxProgress: 100.0,
+        );
+      });
+    }).onError((error) {
+      key.currentState.showSnackBar(new SnackBar(
+        content: new Text(error.toString()),
+        backgroundColor: Colors.red,
+      ));
+    });
+
+    final StorageTaskSnapshot downloadUrl = (await uploadTask.onComplete);
+
+    Fluttertoast.showToast(
+        msg: 'Upload Complete', gravity: ToastGravity.BOTTOM);
+    state.setState(() async {
+      url = (await downloadUrl.ref.getDownloadURL());
+      print("URL is $url");
+      await pr.hide();
+    });
+  }
+
+  _updateUser() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    user.updateEmail(emailCtrl.text);
+    final databaseReference = Firestore.instance;
+    await databaseReference.collection('Users').add({
+      'Name': nameCtrl.text,
+      'id': user.uid,
+      'mail': emailCtrl.text,
+      'pUrl': url
+    });
+    Navigator.pop(context);
+  }
+
+  Future filePicker(BuildContext context, state, key) async {
+    try {
+      print(1);
+      file = await ImagePicker.pickImage(source: ImageSource.gallery);
+      print(1);
+      state.setState(() {
+        fileName = p.basename(file.path);
+      });
+      print(fileName);
+      Fluttertoast.showToast(msg: 'Uploading...', gravity: ToastGravity.BOTTOM);
+      state.setState(() {});
+      _uploadFile(file, fileName, context, state, key);
+    } on PlatformException catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: Text('Sorry...'),
+              content: Text('Unsupported exception: $e'),
+              actions: <Widget>[
+                FlatButton(
+                  child: Text('OK'),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                )
+              ],
+            );
+          });
+    }
   }
 }

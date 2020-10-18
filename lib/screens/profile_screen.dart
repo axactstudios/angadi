@@ -117,31 +117,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 thickness: 3.0,
                 color: Colors.grey[200],
               ),
-              // Column(
-              //   children: <Widget>[
-              //     FoodyBiteCard(
-              //       imagePath: ImagePath.dinnerIsServed,
-              //       status: StringConst.STATUS_OPEN,
-              //       cardTitle: "Gramercy Tavern",
-              //       category: StringConst.ITALIAN,
-              //       distance: "12 km",
-              //       address: "394 Broome St, New York, NY 10013, USA",
-              //       isThereStatus: false,
-              //       onTap: () {},
-              //     ),
-              //     SpaceH16(),
-              //     FoodyBiteCard(
-              //       imagePath: ImagePath.breakfastInBed,
-              //       status: StringConst.STATUS_OPEN,
-              //       cardTitle: "Happy Bones",
-              //       category: StringConst.ITALIAN,
-              //       distance: "12 km",
-              //       address: "394 Broome St, New York, NY 10013, USA",
-              //       isThereStatus: false,
-              //       onTap: () {},
-              //     ),
-              //   ],
-              // ),
+
               Container(
                 height: MediaQuery.of(context).size.height * 0.7,
                 child: StreamBuilder(
@@ -153,167 +129,287 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
                       for (int i = 0; i < snap.data.documents.length; i++) {
                         print(snap.data.documents[i]['Prices'].toString());
+                        String str = '';
+                        for (int it = 0;
+                            it < snap.data.documents[i]['Items'].length;
+                            it++) {
+                          it != snap.data.documents[i]['Items'].length - 1
+                              ? str = str +
+                                  '${snap.data.documents[i]['Qty'][it]} x ${snap.data.documents[i]['Items'][it]}, '
+                              : str = str +
+                                  '${snap.data.documents[i]['Qty'][it]} x ${snap.data.documents[i]['Items'][it]}';
+                        }
                         orders.add(Order(
                             prices: snap.data.documents[i]['Price'],
                             items: snap.data.documents[i]['Items'],
                             total: snap.data.documents[i]['GrandTotal'],
                             quantities: snap.data.documents[i]['Qty'],
                             status: snap.data.documents[i]['Status'],
-                            timestamp:
-                                snap.data.documents[i]['TimeStamp'].toString(),
-                            type: snap.data.documents[i]['Type']));
+                            timestamp: snap.data.documents[i]['TimeStamp'],
+                            type: snap.data.documents[i]['Type'],
+                            orderString: str,
+                            id: snap.data.documents[i].documentID));
                       }
                       return orders.length != 0
                           ? ListView.builder(
                               itemCount: orders.length,
                               itemBuilder: (context, index) {
                                 return Padding(
-                                  padding: const EdgeInsets.all(8.0),
+                                  padding: EdgeInsets.fromLTRB(15.0, 8, 8, 8),
                                   child: Card(
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(10))),
-                                      child: Column(
-                                        children: [
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceEvenly,
-                                            children: [
-                                              Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.3,
-                                                  child: Center(
-                                                      child: Text('Name'))),
-                                              Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.3,
-                                                  child: Center(
-                                                      child: Text('Quantity'))),
-                                              Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.3,
-                                                  child: Center(
-                                                      child: Text('Price'))),
-                                            ],
-                                          ),
-                                          Container(
-                                            height: 40.0 *
-                                                orders[index].items.length,
-                                            child: ListView.builder(
-                                                itemCount:
-                                                    orders[index].items.length,
-                                                itemBuilder: (context, i) {
-                                                  return Row(
-                                                    // mainAxisAlignment:
-                                                    //     MainAxisAlignment
-                                                    //         .spaceEvenly,
-                                                    children: [
-                                                      Container(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.3,
-                                                        child: Center(
-                                                          child: Text(
-                                                            orders[index]
-                                                                .items[i]
-                                                                .toString(),
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.3,
-                                                        child: Center(
-                                                          child: Text(
-                                                              orders[index]
-                                                                  .quantities[i]
-                                                                  .toString()),
-                                                        ),
-                                                      ),
-                                                      Container(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.3,
-                                                        child: Center(
-                                                          child: Text(
-                                                              orders[index]
-                                                                  .prices[i]
-                                                                  .toString()),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  );
-                                                }),
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.45,
-                                                  child: Center(
-                                                      child: Text('Amount-'))),
-                                              Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.45,
-                                                  child: Center(
-                                                    child: Text(
-                                                        orders[index].total),
-                                                  )),
-                                            ],
-                                          ),
-                                          Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Container(
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.45,
-                                                  child: Center(
-                                                      child: Text('Status-'))),
-                                              Container(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.45,
-                                                child: Center(
-                                                  child: Text(orders[index]
-                                                      .status
-                                                      .toString()),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                          SizedBox(
-                                            height: 10,
-                                          ),
-                                        ],
+                                    elevation: 5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Container(
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'Order Id-${orders[index].id}',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Container(
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              height: 1,
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'Items',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              orders[index].orderString,
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'Ordered On',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .day
+                                                      .toString() +
+                                                  '-' +
+                                                  orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .month
+                                                      .toString() +
+                                                  '-' +
+                                                  orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .year
+                                                      .toString() +
+                                                  ' at ' +
+                                                  orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .hour
+                                                      .toString() +
+                                                  ':' +
+                                                  orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .minute
+                                                      .toString(),
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            // Row(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment.spaceEvenly,
+                                            //   children: [
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.3,
+                                            //         child: Center(
+                                            //             child: Text('Name'))),
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.3,
+                                            //         child: Center(
+                                            //             child: Text('Quantity'))),
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.3,
+                                            //         child: Center(
+                                            //             child: Text('Price'))),
+                                            //   ],
+                                            // ),
+                                            // Container(
+                                            //   height:
+                                            //       40.0 * orders[index].items.length,
+                                            //   child: ListView.builder(
+                                            //       itemCount:
+                                            //           orders[index].items.length,
+                                            //       itemBuilder: (context, i) {
+                                            //         return Row(
+                                            //           // mainAxisAlignment:
+                                            //           //     MainAxisAlignment
+                                            //           //         .spaceEvenly,
+                                            //           children: [
+                                            //             Container(
+                                            //               width:
+                                            //                   MediaQuery.of(context)
+                                            //                           .size
+                                            //                           .width *
+                                            //                       0.3,
+                                            //               child: Center(
+                                            //                 child: Text(
+                                            //                   orders[index]
+                                            //                       .items[i]
+                                            //                       .toString(),
+                                            //                   textAlign:
+                                            //                       TextAlign.center,
+                                            //                 ),
+                                            //               ),
+                                            //             ),
+                                            //             Container(
+                                            //               width:
+                                            //                   MediaQuery.of(context)
+                                            //                           .size
+                                            //                           .width *
+                                            //                       0.3,
+                                            //               child: Center(
+                                            //                 child: Text(
+                                            //                     orders[index]
+                                            //                         .quantities[i]
+                                            //                         .toString()),
+                                            //               ),
+                                            //             ),
+                                            //             Container(
+                                            //               width:
+                                            //                   MediaQuery.of(context)
+                                            //                           .size
+                                            //                           .width *
+                                            //                       0.3,
+                                            //               child: Center(
+                                            //                 child: Text(
+                                            //                     orders[index]
+                                            //                         .prices[i]
+                                            //                         .toString()),
+                                            //               ),
+                                            //             ),
+                                            //           ],
+                                            //         );
+                                            //       }),
+                                            // ),
+                                            // Row(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment.spaceAround,
+                                            //   children: [
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.45,
+                                            //         child: Center(
+                                            //             child: Text('Amount-'))),
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.45,
+                                            //         child: Center(
+                                            //           child:
+                                            //               Text(orders[index].total),
+                                            //         )),
+                                            //   ],
+                                            // ),
+                                            // Row(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment.spaceAround,
+                                            //   children: [
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.45,
+                                            //         child: Center(
+                                            //             child: Text('Status-'))),
+                                            //     Container(
+                                            //       width: MediaQuery.of(context)
+                                            //               .size
+                                            //               .width *
+                                            //           0.45,
+                                            //       child: Center(
+                                            //         child: Text(orders[index]
+                                            //             .status
+                                            //             .toString()),
+                                            //       ),
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                            // SizedBox(
+                                            //   height: 10,
+
+                                            // ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'Total',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              'Rs. ' + orders[index].total,
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Container(
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              height: 1,
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              orders[index].status,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -323,10 +419,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     } else
                       return Container(
                           child: Center(
-                              child: Text(
-                        "No Data",
-                        style: TextStyle(color: Colors.black),
-                      )));
+                              child: Container(
+                                  height: 20,
+                                  width: 20,
+                                  child: CircularProgressIndicator())));
                   },
                 ),
               )
@@ -373,7 +469,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
 }
 
 class Order {
-  String total, type, status, timestamp;
+  String total, type, status, orderString, id;
+  Timestamp timestamp;
   List items, prices, quantities;
   Order(
       {this.prices,
@@ -382,5 +479,7 @@ class Order {
       this.type,
       this.status,
       this.total,
-      this.timestamp});
+      this.timestamp,
+      this.orderString,
+      this.id});
 }

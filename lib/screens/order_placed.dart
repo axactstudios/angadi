@@ -411,7 +411,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                             style: Styles.customTitleTextStyle(
                               color: AppColors.headingText,
                               fontWeight: FontWeight.w400,
-                              fontSize: Sizes.TEXT_SIZE_20,
+                              fontSize: 16,
                             ),
                           ),
                         ),

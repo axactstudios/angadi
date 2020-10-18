@@ -135,7 +135,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                 itemBuilder: (context, index) {
                   return Container(
                     width: MediaQuery.of(context).size.width * 0.9,
-                    height: 250,
+                    // height: 250,
                     child: Card(
                       elevation: 4,
                       shape: RoundedRectangleBorder(
@@ -166,13 +166,20 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                     children: [
                                       Column(
                                         children: <Widget>[
-                                          Text(
-                                            cartItems[index].productName,
-                                            textAlign: TextAlign.left,
-                                            style: Styles.customTitleTextStyle(
-                                              color: AppColors.headingText,
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: Sizes.TEXT_SIZE_20,
+                                          Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.4,
+                                            child: Text(
+                                              cartItems[index].productName,
+                                              textAlign: TextAlign.left,
+                                              style:
+                                                  Styles.customTitleTextStyle(
+                                                color: AppColors.headingText,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: Sizes.TEXT_SIZE_20,
+                                              ),
                                             ),
                                           ),
                                         ],
