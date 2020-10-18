@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
@@ -5,8 +6,16 @@ import 'package:angadi/widgets/custom_app_bar.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
-class ChangePasswordScreen extends StatelessWidget {
+class ChangePasswordScreen extends StatefulWidget {
+  @override
+  _ChangePasswordScreenState createState() => _ChangePasswordScreenState();
+}
+
+class _ChangePasswordScreenState extends State<ChangePasswordScreen> {
+  final pass = TextEditingController();
+  final confirmPass = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
@@ -64,6 +73,7 @@ class ChangePasswordScreen extends StatelessWidget {
               ),
               SpaceH20(),
               CustomTextFormField(
+                controller: pass,
                 hasPrefixIcon: true,
                 prefixIconImagePath: ImagePath.passwordIcon,
                 textFormFieldStyle: textFormFieldTextStyle,
@@ -76,6 +86,7 @@ class ChangePasswordScreen extends StatelessWidget {
               ),
               SpaceH20(),
               CustomTextFormField(
+                controller: confirmPass,
                 hasPrefixIcon: true,
                 prefixIconImagePath: ImagePath.passwordIcon,
                 textFormFieldStyle: textFormFieldTextStyle,
@@ -87,19 +98,38 @@ class ChangePasswordScreen extends StatelessWidget {
                 prefixIconColor: AppColors.indigo,
               ),
               Spacer(flex: 1),
-              angadiButton(
-                "Update",
-                buttonWidth: MediaQuery.of(context).size.width,
-                onTap: () => R.Router.navigator.pushNamedAndRemoveUntil(
+              angadiButton("Update",
+                  buttonWidth: MediaQuery.of(context).size.width,
+                  onTap: () async {
+                await _changePassword(pass.text);
+                R.Router.navigator.pushNamedAndRemoveUntil(
                   R.Router.loginScreen,
                   (Route<dynamic> route) => false,
-                ),
-              ),
+                );
+              }),
               Spacer(flex: 1),
             ],
           ),
         ),
       ),
     );
+  }
+
+  Future<void> _changePassword(String password) async {
+    //Create an instance of the current user.
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+    //Pass in the password to updatePassword.
+    pass.text == confirmPass.text
+        ? user.updatePassword(password).then((_) {
+            Fluttertoast.showToast(msg: "Succesfull changed password");
+            print("Succesfull changed password");
+          }).catchError((error) {
+            Fluttertoast.showToast(
+                msg: "Password can't be changed" + error.toString());
+            print("Password can't be changed" + error.toString());
+            //This might happen, when the wrong password is in, the user isn't found, or if the user hasn't logged in recently.
+          })
+        : Fluttertoast.showToast(msg: "Passwords don't match!");
   }
 }

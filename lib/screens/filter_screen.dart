@@ -4,6 +4,8 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/ratings_widget.dart';
 
+import 'home_screen.dart';
+
 class FilterScreen extends StatefulWidget {
   @override
   _FilterScreenState createState() => _FilterScreenState();
@@ -83,7 +85,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     direction: Axis.horizontal,
                     spacing: 16,
                     runAlignment: WrapAlignment.spaceBetween,
-                    children: createCategoryButtons(numberOfButtons: 9),
+                    children: createCategoryButtons(numberOfButtons: 3),
                   ),
                   SizedBox(height: 24.0),
                   Column(
@@ -109,11 +111,12 @@ class _FilterScreenState extends State<FilterScreen> {
                         child: Slider(
 //                          label: '$initialSliderValue players',
                             min: 0,
-                            max: 2000,
+                            max: 1000,
                             value: initialSliderValue,
                             onChanged: (value) {
                               setState(() {
                                 initialSliderValue = value;
+                                money = value;
                               });
                             }),
                       ),
@@ -130,7 +133,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           Container(
                             margin: EdgeInsets.only(right: 24),
                             child: Text(
-                              '2000',
+                              '1000',
                               style: lightTextStyle,
                             ),
                           ),
@@ -145,10 +148,20 @@ class _FilterScreenState extends State<FilterScreen> {
                 ],
               ),
             ),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.299,
+            ),
             Row(
               children: <Widget>[
                 angadiButton(
                   'Reset',
+                  onTap: () {
+                    setState(() {
+                      initialSliderValue = 10;
+                      activeButtonValue = 1;
+                      initRat = 1;
+                    });
+                  },
                   buttonHeight: 65,
                   buttonWidth: (MediaQuery.of(context).size.width / 2) - 0.25,
                   decoration: Decorations.customHalfCurvedButtonDecoration(
@@ -189,7 +202,10 @@ class _FilterScreenState extends State<FilterScreen> {
     return Container(
       margin: EdgeInsets.symmetric(vertical: Sizes.MARGIN_12),
       child: InkWell(
-        onTap: () => setState(() => activeButtonValue = index),
+        onTap: () => setState(() {
+          cat = buttonTitle;
+          activeButtonValue = index;
+        }),
         child: angadiButton(
           buttonTitle,
           buttonWidth: 100,
@@ -219,15 +235,9 @@ class _FilterScreenState extends State<FilterScreen> {
   createCategoryButtons({@required numberOfButtons}) {
     List<Widget> categoryButtons = <Widget>[];
     List<String> buttonTitles = [
-      "Italian",
-      "Chinese",
-      "Mexican",
-      "Thai",
-      "Arabian",
-      "Indian",
-      "American",
-      "Korean",
-      "European",
+      "Starters",
+      "Main Course",
+      "Dessert",
     ];
 
     List<int> list = List<int>.generate(numberOfButtons, (i) => i + 1);
@@ -267,7 +277,7 @@ class RetroSliderThumbShape extends SliderComponentShape {
     double textScaleFactor,
     Size sizeWithOverflow,
   }) {
-    String sliderValue = (value * 100).toInt().toString();
+    String sliderValue = (value * 1000).toInt().toString();
     final Canvas canvas = context.canvas;
     final paint = Paint()
       ..style = PaintingStyle.fill

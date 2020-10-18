@@ -14,6 +14,8 @@ import 'package:angadi/widgets/search_input_field.dart';
 import '../routes/router.gr.dart';
 import '../values/values.dart';
 
+var cat, money, rat;
+
 class HomeScreen extends StatefulWidget {
   static const int TAB_NO = 0;
 

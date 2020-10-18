@@ -1,7 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/custom_app_bar.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatelessWidget {
   @override
@@ -99,11 +101,15 @@ class SettingsScreen extends StatelessWidget {
               tiles: <Widget>[
                 SettingsListTile(
                   title: "Privacy Policy",
-                  onTap: () {},
+                  onTap: () {
+                    launch('https://www.misteridli.com/privacy-policy/');
+                  },
                 ),
                 SettingsListTile(
                   title: "Terms & Conditions",
-                  onTap: () {},
+                  onTap: () {
+                    launch('https://www.misteridli.com/terms-and-conditions/');
+                  },
                 ),
                 SettingsListTile(
                   title: "Logout",
@@ -185,21 +191,23 @@ class SettingsScreen extends StatelessWidget {
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   AlertDialogButton(
-                    buttonText: "Yes",
-                    width: Sizes.WIDTH_150,
-                    border: Border(
-                      top: BorderSide(
-                        width: 1,
-                        color: AppColors.greyShade1,
+                      buttonText: "Yes",
+                      width: Sizes.WIDTH_150,
+                      border: Border(
+                        top: BorderSide(
+                          width: 1,
+                          color: AppColors.greyShade1,
+                        ),
                       ),
-                    ),
-                    textStyle: textTheme.button
-                        .copyWith(color: AppColors.secondaryElement),
-                    onPressed: () => R.Router.navigator.pushNamedAndRemoveUntil(
-                      R.Router.loginScreen,
-                      (Route<dynamic> route) => false,
-                    ),
-                  ),
+                      textStyle: textTheme.button
+                          .copyWith(color: AppColors.secondaryElement),
+                      onPressed: () {
+                        FirebaseAuth.instance.signOut();
+                        R.Router.navigator.pushNamedAndRemoveUntil(
+                          R.Router.loginScreen,
+                          (Route<dynamic> route) => false,
+                        );
+                      }),
                 ],
               )
             ],

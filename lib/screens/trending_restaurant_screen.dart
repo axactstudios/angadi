@@ -1,3 +1,5 @@
+import 'package:angadi/classes/dish.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -7,7 +9,26 @@ import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/search_input_field.dart';
 import 'package:angadi/widgets/spaces.dart';
 
-class TrendingRestaurantsScreen extends StatelessWidget {
+import 'home_screen.dart';
+
+class TrendingRestaurantsScreen extends StatefulWidget {
+  @override
+  _TrendingRestaurantsScreenState createState() =>
+      _TrendingRestaurantsScreenState();
+}
+
+class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
+  List<Widget> trending = new List();
+
+  List<Dish> dishes = new List<Dish>();
+  @override
+  void initState() {
+    super.initState();
+    print(cat);
+    print(rat);
+    print(money);
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -29,7 +50,7 @@ class TrendingRestaurantsScreen extends StatelessWidget {
             ),
             centerTitle: true,
             title: Text(
-              'Trending Restaurant',
+              'Results',
               style: Styles.customTitleTextStyle(
                 color: AppColors.headingText,
                 fontWeight: FontWeight.w600,
@@ -44,54 +65,124 @@ class TrendingRestaurantsScreen extends StatelessWidget {
                 top: Sizes.MARGIN_16),
             child: Column(
               children: <Widget>[
-                FoodyBiteSearchInputField(
-                  ImagePath.searchIcon,
-                  textFormFieldStyle:
-                      Styles.customNormalTextStyle(color: AppColors.accentText),
-                  hintText: StringConst.HINT_TEXT_TRENDING_SEARCH_BAR,
-                  hintTextStyle:
-                      Styles.customNormalTextStyle(color: AppColors.accentText),
-                  suffixIconImagePath: ImagePath.settingsIcon,
-                  borderWidth: 0.0,
-                  borderStyle: BorderStyle.solid,
-                ),
+//                FoodyBiteSearchInputField(
+//                  ImagePath.searchIcon,
+//                  textFormFieldStyle:
+//                      Styles.customNormalTextStyle(color: AppColors.accentText),
+//                  hintText: StringConst.HINT_TEXT_TRENDING_SEARCH_BAR,
+//                  hintTextStyle:
+//                      Styles.customNormalTextStyle(color: AppColors.accentText),
+//                  suffixIconImagePath: ImagePath.settingsIcon,
+//                  borderWidth: 0.0,
+//                  borderStyle: BorderStyle.solid,
+//                ),
                 SizedBox(height: Sizes.WIDTH_16),
                 Expanded(
-                  child: ListView.separated(
-                    scrollDirection: Axis.vertical,
-                    itemCount: 4,
-                    separatorBuilder: (context, index) {
-                      return SpaceH8();
-                    },
-                    itemBuilder: (context, index) {
-                      return Container(
-                        child: FoodyBiteCard(
-                          onTap: () => R.Router.navigator.pushNamed(
-                            R.Router.restaurantDetailsScreen,
-                            arguments: RestaurantDetails(
-                              url: 'snap.data.documents[i][',
-                              name: 'Hamburger',
-                              desc: 'Description',
-                              category: 'Category',
-                              rating: 'Rating',
-                              price: 'Price',
-                            ),
-                          ),
-                          imagePath: imagePaths[index],
-                          status: '20% OFF',
-                          cardTitle: 'Hamburger',
-                          rating: ratings[index],
-                          category: category[index],
-                          distance: '',
-                          address: 'Made with exotic ingredients',
-                        ),
-                      );
-                    },
-                  ),
-                ),
+                    child: StreamBuilder(
+                        stream:
+                            Firestore.instance.collection('Dishes').snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snap) {
+                          if (snap.hasData &&
+                              !snap.hasError &&
+                              snap.data != null) {
+                            dishes.clear();
+                            trending.clear();
+                            for (int i = 0;
+                                i < snap.data.documents.length;
+                                i++) {
+//              print(snap.data.documents[i]['url']);
+                              dishes.add(Dish(
+                                  name: snap.data.documents[i]['name'],
+                                  category: snap.data.documents[i]['category'],
+                                  rating: snap.data.documents[i]['rating'],
+                                  price: snap.data.documents[i]['price'],
+                                  desc: snap.data.documents[i]['description'],
+                                  url: snap.data.documents[i]['url']));
+                              print(snap.data.documents[i]['name']);
+                              if ((money != null
+                                      ? int.parse(snap.data.documents[i]
+                                              ['price']) <=
+                                          money
+                                      : 1 == 1) &&
+                                  (rat != null
+                                      ? double.parse(snap.data.documents[i]
+                                                  ['rating'])
+                                              .ceil() >=
+                                          rat
+                                      : 1 == 1) &&
+                                  (cat != null
+                                      ? snap.data.documents[i]['category'] ==
+                                          cat
+                                      : 1 == 1))
+                                trending.add(Container(
+                                  margin: EdgeInsets.only(right: 4.0),
+                                  child: FoodyBiteCard(
+                                    onTap: () => R.Router.navigator.pushNamed(
+                                        R.Router.restaurantDetailsScreen,
+                                        arguments: RestaurantDetails(
+                                          url: snap.data.documents[i]['url'],
+                                          name: snap.data.documents[i]['name'],
+                                          desc: snap.data.documents[i]
+                                              ['description'],
+                                          category: snap.data.documents[i]
+                                              ['category'],
+                                          rating: snap.data.documents[i]
+                                              ['rating'],
+                                          price: snap.data.documents[i]
+                                              ['price'],
+                                        )),
+                                    imagePath: snap.data.documents[i]['url'],
+                                    cardTitle: snap.data.documents[i]['name'],
+                                    rating: snap.data.documents[i]['rating'],
+                                    category: snap.data.documents[i]
+                                        ['category'],
+                                    address: snap.data.documents[i]
+                                        ['description'],
+                                  ),
+                                ));
+                            }
+                          }
+                          return trending.length != 0
+                              ? ListView(
+                                  children: trending,
+                                )
+                              : Container();
+                        })),
               ],
             ),
           )),
     );
   }
 }
+//ListView.separated(
+//scrollDirection: Axis.vertical,
+//itemCount: 4,
+//separatorBuilder: (context, index) {
+//return SpaceH8();
+//},
+//itemBuilder: (context, index) {
+//return Container(
+//child: FoodyBiteCard(
+//onTap: () => R.Router.navigator.pushNamed(
+//R.Router.restaurantDetailsScreen,
+//arguments: RestaurantDetails(
+//url: 'snap.data.documents[i][',
+//name: 'Hamburger',
+//desc: 'Description',
+//category: 'Category',
+//rating: 'Rating',
+//price: 'Price',
+//),
+//),
+//imagePath: imagePaths[index],
+//status: '20% OFF',
+//cardTitle: 'Hamburger',
+//rating: ratings[index],
+//category: category[index],
+//distance: '',
+//address: 'Made with exotic ingredients',
+//),
+//);
+//},
+//),

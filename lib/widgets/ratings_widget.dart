@@ -1,3 +1,4 @@
+import 'package:angadi/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:angadi/values/values.dart';
@@ -38,6 +39,8 @@ class Ratings extends StatelessWidget {
   }
 }
 
+double initRat = 0;
+
 class RatingsBar extends StatelessWidget {
   RatingsBar({
     this.title = "Rating",
@@ -75,7 +78,7 @@ class RatingsBar extends StatelessWidget {
           ),
           child: Center(
             child: RatingBar(
-              initialRating: 0,
+              initialRating: initRat,
               minRating: 1,
               direction: Axis.horizontal,
               allowHalfRating: true,
@@ -88,6 +91,7 @@ class RatingsBar extends StatelessWidget {
                 color: Colors.amber,
               ),
               onRatingUpdate: (rating) {
+                rat = rating;
                 print(rating);
               },
             ),
