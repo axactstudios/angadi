@@ -631,8 +631,9 @@ class _CheckoutState extends State<Checkout> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                      'Rs. ${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}'),
+                  Text(discount != null
+                      ? 'Rs. ${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}'
+                      : 'Rs. 0'),
                 ],
               ),
               Row(
@@ -668,8 +669,9 @@ class _CheckoutState extends State<Checkout> {
                   SizedBox(
                     width: 10,
                   ),
-                  Text(
-                      'Rs. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)}'),
+                  Text(discount != null
+                      ? 'Rs. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)}'
+                      : 'Rs. ${((totalAmount() * 0.18) + totalAmount())}'),
                 ],
               ),
               SizedBox(
