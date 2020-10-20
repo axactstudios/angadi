@@ -135,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
           onTap: () => R.Router.navigator.pushNamed(R.Router.registerScreen),
           child: Container(
             width: Sizes.WIDTH_150,
-            height: Sizes.HEIGHT_24,
+            height: 50,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               mainAxisSize: MainAxisSize.min,

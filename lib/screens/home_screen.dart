@@ -410,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.32,
+                      height: 255,
                       child: trending.length != 0
                           ? ListView(
                               scrollDirection: Axis.horizontal,
