@@ -42,8 +42,9 @@ class _HomeScreenState extends State<HomeScreen> {
   var location = 'Dubai';
   @override
   void initState() {
-    // TODO: implement initState
+    getBanners();
     _getCurrentLocation();
+
     super.initState();
   }
 
@@ -116,7 +117,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       cardTitle: snap.data.documents[i]['name'],
                       rating: snap.data.documents[i]['rating'],
                       category: snap.data.documents[i]['category'],
-                      address: snap.data.documents[i]['description'],
+                      price: snap.data.documents[i]['price'].toString(),
                     ),
                   ));
               }
@@ -202,10 +203,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               child: GFCarousel(
                                 items: imageList.map(
                                   (url) {
-                                    return Card(
-                                      elevation: 8,
-                                      child: Image.network('$url',
-                                          fit: BoxFit.fitWidth, width: 10000.0),
+                                    return Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(1.0),
+                                        child: Image.network('$url',
+                                            fit: BoxFit.fitWidth,
+                                            width: 10000.0),
+                                      ),
                                     );
                                   },
                                 ).toList(),
@@ -388,35 +392,58 @@ class _HomeScreenState extends State<HomeScreen> {
                         },
                       ),
                     ),
-                    // SizedBox(height: 16.0),
-                    // HeadingRow(
-                    //   title: StringConst.FRIENDS,
-                    //   number: StringConst.SEE_ALL_56,
-                    //   onTapOfNumber: () => R.Router.navigator.pushNamed(
-                    //     R.Router.findFriendsScreen,
-                    //   ),
-                    // ),
-                    // SizedBox(height: 16.0),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: createUserProfilePhotos(numberOfProfilePhotos: 6),
-                    // ),
+
+                    SizedBox(height: 16.0),
+                    Container(
+                      height: 110,
+                      child: Image.network(
+                        banner1Url,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
                     SizedBox(height: 16.0),
                     HeadingRow(
-                      title: StringConst.DISHES,
+                      title: 'Top Deals',
+                      number: 'View All',
+                      onTapOfNumber: () => R.Router.navigator
+                          .pushNamed(R.Router.trendingRestaurantsScreen),
+                    ),
+                    SizedBox(height: 16.0),
+                    Container(
+                      height: MediaQuery.of(context).size.height * 0.32,
+                      child: trending.length != 0
+                          ? ListView(
+                              scrollDirection: Axis.horizontal,
+                              children: trending,
+                            )
+                          : Container(),
+                    ),
+                    SizedBox(height: 16.0),
+                    Container(
+                      height: 110,
+                      child: Image.network(
+                        banner2Url,
+                        fit: BoxFit.fitWidth,
+                      ),
+                    ),
+                    SizedBox(height: 16.0),
+                    HeadingRow(
+                      title: 'Special on Angadi',
                       number: '',
                       onTapOfNumber: () => R.Router.navigator
                           .pushNamed(R.Router.trendingRestaurantsScreen),
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.7,
+                      height: MediaQuery.of(context).size.height * 0.32,
                       child: trending.length != 0
                           ? ListView(
+                              scrollDirection: Axis.horizontal,
                               children: trending,
                             )
                           : Container(),
-                    )
+                    ),
+                    SizedBox(height: 20.0),
                   ],
                 ),
               );
@@ -580,5 +607,27 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  String banner1Url = 'acv', banner2Url = 'acv';
+  getBanners() {
+    Firestore.instance
+        .collection('Backgrounds')
+        .document('Banner1')
+        .get()
+        .then((value) {
+      setState(() {
+        banner1Url = value['url'];
+      });
+    });
+    Firestore.instance
+        .collection('Backgrounds')
+        .document('Banner2')
+        .get()
+        .then((value) {
+      setState(() {
+        banner2Url = value['url'];
+      });
+    });
   }
 }

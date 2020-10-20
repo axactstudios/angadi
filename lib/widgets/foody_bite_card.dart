@@ -1,3 +1,4 @@
+import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/values/values.dart';
 
@@ -11,6 +12,7 @@ class FoodyBiteCard extends StatelessWidget {
   final String category;
   final String distance;
   final String address;
+  final String price;
   final GestureTapCallback onTap;
   final bool bookmark;
   final bool isThereStatus;
@@ -31,9 +33,10 @@ class FoodyBiteCard extends StatelessWidget {
     this.category,
     this.distance,
     this.address,
+    this.price,
     this.width = 340.0,
     this.cardHeight = 280.0,
-    this.imageHeight = 180.0,
+    this.imageHeight = 174.0,
     this.tagRadius = 8.0,
     this.onTap,
     this.isThereStatus = true,
@@ -104,18 +107,47 @@ class FoodyBiteCard extends StatelessWidget {
                             ],
                           ),
                           SizedBox(height: 12.0),
-                          Align(
-                            alignment: Alignment.topLeft,
-                            child: Container(
-                              child: Text(
-                                address,
-                                textAlign: TextAlign.left,
-                                style: Styles.customNormalTextStyle(
-                                  color: AppColors.accentText,
-                                  fontSize: Sizes.TEXT_SIZE_14,
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Align(
+                                alignment: Alignment.topLeft,
+                                child: Row(
+                                  children: [
+                                    Container(
+                                      child: Text(
+                                        'Rs. $price',
+                                        textAlign: TextAlign.left,
+                                        style: Styles.customMediumTextStyle(
+                                          color: AppColors.black,
+                                          fontSize: Sizes.TEXT_SIZE_22,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 10,
+                                    ),
+                                    Container(
+                                      child: Text(
+                                          'Rs. ${(int.parse(price) + (int.parse(price) * 0.12)).toStringAsFixed(2)}',
+                                          textAlign: TextAlign.left,
+                                          style: TextStyle(
+                                              fontSize: 20,
+                                              decoration:
+                                                  TextDecoration.lineThrough)),
+                                    ),
+                                  ],
                                 ),
                               ),
-                            ),
+
+//                              color: AppColors.accentText,
+//                              fontSize: Sizes.TEXT_SIZE_22,
+                              angadiButton(
+                                'Add',
+                                buttonHeight: 40,
+                                buttonWidth: 100,
+                              )
+                            ],
                           ),
                         ],
                       ),

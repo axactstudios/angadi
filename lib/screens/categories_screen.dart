@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/data.dart';
@@ -13,6 +14,7 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
+  List<Widget> categoriesTop = new List();
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
@@ -35,54 +37,98 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
             fontSize: Sizes.TEXT_SIZE_20,
           ),
         ),
-        actions: <Widget>[
-          InkWell(
-            onTap: () {},
-            child: Image.asset(
-              ImagePath.searchIcon,
-              color: AppColors.headingText,
-            ),
-          )
-        ],
+//        actions: <Widget>[
+//          InkWell(
+//            onTap: () {},
+//            child: Image.asset(
+//              ImagePath.searchIcon,
+//              color: AppColors.headingText,
+//            ),
+//          )
+//        ],
       ),
       body: Container(
         margin: EdgeInsets.symmetric(
             horizontal: Sizes.MARGIN_16, vertical: Sizes.MARGIN_16),
-        child: ListView.separated(
-          itemCount: categoryListImagePaths.length,
-          separatorBuilder: (context, index) {
-            return SpaceH12();
-          },
-          itemBuilder: (context, index) {
-            return Container(
-              child: FoodyBiteCategoryCard(
-                onTap: () {
-                  print('L');
-                  R.Router.navigator.pushNamed(
-                    R.Router.categoryDetailScreen,
-                    arguments: CategoryDetailScreenArguments(
-                      categoryName: category[index],
-                      imagePath: categoryListImagePaths[index],
-                      selectedCategory: index,
-                      numberOfCategories: categoryListImagePaths.length,
-                      gradient: gradients[index],
+        child: StreamBuilder(
+            stream: Firestore.instance.collection('Categories').snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+              if (snap.hasData && !snap.hasError && snap.data != null) {
+                categoriesTop.clear();
+
+                for (int i = 0; i < snap.data.documents.length; i++) {
+                  categoriesTop.add(Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8.0),
+                    child: Column(
+                      children: [
+                        Container(
+                          child: FoodyBiteCategoryCard(
+                            onTap: () {
+                              print('L');
+                              R.Router.navigator.pushNamed(
+                                R.Router.categoryDetailScreen,
+                                arguments: CategoryDetailScreenArguments(
+                                  categoryName: snap.data.documents[i]
+                                      ['catName'],
+                                  imagePath: snap.data.documents[i]['imageURL'],
+                                  selectedCategory: i,
+                                  numberOfCategories: categoriesTop.length,
+                                  gradient: gradients[i],
+                                ),
+                              );
+                            },
+                            width: MediaQuery.of(context).size.width,
+                            imagePath: snap.data.documents[i]['imageURL'],
+                            gradient: gradients[i],
+                            category: snap.data.documents[i]['catName'],
+                            hasHandle: true,
+                            opacity: 0.85,
+                            categoryTextStyle: textTheme.title.copyWith(
+                              color: AppColors.primaryColor,
+                              fontSize: Sizes.TEXT_SIZE_22,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          height: 12,
+                        )
+                      ],
                     ),
-                  );
-                },
-                width: MediaQuery.of(context).size.width,
-                imagePath: categoryListImagePaths[index],
-                gradient: gradients[index],
-                category: category[index],
-                hasHandle: true,
-                opacity: 0.85,
-                categoryTextStyle: textTheme.title.copyWith(
-                  color: AppColors.primaryColor,
-                  fontSize: Sizes.TEXT_SIZE_22,
-                ),
-              ),
-            );
-          },
-        ),
+
+//    FoodyBiteCategoryCard(
+//    imagePath: snap.data.documents[i]
+//    ['imageURL'],
+//    gradient: gradients[i],
+//    category: snap.data.documents[i]['catName'],
+//    onTap: () {
+//    print(
+//    '---------==========${snap.data.documents[i]['imageURL']}');
+//    R.Router.navigator.pushNamed(
+//    R.Router.categoryDetailScreen,
+//    arguments:
+//    CategoryDetailScreenArguments(
+//    categoryName: snap.data.documents[i]
+//    ['catName'],
+//    imagePath: snap.data.documents[i]
+//    ['imageURL'],
+//    selectedCategory: i,
+//    numberOfCategories:
+//    snap.data.documents.length,
+//    gradient: gradients[i],
+//    ),
+//    );
+//    },
+//    ),
+                  ));
+                }
+              }
+              return categoriesTop.length != 0
+                  ? ListView(
+                      scrollDirection: Axis.vertical,
+                      children: categoriesTop,
+                    )
+                  : Container();
+            }),
       ),
     );
   }
