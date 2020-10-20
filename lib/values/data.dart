@@ -52,6 +52,8 @@ List<Gradient> gradients = [
   Gradients.indianGradient,
   Gradients.americanGradient,
   Gradients.koreanGradient,
+  Gradients.italianGradient,
+  Gradients.chineseGradient,
 ];
 
 List<String> categoryImagePaths = [
