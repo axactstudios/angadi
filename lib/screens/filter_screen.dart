@@ -85,7 +85,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     direction: Axis.horizontal,
                     spacing: 16,
                     runAlignment: WrapAlignment.spaceBetween,
-                    children: createCategoryButtons(numberOfButtons: 3),
+                    children: createCategoryButtons(numberOfButtons: 7),
                   ),
                   SizedBox(height: 24.0),
                   Column(
@@ -235,9 +235,13 @@ class _FilterScreenState extends State<FilterScreen> {
   createCategoryButtons({@required numberOfButtons}) {
     List<Widget> categoryButtons = <Widget>[];
     List<String> buttonTitles = [
-      "Starters",
-      "Main Course",
-      "Dessert",
+      'Pickles/Podi',
+      'Curries/Koottu',
+      'Snacks',
+      "Sweet/Savoury",
+      'Desserts',
+      'Tiffin',
+      'Rice'
     ];
 
     List<int> list = List<int>.generate(numberOfButtons, (i) => i + 1);

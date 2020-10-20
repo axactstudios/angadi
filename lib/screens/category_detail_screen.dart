@@ -131,6 +131,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       category: snap.data.documents[i]['category'],
                       rating: snap.data.documents[i]['rating'],
                       price: snap.data.documents[i]['price'],
+                      iPrice: snap.data.documents[i]['iPrice'],
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url']));
                 print(snap.data.documents[i]['price']);
@@ -165,6 +166,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                             cardTitle: dishes[index].name,
                             rating: dishes[index].rating,
                             price: dishes[index].price,
+                            iPrice: dishes[index].iPrice,
                             category: dishes[index].category,
 //                            distance: distance[index],
                             address: dishes[index].desc,

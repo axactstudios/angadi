@@ -3,6 +3,7 @@ import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/values/values.dart';
+import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 import 'card_tags.dart';
@@ -16,6 +17,7 @@ class FoodyBiteCard extends StatefulWidget {
   final String distance;
   final String address;
   final String price;
+  final String iPrice;
   final GestureTapCallback onTap;
   final bool bookmark;
   final bool isThereStatus;
@@ -37,8 +39,9 @@ class FoodyBiteCard extends StatefulWidget {
     this.distance,
     this.address,
     this.price,
+    this.iPrice,
     this.width = 340.0,
-    this.cardHeight = 255.0,
+    this.cardHeight = 305.0,
     this.imageHeight = 169.0,
     this.tagRadius = 8.0,
     this.onTap,
@@ -136,6 +139,13 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     return item;
   }
 
+  List<String> listOfQuantities = [
+    '500 ML',
+    '1 Ltr',
+    '2 Ltr',
+    '5 Ltr',
+    '10 Ltr'
+  ];
   bool check = false;
 
   void checkInCart() async {
@@ -219,6 +229,22 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                               ),
                             ],
                           ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              DropDown<String>(
+                                initialValue: '500 ML',
+                                items: <String>[
+                                  '500 ML',
+                                  '1 Ltr',
+                                  '2 Ltr',
+                                  '5 Ltr',
+                                  '10 Ltr'
+                                ],
+                                hint: Text("Select quantity"),
+                              ),
+                            ],
+                          ),
                           SizedBox(height: 6.0),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -242,7 +268,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                     ),
                                     Container(
                                       child: Text(
-                                          'Rs. ${(int.parse(widget.price) + (int.parse(widget.price) * 0.12)).toStringAsFixed(2)}',
+                                          'Rs. ${int.parse(widget.iPrice)}',
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                               fontSize: 20,
@@ -299,7 +325,11 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                               color: AppColors.secondaryColor,
                                             ),
                                           ),
-                                          Text(qty.toString()),
+                                          Text(
+                                            qty.toString(),
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
                                           InkWell(
                                             onTap: () {
                                               Cart x;
@@ -355,18 +385,18 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                               child: Row(
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: <Widget>[
-                                  Image.asset(
-                                    ImagePath.starIcon,
-                                    height: Sizes.WIDTH_14,
-                                    width: Sizes.WIDTH_14,
-                                  ),
+//                                  Image.asset(
+//                                    ImagePath.starIcon,
+//                                    height: Sizes.WIDTH_14,
+//                                    width: Sizes.WIDTH_14,
+//                                  ),
                                   SizedBox(width: Sizes.WIDTH_4),
                                   Text(
-                                    widget.rating,
+                                    ('${((int.parse(widget.iPrice) - int.parse(widget.price)) / int.parse(widget.iPrice) * 100).toStringAsFixed(0)} % off'),
                                     style: Styles.customTitleTextStyle(
-                                      color: AppColors.headingText,
+                                      color: Colors.deepOrangeAccent,
                                       fontWeight: FontWeight.w600,
-                                      fontSize: Sizes.TEXT_SIZE_14,
+                                      fontSize: 17,
                                     ),
                                   ),
                                 ],

@@ -7,7 +7,7 @@ import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
 
 class ProfileScreen extends StatefulWidget {
-  static const int TAB_NO = 3;
+  static const int TAB_NO = 4;
 
   ProfileScreen({Key key}) : super(key: key);
 

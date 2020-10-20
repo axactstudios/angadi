@@ -6,6 +6,7 @@ class Dish {
   String rating;
   String id;
   String price;
+  String iPrice;
 
   Dish(
       {this.name,
@@ -14,5 +15,6 @@ class Dish {
       this.rating,
       this.id,
       this.price,
+      this.iPrice,
       this.desc});
 }

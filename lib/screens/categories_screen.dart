@@ -9,6 +9,7 @@ import 'package:angadi/widgets/spaces.dart';
 import '../routes/router.gr.dart';
 
 class CategoriesScreen extends StatefulWidget {
+  static const int TAB_NO = 1;
   @override
   _CategoriesScreenState createState() => _CategoriesScreenState();
 }
@@ -21,13 +22,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        leading: InkWell(
-          onTap: () => R.Router.navigator.pop(),
-          child: Image.asset(
-            ImagePath.arrowBackIcon,
-            color: AppColors.headingText,
-          ),
-        ),
+//        leading: InkWell(
+//          onTap: () => R.Router.navigator.pop(),
+//          child: Image.asset(
+//            ImagePath.arrowBackIcon,
+//            color: AppColors.headingText,
+//          ),
+//        ),
         centerTitle: true,
         title: Text(
           StringConst.CATEGORY,

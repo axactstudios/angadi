@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:angadi/values/values.dart';
 
 class NotificationsScreen extends StatefulWidget {
-  static const int TAB_NO = 2;
+  static const int TAB_NO = 3;
 
   NotificationsScreen({Key key}) : super(key: key);
 

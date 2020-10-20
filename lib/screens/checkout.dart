@@ -490,7 +490,7 @@ class _CheckoutState extends State<Checkout> {
     await databaseReference.collection('Notifications').add({
       'UserID': user.uid,
       'OrderID': docID,
-      'Notification': 'Order Placed. Awaiting restaurant confirmation.',
+      'Notification': 'Order Placed. Awaiting confirmation.',
       'TimeStamp': DateTime.now(),
       'Type': orderType,
       'GrandTotal': ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),

@@ -1,6 +1,7 @@
 import 'package:angadi/classes/dish.dart';
 import 'package:angadi/classes/offer.dart';
 import 'package:angadi/screens/settings_screen.dart';
+import 'package:angadi/screens/trending_restaurant_screen.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/nav_drawer.dart';
 import 'package:angadi/widgets/offer_card.dart';
@@ -19,6 +20,7 @@ import 'package:angadi/widgets/search_input_field.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:getflutter/components/carousel/gf_carousel.dart';
 import 'package:location/location.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../routes/router.gr.dart';
 import '../values/values.dart';
 import 'checkout.dart';
@@ -38,9 +40,12 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController controller = TextEditingController();
   List<String> imageList = List();
   List<Widget> trending = new List();
+  List<Widget> special = new List();
+  List<Widget> top = new List();
   List<Widget> categories = new List();
   List<Widget> categoriesTop = new List();
   var location = 'Dubai';
+  var delivery = '6 Hrs';
   @override
   void initState() {
     getBanners();
@@ -50,17 +55,28 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   List<Dish> dishes = new List<Dish>();
+  List<Dish> dishesTop = new List<Dish>();
+  List<Dish> dishesSpecial = new List<Dish>();
   List<Offer> offers = new List<Offer>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         actions: [
-          Icon(Icons.phone),
+          InkWell(
+              onTap: () {
+                launch('tel:+919027553376');
+              },
+              child: Icon(Icons.phone)),
           SizedBox(
             width: 8,
           ),
-          Icon(Icons.person),
+          InkWell(
+              onTap: () {
+                launch(
+                    '<work.axactstudios@gmail.com?subject=Complaint/Feedback&body=<Type your views here.>');
+              },
+              child: Icon(Icons.person)),
           SizedBox(
             width: 14,
           )
@@ -90,6 +106,10 @@ class _HomeScreenState extends State<HomeScreen> {
             if (snap.hasData && !snap.hasError && snap.data != null) {
               dishes.clear();
               trending.clear();
+              top.clear();
+              special.clear();
+              dishesSpecial.clear();
+              dishesTop.clear();
               for (int i = 0; i < snap.data.documents.length; i++) {
 //              print(snap.data.documents[i]['url']);
                 dishes.add(Dish(
@@ -100,6 +120,68 @@ class _HomeScreenState extends State<HomeScreen> {
                     desc: snap.data.documents[i]['description'],
                     url: snap.data.documents[i]['url']));
                 print(snap.data.documents[i]['name']);
+                if (snap.data.documents[i]['special']) {
+                  dishesSpecial.add(Dish(
+                      name: snap.data.documents[i]['name'],
+                      category: snap.data.documents[i]['category'],
+                      rating: snap.data.documents[i]['rating'],
+                      price: snap.data.documents[i]['price'],
+                      desc: snap.data.documents[i]['description'],
+                      url: snap.data.documents[i]['url']));
+                  print(snap.data.documents[i]['name']);
+                  special.add(Container(
+                    margin: EdgeInsets.only(right: 4.0),
+                    child: FoodyBiteCard(
+                      onTap: () => R.Router.navigator
+                          .pushNamed(R.Router.restaurantDetailsScreen,
+                              arguments: RestaurantDetails(
+                                url: snap.data.documents[i]['url'],
+                                name: snap.data.documents[i]['name'],
+                                desc: snap.data.documents[i]['description'],
+                                category: snap.data.documents[i]['category'],
+                                rating: snap.data.documents[i]['rating'],
+                                price: snap.data.documents[i]['price'],
+                              )),
+                      imagePath: snap.data.documents[i]['url'],
+                      cardTitle: snap.data.documents[i]['name'],
+                      rating: snap.data.documents[i]['rating'],
+                      category: snap.data.documents[i]['category'],
+                      price: snap.data.documents[i]['price'].toString(),
+                      iPrice: snap.data.documents[i]['iPrice'].toString(),
+                    ),
+                  ));
+                }
+                if (snap.data.documents[i]['top']) {
+                  dishesTop.add(Dish(
+                      name: snap.data.documents[i]['name'],
+                      category: snap.data.documents[i]['category'],
+                      rating: snap.data.documents[i]['rating'],
+                      price: snap.data.documents[i]['price'],
+                      desc: snap.data.documents[i]['description'],
+                      url: snap.data.documents[i]['url']));
+                  print(snap.data.documents[i]['name']);
+                  top.add(Container(
+                    margin: EdgeInsets.only(right: 4.0),
+                    child: FoodyBiteCard(
+                      onTap: () => R.Router.navigator
+                          .pushNamed(R.Router.restaurantDetailsScreen,
+                              arguments: RestaurantDetails(
+                                url: snap.data.documents[i]['url'],
+                                name: snap.data.documents[i]['name'],
+                                desc: snap.data.documents[i]['description'],
+                                category: snap.data.documents[i]['category'],
+                                rating: snap.data.documents[i]['rating'],
+                                price: snap.data.documents[i]['price'],
+                              )),
+                      imagePath: snap.data.documents[i]['url'],
+                      cardTitle: snap.data.documents[i]['name'],
+                      rating: snap.data.documents[i]['rating'],
+                      category: snap.data.documents[i]['category'],
+                      price: snap.data.documents[i]['price'].toString(),
+                      iPrice: snap.data.documents[i]['iPrice'].toString(),
+                    ),
+                  ));
+                }
                 if (i < 5)
                   trending.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
@@ -119,6 +201,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       rating: snap.data.documents[i]['rating'],
                       category: snap.data.documents[i]['category'],
                       price: snap.data.documents[i]['price'].toString(),
+                      iPrice: snap.data.documents[i]['iPrice'].toString(),
                     ),
                   ));
               }
@@ -168,14 +251,31 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Icon(Icons.edit))
                       ],
                     ),
-                    SizedBox(height: 16.0),
+                    Row(
+                      children: [
+                        Icon(Icons.delivery_dining),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text('Estimated Delivery by $delivery'),
+                        SizedBox(
+                          width: 10,
+                        ),
+//                        InkWell(
+//                            onTap: () {
+//                              _locationDialog(context);
+//                            },
+//                            child: Icon(Icons.edit))
+                      ],
+                    ),
+
 //                    HeadingRow(
 //                      title: StringConst.OFFERS,
 //                      number: '',
 //                      onTapOfNumber: () => R.Router.navigator
 //                          .pushNamed(R.Router.trendingRestaurantsScreen),
 //                    ),
-                    SizedBox(height: 16.0),
+
                     StreamBuilder(
                         stream:
                             Firestore.instance.collection('Offers').snapshots(),
@@ -199,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
 
                             return Container(
-                              height: 250,
+                              height: 220,
                               width: MediaQuery.of(context).size.width,
                               child: GFCarousel(
                                 items: imageList.map(
@@ -225,7 +325,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 passiveIndicator: Colors.black,
                                 activeIndicator: Colors.grey,
                                 pauseAutoPlayOnTouch: Duration(seconds: 8),
-                                pagerSize: 10,
+                                pagerSize: 8,
                               ),
 //                              ListView.builder(
 //                                  scrollDirection: Axis.horizontal,
@@ -406,16 +506,20 @@ class _HomeScreenState extends State<HomeScreen> {
                     HeadingRow(
                       title: 'Top Deals',
                       number: 'View All',
-                      onTapOfNumber: () => R.Router.navigator
-                          .pushNamed(R.Router.trendingRestaurantsScreen),
+                      onTapOfNumber: () {
+                        Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return TrendingRestaurantsScreen1("top");
+                        }));
+                      },
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 255,
-                      child: trending.length != 0
+                      height: MediaQuery.of(context).size.height * 0.335,
+                      child: top.length != 0
                           ? ListView(
                               scrollDirection: Axis.horizontal,
-                              children: trending,
+                              children: top,
                             )
                           : Container(),
                     ),
@@ -429,18 +533,21 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     HeadingRow(
-                      title: 'Special on Angadi',
-                      number: '',
-                      onTapOfNumber: () => R.Router.navigator
-                          .pushNamed(R.Router.trendingRestaurantsScreen),
-                    ),
+                        title: 'Special on Angadi',
+                        number: 'View All',
+                        onTapOfNumber: () {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return TrendingRestaurantsScreen1("special");
+                          }));
+                        }),
                     SizedBox(height: 16.0),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.32,
-                      child: trending.length != 0
+                      height: MediaQuery.of(context).size.height * 0.335,
+                      child: special.length != 0
                           ? ListView(
                               scrollDirection: Axis.horizontal,
-                              children: trending,
+                              children: special,
                             )
                           : Container(),
                     ),
@@ -638,15 +745,8 @@ class _HomeScreenState extends State<HomeScreen> {
         Firestore.instance
             .collection('Dishes')
             .document(element.documentID)
-            .setData({
-          'name': '',
-          'url': '',
-          'description': '',
-          'category': '',
-          'price': '',
-          'rating': '',
-          'top': false,
-          'iPrice': ''
+            .updateData({
+          'special': false,
         });
       });
     });

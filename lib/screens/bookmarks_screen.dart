@@ -14,8 +14,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'checkout.dart';
 
 class BookmarksScreen extends StatefulWidget {
-  static const int TAB_NO = 1;
-
   @override
   _BookmarksScreenState createState() => _BookmarksScreenState();
 }

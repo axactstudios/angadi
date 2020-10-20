@@ -1,3 +1,4 @@
+import 'package:angadi/screens/search_results.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/screens/new_review_screen.dart';
@@ -6,6 +7,7 @@ import 'package:angadi/values/values.dart';
 import 'dart:math' as math;
 
 import 'bookmarks_screen.dart';
+import 'categories_screen.dart';
 import 'home_screen.dart';
 import 'notification_screen.dart';
 
@@ -100,7 +102,7 @@ class _RootScreenState extends State<RootScreen>
           animation: _controller,
           child: angle == 0
               ? Icon(
-                  Icons.outlined_flag,
+                  Icons.shopping_cart_outlined,
                   size: 36,
                   color: AppColors.white,
                 )
@@ -122,7 +124,7 @@ class _RootScreenState extends State<RootScreen>
           _isPanelVisible
               ? changeScreen(
                   currentScreen: BookmarksScreen(),
-                  currentTab: BookmarksScreen.TAB_NO,
+                  currentTab: 5,
                 )
               : changeScreen(
                   currentScreen: HomeScreen(),
@@ -146,69 +148,68 @@ class _RootScreenState extends State<RootScreen>
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: <Widget>[
-              //Left Tab bar icons
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  bottomNavigationIcon(
-                    destination: HomeScreen(),
-                    currentTab: HomeScreen.TAB_NO,
-                    activeIcon: Icon(
-                      Icons.home,
-                      color: AppColors.secondaryElement,
-                    ),
-                    nonActiveIcon: Icon(
-                      Icons.outlined_flag,
-                      color: AppColors.secondaryElement,
-                    ),
-                  ),
-                  SizedBox(width: 40),
-                  bottomNavigationIcon(
-                    destination: BookmarksScreen(),
-                    currentTab: BookmarksScreen.TAB_NO,
-                    activeIcon: Icon(
-                      Icons.shopping_cart,
-                      color: AppColors.secondaryElement,
-                    ),
-                    nonActiveIcon: Icon(
-                      Icons.outlined_flag,
-                      color: AppColors.secondaryElement,
-                    ),
-                  ),
-                ],
+              bottomNavigationIcon(
+                destination: HomeScreen(),
+                currentTab: HomeScreen.TAB_NO,
+                activeIcon: Icon(
+                  Icons.home,
+                  color: AppColors.secondaryElement,
+                ),
+                nonActiveIcon: Icon(
+                  Icons.home_outlined,
+                  color: AppColors.secondaryElement,
+                ),
               ),
-
-              // Right Tab bar icons
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  bottomNavigationIcon(
-                    destination: NotificationsScreen(),
-                    currentTab: NotificationsScreen.TAB_NO,
-                    activeIcon: Icon(
-                      Icons.notifications,
-                      color: AppColors.secondaryElement,
-                    ),
-                    nonActiveIcon: Icon(
-                      Icons.notifications_none,
-                      color: AppColors.secondaryElement,
-                    ),
-                  ),
-                  SizedBox(width: 40),
-                  bottomNavigationIcon(
-                    destination: ProfileScreen(),
-                    currentTab: ProfileScreen.TAB_NO,
-                    activeIcon: Icon(
-                      Icons.settings,
-                      color: AppColors.secondaryElement,
-                    ),
-                    nonActiveIcon: Icon(
-                      Icons.outlined_flag,
-                      color: AppColors.secondaryElement,
-                    ),
-                  ),
-                ],
-              )
+              bottomNavigationIcon(
+                destination: CategoriesScreen(),
+                currentTab: CategoriesScreen.TAB_NO,
+                activeIcon: Icon(
+                  Icons.category_rounded,
+                  color: AppColors.secondaryElement,
+                ),
+                nonActiveIcon: Icon(
+                  Icons.category_outlined,
+                  color: AppColors.secondaryElement,
+                ),
+              ),
+              bottomNavigationIcon(
+                destination: SearchScreen(),
+                currentTab: SearchScreen.TAB_NO,
+//                destination: SearchResultsScreen(),
+//                currentTab: SearchResultsScreen.TAB_NO,
+                activeIcon: Icon(
+                  Icons.search,
+                  color: AppColors.secondaryElement,
+                ),
+                nonActiveIcon: Icon(
+                  Icons.search_outlined,
+                  color: AppColors.secondaryElement,
+                ),
+              ),
+              bottomNavigationIcon(
+                destination: NotificationsScreen(),
+                currentTab: NotificationsScreen.TAB_NO,
+                activeIcon: Icon(
+                  Icons.notifications,
+                  color: AppColors.secondaryElement,
+                ),
+                nonActiveIcon: Icon(
+                  Icons.notifications_none,
+                  color: AppColors.secondaryElement,
+                ),
+              ),
+              bottomNavigationIcon(
+                destination: ProfileScreen(),
+                currentTab: ProfileScreen.TAB_NO,
+                activeIcon: Icon(
+                  Icons.settings,
+                  color: AppColors.secondaryElement,
+                ),
+                nonActiveIcon: Icon(
+                  Icons.settings_outlined,
+                  color: AppColors.secondaryElement,
+                ),
+              ),
             ],
           ),
         ),
