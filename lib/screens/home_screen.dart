@@ -2,6 +2,7 @@ import 'package:angadi/classes/dish.dart';
 import 'package:angadi/classes/offer.dart';
 import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
+import 'package:angadi/widgets/nav_drawer.dart';
 import 'package:angadi/widgets/offer_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -75,7 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      drawer: Drawer(),
+      drawer: retNavDrawer(),
       body: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
