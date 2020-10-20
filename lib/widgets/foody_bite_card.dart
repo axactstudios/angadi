@@ -35,7 +35,7 @@ class FoodyBiteCard extends StatelessWidget {
     this.address,
     this.price,
     this.width = 340.0,
-    this.cardHeight = 280.0,
+    this.cardHeight = 300.0,
     this.imageHeight = 174.0,
     this.tagRadius = 8.0,
     this.onTap,

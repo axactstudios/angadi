@@ -133,7 +133,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url']));
-                print(snap.data.documents[i]['name']);
+                print(snap.data.documents[i]['price']);
               }
 
               return Column(
@@ -145,6 +145,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                         return SpaceH8();
                       },
                       itemBuilder: (context, index) {
+                        print('============${dishes[index].price}');
                         return Container(
                           margin: EdgeInsets.only(right: 4.0),
                           child: FoodyBiteCard(
@@ -163,6 +164,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
 //                            status: status[index],
                             cardTitle: dishes[index].name,
                             rating: dishes[index].rating,
+                            price: dishes[index].price,
                             category: dishes[index].category,
 //                            distance: distance[index],
                             address: dishes[index].desc,

@@ -630,4 +630,30 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
   }
+
+  addFields() {
+    Firestore.instance.collection('Dishes').getDocuments().then((value) {
+      value.documents.forEach((element) {
+        Firestore.instance
+            .collection('Dishes')
+            .document(element.documentID)
+            .setData({
+          'name': '',
+          'url': '',
+          'description': '',
+          'category': '',
+          'price': '',
+          'rating': '',
+          'top': false,
+          'iPrice': ''
+        });
+      });
+    });
+  }
 }
+//url: snap.data.documents[i]['url'],
+//name: snap.data.documents[i]['name'],
+//desc: snap.data.documents[i]['description'],
+//category: snap.data.documents[i]['category'],
+//rating: snap.data.documents[i]['rating'],
+//price: snap.data.documents[i]['price'],

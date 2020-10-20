@@ -27,7 +27,7 @@ class _RootScreenState extends State<RootScreen>
 
 //  final double pi = math.pi;
   final double tilt90Degrees = 90;
-  double angle = math.pi;
+  double angle = 0;
 
   bool get _isPanelVisible {
     return angle == tilt90Degrees ? true : false;
@@ -63,13 +63,13 @@ class _RootScreenState extends State<RootScreen>
   }
 
   void changeAngle() {
-    if (angle == math.pi) {
+    if (angle == 0) {
       setState(() {
         angle = tilt90Degrees;
       });
     } else {
       setState(() {
-        angle = math.pi;
+        angle = 0;
       });
     }
   }
@@ -98,11 +98,17 @@ class _RootScreenState extends State<RootScreen>
       floatingActionButton: FloatingActionButton(
         child: AnimatedBuilder(
           animation: _controller,
-          child: Icon(
-            Icons.add,
-            size: 36,
-            color: AppColors.white,
-          ),
+          child: angle == 0
+              ? Icon(
+                  Icons.shopping_cart_outlined,
+                  size: 36,
+                  color: AppColors.white,
+                )
+              : Icon(
+                  Icons.add,
+                  size: 36,
+                  color: AppColors.white,
+                ),
           builder: (context, child) => Transform.rotate(
             angle: angle,
             child: child,
@@ -115,8 +121,8 @@ class _RootScreenState extends State<RootScreen>
           _isPanelVisible ? _controller.forward() : _controller.reverse();
           _isPanelVisible
               ? changeScreen(
-                  currentScreen: NewReviewScreen(),
-                  currentTab: NewReviewScreen.TAB_NO,
+                  currentScreen: BookmarksScreen(),
+                  currentTab: BookmarksScreen.TAB_NO,
                 )
               : changeScreen(
                   currentScreen: HomeScreen(),
@@ -124,7 +130,6 @@ class _RootScreenState extends State<RootScreen>
                 );
         },
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
         elevation: 8.0,
         shape: AutomaticNotchedShape(
