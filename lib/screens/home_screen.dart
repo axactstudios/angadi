@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ),
       ),
-      drawer: retNavDrawer(),
+      drawer: CustomDrawer(),
       body: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -254,7 +254,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     Row(
                       children: [
-                        Icon(Icons.delivery_dining),
+                        Icon(Icons.local_dining),
                         SizedBox(
                           width: 5,
                         ),
@@ -516,7 +516,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.335,
+                      height: 300,
                       child: top.length != 0
                           ? ListView(
                               scrollDirection: Axis.horizontal,
@@ -544,7 +544,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }),
                     SizedBox(height: 16.0),
                     Container(
-                      height: MediaQuery.of(context).size.height * 0.335,
+                      height: 300,
                       child: special.length != 0
                           ? ListView(
                               scrollDirection: Axis.horizontal,

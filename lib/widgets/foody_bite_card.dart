@@ -61,7 +61,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
   final dbHelper = DatabaseHelper.instance;
   Cart item;
   var length;
-  var qty;
+  var qty = 1;
   List<Cart> cartItems = [];
 
   void updateItem(
@@ -306,19 +306,20 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                             MainAxisAlignment.spaceEvenly,
                                         children: [
                                           InkWell(
-                                            onTap: () {
-                                              Cart x;
+                                            onTap: () async {
+                                              await getAllItems();
                                               for (var v in cartItems) {
                                                 if (v.productName ==
-                                                    widget.cardTitle) x = v;
+                                                    widget.cardTitle) {
+                                                  var newQty = v.qty + 1;
+                                                  updateItem(
+                                                      id: v.id,
+                                                      name: v.productName,
+                                                      imgUrl: v.imgUrl,
+                                                      price: v.price,
+                                                      qty: newQty);
+                                                }
                                               }
-                                              var newQty = x.qty + 1;
-                                              updateItem(
-                                                  id: x.id,
-                                                  name: x.productName,
-                                                  imgUrl: x.imgUrl,
-                                                  price: x.price,
-                                                  qty: newQty);
                                             },
                                             child: Icon(
                                               Icons.add,
@@ -331,22 +332,24 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                                 TextStyle(color: Colors.white),
                                           ),
                                           InkWell(
-                                            onTap: () {
-                                              Cart x;
+                                            onTap: () async {
+                                              await getAllItems();
+
                                               for (var v in cartItems) {
                                                 if (v.productName ==
-                                                    widget.cardTitle) x = v;
-                                              }
-                                              if (x.qty == 1) {
-                                                removeItem(x.productName);
-                                              } else {
-                                                var newQty = x.qty - 1;
-                                                updateItem(
-                                                    id: x.id,
-                                                    name: x.productName,
-                                                    imgUrl: x.imgUrl,
-                                                    price: x.price,
-                                                    qty: newQty);
+                                                    widget.cardTitle) {
+                                                  if (v.qty == 1) {
+                                                    removeItem(v.productName);
+                                                  } else {
+                                                    var newQty = v.qty - 1;
+                                                    updateItem(
+                                                        id: v.id,
+                                                        name: v.productName,
+                                                        imgUrl: v.imgUrl,
+                                                        price: v.price,
+                                                        qty: newQty);
+                                                  }
+                                                }
                                               }
                                             },
                                             child: Icon(

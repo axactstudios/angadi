@@ -36,6 +36,8 @@ dependencies:
   fluttertoast: ^7.1.1
 #  intl: ^0.16.1
   progress_dialog: ^1.2.4
+  expandable: ^4.1.4
+  getwidget: ^1.1.0
   getflutter: ^1.0.11
   image_picker: ^0.6.7+3
   cloud_firestore: ^0.13.7

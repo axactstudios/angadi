@@ -42,6 +42,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     });
   }
 
+  int choice = 0;
+
   List<Widget> reviews = [];
   List<Widget> recents = [];
 
@@ -115,6 +117,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     }
   }
 
+  List sizes = ['500 ML', '1 Ltr', '2 Ltr', '5 Ltr', '10 Ltr'];
+
   @override
   Widget build(BuildContext context) {
 //    final RestaurantDetails args = ModalRoute.of(context).settings.arguments;
@@ -122,6 +126,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     var heightOfStack = MediaQuery.of(context).size.height / 2.8;
     var aPieceOfTheHeightOfStack = heightOfStack - heightOfStack / 3.5;
     return Scaffold(
+      appBar: AppBar(),
       body: SafeArea(
         child: Container(
           child: Column(
@@ -130,6 +135,49 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 child: ListView(
                   shrinkWrap: true,
                   children: <Widget>[
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),
+                      child: Row(
+                        children: <Widget>[
+                          Text(
+                            widget.restaurantDetail.name,
+                            textAlign: TextAlign.left,
+                            style: Styles.customTitleTextStyle(
+                              color: AppColors.headingText,
+                              fontWeight: FontWeight.w600,
+                              fontSize: Sizes.TEXT_SIZE_20,
+                            ),
+                          ),
+                          SizedBox(width: 4.0),
+                          CardTags(
+                            title: widget.restaurantDetail.category,
+                            decoration: BoxDecoration(
+                              gradient: Gradients.secondaryGradient,
+                              boxShadow: [
+                                Shadows.secondaryShadow,
+                              ],
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(8.0)),
+                            ),
+                          ),
+                          Spacer(flex: 1),
+                          Ratings(widget.restaurantDetail.rating)
+                        ],
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
+                      child: Text(
+                        'Rs. ${widget.restaurantDetail.price}',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
+                      child: Text(
+                        '(Inclusive of all taxes)',
+                        style: addressTextStyle,
+                      ),
+                    ),
                     Stack(
                       children: <Widget>[
                         Positioned(
@@ -247,46 +295,73 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                         )
                       ],
                     ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),
+                      child: Text(
+                        'Product Description',
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
+                      child: Text(
+                        widget.restaurantDetail.desc,
+                        style: addressTextStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),
+                      child: Text(
+                        'Pack Sizes',
+                      ),
+                    ),
                     Container(
-                      margin: EdgeInsets.symmetric(
-                          horizontal: 16.0, vertical: 16.0),
+                      height: sizes.length * 43.2,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: ListView.builder(
+                            itemCount: sizes.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: const EdgeInsets.all(2.0),
+                                child: InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      choice = index;
+                                    });
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: choice == index
+                                            ? AppColors.secondaryElement
+                                            : Colors.transparent,
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(3)),
+                                        border: Border.all(width: 1)),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Text(sizes[index].toString()),
+                                          Text(
+                                              'Rs. ${int.parse(widget.restaurantDetail.price) * (index + 1)}'),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              );
+                            }),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.fromLTRB(10, 2, 10, 5),
                       child: Column(
                         children: <Widget>[
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              Row(
-                                children: <Widget>[
-                                  Text(
-                                    widget.restaurantDetail.name,
-                                    textAlign: TextAlign.left,
-                                    style: Styles.customTitleTextStyle(
-                                      color: AppColors.headingText,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: Sizes.TEXT_SIZE_20,
-                                    ),
-                                  ),
-                                  SizedBox(width: 4.0),
-                                  CardTags(
-                                    title: widget.restaurantDetail.category,
-                                    decoration: BoxDecoration(
-                                      gradient: Gradients.secondaryGradient,
-                                      boxShadow: [
-                                        Shadows.secondaryShadow,
-                                      ],
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(8.0)),
-                                    ),
-                                  ),
-                                  Spacer(flex: 1),
-                                  Ratings(widget.restaurantDetail.rating)
-                                ],
-                              ),
-                              SizedBox(height: 16.0),
-                              Text(
-                                widget.restaurantDetail.desc,
-                                style: addressTextStyle,
-                              ),
                               // SizedBox(height: 8.0),
                               // RichText(
                               //   text: TextSpan(
@@ -430,60 +505,82 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                   ],
                 ),
               ),
-              check == false
-                  ? angadiButton(
-                      'Add to Cart ',
-                      onTap: () async {
+              Row(
+                children: [
+                  angadiButton(
+                    'Save For Later',
+                    buttonTextStyle: addressTextStyle,
+                    onTap: () async {
 //                  await dbHelper.onCreate();
 //                  int l = await dbHelper.check(widget.restaurantDetail.name);
 //                  print(l);
-                        var temp = await _query(widget.restaurantDetail.name);
-                        print(temp);
-                        if (temp == null)
-                          addToCart(
-                              name: widget.restaurantDetail.name,
-                              imgUrl: widget.restaurantDetail.url,
-                              price: widget.restaurantDetail.price,
-                              qty: 1);
-                        else
-                          setState(() {
-                            print('Item already exists');
-                            check = true;
-                          });
-                      },
+                      var temp = await _query(widget.restaurantDetail.name);
+                      print(temp);
+                      if (temp == null)
+                        addToCart(
+                            name: widget.restaurantDetail.name,
+                            imgUrl: widget.restaurantDetail.url,
+                            price: widget.restaurantDetail.price,
+                            qty: 1);
+                      else
+                        setState(() {
+                          print('Item already exists');
+                          check = true;
+                        });
+                    },
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                      buttonHeight: 65,
-                      buttonWidth: MediaQuery.of(context).size.width,
-                      decoration: Decorations.customHalfCurvedButtonDecoration(
-                        topleftRadius: Sizes.RADIUS_14,
-                        topRightRadius: Sizes.RADIUS_14,
-                      ),
-                    )
-                  : angadiButton(
-                      'Already in Cart ',
-                      onTap: () async {
-//                  await dbHelper.onCreate();
-//                  int l = await dbHelper.check(widget.restaurantDetail.name);
-//                  print(l);
-//               var temp = await _query(widget.restaurantDetail.name);
-//               print(temp);
-//               if (temp == null)
-//
-//               else
-//                 setState(() {
-//                   print('Item already exists');
-//                   check = true;
-//                 });
-                      },
-//                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                      buttonHeight: 65,
-                      buttonWidth: MediaQuery.of(context).size.width,
-                      decoration:
-                          Decorations.customHalfCurvedButtonDecorationGrey(
-                        topleftRadius: Sizes.RADIUS_14,
-                        topRightRadius: Sizes.RADIUS_14,
-                      ),
+                    buttonHeight: 65,
+                    buttonWidth: MediaQuery.of(context).size.width * 0.5,
+                    decoration: Decorations.customHalfCurvedButtonDecoration(
+                      color: AppColors.secondaryColor,
+                      topleftRadius: Sizes.RADIUS_14,
+                      topRightRadius: Sizes.RADIUS_14,
                     ),
+                  ),
+                  check == false
+                      ? angadiButton(
+                          'Add to Cart ',
+                          onTap: () async {
+//                  await dbHelper.onCreate();
+//                  int l = await dbHelper.check(widget.restaurantDetail.name);
+//                  print(l);
+                            var temp =
+                                await _query(widget.restaurantDetail.name);
+                            print(temp);
+                            if (temp == null)
+                              addToCart(
+                                  name: widget.restaurantDetail.name,
+                                  imgUrl: widget.restaurantDetail.url,
+                                  price: widget.restaurantDetail.price,
+                                  qty: 1);
+                            else
+                              setState(() {
+                                print('Item already exists');
+                                check = true;
+                              });
+                          },
+//                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
+                          buttonHeight: 65,
+                          buttonWidth: MediaQuery.of(context).size.width * 0.5,
+                          decoration:
+                              Decorations.customHalfCurvedButtonDecoration(
+                            topleftRadius: Sizes.RADIUS_14,
+                            topRightRadius: Sizes.RADIUS_14,
+                          ),
+                        )
+                      : angadiButton(
+                          'Already in Cart ',
+                          onTap: () async {},
+                          buttonHeight: 65,
+                          buttonWidth: MediaQuery.of(context).size.width,
+                          decoration:
+                              Decorations.customHalfCurvedButtonDecorationGrey(
+                            topleftRadius: Sizes.RADIUS_14,
+                            topRightRadius: Sizes.RADIUS_14,
+                          ),
+                        ),
+                ],
+              )
             ],
           ),
         ),
