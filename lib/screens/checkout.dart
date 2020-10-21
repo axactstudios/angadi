@@ -553,7 +553,7 @@ class _CheckoutState extends State<Checkout> {
   void removeAll() async {
     // Assuming that the number of rows is the id for the last row.
     for (var v in cartItems) {
-      final rowsDeleted = await dbHelper.delete(v.productName);
+      final rowsDeleted = await dbHelper.delete(v.productName, v.qtyTag);
     }
 
     getAllItems();

@@ -13,6 +13,8 @@ class DatabaseHelper {
   static final columnImageUrl = 'imgUrl';
   static final columnPrice = 'price';
   static final columnQuantity = 'qty';
+  static final columnQuantityTag = 'qtyTag';
+
 //  static final columnDetail = 'details';
 
   // make this a singleton class
@@ -44,7 +46,8 @@ class DatabaseHelper {
             $columnProductName TEXT NOT NULL,
             $columnImageUrl TEXT NOT NULL,
             $columnPrice TEXT NOT NULL,
-            $columnQuantity INTEGER NOT NULL
+            $columnQuantity INTEGER NOT NULL,
+            $columnQuantityTag TEXT NOT NULL
           )
           ''');
   }
@@ -56,7 +59,8 @@ class DatabaseHelper {
             $columnProductName TEXT NOT NULL,
             $columnImageUrl TEXT NOT NULL,
             $columnPrice TEXT NOT NULL,
-            $columnQuantity INTEGER NOT NULL
+            $columnQuantity INTEGER NOT NULL,
+            $columnQuantityTag TEXT NOT NULL
           )
           ''');
   }
@@ -72,7 +76,8 @@ class DatabaseHelper {
       'productName': item.productName,
       'imgUrl': item.imgUrl,
       'price': item.price,
-      'qty': item.qty
+      'qty': item.qty,
+      'qtyTag': item.qtyTag
     });
   }
 
@@ -81,9 +86,15 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
-  Future<List<Map<String, dynamic>>> queryRows(name) async {
+  Future<List<Map<String, dynamic>>> queryRows(name, qtyTag) async {
     Database db = await instance.database;
-    return await db.query(table, where: "$columnProductName LIKE '%$name%'");
+    var x = await db.query(table,
+        where:
+            "$columnProductName LIKE '%$name%' AND $columnQuantityTag LIKE '%$qtyTag%'");
+    print(x.toString());
+    return await db.query(table,
+        where:
+            "$columnProductName LIKE '%$name%' AND $columnQuantityTag LIKE '%$qtyTag%'");
   }
 
   Future<int> queryRowCount() async {
@@ -92,24 +103,28 @@ class DatabaseHelper {
         await db.rawQuery('SELECT COUNT(*) FROM $table'));
   }
 
-  Future<int> check(String name) async {
+  Future<int> check(String name, String qtyTag) async {
     Database db = await instance.database;
     return Sqflite.firstIntValue(await db.rawQuery(
-        'SELECT COUNT(*) FROM $table WHERE $columnProductName = $name'));
+        'SELECT COUNT(*) FROM $table WHERE $columnProductName = $name AND $columnQuantityTag = $qtyTag'));
   }
 
   Future<int> update(Cart item) async {
     Database db = await instance.database;
     String productName = item.toMap()['productName'];
+
+    String qtyTag = item.toMap()['qtyTag'];
     return await db.update(table, item.toMap(),
-        where: '$columnProductName = ?', whereArgs: [productName]);
+        where: '$columnProductName = ? AND $columnQuantityTag = ?',
+        whereArgs: [productName, qtyTag]);
   }
 
   // Deletes the row specified by the id. The number of affected rows is
   // returned. This should be 1 as long as the row exists.
-  Future<int> delete(String name) async {
+  Future<int> delete(String name, String qtyTag) async {
     Database db = await instance.database;
-    return await db
-        .delete(table, where: '$columnProductName = ?', whereArgs: [name]);
+    return await db.delete(table,
+        where: '$columnProductName = ? AND $columnQuantityTag = ?',
+        whereArgs: [name, qtyTag]);
   }
 }

@@ -27,6 +27,7 @@ class RestaurantDetailsScreen extends StatefulWidget {
   _RestaurantDetailsScreenState createState() =>
       _RestaurantDetailsScreenState();
 }
+//TODO:Enter Qty Tag
 
 class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   final dbHelper = DatabaseHelper.instance;
@@ -85,7 +86,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     bottomRightRadius: 24,
   );
   void checkInCart() async {
-    var temp = await _query(widget.restaurantDetail.name);
+    var temp = await _query(widget.restaurantDetail.name, sizes[choice]);
     print(temp);
     if (temp == null)
       setState(() {
@@ -122,11 +123,22 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   @override
   Widget build(BuildContext context) {
 //    final RestaurantDetails args = ModalRoute.of(context).settings.arguments;
-
+    List priceFactors = [500, 1, 2, 5, 10];
     var heightOfStack = MediaQuery.of(context).size.height / 2.8;
     var aPieceOfTheHeightOfStack = heightOfStack - heightOfStack / 3.5;
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        elevation: 0.0,
+        centerTitle: true,
+        title: Text(
+          'Product',
+          style: Styles.customTitleTextStyle(
+            color: AppColors.headingText,
+            fontWeight: FontWeight.w600,
+            fontSize: Sizes.TEXT_SIZE_22,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Container(
           child: Column(
@@ -196,32 +208,32 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               right: Sizes.MARGIN_16,
                               top: Sizes.MARGIN_16,
                             ),
-                            child: Row(
-                              children: <Widget>[
-                                InkWell(
-                                  onTap: () => R.Router.navigator.pop(),
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                      left: Sizes.MARGIN_16,
-                                      right: Sizes.MARGIN_16,
-                                    ),
-                                    child: Image.asset(ImagePath.arrowBackIcon),
-                                  ),
-                                ),
-                                Spacer(flex: 1),
-                                InkWell(
-                                  child: Icon(
-                                    FeatherIcons.share2,
-                                    color: AppColors.white,
-                                  ),
-                                ),
-                                SpaceW20(),
-                                InkWell(
-                                  child: Image.asset(ImagePath.bookmarksIcon,
-                                      color: Colors.white),
-                                ),
-                              ],
-                            ),
+//                            child: Row(
+//                              children: <Widget>[
+//                                InkWell(
+//                                  onTap: () => R.Router.navigator.pop(),
+//                                  child: Padding(
+//                                    padding: const EdgeInsets.only(
+//                                      left: Sizes.MARGIN_16,
+//                                      right: Sizes.MARGIN_16,
+//                                    ),
+//                                    child: Image.asset(ImagePath.arrowBackIcon),
+//                                  ),
+//                                ),
+//                                Spacer(flex: 1),
+//                                InkWell(
+//                                  child: Icon(
+//                                    FeatherIcons.share2,
+//                                    color: AppColors.white,
+//                                  ),
+//                                ),
+//                                SpaceW20(),
+//                                InkWell(
+//                                  child: Image.asset(ImagePath.bookmarksIcon,
+//                                      color: Colors.white),
+//                                ),
+//                              ],
+//                            ),
                           ),
                         ),
 //                         Positioned(
@@ -345,7 +357,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                         children: [
                                           Text(sizes[index].toString()),
                                           Text(
-                                              'Rs. ${int.parse(widget.restaurantDetail.price) * (index + 1)}'),
+                                              'Rs. ${int.parse(widget.restaurantDetail.price) * priceFactors[index]}'),
                                         ],
                                       ),
                                     ),
@@ -514,14 +526,16 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                  await dbHelper.onCreate();
 //                  int l = await dbHelper.check(widget.restaurantDetail.name);
 //                  print(l);
-                      var temp = await _query(widget.restaurantDetail.name);
+                      var temp = await _query(
+                          widget.restaurantDetail.name, sizes[choice]);
                       print(temp);
                       if (temp == null)
                         addToCart(
                             name: widget.restaurantDetail.name,
                             imgUrl: widget.restaurantDetail.url,
                             price: widget.restaurantDetail.price,
-                            qty: 1);
+                            qty: 1,
+                            qtyTag: sizes[choice]);
                       else
                         setState(() {
                           print('Item already exists');
@@ -544,15 +558,16 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                  await dbHelper.onCreate();
 //                  int l = await dbHelper.check(widget.restaurantDetail.name);
 //                  print(l);
-                            var temp =
-                                await _query(widget.restaurantDetail.name);
+                            var temp = await _query(
+                                widget.restaurantDetail.name, sizes[choice]);
                             print(temp);
                             if (temp == null)
                               addToCart(
                                   name: widget.restaurantDetail.name,
                                   imgUrl: widget.restaurantDetail.url,
                                   price: widget.restaurantDetail.price,
-                                  qty: 1);
+                                  qty: 1,
+                                  qtyTag: sizes[choice]);
                             else
                               setState(() {
                                 print('Item already exists');
@@ -572,7 +587,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           'Already in Cart ',
                           onTap: () async {},
                           buttonHeight: 65,
-                          buttonWidth: MediaQuery.of(context).size.width,
+                          buttonWidth: MediaQuery.of(context).size.width * 0.5,
                           decoration:
                               Decorations.customHalfCurvedButtonDecorationGrey(
                             topleftRadius: Sizes.RADIUS_14,
@@ -644,12 +659,14 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     return userListTiles;
   }
 
-  void addToCart({String name, String imgUrl, String price, int qty}) async {
+  void addToCart(
+      {String name, String imgUrl, String price, int qty, int qtyTag}) async {
     Map<String, dynamic> row = {
       DatabaseHelper.columnProductName: name,
       DatabaseHelper.columnImageUrl: imgUrl,
       DatabaseHelper.columnPrice: price,
-      DatabaseHelper.columnQuantity: qty
+      DatabaseHelper.columnQuantity: qty,
+      DatabaseHelper.columnQuantityTag: qtyTag
     };
     Cart item = Cart.fromMap(row);
     final id = await dbHelper.insert(item);
@@ -661,8 +678,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     getCartLength();
   }
 
-  Future<Cart> _query(String name) async {
-    final allRows = await dbHelper.queryRows(name);
+  Future<Cart> _query(String name, String qtyTag) async {
+    final allRows = await dbHelper.queryRows(name, qtyTag);
     print(allRows);
     allRows.forEach((row) => item = Cart.fromMap(row));
     setState(() {
@@ -679,24 +696,25 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       String imgUrl,
       String price,
       int qty,
+      String qtyTag,
       String details}) async {
     // row to update
-    Cart item = Cart(id, name, imgUrl, price, qty);
+    Cart item = Cart(id, name, imgUrl, price, qty, qtyTag);
     final rowsAffected = await dbHelper.update(item);
-    _query(name);
+    _query(name, qtyTag);
     Fluttertoast.showToast(msg: 'Updated', toastLength: Toast.LENGTH_SHORT);
     setState(() {
-      _query(item.productName);
+      _query(item.productName, item.qtyTag);
       print('Updated');
       item;
     });
     getCartLength();
   }
 
-  void removeItem(String name) async {
+  void removeItem(String name, String qtyTag) async {
     // Assuming that the number of rows is the id for the last row.
-    final rowsDeleted = await dbHelper.delete(name);
-    _query(name);
+    final rowsDeleted = await dbHelper.delete(name, qtyTag);
+    _query(name, qtyTag);
     setState(() {
       print('Updated');
       item;

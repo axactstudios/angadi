@@ -2,11 +2,12 @@ import 'package:angadi/services/database_helper.dart';
 
 class Cart {
   int id;
-  String productName, imgUrl, price;
+  String productName, imgUrl, price, qtyTag;
 //  String details;
   int qty;
 
-  Cart(this.id, this.productName, this.imgUrl, this.price, this.qty);
+  Cart(this.id, this.productName, this.imgUrl, this.price, this.qty,
+      this.qtyTag);
 
   Cart.fromMap(Map<String, dynamic> map) {
     id = map['id'];
@@ -14,6 +15,7 @@ class Cart {
     imgUrl = map['imgUrl'];
     price = map['price'];
     qty = map['qty'];
+    qtyTag = map['qtyTag'];
 //    details = map['details'];
   }
 
@@ -24,6 +26,7 @@ class Cart {
       DatabaseHelper.columnImageUrl: imgUrl,
       DatabaseHelper.columnPrice: price,
       DatabaseHelper.columnQuantity: qty,
+      DatabaseHelper.columnQuantityTag: qtyTag
 //      DatabaseHelper.columnDetail: details
     };
   }

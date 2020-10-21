@@ -18,6 +18,7 @@ class BookmarksScreen extends StatefulWidget {
   _BookmarksScreenState createState() => _BookmarksScreenState();
 }
 
+//TODO:Enter Qty Tag
 class _BookmarksScreenState extends State<BookmarksScreen> {
   List<Cart> cartItems = [];
   double total;
@@ -40,17 +41,18 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
       String imgUrl,
       String price,
       int qty,
+      String qtyTag,
       String details}) async {
     // row to update
-    Cart item = Cart(id, name, imgUrl, price, qty);
+    Cart item = Cart(id, name, imgUrl, price, qty, qtyTag);
     final rowsAffected = await dbHelper.update(item);
     Fluttertoast.showToast(msg: 'Updated', toastLength: Toast.LENGTH_SHORT);
     getAllItems();
   }
 
-  void removeItem(String name) async {
+  void removeItem(String name, String qtyTag) async {
     // Assuming that the number of rows is the id for the last row.
-    final rowsDeleted = await dbHelper.delete(name);
+    final rowsDeleted = await dbHelper.delete(name, qtyTag);
     getAllItems();
     Fluttertoast.showToast(
         msg: 'Removed from cart', toastLength: Toast.LENGTH_SHORT);
@@ -131,6 +133,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                   return SpaceH8();
                 },
                 itemBuilder: (context, index) {
+                  print(cartItems[index].qtyTag);
                   return Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     // height: 250,
@@ -170,7 +173,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                                     .width *
                                                 0.4,
                                             child: Text(
-                                              cartItems[index].productName,
+                                              '${cartItems[index].productName} ${cartItems[index].qtyTag}',
                                               textAlign: TextAlign.left,
                                               style:
                                                   Styles.customTitleTextStyle(
@@ -200,7 +203,9 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                                         cartItems[index].imgUrl,
                                                     price:
                                                         cartItems[index].price,
-                                                    qty: newQty);
+                                                    qty: newQty,
+                                                    qtyTag: cartItems[index]
+                                                        .qtyTag);
                                               },
                                               child: Container(
                                                 decoration: BoxDecoration(
@@ -253,8 +258,10 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                             InkWell(
                                               onTap: () {
                                                 if (cartItems[index].qty == 1) {
-                                                  removeItem(cartItems[index]
-                                                      .productName);
+                                                  removeItem(
+                                                      cartItems[index]
+                                                          .productName,
+                                                      cartItems[index].qtyTag);
                                                 } else {
                                                   var newQty =
                                                       cartItems[index].qty - 1;
@@ -266,7 +273,9 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                                           .imgUrl,
                                                       price: cartItems[index]
                                                           .price,
-                                                      qty: newQty);
+                                                      qty: newQty,
+                                                      qtyTag: cartItems[index]
+                                                          .qtyTag);
                                                 }
                                               },
                                               child: Container(
@@ -291,7 +300,8 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                                       InkWell(
                                           onTap: () {
                                             removeItem(
-                                                cartItems[index].productName);
+                                                cartItems[index].productName,
+                                                cartItems[index].qtyTag);
                                           },
                                           child: Icon(
                                             Icons.delete,

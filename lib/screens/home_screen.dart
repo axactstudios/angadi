@@ -120,7 +120,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     price: snap.data.documents[i]['price'],
                     desc: snap.data.documents[i]['description'],
                     url: snap.data.documents[i]['url']));
-                print(snap.data.documents[i]['name']);
+//                print(snap.data.documents[i]['name']);
                 if (snap.data.documents[i]['special']) {
                   dishesSpecial.add(Dish(
                       name: snap.data.documents[i]['name'],
@@ -129,7 +129,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url']));
-                  print(snap.data.documents[i]['name']);
+//                  print(snap.data.documents[i]['name']);
                   special.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
@@ -160,7 +160,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url']));
-                  print(snap.data.documents[i]['name']);
+//                  print(snap.data.documents[i]['name']);
                   top.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
@@ -317,7 +317,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ).toList(),
                                 onPageChanged: (index) {
                                   setState(() {
-                                    print('change');
+//                                    print('change');
                                   });
                                 },
                                 autoPlay: true,

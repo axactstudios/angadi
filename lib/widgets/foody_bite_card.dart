@@ -8,6 +8,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'card_tags.dart';
 
+//TODO:Enter Qty Tag
 class FoodyBiteCard extends StatefulWidget {
   final String status;
   final String rating;
@@ -62,28 +63,30 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
   Cart item;
   var length;
   var qty = 1;
+  int choice = 0;
   List<Cart> cartItems = [];
-
+  List<bool> check = [false, false, false, false, false];
   void updateItem(
       {int id,
       String name,
       String imgUrl,
       String price,
       int qty,
+      String qtyTag,
       String details}) async {
     // row to update
-    Cart item = Cart(id, name, imgUrl, price, qty);
+    Cart item = Cart(id, name, imgUrl, price, qty, qtyTag);
     final rowsAffected = await dbHelper.update(item);
     Fluttertoast.showToast(msg: 'Updated', toastLength: Toast.LENGTH_SHORT);
     getAllItems();
   }
 
-  void removeItem(String name) async {
+  void removeItem(String name, String qtyTag) async {
     // Assuming that the number of rows is the id for the last row.
-    final rowsDeleted = await dbHelper.delete(name);
+    final rowsDeleted = await dbHelper.delete(name, qtyTag);
     getAllItems();
     setState(() {
-      check = false;
+      check[choice] = false;
     });
     Fluttertoast.showToast(
         msg: 'Removed from cart', toastLength: Toast.LENGTH_SHORT);
@@ -95,25 +98,34 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     await allRows.forEach((row) => cartItems.add(Cart.fromMap(row)));
     setState(() {
       for (var v in cartItems) {
-        if (v.productName == widget.cardTitle) qty = v.qty;
+        if (v.productName == widget.cardTitle &&
+            v.qtyTag == listOfQuantities[choice]) {
+          qty = v.qty;
+        }
       }
 //      print(cartItems[1]);
     });
   }
 
-  void addToCart({String name, String imgUrl, String price, int qty}) async {
+  void addToCart(
+      {String name,
+      String imgUrl,
+      String price,
+      int qty,
+      String qtyTag}) async {
     Map<String, dynamic> row = {
       DatabaseHelper.columnProductName: name,
       DatabaseHelper.columnImageUrl: imgUrl,
       DatabaseHelper.columnPrice: price,
-      DatabaseHelper.columnQuantity: qty
+      DatabaseHelper.columnQuantity: qty,
+      DatabaseHelper.columnQuantityTag: qtyTag
     };
     Cart item = Cart.fromMap(row);
     final id = await dbHelper.insert(item);
     Fluttertoast.showToast(
         msg: 'Added to cart', toastLength: Toast.LENGTH_SHORT);
     setState(() {
-      check = true;
+      check[choice] = true;
     });
     getCartLength();
   }
@@ -127,18 +139,21 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     });
   }
 
-  Future<Cart> _query(String name) async {
-    final allRows = await dbHelper.queryRows(name);
+  Future<Cart> _query(String name, String qtyTag) async {
+    final allRows = await dbHelper.queryRows(name, qtyTag);
     print(allRows);
+
     allRows.forEach((row) => item = Cart.fromMap(row));
     setState(() {
       item;
-      print(item);
-      print('Updated');
+//      print(item.qtyTag);
+      print('-------------Updated');
     });
     return item;
   }
 
+  var factor = 1;
+  String qtyTag = '500 ML';
   List<String> listOfQuantities = [
     '500 ML',
     '1 Ltr',
@@ -146,26 +161,36 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     '5 Ltr',
     '10 Ltr'
   ];
-  bool check = false;
 
-  void checkInCart() async {
-    var temp = await _query(widget.cardTitle);
+  Future<int> getQuantity(String name, String qtyTag) async {
+    var temp = await _query(name, qtyTag);
+    if (temp == null)
+      return 0;
+    else {
+      print('item found');
+      qty = temp.qty;
+      return temp.qty;
+    }
+  }
+
+  void checkInCart(String qtyTag) async {
+    var temp = await _query(widget.cardTitle, qtyTag);
     print(temp);
     if (temp == null)
       setState(() {
-        check = false;
+        check[choice] = false;
       });
     else
       setState(() {
         print('Item already exists');
-        check = true;
+        check[choice] = true;
+        qty = temp.qty;
       });
   }
 
   @override
   void initState() {
-    // TODO: implement initState
-    checkInCart();
+    checkInCart('500 ML');
     getAllItems();
     super.initState();
   }
@@ -242,6 +267,83 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                   '10 Ltr'
                                 ],
                                 hint: Text("Select quantity"),
+                                onChanged: (value) async {
+                                  if (value == '500 ML') {
+                                    factor = await 1;
+                                    qtyTag = await '500 ML';
+                                    choice = await 0;
+                                    await getAllItems();
+                                    await checkInCart('500 ML');
+                                    qty = await getQuantity(
+                                        widget.cardTitle, '500 ML');
+                                    setState(() {
+                                      print(factor);
+                                      print(choice);
+                                      print(qtyTag);
+                                      print(qty);
+                                    });
+                                  }
+                                  if (value == '1 Ltr') {
+                                    factor = await 2;
+                                    qtyTag = await '1 Ltr';
+                                    choice = await 1;
+                                    await getAllItems();
+                                    await checkInCart('1 Ltr');
+                                    qty = await getQuantity(
+                                        widget.cardTitle, '1 Ltr');
+                                    setState(() {});
+
+                                    print(factor);
+                                    print(choice);
+                                    print(qtyTag);
+                                    print(qty);
+                                  }
+                                  if (value == '2 Ltr') {
+                                    factor = await 4;
+                                    choice = await 2;
+                                    qtyTag = await '2 Ltr';
+                                    await getAllItems();
+                                    await checkInCart('2 Ltr');
+                                    qty = await getQuantity(
+                                        widget.cardTitle, '2 Ltr');
+                                    setState(() {
+                                      print(factor);
+                                      print(choice);
+                                      print(qtyTag);
+                                      print(qty);
+                                    });
+                                  }
+                                  if (value == '5 Ltr') {
+                                    factor = await 10;
+                                    choice = await 3;
+                                    qtyTag = await '5 Ltr';
+                                    await getAllItems();
+                                    await checkInCart('5 Ltr');
+                                    qty = await getQuantity(
+                                        widget.cardTitle, '5 Ltr');
+                                    setState(() {
+                                      print(factor);
+                                      print(choice);
+                                      print(qtyTag);
+                                      print(qty);
+                                    });
+                                  }
+                                  if (value == '10 Ltr') {
+                                    factor = await 20;
+                                    choice = await 4;
+                                    qtyTag = await '10 Ltr';
+                                    await getAllItems();
+                                    await checkInCart('10 Ltr');
+                                    qty = await getQuantity(
+                                        widget.cardTitle, '10 Ltr');
+                                    setState(() {
+                                      print(factor);
+                                      print(choice);
+                                      print(qtyTag);
+                                      print(qty);
+                                    });
+                                  }
+                                },
                               ),
                             ],
                           ),
@@ -255,7 +357,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                   children: [
                                     Container(
                                       child: Text(
-                                        'Rs. ${widget.price}',
+                                        'Rs. ${(int.parse(widget.price) * factor).toString()}',
                                         textAlign: TextAlign.left,
                                         style: Styles.customMediumTextStyle(
                                           color: AppColors.black,
@@ -268,7 +370,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                     ),
                                     Container(
                                       child: Text(
-                                          'Rs. ${int.parse(widget.iPrice)}',
+                                          'Rs. ${(int.parse(widget.iPrice) * factor).toString()}',
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                               fontSize: 20,
@@ -281,14 +383,16 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 
 //                              color: AppColors.accentText,
 //                              fontSize: Sizes.TEXT_SIZE_22,
-                              check == false
+                              check[choice] == false
                                   ? InkWell(
                                       onTap: () {
+                                        print('===========$qtyTag=======');
                                         addToCart(
                                             name: widget.cardTitle,
                                             imgUrl: widget.imagePath,
                                             price: widget.price,
-                                            qty: 1);
+                                            qty: 1,
+                                            qtyTag: qtyTag);
                                       },
                                       child: angadiButton(
                                         'Add',
@@ -317,7 +421,8 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                                       name: v.productName,
                                                       imgUrl: v.imgUrl,
                                                       price: v.price,
-                                                      qty: newQty);
+                                                      qty: newQty,
+                                                      qtyTag: qtyTag);
                                                 }
                                               }
                                             },
@@ -339,7 +444,8 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                                 if (v.productName ==
                                                     widget.cardTitle) {
                                                   if (v.qty == 1) {
-                                                    removeItem(v.productName);
+                                                    removeItem(
+                                                        v.productName, qtyTag);
                                                   } else {
                                                     var newQty = v.qty - 1;
                                                     updateItem(
@@ -347,7 +453,8 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                                         name: v.productName,
                                                         imgUrl: v.imgUrl,
                                                         price: v.price,
-                                                        qty: newQty);
+                                                        qty: newQty,
+                                                        qtyTag: qtyTag);
                                                   }
                                                 }
                                               }
