@@ -73,8 +73,9 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
               onTap: () {
+                print(1);
                 launch(
-                    '<work.axactstudios@gmail.com?subject=Complaint/Feedback&body=<Type your views here.>');
+                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
               },
               child: Icon(Icons.person)),
           SizedBox(
