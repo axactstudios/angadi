@@ -30,21 +30,7 @@ class RestaurantDetailsScreen extends StatefulWidget {
 //TODO:Enter Qty Tag
 
 class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
-  final dbHelper = DatabaseHelper.instance;
-  Cart item;
-  int newQty, length = 0;
-
-  getCartLength() async {
-    int x = await dbHelper.queryRowCount();
-    length = x;
-    setState(() {
-      print('Length Updated');
-      length;
-    });
-  }
-
-  int choice = 0;
-
+  static List<bool> check = [false, false, false, false, false];
   List<Widget> reviews = [];
   List<Widget> recents = [];
 
@@ -78,44 +64,163 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     topleftRadius: 24,
     bottomleftRadius: 24,
   );
-  bool check = false;
+
   BoxDecoration rightSideDecorations =
       Decorations.customHalfCurvedButtonDecoration(
     color: Colors.black.withOpacity(0.1),
     topRightRadius: 24,
     bottomRightRadius: 24,
   );
-  void checkInCart() async {
-    var temp = await _query(widget.restaurantDetail.name, sizes[choice]);
+
+  final dbHelper = DatabaseHelper.instance;
+  Cart item;
+  var length;
+  var qty = 1;
+  int choice = 0;
+  List<Cart> cartItems = [];
+
+  void updateItem(
+      {int id,
+      String name,
+      String imgUrl,
+      String price,
+      int qty,
+      String qtyTag,
+      String details}) async {
+    // row to update
+    Cart item = Cart(id, name, imgUrl, price, qty, qtyTag);
+    final rowsAffected = await dbHelper.update(item);
+    Fluttertoast.showToast(msg: 'Updated', toastLength: Toast.LENGTH_SHORT);
+    getAllItems();
+  }
+
+  void removeItem(String name, String qtyTag) async {
+    // Assuming that the number of rows is the id for the last row.
+    final rowsDeleted = await dbHelper.delete(name, qtyTag);
+    getAllItems();
+    setState(() {
+      check[choice] = false;
+      qty = 0;
+    });
+    Fluttertoast.showToast(
+        msg: 'Removed from cart', toastLength: Toast.LENGTH_SHORT);
+  }
+
+  void getAllItems() async {
+    final allRows = await dbHelper.queryAllRows();
+    cartItems.clear();
+    await allRows.forEach((row) => cartItems.add(Cart.fromMap(row)));
+    setState(() {
+      for (var v in cartItems) {
+        if (v.productName == widget.restaurantDetail.name &&
+            v.qtyTag == listOfQuantities[choice]) {
+          qty = v.qty;
+        }
+      }
+//      print(cartItems[1]);
+    });
+  }
+
+  void addToCart(
+      {String name,
+      String imgUrl,
+      String price,
+      int qty,
+      String qtyTag}) async {
+    Map<String, dynamic> row = {
+      DatabaseHelper.columnProductName: name,
+      DatabaseHelper.columnImageUrl: imgUrl,
+      DatabaseHelper.columnPrice: price,
+      DatabaseHelper.columnQuantity: qty,
+      DatabaseHelper.columnQuantityTag: qtyTag
+    };
+    Cart item = Cart.fromMap(row);
+    final id = await dbHelper.insert(item);
+    Fluttertoast.showToast(
+        msg: 'Added to cart', toastLength: Toast.LENGTH_SHORT);
+    setState(() {
+      check[choice] = true;
+    });
+    await getAllItems();
+    getCartLength();
+  }
+
+  getCartLength() async {
+    int x = await dbHelper.queryRowCount();
+    length = x;
+    setState(() {
+      print('Length Updated');
+      length;
+    });
+  }
+
+  Future<Cart> _query(String name, String qtyTag) async {
+    final allRows = await dbHelper.queryRows(name, qtyTag);
+    print(allRows);
+
+    allRows.forEach((row) => item = Cart.fromMap(row));
+    setState(() {
+      item;
+//      print(item.qtyTag);
+      print('-------------Updated');
+    });
+    return item;
+  }
+
+  var factor = 1;
+  String qtyTag = '500 ML';
+  List<String> listOfQuantities = [
+    '500 ML',
+    '1 Ltr',
+    '2 Ltr',
+    '5 Ltr',
+    '10 Ltr'
+  ];
+
+  Future<int> getQuantity(String name, String qtyTag) async {
+    var temp = await _query(name, qtyTag);
+    if (temp != null) {
+      if (temp.productName == name && temp.qtyTag == qtyTag) {
+        print('item found');
+        qty = temp.qty;
+        return temp.qty;
+      } else {
+        return 0;
+      }
+    }
+  }
+
+  void checkInCart(String qtyTag) async {
+    var temp = await _query(widget.restaurantDetail.name, qtyTag);
     print(temp);
-    if (temp == null)
-      setState(() {
-        check = false;
-      });
-    else
-      setState(() {
-        print('Item already exists');
-        check = true;
-      });
+    if (temp != null) {
+      if (temp.productName == widget.restaurantDetail.name &&
+          temp.qtyTag == qtyTag) {
+        setState(() {
+          print('Item already exists');
+          check[choice] = true;
+          qty = temp.qty;
+        });
+        return;
+      } else
+        setState(() {
+          check[choice] = false;
+        });
+    }
+  }
+
+  var l = 0;
+  first() async {
+    qty = await getQuantity(widget.restaurantDetail.name, '500 ML');
   }
 
   @override
   void initState() {
-    getCartLength();
-    checkInCart();
-    update();
+    choice = 0;
+    first();
+    checkInCart('500 ML');
+    getAllItems();
     super.initState();
-  }
-
-  var l = 0;
-  void update() {
-    if (1 == 1) {
-      setState(() {
-        print(l);
-        l = reviews.length;
-      });
-      print(l);
-    }
   }
 
   List sizes = ['500 ML', '1 Ltr', '2 Ltr', '5 Ltr', '10 Ltr'];
@@ -336,7 +441,15 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               return Padding(
                                 padding: const EdgeInsets.all(2.0),
                                 child: InkWell(
-                                  onTap: () {
+                                  onTap: () async {
+                                    await getAllItems();
+                                    factor = await 1;
+                                    qtyTag = await sizes[index];
+                                    choice = await 0;
+                                    await checkInCart(sizes[index]);
+                                    qty = await getQuantity(
+                                        widget.restaurantDetail.name,
+                                        sizes[index]);
                                     setState(() {
                                       choice = index;
                                     });
@@ -539,7 +652,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                       else
                         setState(() {
                           print('Item already exists');
-                          check = true;
+                          check[choice] = true;
                         });
                     },
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
@@ -551,7 +664,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                       topRightRadius: Sizes.RADIUS_14,
                     ),
                   ),
-                  check == false
+                  qty == 0 || qty == null
                       ? angadiButton(
                           'Add to Cart ',
                           onTap: () async {
@@ -571,7 +684,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             else
                               setState(() {
                                 print('Item already exists');
-                                check = true;
+                                check[choice] = true;
                               });
                           },
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
@@ -583,17 +696,72 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             topRightRadius: Sizes.RADIUS_14,
                           ),
                         )
-                      : angadiButton(
-                          'Already in Cart ',
-                          onTap: () async {},
-                          buttonHeight: 65,
-                          buttonWidth: MediaQuery.of(context).size.width * 0.5,
-                          decoration:
-                              Decorations.customHalfCurvedButtonDecorationGrey(
-                            topleftRadius: Sizes.RADIUS_14,
-                            topRightRadius: Sizes.RADIUS_14,
+                      : Container(
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              color: AppColors.secondaryElement),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              InkWell(
+                                onTap: () async {
+                                  await getAllItems();
+                                  for (var v in cartItems) {
+                                    if (v.productName ==
+                                        widget.restaurantDetail.name) {
+                                      var newQty = v.qty + 1;
+                                      updateItem(
+                                          id: v.id,
+                                          name: v.productName,
+                                          imgUrl: v.imgUrl,
+                                          price: v.price,
+                                          qty: newQty,
+                                          qtyTag: qtyTag);
+                                    }
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.add,
+                                  color: AppColors.secondaryColor,
+                                ),
+                              ),
+                              Text(
+                                qty.toString(),
+                                style: TextStyle(color: Colors.white),
+                              ),
+                              InkWell(
+                                onTap: () async {
+                                  await getAllItems();
+
+                                  for (var v in cartItems) {
+                                    if (v.productName ==
+                                        widget.restaurantDetail.name) {
+                                      if (v.qty == 1) {
+                                        removeItem(v.productName, qtyTag);
+                                      } else {
+                                        var newQty = v.qty - 1;
+                                        updateItem(
+                                            id: v.id,
+                                            name: v.productName,
+                                            imgUrl: v.imgUrl,
+                                            price: v.price,
+                                            qty: newQty,
+                                            qtyTag: qtyTag);
+                                      }
+                                    }
+                                  }
+                                },
+                                child: Icon(
+                                  Icons.remove,
+                                  color: AppColors.secondaryColor,
+                                ),
+                              )
+                            ],
                           ),
-                        ),
+                          height: 30,
+                          width: 100,
+                        )
                 ],
               )
             ],
@@ -657,68 +825,5 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       ));
     });
     return userListTiles;
-  }
-
-  void addToCart(
-      {String name, String imgUrl, String price, int qty, int qtyTag}) async {
-    Map<String, dynamic> row = {
-      DatabaseHelper.columnProductName: name,
-      DatabaseHelper.columnImageUrl: imgUrl,
-      DatabaseHelper.columnPrice: price,
-      DatabaseHelper.columnQuantity: qty,
-      DatabaseHelper.columnQuantityTag: qtyTag
-    };
-    Cart item = Cart.fromMap(row);
-    final id = await dbHelper.insert(item);
-    Fluttertoast.showToast(
-        msg: 'Added to cart', toastLength: Toast.LENGTH_SHORT);
-    setState(() {
-      check = true;
-    });
-    getCartLength();
-  }
-
-  Future<Cart> _query(String name, String qtyTag) async {
-    final allRows = await dbHelper.queryRows(name, qtyTag);
-    print(allRows);
-    allRows.forEach((row) => item = Cart.fromMap(row));
-    setState(() {
-      item;
-      print(item);
-      print('Updated');
-    });
-    return item;
-  }
-
-  void updateItem(
-      {int id,
-      String name,
-      String imgUrl,
-      String price,
-      int qty,
-      String qtyTag,
-      String details}) async {
-    // row to update
-    Cart item = Cart(id, name, imgUrl, price, qty, qtyTag);
-    final rowsAffected = await dbHelper.update(item);
-    _query(name, qtyTag);
-    Fluttertoast.showToast(msg: 'Updated', toastLength: Toast.LENGTH_SHORT);
-    setState(() {
-      _query(item.productName, item.qtyTag);
-      print('Updated');
-      item;
-    });
-    getCartLength();
-  }
-
-  void removeItem(String name, String qtyTag) async {
-    // Assuming that the number of rows is the id for the last row.
-    final rowsDeleted = await dbHelper.delete(name, qtyTag);
-    _query(name, qtyTag);
-    setState(() {
-      print('Updated');
-      item;
-    });
-    getCartLength();
   }
 }
