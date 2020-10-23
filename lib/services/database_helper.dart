@@ -5,9 +5,7 @@ import 'package:path/path.dart';
 class DatabaseHelper {
   static final _databaseName = "cartdb.db";
   static final _databaseVersion = 1;
-
   static final table = 'Cart';
-
   static final columnId = 'id';
   static final columnProductName = 'productName';
   static final columnImageUrl = 'imgUrl';
@@ -88,13 +86,21 @@ class DatabaseHelper {
 
   Future<List<Map<String, dynamic>>> queryRows(name, qtyTag) async {
     Database db = await instance.database;
-    var x = await db.query(table,
-        where:
-            "$columnProductName LIKE '%$name%' AND $columnQuantityTag LIKE '%$qtyTag%'");
+    var x = await db
+        .query(table,
+            where:
+                "$columnProductName LIKE '%$name%' AND $columnQuantityTag LIKE '%$qtyTag%'")
+        .catchError((e) {
+      print(e);
+    });
     print(x.toString());
-    return await db.query(table,
-        where:
-            "$columnProductName LIKE '%$name%' AND $columnQuantityTag LIKE '%$qtyTag%'");
+    return await db
+        .query(table,
+            where:
+                "$columnProductName LIKE '%$name%' AND $columnQuantityTag LIKE '%$qtyTag%'")
+        .catchError((e) {
+      print(e);
+    });
   }
 
   Future<int> queryRowCount() async {

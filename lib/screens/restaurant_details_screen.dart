@@ -228,7 +228,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   @override
   Widget build(BuildContext context) {
 //    final RestaurantDetails args = ModalRoute.of(context).settings.arguments;
-    List priceFactors = [500, 1, 2, 5, 10];
+    List priceFactors = [1, 2, 4, 10, 20];
     var heightOfStack = MediaQuery.of(context).size.height / 2.8;
     var aPieceOfTheHeightOfStack = heightOfStack - heightOfStack / 3.5;
     return Scaffold(
@@ -697,70 +697,78 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           ),
                         )
                       : Container(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              color: AppColors.secondaryElement),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            children: [
-                              InkWell(
-                                onTap: () async {
-                                  await getAllItems();
-                                  for (var v in cartItems) {
-                                    if (v.productName ==
-                                        widget.restaurantDetail.name) {
-                                      var newQty = v.qty + 1;
-                                      updateItem(
-                                          id: v.id,
-                                          name: v.productName,
-                                          imgUrl: v.imgUrl,
-                                          price: v.price,
-                                          qty: newQty,
-                                          qtyTag: qtyTag);
-                                    }
-                                  }
-                                },
-                                child: Icon(
-                                  Icons.add,
-                                  color: AppColors.secondaryColor,
-                                ),
-                              ),
-                              Text(
-                                qty.toString(),
-                                style: TextStyle(color: Colors.white),
-                              ),
-                              InkWell(
-                                onTap: () async {
-                                  await getAllItems();
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Center(
+                            child: Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: AppColors.secondaryElement),
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    InkWell(
+                                      onTap: () async {
+                                        await getAllItems();
+                                        for (var v in cartItems) {
+                                          if (v.productName ==
+                                              widget.restaurantDetail.name) {
+                                            var newQty = v.qty + 1;
+                                            updateItem(
+                                                id: v.id,
+                                                name: v.productName,
+                                                imgUrl: v.imgUrl,
+                                                price: v.price,
+                                                qty: newQty,
+                                                qtyTag: qtyTag);
+                                          }
+                                        }
+                                      },
+                                      child: Icon(
+                                        Icons.add,
+                                        color: AppColors.secondaryColor,
+                                      ),
+                                    ),
+                                    Text(
+                                      qty.toString(),
+                                      style: TextStyle(color: Colors.white),
+                                    ),
+                                    InkWell(
+                                      onTap: () async {
+                                        await getAllItems();
 
-                                  for (var v in cartItems) {
-                                    if (v.productName ==
-                                        widget.restaurantDetail.name) {
-                                      if (v.qty == 1) {
-                                        removeItem(v.productName, qtyTag);
-                                      } else {
-                                        var newQty = v.qty - 1;
-                                        updateItem(
-                                            id: v.id,
-                                            name: v.productName,
-                                            imgUrl: v.imgUrl,
-                                            price: v.price,
-                                            qty: newQty,
-                                            qtyTag: qtyTag);
-                                      }
-                                    }
-                                  }
-                                },
-                                child: Icon(
-                                  Icons.remove,
-                                  color: AppColors.secondaryColor,
+                                        for (var v in cartItems) {
+                                          if (v.productName ==
+                                              widget.restaurantDetail.name) {
+                                            if (v.qty == 1) {
+                                              removeItem(v.productName, qtyTag);
+                                            } else {
+                                              var newQty = v.qty - 1;
+                                              updateItem(
+                                                  id: v.id,
+                                                  name: v.productName,
+                                                  imgUrl: v.imgUrl,
+                                                  price: v.price,
+                                                  qty: newQty,
+                                                  qtyTag: qtyTag);
+                                            }
+                                          }
+                                        }
+                                      },
+                                      child: Icon(
+                                        Icons.remove,
+                                        color: AppColors.secondaryColor,
+                                      ),
+                                    )
+                                  ],
                                 ),
-                              )
-                            ],
+                              ),
+                              height: 30,
+                              width: 100,
+                            ),
                           ),
-                          height: 30,
-                          width: 100,
                         )
                 ],
               )

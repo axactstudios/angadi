@@ -101,7 +101,7 @@ class _RootScreenState extends State<RootScreen>
           animation: _controller,
           child: angle == 0
               ? Icon(
-                  Icons.outlined_flag,
+                  Icons.shopping_cart_outlined,
                   size: 36,
                   color: AppColors.white,
                 )
@@ -155,7 +155,7 @@ class _RootScreenState extends State<RootScreen>
                   color: AppColors.secondaryElement,
                 ),
                 nonActiveIcon: Icon(
-                  Icons.outlined_flag,
+                  Icons.home_outlined,
                   color: AppColors.secondaryElement,
                 ),
               ),
@@ -163,11 +163,11 @@ class _RootScreenState extends State<RootScreen>
                 destination: CategoriesScreen(),
                 currentTab: CategoriesScreen.TAB_NO,
                 activeIcon: Icon(
-                  Icons.outlined_flag,
+                  Icons.category_rounded,
                   color: AppColors.secondaryElement,
                 ),
                 nonActiveIcon: Icon(
-                  Icons.outlined_flag,
+                  Icons.category_outlined,
                   color: AppColors.secondaryElement,
                 ),
               ),
@@ -181,7 +181,7 @@ class _RootScreenState extends State<RootScreen>
                   color: AppColors.secondaryElement,
                 ),
                 nonActiveIcon: Icon(
-                  Icons.outlined_flag,
+                  Icons.search,
                   color: AppColors.secondaryElement,
                 ),
               ),
@@ -205,7 +205,7 @@ class _RootScreenState extends State<RootScreen>
                   color: AppColors.secondaryElement,
                 ),
                 nonActiveIcon: Icon(
-                  Icons.outlined_flag,
+                  Icons.settings_outlined,
                   color: AppColors.secondaryElement,
                 ),
               ),
