@@ -12,7 +12,7 @@ class Ratings extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 8.0, vertical: 8.0),
+      padding: EdgeInsets.symmetric(horizontal: 4.0, vertical: 4.0),
       decoration: BoxDecoration(
         color: AppColors.kFoodyBiteSkyBlue,
         borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -21,8 +21,8 @@ class Ratings extends StatelessWidget {
         children: <Widget>[
           Image.asset(
             ImagePath.starIcon,
-            height: Sizes.WIDTH_14,
-            width: Sizes.WIDTH_14,
+            height: 10,
+            width: 10,
           ),
           SizedBox(width: Sizes.WIDTH_4),
           Text(
@@ -30,7 +30,7 @@ class Ratings extends StatelessWidget {
             style: Styles.customTitleTextStyle(
               color: AppColors.headingText,
               fontWeight: FontWeight.w600,
-              fontSize: Sizes.TEXT_SIZE_14,
+              fontSize: 10,
             ),
           )
         ],

@@ -54,6 +54,8 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  SliverGridDelegate gd;
+
   List<Dish> dishes = new List<Dish>();
   List<Dish> dishesTop = new List<Dish>();
   List<Dish> dishesSpecial = new List<Dish>();
@@ -386,6 +388,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: FoodyBiteCategoryCard(
                                   imagePath: snap.data.documents[i]['imageURL'],
                                   gradient: gradients[i],
+                                  width: 100,
                                   category: snap.data.documents[i]['catName'],
                                   onTap: () {
                                     print(
@@ -432,7 +435,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 100,
+                      height: 220,
                       child: StreamBuilder(
                         stream: Firestore.instance
                             .collection('Categories')
@@ -448,40 +451,66 @@ class _HomeScreenState extends State<HomeScreen> {
                                 i < snap.data.documents.length;
                                 i++) {
                               if (snap.data.documents[i]['top']) {
-                                categoriesTop.add(Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: FoodyBiteCategoryCard(
-                                    imagePath: snap.data.documents[i]
-                                        ['imageURL'],
-                                    gradient: gradients[i],
-                                    category: snap.data.documents[i]['catName'],
-                                    onTap: () {
-                                      print(
-                                          '---------==========${snap.data.documents[i]['imageURL']}');
-                                      R.Router.navigator.pushNamed(
-                                        R.Router.categoryDetailScreen,
-                                        arguments:
-                                            CategoryDetailScreenArguments(
-                                          categoryName: snap.data.documents[i]
-                                              ['catName'],
-                                          imagePath: snap.data.documents[i]
-                                              ['imageURL'],
-                                          selectedCategory: i,
-                                          numberOfCategories:
-                                              snap.data.documents.length,
-                                          gradient: gradients[i],
-                                        ),
-                                      );
-                                    },
-                                  ),
+                                // categoriesTop.add(Padding(
+                                //   padding: const EdgeInsets.all(8.0),
+                                //   child: Container(
+                                //     height: 200,
+                                //     width: 200,
+                                //     color: Colors.red,
+                                //   ),
+                                // ));
+                                categoriesTop.add(FoodyBiteCategoryCard(
+                                  width:
+                                      (MediaQuery.of(context).size.width - 52) /
+                                          2,
+                                  imagePath: snap.data.documents[i]['imageURL'],
+                                  gradient: gradients[i],
+                                  category: snap.data.documents[i]['catName'],
+                                  onTap: () {
+                                    print(
+                                        '---------==========${snap.data.documents[i]['imageURL']}');
+                                    R.Router.navigator.pushNamed(
+                                      R.Router.categoryDetailScreen,
+                                      arguments: CategoryDetailScreenArguments(
+                                        categoryName: snap.data.documents[i]
+                                            ['catName'],
+                                        imagePath: snap.data.documents[i]
+                                            ['imageURL'],
+                                        selectedCategory: i,
+                                        numberOfCategories:
+                                            snap.data.documents.length,
+                                        gradient: gradients[i],
+                                      ),
+                                    );
+                                  },
                                 ));
                               }
                             }
                             return categoriesTop.length != 0
-                                ? ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: categoriesTop,
+                                ? Column(
+                                    children: [
+                                      Row(
+                                        children: [
+                                          categoriesTop[0],
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          categoriesTop[1]
+                                        ],
+                                      ),
+                                      SizedBox(
+                                        height: 20,
+                                      ),
+                                      Row(
+                                        children: [
+                                          categoriesTop[2],
+                                          SizedBox(
+                                            width: 20,
+                                          ),
+                                          categoriesTop[3]
+                                        ],
+                                      )
+                                    ],
                                   )
                                 : Container();
                           } else

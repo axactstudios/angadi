@@ -18,6 +18,7 @@ import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/ratings_widget.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
   RestaurantDetails restaurantDetail;
@@ -234,15 +235,35 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
-        centerTitle: true,
-        title: Text(
-          'Product',
-          style: Styles.customTitleTextStyle(
-            color: AppColors.headingText,
-            fontWeight: FontWeight.w600,
-            fontSize: Sizes.TEXT_SIZE_22,
+        actions: [
+          InkWell(
+              onTap: () {
+                launch('tel:+919027553376');
+              },
+              child: Icon(Icons.share)),
+          SizedBox(
+            width: 8,
           ),
-        ),
+          InkWell(
+              onTap: () {
+                print(1);
+                launch(
+                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+              },
+              child: Icon(Icons.shopping_cart)),
+          SizedBox(
+            width: 14,
+          )
+        ],
+        // centerTitle: true,
+        // title: Text(
+        //   'Product',
+        //   style: Styles.customTitleTextStyle(
+        //     color: AppColors.headingText,
+        //     fontWeight: FontWeight.w600,
+        //     fontSize: Sizes.TEXT_SIZE_22,
+        //   ),
+        // ),
       ),
       body: SafeArea(
         child: Container(
@@ -254,45 +275,70 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                   children: <Widget>[
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),
-                      child: Row(
-                        children: <Widget>[
-                          Text(
-                            widget.restaurantDetail.name,
-                            textAlign: TextAlign.left,
-                            style: Styles.customTitleTextStyle(
-                              color: AppColors.headingText,
-                              fontWeight: FontWeight.w600,
-                              fontSize: Sizes.TEXT_SIZE_20,
-                            ),
-                          ),
-                          SizedBox(width: 4.0),
-                          CardTags(
-                            title: widget.restaurantDetail.category,
-                            decoration: BoxDecoration(
-                              gradient: Gradients.secondaryGradient,
-                              boxShadow: [
-                                Shadows.secondaryShadow,
-                              ],
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(8.0)),
-                            ),
-                          ),
-                          Spacer(flex: 1),
-                          Ratings(widget.restaurantDetail.rating)
-                        ],
+                      child: Text(
+                        widget.restaurantDetail.name,
+                        textAlign: TextAlign.left,
+                        style: Styles.customMediumTextStyle(
+                          color: AppColors.headingText,
+                          // fontWeight: FontWeight.w600,
+                          fontSize: Sizes.TEXT_SIZE_20,
+                        ),
                       ),
                     ),
                     Padding(
-                      padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
+                      padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
+                      child: Text(
+                        widget.restaurantDetail.category,
+                        style: addressTextStyle,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 3, 8, 2),
                       child: Text(
                         'Rs. ${widget.restaurantDetail.price}',
+                        style: Styles.customMediumTextStyle(
+                          color: AppColors.headingText,
+                          // fontWeight: FontWeight.w600,
+                          fontSize: 15,
+                        ),
                       ),
                     ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
                       child: Text(
                         '(Inclusive of all taxes)',
-                        style: addressTextStyle,
+                        style: TextStyle(
+                          color: AppColors.accentText,
+                          fontSize: 10,
+                        ),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(8.0, 3, 8, 10),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Ratings(widget.restaurantDetail.rating),
+                          InkWell(
+                            onTap: () {
+                              R.Router.navigator.pushNamed(
+                                  R.Router.reviewRatingScreen,
+                                  arguments: ReviewRating(
+                                      widget.restaurantDetail.name));
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 0),
+                              child: Text(
+                                'See All Reviews',
+                                style: TextStyle(
+                                  color: AppColors.accentText,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Spacer(flex: 1),
+                        ],
                       ),
                     ),
                     Stack(
@@ -412,10 +458,39 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                         )
                       ],
                     ),
+                    Container(
+                      height: 5,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.grey.withOpacity(0.5),
+                    ),
+                    Row(
+                      children: [
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Image.asset(
+                          'assets/images/truck',
+                          height: 30,
+                          width: 30,
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          'Delivers in 13 hrs',
+                          style: TextStyle(fontSize: 14),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      height: 5,
+                      width: MediaQuery.of(context).size.width,
+                      color: Colors.grey.withOpacity(0.5),
+                    ),
                     Padding(
                       padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),
                       child: Text(
-                        'Product Description',
+                        'About this product',
                       ),
                     ),
                     Padding(
@@ -432,7 +507,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                       ),
                     ),
                     Container(
-                      height: sizes.length * 43.2,
+                      height: sizes.length * 46.0,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: ListView.builder(
@@ -480,153 +555,154 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             }),
                       ),
                     ),
-                    Container(
-                      margin: EdgeInsets.fromLTRB(10, 2, 10, 5),
-                      child: Column(
-                        children: <Widget>[
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              // SizedBox(height: 8.0),
-                              // RichText(
-                              //   text: TextSpan(
-                              //     style: openingTimeTextStyle,
-                              //     children: [
-                              //       TextSpan(text: "Open Now "),
-                              //       TextSpan(
-                              //           text: "daily time ",
-                              //           style: addressTextStyle),
-                              //       TextSpan(text: "9:30 am to 11:30 am "),
-                              //     ],
-                              //   ),
-                              // )
-                            ],
-                          ),
-                          // SpaceH24(),
-                          // HeadingRow(
-                          //   title: StringConst.MENU_AND_PHOTOS,
-                          //   number: StringConst.SEE_ALL_32,
-                          //   onTapOfNumber: () => R.Router.navigator
-                          //       .pushNamed(R.Router.menuPhotosScreen),
-                          // ),
-                          // SizedBox(height: 16.0),
-                          // Container(
-                          //   height: 120,
-                          //   width: MediaQuery.of(context).size.width,
-                          //   child: ListView.builder(
-                          //     scrollDirection: Axis.horizontal,
-                          //     itemCount: 4,
-                          //     itemBuilder: (context, index) {
-                          //       return Container(
-                          //         margin: EdgeInsets.only(right: 12.0),
-                          //         decoration: BoxDecoration(
-                          //             borderRadius:
-                          //                 BorderRadius.all(Radius.circular(8))),
-                          //         child: Image.asset(
-                          //           menuPhotosImagePaths[index],
-                          //           fit: BoxFit.fill,
-                          //           width: 160,
-                          //         ),
-                          //       );
-                          //     },
-                          //   ),
-                          // ),
-                          SpaceH24(),
-                          HeadingRow(
-                            title: StringConst.REVIEWS_AND_RATINGS,
-                            number: 'See All Reviews',
-                            onTapOfNumber: () => R.Router.navigator.pushNamed(
-                                R.Router.reviewRatingScreen,
-                                arguments:
-                                    ReviewRating(widget.restaurantDetail.name)),
-                          ),
-                          SizedBox(height: 16.0),
-                          StreamBuilder(
-                            stream: Firestore.instance
-                                .collection('Reviews')
-                                .snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<QuerySnapshot> snap) {
-                              if (snap.hasData &&
-                                  !snap.hasError &&
-                                  snap.data != null) {
-                                reviews.clear();
-                                recents.clear();
 
-                                for (int i = 0;
-                                    i < snap.data.documents.length;
-                                    i++) {
-                                  if (snap.data.documents[i]['dishName'] ==
-                                      widget.restaurantDetail.name) {
-                                    reviews.add(ListTile(
-                                      leading: Image.network(
-                                          snap.data.documents[i]['userImage']),
-                                      title: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: <Widget>[
-                                          Text(
-                                            snap.data.documents[i]['userName'],
-                                            style: subHeadingTextStyle,
-                                          ),
-                                          Ratings(
-                                              snap.data.documents[i]['rating']),
-                                        ],
-                                      ),
-                                      contentPadding:
-                                          EdgeInsets.symmetric(horizontal: 0),
-                                      subtitle: Text(
-                                        snap.data.documents[i]['details'],
-                                        style: addressTextStyle,
-                                      ),
-                                    ));
-                                    l = reviews.length;
-                                    if (i < 5) {
-                                      recents.add(ListTile(
-                                        leading: Image.network(snap
-                                            .data.documents[i]['userImage']),
-                                        title: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: <Widget>[
-                                            Text(
-                                              snap.data.documents[i]
-                                                  ['userName'],
-                                              style: subHeadingTextStyle,
-                                            ),
-                                            Ratings(snap.data.documents[i]
-                                                ['rating']),
-                                          ],
-                                        ),
-                                        contentPadding:
-                                            EdgeInsets.symmetric(horizontal: 0),
-                                        subtitle: Text(
-                                          snap.data.documents[i]['details'],
-                                          style: addressTextStyle,
-                                        ),
-                                      ));
-                                    }
-                                  }
-                                }
-                                return recents.length != 0
-                                    ? Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: recents,
-                                      )
-                                    : Container();
-                              } else
-                                return Container(
-                                    child: Center(
-                                        child: Text(
-                                  "No Data",
-                                  style: TextStyle(color: Colors.black),
-                                )));
-                            },
-                          ),
-                        ],
-                      ),
-                    )
+                    // Container(
+                    //   margin: EdgeInsets.fromLTRB(10, 2, 10, 5),
+                    //   child: Column(
+                    //     children: <Widget>[
+                    //       Column(
+                    //         crossAxisAlignment: CrossAxisAlignment.start,
+                    //         children: <Widget>[
+                    //           // SizedBox(height: 8.0),
+                    //           // RichText(
+                    //           //   text: TextSpan(
+                    //           //     style: openingTimeTextStyle,
+                    //           //     children: [
+                    //           //       TextSpan(text: "Open Now "),
+                    //           //       TextSpan(
+                    //           //           text: "daily time ",
+                    //           //           style: addressTextStyle),
+                    //           //       TextSpan(text: "9:30 am to 11:30 am "),
+                    //           //     ],
+                    //           //   ),
+                    //           // )
+                    //         ],
+                    //       ),
+                    //       // SpaceH24(),
+                    //       // HeadingRow(
+                    //       //   title: StringConst.MENU_AND_PHOTOS,
+                    //       //   number: StringConst.SEE_ALL_32,
+                    //       //   onTapOfNumber: () => R.Router.navigator
+                    //       //       .pushNamed(R.Router.menuPhotosScreen),
+                    //       // ),
+                    //       // SizedBox(height: 16.0),
+                    //       // Container(
+                    //       //   height: 120,
+                    //       //   width: MediaQuery.of(context).size.width,
+                    //       //   child: ListView.builder(
+                    //       //     scrollDirection: Axis.horizontal,
+                    //       //     itemCount: 4,
+                    //       //     itemBuilder: (context, index) {
+                    //       //       return Container(
+                    //       //         margin: EdgeInsets.only(right: 12.0),
+                    //       //         decoration: BoxDecoration(
+                    //       //             borderRadius:
+                    //       //                 BorderRadius.all(Radius.circular(8))),
+                    //       //         child: Image.asset(
+                    //       //           menuPhotosImagePaths[index],
+                    //       //           fit: BoxFit.fill,
+                    //       //           width: 160,
+                    //       //         ),
+                    //       //       );
+                    //       //     },
+                    //       //   ),
+                    //       // ),
+                    //       SpaceH24(),
+                    //       HeadingRow(
+                    //         title: StringConst.REVIEWS_AND_RATINGS,
+                    //         number: 'See All Reviews',
+                    //         onTapOfNumber: () => R.Router.navigator.pushNamed(
+                    //             R.Router.reviewRatingScreen,
+                    //             arguments:
+                    //                 ReviewRating(widget.restaurantDetail.name)),
+                    //       ),
+                    //       SizedBox(height: 16.0),
+                    //       StreamBuilder(
+                    //         stream: Firestore.instance
+                    //             .collection('Reviews')
+                    //             .snapshots(),
+                    //         builder: (BuildContext context,
+                    //             AsyncSnapshot<QuerySnapshot> snap) {
+                    //           if (snap.hasData &&
+                    //               !snap.hasError &&
+                    //               snap.data != null) {
+                    //             reviews.clear();
+                    //             recents.clear();
+                    //
+                    //             for (int i = 0;
+                    //                 i < snap.data.documents.length;
+                    //                 i++) {
+                    //               if (snap.data.documents[i]['dishName'] ==
+                    //                   widget.restaurantDetail.name) {
+                    //                 reviews.add(ListTile(
+                    //                   leading: Image.network(
+                    //                       snap.data.documents[i]['userImage']),
+                    //                   title: Row(
+                    //                     mainAxisAlignment:
+                    //                         MainAxisAlignment.spaceBetween,
+                    //                     children: <Widget>[
+                    //                       Text(
+                    //                         snap.data.documents[i]['userName'],
+                    //                         style: subHeadingTextStyle,
+                    //                       ),
+                    //                       Ratings(
+                    //                           snap.data.documents[i]['rating']),
+                    //                     ],
+                    //                   ),
+                    //                   contentPadding:
+                    //                       EdgeInsets.symmetric(horizontal: 0),
+                    //                   subtitle: Text(
+                    //                     snap.data.documents[i]['details'],
+                    //                     style: addressTextStyle,
+                    //                   ),
+                    //                 ));
+                    //                 l = reviews.length;
+                    //                 if (i < 5) {
+                    //                   recents.add(ListTile(
+                    //                     leading: Image.network(snap
+                    //                         .data.documents[i]['userImage']),
+                    //                     title: Row(
+                    //                       mainAxisAlignment:
+                    //                           MainAxisAlignment.spaceBetween,
+                    //                       children: <Widget>[
+                    //                         Text(
+                    //                           snap.data.documents[i]
+                    //                               ['userName'],
+                    //                           style: subHeadingTextStyle,
+                    //                         ),
+                    //                         Ratings(snap.data.documents[i]
+                    //                             ['rating']),
+                    //                       ],
+                    //                     ),
+                    //                     contentPadding:
+                    //                         EdgeInsets.symmetric(horizontal: 0),
+                    //                     subtitle: Text(
+                    //                       snap.data.documents[i]['details'],
+                    //                       style: addressTextStyle,
+                    //                     ),
+                    //                   ));
+                    //                 }
+                    //               }
+                    //             }
+                    //             return recents.length != 0
+                    //                 ? Column(
+                    //                     crossAxisAlignment:
+                    //                         CrossAxisAlignment.start,
+                    //                     children: recents,
+                    //                   )
+                    //                 : Container();
+                    //           } else
+                    //             return Container(
+                    //                 child: Center(
+                    //                     child: Text(
+                    //               "No Data",
+                    //               style: TextStyle(color: Colors.black),
+                    //             )));
+                    //         },
+                    //       ),
+                    //     ],
+                    //   ),
+                    // )
                   ],
                 ),
               ),

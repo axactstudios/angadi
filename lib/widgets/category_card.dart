@@ -15,7 +15,7 @@ class FoodyBiteCategoryCard extends StatelessWidget {
   final GestureTapCallback onTap;
 
   FoodyBiteCategoryCard(
-      {this.width = Sizes.WIDTH_100,
+      {this.width,
       this.height = Sizes.HEIGHT_100,
       this.borderRadius = Sizes.RADIUS_8,
       this.opacity = 0.65,
