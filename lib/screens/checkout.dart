@@ -12,6 +12,8 @@ import 'package:flutter/material.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
+import 'package:place_picker/entities/location_result.dart';
+import 'package:place_picker/widgets/place_picker.dart';
 import 'order_placed.dart';
 
 class Checkout extends StatefulWidget {
@@ -205,12 +207,34 @@ class _CheckoutState extends State<Checkout> {
                         );
                       }),
                 ),
+                SizedBox(
+                  height: 10,
+                ),
                 type != 'Takeaway'
                     ? Padding(
-                        padding: const EdgeInsets.only(left: 12.0, bottom: 12),
-                        child: HeadingRow(
-                          title: 'Address',
-                          number: '',
+                        padding: const EdgeInsets.only(right: 18.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 12.0, bottom: 12),
+                              child: HeadingRow(
+                                title: 'Address',
+                                number: '',
+                              ),
+                            ),
+                            InkWell(
+                                onTap: () {
+                                  showPlacePicker();
+
+//                              _locationDialog(context);
+                                },
+                                child: Icon(
+                                  Icons.map,
+                                  size: 30,
+                                )),
+                          ],
                         ),
                       )
                     : Container(),
@@ -619,11 +643,11 @@ class _CheckoutState extends State<Checkout> {
                 children: [
                   Text('Sub Total'),
                   SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.1846,
+                    width: MediaQuery.of(context).size.width * 0.187,
                   ),
                   Text(':'),
                   SizedBox(
-                    width: 10,
+                    width: MediaQuery.of(context).size.width * 0.03,
                   ),
                   Text('Rs. ${totalAmount().toString()}')
                 ],
@@ -636,7 +660,7 @@ class _CheckoutState extends State<Checkout> {
                   ),
                   Text(':'),
                   SizedBox(
-                    width: 10,
+                    width: MediaQuery.of(context).size.width * 0.03,
                   ),
                   Text(discount != null
                       ? 'Rs. ${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}'
@@ -647,11 +671,11 @@ class _CheckoutState extends State<Checkout> {
                 children: [
                   Text('Taxes and Charges'),
                   SizedBox(
-                    width: 10,
+                    width: MediaQuery.of(context).size.width * 0.03,
                   ),
                   Text(':'),
                   SizedBox(
-                    width: 10,
+                    width: MediaQuery.of(context).size.width * 0.03,
                   ),
                   Text('Rs. ${(totalAmount() * 0.18).toStringAsFixed(2)}'),
                 ],
@@ -674,7 +698,7 @@ class _CheckoutState extends State<Checkout> {
                   ),
                   Text(':'),
                   SizedBox(
-                    width: 10,
+                    width: MediaQuery.of(context).size.width * 0.03,
                   ),
                   Text(discount != null
                       ? 'Rs. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)}'
@@ -689,5 +713,18 @@ class _CheckoutState extends State<Checkout> {
         ),
       ),
     );
+  }
+
+  LocationResult result;
+
+  void showPlacePicker() async {
+    result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            PlacePicker("AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw")));
+    setState(() {
+      addressController.text = result.formattedAddress;
+    });
+    // Handle the result in your way
+    print(addressController.text);
   }
 }

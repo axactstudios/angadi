@@ -29,8 +29,10 @@ import 'package:place_picker/widgets/place_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../routes/router.gr.dart';
 import '../values/values.dart';
+import 'categories_screen.dart';
 import 'category_detail_screen.dart';
 import 'checkout.dart';
+import 'filter_screen.dart';
 
 var cat, money, rat;
 
@@ -221,6 +223,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ));
                 }
+
                 if (i < 5)
                   trending.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
@@ -268,8 +271,10 @@ class _HomeScreenState extends State<HomeScreen> {
                           controller.text,
                         ),
                       ),
-                      onTapOfSuffixIcon: () =>
-                          R.Router.navigator.pushNamed(R.Router.filterScreen),
+                      onTapOfSuffixIcon: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return FilterScreen();
+                      })),
                       borderStyle: BorderStyle.solid,
                     ),
                     SizedBox(height: 16.0),
@@ -285,11 +290,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         InkWell(
                             onTap: () {
+                              _locationDialog(context);
+
+//
+                            },
+                            child: Icon(Icons.edit)),
+                        InkWell(
+                            onTap: () {
                               showPlacePicker();
 
 //                              _locationDialog(context);
                             },
-                            child: Icon(Icons.edit))
+                            child: Icon(Icons.map))
                       ],
                     ),
                     Row(
@@ -424,8 +436,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     HeadingRow(
                       title: StringConst.CATEGORY,
                       number: 'All Categories ',
-                      onTapOfNumber: () => R.Router.navigator
-                          .pushNamed(R.Router.categoriesScreen),
+                      onTapOfNumber: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return CategoriesScreen();
+                      })),
                     ),
                     SizedBox(height: 16.0),
                     Container(

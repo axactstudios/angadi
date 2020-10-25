@@ -9,6 +9,7 @@ import 'package:angadi/widgets/spaces.dart';
 
 import '../routes/router.dart';
 import '../routes/router.gr.dart';
+import 'category_detail_screen.dart';
 
 class CategoriesScreen extends StatefulWidget {
   static const int TAB_NO = 1;
@@ -70,17 +71,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           child: FoodyBiteCategoryCard(
                             onTap: () {
                               print('L');
-                              R.Router.navigator.pushNamed(
-                                R.Router.categoryDetailScreen,
-                                arguments: CategoryDetailScreenArguments(
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return CategoryDetailScreen(
                                   categoryName: snap.data.documents[i]
                                       ['catName'],
                                   imagePath: snap.data.documents[i]['imageURL'],
                                   selectedCategory: i,
                                   numberOfCategories: categoriesTop.length,
                                   gradient: gradients[i],
-                                ),
-                              );
+                                );
+                              }));
                             },
                             width: MediaQuery.of(context).size.width,
                             imagePath: snap.data.documents[i]['imageURL'],

@@ -10,6 +10,10 @@ import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/search_input_field.dart';
 import 'package:angadi/widgets/spaces.dart';
 
+import '../routes/router.dart';
+import 'filter_screen.dart';
+import 'restaurant_details_screen.dart';
+
 class SearchResultsScreen extends StatelessWidget {
   final SearchValue searchValue;
 
@@ -153,8 +157,10 @@ class SearchScreen extends StatelessWidget {
                     controller.text,
                   ),
                 ),
-                onTapOfSuffixIcon: () =>
-                    R.Router.navigator.pushNamed(R.Router.filterScreen),
+                onTapOfSuffixIcon: () => Navigator.push(context,
+                    MaterialPageRoute(builder: (BuildContext context) {
+                  return FilterScreen();
+                })),
                 borderStyle: BorderStyle.solid,
               ),
               SizedBox(height: Sizes.WIDTH_16),
@@ -183,18 +189,20 @@ class SearchScreen extends StatelessWidget {
                             trending.add(Container(
                               margin: EdgeInsets.only(right: 4.0),
                               child: FoodyBiteCard(
-                                onTap: () => R.Router.navigator.pushNamed(
-                                    R.Router.restaurantDetailsScreen,
-                                    arguments: RestaurantDetails(
-                                      url: snap.data.documents[i]['url'],
-                                      name: snap.data.documents[i]['name'],
-                                      desc: snap.data.documents[i]
-                                          ['description'],
-                                      category: snap.data.documents[i]
-                                          ['category'],
-                                      rating: snap.data.documents[i]['rating'],
-                                      price: snap.data.documents[i]['price'],
-                                    )),
+                                onTap: () => Navigator.push(context,
+                                    MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                  return RestaurantDetailsScreen(
+                                      RestaurantDetails(
+                                    url: snap.data.documents[i]['url'],
+                                    name: snap.data.documents[i]['name'],
+                                    desc: snap.data.documents[i]['description'],
+                                    category: snap.data.documents[i]
+                                        ['category'],
+                                    rating: snap.data.documents[i]['rating'],
+                                    price: snap.data.documents[i]['price'],
+                                  ));
+                                })),
                                 imagePath: snap.data.documents[i]['url'],
                                 cardTitle: snap.data.documents[i]['name'],
                                 rating: snap.data.documents[i]['rating'],
