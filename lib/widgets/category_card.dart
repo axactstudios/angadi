@@ -64,8 +64,8 @@ class FoodyBiteCategoryCard extends StatelessWidget {
             ),
             Positioned(
               top: hasHandle ? Sizes.SIZE_36 : (height / 2) - 4,
-              right: hasHandle ? Sizes.SIZE_24 : width / 4,
-              left: hasHandle ? Sizes.SIZE_8 : width / 4,
+              right: hasHandle ? Sizes.SIZE_24 : width / 8,
+              left: hasHandle ? Sizes.SIZE_8 : width / 8,
               child: hasHandle
                   ? Row(
                       children: <Widget>[
@@ -73,7 +73,12 @@ class FoodyBiteCategoryCard extends StatelessWidget {
                         Text(
                           category,
                           textAlign: TextAlign.center,
-                          style: categoryTextStyle,
+                          style: TextStyle(
+                            color: AppColors.secondaryText,
+                            fontFamily: StringConst.FONT_FAMILY,
+                            fontWeight: FontWeight.w500,
+                            fontSize: Sizes.TEXT_SIZE_18,
+                          ),
                         ),
                         Spacer(flex: 1),
                         Container(

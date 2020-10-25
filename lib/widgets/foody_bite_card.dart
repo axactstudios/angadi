@@ -41,7 +41,7 @@ class FoodyBiteCard extends StatefulWidget {
     this.address,
     this.price,
     this.iPrice,
-    this.width = 340.0,
+    this.width = 300,
     this.cardHeight = 305.0,
     this.imageHeight = 169.0,
     this.tagRadius = 8.0,
@@ -149,7 +149,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     setState(() {
       item;
 //      print(item.qtyTag);
-//      print('-------------Updated');
+      print('-------------Updated');
     });
     return item;
   }
@@ -210,10 +210,12 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width * 0.85;
+
     return InkWell(
       onTap: widget.onTap,
       child: Container(
-        width: widget.width,
+        width: width,
         child: Card(
           elevation: widget.cardElevation,
           shape: RoundedRectangleBorder(
@@ -283,7 +285,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.38,
+                      width: MediaQuery.of(context).size.width * 0.42,
                       child: Text(
                         widget.cardTitle,
                         textAlign: TextAlign.left,

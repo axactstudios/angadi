@@ -40,14 +40,14 @@ class SearchResultsScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               FoodyBiteSearchInputField(
-                ImagePath.searchIcon,
+                Icons.search,
                 controller: controller,
                 textFormFieldStyle:
                     Styles.customNormalTextStyle(color: AppColors.accentText),
                 hintText: StringConst.HINT_TEXT_TRENDING_SEARCH_BAR,
                 hintTextStyle:
                     Styles.customNormalTextStyle(color: AppColors.accentText),
-                suffixIconImagePath: ImagePath.closeIcon,
+                suffixIconImagePath: Icons.sort,
                 onTapOfSuffixIcon: () => Navigator.pop(context),
                 borderWidth: 0.0,
                 borderStyle: BorderStyle.solid,
@@ -142,14 +142,14 @@ class SearchScreen extends StatelessWidget {
           child: Column(
             children: <Widget>[
               FoodyBiteSearchInputField(
-                ImagePath.searchIcon,
+                Icons.search,
                 controller: controller,
                 textFormFieldStyle:
                     Styles.customNormalTextStyle(color: AppColors.accentText),
                 hintText: StringConst.HINT_TEXT_HOME_SEARCH_BAR,
                 hintTextStyle:
                     Styles.customNormalTextStyle(color: AppColors.accentText),
-                suffixIconImagePath: ImagePath.settingsIcon,
+                suffixIconImagePath: Icons.sort,
                 borderWidth: 0.0,
                 onTapOfLeadingIcon: () => R.Router.navigator.pushNamed(
                   R.Router.searchResultsScreen,

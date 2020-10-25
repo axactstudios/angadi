@@ -230,7 +230,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                       child: Image.network(
                         widget.imagePath,
                         width: widget.width,
-                        height: 120,
+                        height: 95,
                         fit: BoxFit.cover,
                       ),
                     ),

@@ -49,7 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: ListView(
                   children: <Widget>[
                     _buildHeader(),
-                    SizedBox(height: Sizes.HEIGHT_200),
+                    SizedBox(height: 60),
                     _buildForm(),
                     SpaceH36(),
                     _buildFooter()

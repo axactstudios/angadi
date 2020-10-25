@@ -167,7 +167,7 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
           child: ListView(
             children: <Widget>[
               FoodyBiteSearchInputField(
-                ImagePath.searchIcon,
+                Icons.search,
                 controller: controller,
                 textFormFieldStyle:
                     Styles.customNormalTextStyle(color: AppColors.accentText),
@@ -176,7 +176,7 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
                     Styles.customNormalTextStyle(color: AppColors.accentText),
                 hasSuffixIcon: showSuffixIcon,
                 suffixIcon: suffixIcon(),
-                suffixIconImagePath: ImagePath.settingsIcon,
+                suffixIconImagePath: Icons.sort,
                 borderWidth: 0.0,
                 onTapOfLeadingIcon: () {},
                 onTapOfSuffixIcon: () {

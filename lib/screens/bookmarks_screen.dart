@@ -101,10 +101,14 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                 margin: EdgeInsets.only(right: Sizes.MARGIN_16),
                 child: InkWell(
                   onTap: () {
-                    Navigator.push(context,
-                        MaterialPageRoute(builder: (BuildContext context) {
-                      return Checkout();
-                    }));
+                    FirebaseAuth.instance.currentUser() != null
+                        ? Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                            return Checkout();
+                          }))
+                        : Fluttertoast.showToast(
+                            msg: 'Login to checkout!',
+                          );
                   },
                   child: Container(
                     child: Padding(

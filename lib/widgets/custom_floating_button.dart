@@ -1,9 +1,12 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
+import '../classes/cart.dart';
 import '../routes/router.dart';
 import '../screens/bookmarks_screen.dart';
 import '../screens/bookmarks_screen.dart';
 import '../screens/home_screen.dart';
+import '../services/database_helper.dart';
 import '../values/values.dart';
 
 class CustomFloatingButton extends StatefulWidget {
@@ -15,6 +18,21 @@ class CustomFloatingButton extends StatefulWidget {
 
 class _CustomFloatingButtonState extends State<CustomFloatingButton>
     with SingleTickerProviderStateMixin {
+  List<Cart> cartItems = [];
+  int total;
+  final dbHelper = DatabaseHelper.instance;
+//  final dbRef = FirebaseDatabase.instance.reference();
+  FirebaseAuth mAuth = FirebaseAuth.instance;
+  int newQty;
+  void getAllItems() async {
+    final allRows = await dbHelper.queryAllRows();
+    cartItems.clear();
+    allRows.forEach((row) => cartItems.add(Cart.fromMap(row)));
+    setState(() {
+      total = cartItems.length;
+    });
+  }
+
   final PageStorageBucket bucket = PageStorageBucket();
   Widget currentScreen;
   int currentTab;
@@ -31,6 +49,7 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton>
   @override
   initState() {
     super.initState();
+
     print("init runs");
     currentScreen = widget.currentScreen?.currentScreen ?? HomeScreen();
     currentTab = widget.currentScreen?.tab_no ?? 0;
@@ -71,19 +90,78 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton>
 
   @override
   Widget build(BuildContext context) {
+    getAllItems();
     return FloatingActionButton(
       child: AnimatedBuilder(
         animation: _controller,
         child: angle == 0
-            ? Icon(
-                Icons.shopping_cart,
-                size: 36,
-                color: AppColors.white,
+            ? Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.shopping_cart,
+                    size: 36,
+                    color: AppColors.white,
+                  ),
+                  total != null
+                      ? total > 0
+                          ? Positioned(
+                              bottom:
+                                  MediaQuery.of(context).size.height * 0.0265,
+                              left: MediaQuery.of(context).size.height * 0.023,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2.0),
+                                child: CircleAvatar(
+                                  radius: 8.0,
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  child: Text(
+                                    total.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container()
+                      : Container(),
+                ],
               )
-            : Icon(
-                Icons.shopping_cart,
-                size: 36,
-                color: AppColors.white,
+            : Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.shopping_cart,
+                    size: 36,
+                    color: AppColors.white,
+                  ),
+                  total != null
+                      ? total > 0
+                          ? Positioned(
+                              bottom:
+                                  MediaQuery.of(context).size.height * 0.0265,
+                              left: MediaQuery.of(context).size.height * 0.023,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2.0),
+                                child: CircleAvatar(
+                                  radius: 8.0,
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  child: Text(
+                                    total.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 12.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container()
+                      : Container(),
+                ],
               ),
         builder: (context, child) => Transform.rotate(
           angle: angle,

@@ -20,7 +20,10 @@ import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/ratings_widget.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import 'bookmarks_screen.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
   RestaurantDetails restaurantDetail;
@@ -117,6 +120,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     cartItems.clear();
     await allRows.forEach((row) => cartItems.add(Cart.fromMap(row)));
     setState(() {
+      total = cartItems.length;
       for (var v in cartItems) {
         if (v.productName == widget.restaurantDetail.name &&
             v.qtyTag == listOfQuantities[choice]) {
@@ -127,7 +131,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     });
   }
 
-  void addToCart(
+  int total;
+
+  void addToCart(ctxt,
       {String name,
       String imgUrl,
       String price,
@@ -142,8 +148,31 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     };
     Cart item = Cart.fromMap(row);
     final id = await dbHelper.insert(item);
-    Fluttertoast.showToast(
-        msg: 'Added to cart', toastLength: Toast.LENGTH_SHORT);
+    final snackBar = SnackBar(
+        content: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('Added to Cart'),
+          InkWell(
+            onTap: () {
+              pushNewScreen(context,
+                  screen: BookmarksScreen(), withNavBar: true);
+            },
+            child: Text(
+              'View Cart',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+            ),
+          ),
+        ],
+      ),
+    ));
+
+// Find the Scaffold in the widget tree and use it to show a SnackBar.
+    Scaffold.of(ctxt).showSnackBar(snackBar);
+//    Fluttertoast.showToast(
+//        msg: 'Added to cart', toastLength: Toast.LENGTH_SHORT);
     setState(() {
       check[choice] = true;
     });
@@ -253,13 +282,48 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
             width: 8,
           ),
           InkWell(
-              onTap: () {
-                print(1);
-                R.Router.navigator.pushNamed(
-                  R.Router.bookmarksScreen2,
-                );
-              },
-              child: Icon(Icons.shopping_cart)),
+            onTap: () {
+              print(1);
+              R.Router.navigator.pushNamed(
+                R.Router.bookmarksScreen2,
+              );
+            },
+            child: Padding(
+              padding: const EdgeInsets.only(right: 5.0),
+              child: Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  Icon(
+                    Icons.shopping_cart,
+                    color: AppColors.black,
+                  ),
+                  total != null
+                      ? total > 0
+                          ? Positioned(
+                              bottom: MediaQuery.of(context).size.height * 0.04,
+                              left: MediaQuery.of(context).size.height * 0.013,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 2.0),
+                                child: CircleAvatar(
+                                  radius: 6.0,
+                                  backgroundColor: Colors.red,
+                                  foregroundColor: Colors.white,
+                                  child: Text(
+                                    total.toString(),
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 8.0,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            )
+                          : Container()
+                      : Container(),
+                ],
+              ),
+            ),
+          ),
           SizedBox(
             width: 14,
           )
@@ -841,7 +905,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 widget.restaurantDetail.name, sizes[choice]);
                             print(temp);
                             if (temp == null)
-                              addToCart(
+                              addToCart(context,
                                   name: widget.restaurantDetail.name,
                                   imgUrl: widget.restaurantDetail.url,
                                   price: widget.restaurantDetail.price,
@@ -875,7 +939,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       sizes[choice]);
                                   print(temp);
                                   if (temp == null)
-                                    addToCart(
+                                    addToCart(context,
                                         name: widget.restaurantDetail.name,
                                         imgUrl: widget.restaurantDetail.url,
                                         price: widget.restaurantDetail.price,

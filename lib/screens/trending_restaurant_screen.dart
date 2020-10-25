@@ -9,8 +9,10 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/search_input_field.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'home_screen.dart';
+import 'restaurant_details_screen.dart';
 
 class TrendingRestaurantsScreen extends StatefulWidget {
   @override
@@ -40,6 +42,10 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
         }
       },
       child: Scaffold(
+          floatingActionButton: CustomFloatingButton(
+            CurrentScreen(
+                tab_no: 10, currentScreen: TrendingRestaurantsScreen()),
+          ),
           appBar: AppBar(
             elevation: 0.0,
             leading: InkWell(
@@ -119,20 +125,23 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                                 trending.add(Container(
                                   margin: EdgeInsets.only(right: 4.0),
                                   child: FoodyBiteCard(
-                                    onTap: () => R.Router.navigator.pushNamed(
-                                        R.Router.restaurantDetailsScreen,
-                                        arguments: RestaurantDetails(
-                                          url: snap.data.documents[i]['url'],
-                                          name: snap.data.documents[i]['name'],
-                                          desc: snap.data.documents[i]
-                                              ['description'],
-                                          category: snap.data.documents[i]
-                                              ['category'],
-                                          rating: snap.data.documents[i]
-                                              ['rating'],
-                                          price: snap.data.documents[i]
-                                              ['price'],
-                                        )),
+                                    onTap: () => pushNewScreen(
+                                      context,
+                                      screen: RestaurantDetailsScreen(
+                                        RestaurantDetails(
+                                          url: dishes[i].url,
+                                          name: dishes[i].name,
+                                          desc: dishes[i].desc,
+                                          category: dishes[i].category,
+                                          rating: dishes[i].rating,
+                                          price: dishes[i].price,
+                                        ),
+                                      ),
+                                      withNavBar:
+                                          true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
+                                    ),
                                     imagePath: snap.data.documents[i]['url'],
                                     cardTitle: snap.data.documents[i]['name'],
                                     rating: snap.data.documents[i]['rating'],
@@ -289,20 +298,23 @@ class _TrendingRestaurantsScreen1State
                                 trending.add(Container(
                                   margin: EdgeInsets.only(right: 4.0),
                                   child: FoodyBiteCard(
-                                    onTap: () => R.Router.navigator.pushNamed(
-                                        R.Router.restaurantDetailsScreen,
-                                        arguments: RestaurantDetails(
-                                          url: snap.data.documents[i]['url'],
-                                          name: snap.data.documents[i]['name'],
-                                          desc: snap.data.documents[i]
-                                              ['description'],
-                                          category: snap.data.documents[i]
-                                              ['category'],
-                                          rating: snap.data.documents[i]
-                                              ['rating'],
-                                          price: snap.data.documents[i]
-                                              ['price'],
-                                        )),
+                                    onTap: () => pushNewScreen(
+                                      context,
+                                      screen: RestaurantDetailsScreen(
+                                        RestaurantDetails(
+                                          url: dishes[i].url,
+                                          name: dishes[i].name,
+                                          desc: dishes[i].desc,
+                                          category: dishes[i].category,
+                                          rating: dishes[i].rating,
+                                          price: dishes[i].price,
+                                        ),
+                                      ),
+                                      withNavBar:
+                                          true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
+                                    ),
                                     imagePath: snap.data.documents[i]['url'],
                                     cardTitle: snap.data.documents[i]['name'],
                                     rating: snap.data.documents[i]['rating'],

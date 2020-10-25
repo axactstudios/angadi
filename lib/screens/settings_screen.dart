@@ -41,7 +41,7 @@ class SettingsScreen extends StatelessWidget {
                 Text(
                   "Account",
                   style: textTheme.title.copyWith(
-                    fontSize: Sizes.TEXT_SIZE_20,
+                    fontSize: Sizes.TEXT_SIZE_16,
                     color: AppColors.indigoShade1,
                   ),
                 ),
@@ -87,7 +87,7 @@ class SettingsScreen extends StatelessWidget {
                 Text(
                   "Others",
                   style: textTheme.title.copyWith(
-                    fontSize: Sizes.TEXT_SIZE_20,
+                    fontSize: Sizes.TEXT_SIZE_16,
                     color: AppColors.indigoShade1,
                   ),
                 ),
@@ -165,7 +165,7 @@ class SettingsScreen extends StatelessWidget {
                   child: Text(
                     'Are you sure you want to Logout ?',
                     style: textTheme.title.copyWith(
-                      fontSize: Sizes.TEXT_SIZE_20,
+                      fontSize: Sizes.TEXT_SIZE_16,
                     ),
                   ),
                 ),
@@ -247,7 +247,7 @@ class SettingsListTile extends StatelessWidget {
           child: Text(
             title,
             style: textTheme.title
-                .copyWith(fontSize: Sizes.TEXT_SIZE_20, color: titleColor),
+                .copyWith(fontSize: Sizes.TEXT_SIZE_16, color: titleColor),
           ),
         ),
         trailing: hasTrailing ? Icon(iconData, color: AppColors.indigo) : null,

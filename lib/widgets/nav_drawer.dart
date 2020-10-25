@@ -15,6 +15,12 @@ import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/components/drawer/gf_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:location/location.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+
+import '../screens/categories_screen.dart';
+import '../screens/login_screen.dart';
+import '../screens/profile_screen.dart';
+import '../screens/settings_screen.dart';
 
 class CustomDrawer extends StatefulWidget {
   @override
@@ -186,275 +192,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
   @override
   void initState() {
     _getCurrentLocation();
+    getUserDetails();
     getCategories();
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return GFDrawer(
-      child: Scaffold(
-        body: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            SizedBox(
-              height: 50,
-              child: Container(
-                  // color: Color(0xFF3871AD),
-                  ),
-            ),
-            // Container(
-            //   margin: EdgeInsets.symmetric(horizontal: 20),
-            //   height: 0.5,
-            //   color: Colors.black26,
-            // ),
-            Container(
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(20, 8.0, 8, 8),
-                child: Row(
-                  children: [
-                    Container(width: 230, child: Text('Deliver to $location')),
-                    SizedBox(
-                      width: 10,
-                    ),
-                    InkWell(
-                        onTap: () {
-                          _locationDialog(context);
-                        },
-                        child: Icon(Icons.edit))
-                  ],
-                ),
-              ),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 0.5,
-              color: Colors.black26,
-            ),
-            ExpandablePanel(
-                // hasIcon: true,
-                // iconColor: Color(0xFFC5891E),
-//          trailing: Icon(Icons.keyboard_arrow_down),
-                header: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 10),
-                  child: Text(
-                    'Earliest Delivery in 5 hrs',
-                    style: TextStyle(
-                      // fontWeight: FontWeight.w500,
-                      fontSize: 22,
-                      // color: Color(0xFFC5891E),
-                    ),
-                  ),
-                ),
-                expanded: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: ListView.builder(
-                        itemCount: 2,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
-                            child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                // color: Color(0xFFC5891E),
-                                child: Text(
-                                  'Delivery in ${24 * (index + 1)} hrs',
-                                  style: TextStyle(
-                                    fontSize: 20,
-                                  ),
-                                )),
-                          );
-                        }))),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 0.5,
-              color: Colors.black26,
-            ),
-
-            InkWell(
-              onTap: () {
-                Navigator.pop(context);
-              },
-              child: ListTile(
-                title: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                  child: Text(
-                    'Home',
-                    style: TextStyle(
-                      fontSize: 20,
-                      // fontFamily: 'nunito',
-                    ),
-                  ),
-                ),
-                onTap: () {
-                  // UrlLauncher.launch(
-                  //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-                },
-              ),
-            ),
-
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 0.5,
-              color: Colors.black26,
-            ),
-            ListTile(
-              title: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                child: Text(
-                  'Offers',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              onTap: () {
-                // UrlLauncher.launch(
-                //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-              },
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 0.5,
-              color: Colors.black26,
-            ),
-            ExpandablePanel(
-                // hasIcon: true,
-                // iconColor: Color(0xFFC5891E),
-//          trailing: Icon(Icons.keyboard_arrow_down),
-                header: Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 0, 20),
-                  child: Text(
-                    'Categories',
-                    style: TextStyle(
-                      // fontWeight: FontWeight.w500,
-                      fontSize: 22,
-                      // color: Color(0xFFC5891E),
-                    ),
-                  ),
-                ),
-                expanded: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 8),
-                    child: ListView.builder(
-                        itemCount: categories.length,
-                        shrinkWrap: true,
-                        scrollDirection: Axis.vertical,
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              R.Router.navigator.pushNamed(
-                                R.Router.categoryDetailScreen,
-                                arguments: CategoryDetailScreenArguments(
-                                  categoryName: categories[index]['catName'],
-                                  imagePath: categories[index]['imageURL'],
-                                  selectedCategory: index,
-                                  numberOfCategories: categories.length,
-                                  gradient: gradients[index],
-                                ),
-                              );
-                            },
-                            child: Padding(
-                              padding: const EdgeInsets.fromLTRB(20, 0, 0, 10),
-                              child: Container(
-                                  width: MediaQuery.of(context).size.width,
-                                  // color: Color(0xFFC5891E),
-                                  child: Text(
-                                    '${categories[index]['catName']}',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                    ),
-                                  )),
-                            ),
-                          );
-                        }))),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 0.5,
-              color: Colors.black26,
-            ),
-            ListTile(
-              title: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                child: Text(
-                  'Customer Service',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              onTap: () {
-                // UrlLauncher.launch(
-                //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-              },
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 0.5,
-              color: Colors.black26,
-            ),
-            ListTile(
-              title: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                child: Text(
-                  'Notifications',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              onTap: () {
-                // UrlLauncher.launch(
-                //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-              },
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 0.5,
-              color: Colors.black26,
-            ),
-            ListTile(
-              title: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                child: Text(
-                  'FAQs',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              onTap: () {
-                // UrlLauncher.launch(
-                //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-              },
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(horizontal: 20),
-              height: 0.5,
-              color: Colors.black26,
-            ),
-            ListTile(
-              title: Padding(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-                child: Text(
-                  'Sign Out',
-                  style: TextStyle(
-                    fontSize: 20,
-                  ),
-                ),
-              ),
-              onTap: () => _logoutDialog(context),
-            ),
-          ],
-        ),
-      ),
-    );
+    return retNavDrawer();
   }
 
   Future<void> _logoutDialog(BuildContext context) async {
@@ -552,150 +297,242 @@ class _CustomDrawerState extends State<CustomDrawer> {
       ),
     );
   }
-}
 
-//
-// Widget retNavDrawer() {
-//   return GFDrawer(
-//     child: Scaffold(
-//       body: ListView(
-//         padding: EdgeInsets.zero,
-//         children: <Widget>[
-//           SizedBox(
-//             height: 50,
-//             child: Container(
-//                 // color: Color(0xFF3871AD),
-//                 ),
-//           ),
-//           // Container(
-//           //   margin: EdgeInsets.symmetric(horizontal: 20),
-//           //   height: 0.5,
-//           //   color: Colors.black26,
-//           // ),
-//           ListTile(
-//             title: Padding(
-//               padding:
-//                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-//               child: Text(
-//                 'Home',
-//                 style: TextStyle(
-//                   fontSize: 20,
-//                   // fontFamily: 'nunito',
-//                 ),
-//               ),
-//             ),
-//             onTap: () {
-//               // UrlLauncher.launch(
-//               //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-//             },
-//           ),
-//           Container(
-//             margin: EdgeInsets.symmetric(horizontal: 20),
-//             height: 0.5,
-//             color: Colors.black26,
-//           ),
-//           ListTile(
-//             title: Padding(
-//               padding:
-//                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-//               child: Text(
-//                 'Offers',
-//                 style: TextStyle(
-//                   fontSize: 20,
-//                 ),
-//               ),
-//             ),
-//             onTap: () {
-//               // UrlLauncher.launch(
-//               //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-//             },
-//           ),
-//           Container(
-//             margin: EdgeInsets.symmetric(horizontal: 20),
-//             height: 0.5,
-//             color: Colors.black26,
-//           ),
-//           ListTile(
-//             title: Padding(
-//               padding:
-//                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-//               child: Text(
-//                 'Shop By Category',
-//                 style: TextStyle(
-//                   fontSize: 20,
-//                 ),
-//               ),
-//             ),
-//             onTap: () {
-//               // UrlLauncher.launch(
-//               //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-//             },
-//           ),
-//           Container(
-//             margin: EdgeInsets.symmetric(horizontal: 20),
-//             height: 0.5,
-//             color: Colors.black26,
-//           ),
-//           ListTile(
-//             title: Padding(
-//               padding:
-//                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-//               child: Text(
-//                 'Customer Service',
-//                 style: TextStyle(
-//                   fontSize: 20,
-//                 ),
-//               ),
-//             ),
-//             onTap: () {
-//               // UrlLauncher.launch(
-//               //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-//             },
-//           ),
-//           Container(
-//             margin: EdgeInsets.symmetric(horizontal: 20),
-//             height: 0.5,
-//             color: Colors.black26,
-//           ),
-//           ListTile(
-//             title: Padding(
-//               padding:
-//                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-//               child: Text(
-//                 'Notifications',
-//                 style: TextStyle(
-//                   fontSize: 20,
-//                 ),
-//               ),
-//             ),
-//             onTap: () {
-//               // UrlLauncher.launch(
-//               //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-//             },
-//           ),
-//           Container(
-//             margin: EdgeInsets.symmetric(horizontal: 20),
-//             height: 0.5,
-//             color: Colors.black26,
-//           ),
-//           ListTile(
-//             title: Padding(
-//               padding:
-//                   const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5),
-//               child: Text(
-//                 'FAQs',
-//                 style: TextStyle(
-//                   fontSize: 20,
-//                 ),
-//               ),
-//             ),
-//             onTap: () {
-//               // UrlLauncher.launch(
-//               //     "https://www.youtube.com/playlist?list=PLKe-Zuux9p9vWWUVGyY5SPMO6MpRDjZ5x");
-//             },
-//           ),
-//         ],
-//       ),
-//     ),
-//   );
-// }
+  Widget retNavDrawer() {
+    return GFDrawer(
+      child: ListView(
+        padding: EdgeInsets.zero,
+        children: <Widget>[
+          SafeArea(
+              child: FirebaseAuth.instance.currentUser() != null
+                  ? Container(
+                      color: AppColors.secondaryElement,
+                      height: 80,
+                      alignment: Alignment.center,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: <Widget>[
+                          Padding(
+                              padding: const EdgeInsets.all(15.0),
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                backgroundImage: NetworkImage(url),
+                                radius: 30,
+                              )),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                name,
+                                style: TextStyle(
+                                    fontFamily: 'nunito',
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
+                              ),
+                              Text(
+                                email,
+                                style: TextStyle(
+                                    fontFamily: 'nunito',
+                                    fontSize: 14,
+                                    color: Color(0xFFFFE600)),
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                    )
+                  : InkWell(
+                      onTap: () {
+                        pushNewScreen(context,
+                            screen: LoginScreen(), withNavBar: false);
+                      },
+                      child: Container(
+                        color: AppColors.secondaryElement,
+                        height: 80,
+                        alignment: Alignment.center,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              SizedBox(
+                                width: 18,
+                              ),
+                              Icon(
+                                Icons.person,
+                                color: Colors.white,
+                              ),
+                              SizedBox(
+                                width: 20,
+                              ),
+                              Text(
+                                'Sign In/Sign Up',
+                                style: TextStyle(
+                                    fontSize: 17,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600),
+                              ),
+                              SizedBox(
+                                width: 40,
+                              ),
+                              Icon(
+                                Icons.arrow_forward_ios,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    )),
+          ListTile(
+            title: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+              child: Text(
+                'Home',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'nunito',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            height: 0.5,
+            color: Colors.black26,
+          ),
+          ListTile(
+            title: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+              child: Text(
+                'Shop by Category',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'nunito',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            onTap: () {
+              pushNewScreen(context, screen: CategoriesScreen());
+            },
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            height: 0.5,
+            color: Colors.black26,
+          ),
+          ListTile(
+            title: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+              child: Text(
+                'My Orders',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'nunito',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            onTap: () {},
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            height: 0.5,
+            color: Colors.black26,
+          ),
+          ListTile(
+            title: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+              child: Text(
+                'My Account',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'nunito',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            onTap: () {
+              pushNewScreen(context, screen: ProfileScreen());
+            },
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            height: 0.5,
+            color: Colors.black26,
+          ),
+          ListTile(
+            title: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+              child: Text(
+                'App Settings',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'nunito',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            onTap: () {
+              pushNewScreen(context, screen: SettingsScreen());
+            },
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            height: 0.5,
+            color: Colors.black26,
+          ),
+          ListTile(
+            title: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+              child: Text(
+                'Log Out',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'nunito',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            onTap: () {
+              _logoutDialog(context);
+            },
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            height: 0.5,
+            color: Colors.black26,
+          ),
+        ],
+      ),
+    );
+  }
+
+  String name = 'John',
+      email = 'support@gmail.com',
+      url =
+          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e';
+  getUserDetails() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection('Users')
+        .where('id', isEqualTo: user.uid)
+        .getDocuments()
+        .then((value) {
+      value.documents.forEach((element) {
+        setState(() {
+          name = element['Name'];
+          email = element['mail'];
+          url = element['pUrl'];
+        });
+      });
+    });
+  }
+}

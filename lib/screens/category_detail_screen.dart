@@ -2,15 +2,21 @@ import 'package:angadi/classes/dish.dart';
 import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:angadi/widgets/foody_bite_card_2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/data.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
+import '../classes/cart.dart';
 import '../routes/router.dart';
 import '../routes/router.gr.dart';
+import '../services/database_helper.dart';
+import 'restaurant_details_screen.dart';
+import 'search_results.dart';
 
 class CategoryDetailScreen extends StatefulWidget {
   CategoryDetailScreen({
@@ -124,6 +130,15 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
 //          ),
 //          backgroundColor: Colors.transparent,
 //        ),
+      floatingActionButton: CustomFloatingButton(CurrentScreen(
+          tab_no: 9,
+          currentScreen: CategoryDetailScreen(
+            numberOfCategories: widget.numberOfCategories,
+            selectedCategory: widget.selectedCategory,
+            imagePath: widget.imagePath,
+            categoryName: widget.categoryName,
+            gradient: widget.gradient,
+          ))),
       appBar: AppBar(
         leading: InkWell(
             onTap: () => Navigator.pop(context),
@@ -133,11 +148,10 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           InkWell(
               onTap: () {
                 print(1);
-                R.Router.navigator.pushNamed(
-                  R.Router.bookmarksScreen2,
-                );
+                pushNewScreen(context,
+                    screen: SearchScreen(), withNavBar: true);
               },
-              child: Icon(Icons.shopping_cart)),
+              child: Icon(Icons.search)),
           SizedBox(
             width: 14,
           )
@@ -275,7 +289,10 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                           InkWell(
                               onTap: () => R.Router.navigator
                                   .pushNamed(R.Router.filterScreen),
-                              child: Image.asset(ImagePath.settingsIcon))
+                              child: Icon(
+                                Icons.filter_list,
+                                color: Colors.black,
+                              ))
                         ],
                       )),
                   listType == 'List'
@@ -290,17 +307,25 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                               return Container(
                                 margin: EdgeInsets.only(right: 4.0),
                                 child: FoodyBiteCard(
-                                  onTap: () => R.Router.navigator.pushNamed(
-                                    R.Router.restaurantDetailsScreen,
-                                    arguments: RestaurantDetails(
-                                      url: dishes[index].url,
-                                      name: dishes[index].name,
-                                      desc: dishes[index].desc,
-                                      category: dishes[index].category,
-                                      rating: dishes[index].rating,
-                                      price: dishes[index].price,
-                                    ),
-                                  ),
+                                  onTap: () {
+                                    pushNewScreen(
+                                      context,
+                                      screen: RestaurantDetailsScreen(
+                                        RestaurantDetails(
+                                          url: dishes[index].url,
+                                          name: dishes[index].name,
+                                          desc: dishes[index].desc,
+                                          category: dishes[index].category,
+                                          rating: dishes[index].rating,
+                                          price: dishes[index].price,
+                                        ),
+                                      ),
+                                      withNavBar:
+                                          true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
+                                    );
+                                  },
                                   imagePath: dishes[index].url,
 //                            status: status[index],
                                   cardTitle: dishes[index].name,
@@ -329,16 +354,22 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                 return Container(
                                   margin: EdgeInsets.only(right: 4.0),
                                   child: FoodyBiteCard2(
-                                    onTap: () => R.Router.navigator.pushNamed(
-                                      R.Router.restaurantDetailsScreen,
-                                      arguments: RestaurantDetails(
-                                        url: dishes[index].url,
-                                        name: dishes[index].name,
-                                        desc: dishes[index].desc,
-                                        category: dishes[index].category,
-                                        rating: dishes[index].rating,
-                                        price: dishes[index].price,
+                                    onTap: () => pushNewScreen(
+                                      context,
+                                      screen: RestaurantDetailsScreen(
+                                        RestaurantDetails(
+                                          url: dishes[index].url,
+                                          name: dishes[index].name,
+                                          desc: dishes[index].desc,
+                                          category: dishes[index].category,
+                                          rating: dishes[index].rating,
+                                          price: dishes[index].price,
+                                        ),
                                       ),
+                                      withNavBar:
+                                          true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
                                     ),
                                     imagePath: dishes[index].url,
 //                            status: status[index],

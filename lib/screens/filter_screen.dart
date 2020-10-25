@@ -3,8 +3,10 @@ import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/ratings_widget.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'home_screen.dart';
+import 'trending_restaurant_screen.dart';
 
 class FilterScreen extends StatefulWidget {
   @override
@@ -177,8 +179,12 @@ class _FilterScreenState extends State<FilterScreen> {
                 ),
                 angadiButton(
                   'Apply',
-                  onTap: () => R.Router.navigator
-                      .pushNamed(R.Router.trendingRestaurantsScreen),
+                  onTap: () => pushNewScreen(
+                    context,
+                    screen: TrendingRestaurantsScreen(),
+                    withNavBar: true, // OPTIONAL VALUE. True by default.
+                    pageTransitionAnimation: PageTransitionAnimation.cupertino,
+                  ),
                   buttonHeight: 65,
                   buttonWidth: (MediaQuery.of(context).size.width / 2) - 0.25,
                   decoration: Decorations.customHalfCurvedButtonDecoration(

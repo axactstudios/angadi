@@ -21,44 +21,44 @@ const MaterialColor white = const MaterialColor(
 TextTheme _buildTextTheme(BuildContext context) {
   var textTheme = Theme.of(context).textTheme;
 
-  return GoogleFonts.josefinSansTextTheme(textTheme).copyWith(
+  return GoogleFonts.poppinsTextTheme(textTheme).copyWith(
     display1: GoogleFonts.josefinSans(
       fontSize: Sizes.TEXT_SIZE_36,
       color: AppColors.primaryText,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.normal,
     ),
-    headline: GoogleFonts.josefinSans(
-      fontSize: Sizes.TEXT_SIZE_36,
+    headline: GoogleFonts.poppins(
+      fontSize: Sizes.TEXT_SIZE_14,
       color: AppColors.primaryText,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.normal,
     ),
-    subhead: GoogleFonts.josefinSans(
-      fontSize: Sizes.TEXT_SIZE_18,
+    subhead: GoogleFonts.poppins(
+      fontSize: Sizes.TEXT_SIZE_14,
       color: AppColors.primaryText,
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
     ),
-    title: GoogleFonts.josefinSans(
-      fontSize: Sizes.TEXT_SIZE_18,
+    title: GoogleFonts.poppins(
+      fontSize: Sizes.TEXT_SIZE_14,
       color: AppColors.primaryText,
       fontWeight: FontWeight.w600,
       fontStyle: FontStyle.normal,
     ),
-    body1: GoogleFonts.josefinSans(
-      fontSize: Sizes.TEXT_SIZE_18,
+    body1: GoogleFonts.poppins(
+      fontSize: Sizes.TEXT_SIZE_14,
       color: AppColors.primaryText,
       fontWeight: FontWeight.normal,
       fontStyle: FontStyle.normal,
     ),
-    button: GoogleFonts.josefinSans(
-        fontSize: Sizes.TEXT_SIZE_18,
+    button: GoogleFonts.poppins(
+        fontSize: Sizes.TEXT_SIZE_14,
         color: AppColors.primaryText,
         fontStyle: FontStyle.normal,
         fontWeight: FontWeight.bold),
-    subtitle: GoogleFonts.josefinSans(
-      fontSize: Sizes.TEXT_SIZE_18,
+    subtitle: GoogleFonts.poppins(
+      fontSize: Sizes.TEXT_SIZE_14,
       color: AppColors.primaryText,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.normal,

@@ -22,10 +22,11 @@ class CustomAppBar extends StatelessWidget {
   final String title;
 
   @override
+  @override
   Widget build(BuildContext context) {
     return AppBar(
       elevation: 0.0,
-      leading: hasLeading ? (leading ?? defaultLeading()) : null,
+      leading: hasLeading ? (leading ?? defaultLeading(context)) : null,
       centerTitle: true,
       title: Text(
         title,
@@ -51,9 +52,9 @@ class CustomAppBar extends StatelessWidget {
     ];
   }
 
-  Widget defaultLeading() {
+  Widget defaultLeading(context) {
     return InkWell(
-      onTap: () => R.Router.navigator.pop(),
+      onTap: () => Navigator.of(context).pop(),
       child: Image.asset(
         ImagePath.arrowBackIcon,
         color: AppColors.headingText,

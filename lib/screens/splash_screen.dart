@@ -67,7 +67,7 @@ class _SplashScreenState extends State<SplashScreen>
           );
         } else {
           R.Router.navigator.pushNamedAndRemoveUntil(
-            R.Router.loginScreen,
+            R.Router.rootScreen,
             (Route<dynamic> route) => false,
           );
         }

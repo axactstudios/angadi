@@ -12,8 +12,8 @@ class FoodyBiteSearchInputField extends StatelessWidget {
   final double borderWidth;
   final double contentPaddingHorizontal;
   final double contentPaddingVertical;
-  final String prefixIconImagePath;
-  final String suffixIconImagePath;
+  final IconData prefixIconImagePath;
+  final IconData suffixIconImagePath;
   final String hintText;
   final Color borderColor;
   final Color prefixIconColor;
@@ -99,15 +99,15 @@ class FoodyBiteSearchInputField extends StatelessWidget {
   }
 
   Widget defaultSuffixIcon() {
-    return ImageIcon(
-      AssetImage(suffixIconImagePath),
+    return Icon(
+      suffixIconImagePath,
       color: suffixIconColor,
     );
   }
 
   Widget defaultPrefixIcon() {
-    return ImageIcon(
-      AssetImage(prefixIconImagePath),
+    return Icon(
+      prefixIconImagePath,
       color: prefixIconColor,
     );
   }

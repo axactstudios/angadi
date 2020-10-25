@@ -33,6 +33,7 @@ import 'categories_screen.dart';
 import 'category_detail_screen.dart';
 import 'checkout.dart';
 import 'filter_screen.dart';
+import 'restaurant_details_screen.dart';
 
 var cat, money, rat;
 
@@ -59,8 +60,14 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime date;
   DateTime selectedDate;
   String selectedTime = '9 AM';
+  FirebaseUser user;
+  getUser() async {
+    user = await FirebaseAuth.instance.currentUser();
+  }
+
   @override
   void initState() {
+    getUser();
     getBanners();
     date = DateTime.now();
     _getCurrentLocation();
@@ -156,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 dishes.add(Dish(
                     name: snap.data.documents[i]['name'],
                     category: snap.data.documents[i]['category'],
-                    rating: snap.data.documents[i]['rating'],
+                    rating: snap.data.documents[i]['rating'].toString(),
                     price: snap.data.documents[i]['price'],
                     desc: snap.data.documents[i]['description'],
                     url: snap.data.documents[i]['url']));
@@ -165,7 +172,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   dishesSpecial.add(Dish(
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
-                      rating: snap.data.documents[i]['rating'],
+                      rating: snap.data.documents[i]['rating'].toString(),
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url']));
@@ -173,19 +180,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   special.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
-                      onTap: () => R.Router.navigator
-                          .pushNamed(R.Router.restaurantDetailsScreen,
-                              arguments: RestaurantDetails(
-                                url: snap.data.documents[i]['url'],
-                                name: snap.data.documents[i]['name'],
-                                desc: snap.data.documents[i]['description'],
-                                category: snap.data.documents[i]['category'],
-                                rating: snap.data.documents[i]['rating'],
-                                price: snap.data.documents[i]['price'],
-                              )),
+                      onTap: () => pushNewScreen(
+                        context,
+                        screen: RestaurantDetailsScreen(
+                          RestaurantDetails(
+                            url: dishes[i].url,
+                            name: dishes[i].name,
+                            desc: dishes[i].desc,
+                            category: dishes[i].category,
+                            rating: dishes[i].rating,
+                            price: dishes[i].price,
+                          ),
+                        ),
+                        withNavBar: true, // OPTIONAL VALUE. True by default.
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
                       imagePath: snap.data.documents[i]['url'],
                       cardTitle: snap.data.documents[i]['name'],
-                      rating: snap.data.documents[i]['rating'],
+                      rating: snap.data.documents[i]['rating'].toString(),
                       category: snap.data.documents[i]['category'],
                       price: snap.data.documents[i]['price'].toString(),
                       iPrice: snap.data.documents[i]['iPrice'].toString(),
@@ -196,7 +209,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   dishesTop.add(Dish(
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
-                      rating: snap.data.documents[i]['rating'],
+                      rating: snap.data.documents[i]['rating'].toString(),
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url']));
@@ -204,19 +217,25 @@ class _HomeScreenState extends State<HomeScreen> {
                   top.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
-                      onTap: () => R.Router.navigator
-                          .pushNamed(R.Router.restaurantDetailsScreen,
-                              arguments: RestaurantDetails(
-                                url: snap.data.documents[i]['url'],
-                                name: snap.data.documents[i]['name'],
-                                desc: snap.data.documents[i]['description'],
-                                category: snap.data.documents[i]['category'],
-                                rating: snap.data.documents[i]['rating'],
-                                price: snap.data.documents[i]['price'],
-                              )),
+                      onTap: () => pushNewScreen(
+                        context,
+                        screen: RestaurantDetailsScreen(
+                          RestaurantDetails(
+                            url: dishes[i].url,
+                            name: dishes[i].name,
+                            desc: dishes[i].desc,
+                            category: dishes[i].category,
+                            rating: dishes[i].rating,
+                            price: dishes[i].price,
+                          ),
+                        ),
+                        withNavBar: true, // OPTIONAL VALUE. True by default.
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
                       imagePath: snap.data.documents[i]['url'],
                       cardTitle: snap.data.documents[i]['name'],
-                      rating: snap.data.documents[i]['rating'],
+                      rating: snap.data.documents[i]['rating'].toString(),
                       category: snap.data.documents[i]['category'],
                       price: snap.data.documents[i]['price'].toString(),
                       iPrice: snap.data.documents[i]['iPrice'].toString(),
@@ -228,22 +247,22 @@ class _HomeScreenState extends State<HomeScreen> {
                   trending.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
-                      onTap: () => R.Router.navigator
-                          .pushNamed(R.Router.restaurantDetailsScreen,
-                              arguments: RestaurantDetails(
-                                url: snap.data.documents[i]['url'],
-                                name: snap.data.documents[i]['name'],
-                                desc: snap.data.documents[i]['description'],
-                                category: snap.data.documents[i]['category'],
-                                rating: snap.data.documents[i]['rating'],
-                                price: snap.data.documents[i]['price'],
-                              )),
-                      imagePath: snap.data.documents[i]['url'],
-                      cardTitle: snap.data.documents[i]['name'],
-                      rating: snap.data.documents[i]['rating'],
-                      category: snap.data.documents[i]['category'],
-                      price: snap.data.documents[i]['price'].toString(),
-                      iPrice: snap.data.documents[i]['iPrice'].toString(),
+                      onTap: () => pushNewScreen(
+                        context,
+                        screen: RestaurantDetailsScreen(
+                          RestaurantDetails(
+                            url: dishes[i].url,
+                            name: dishes[i].name,
+                            desc: dishes[i].desc,
+                            category: dishes[i].category,
+                            rating: dishes[i].rating,
+                            price: dishes[i].price,
+                          ),
+                        ),
+                        withNavBar: true, // OPTIONAL VALUE. True by default.
+                        pageTransitionAnimation:
+                            PageTransitionAnimation.cupertino,
+                      ),
                     ),
                   ));
               }
@@ -255,15 +274,122 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: ListView(
                   children: <Widget>[
+                    FirebaseAuth.instance.currentUser() != null
+                        ? StreamBuilder(
+                            stream: Firestore.instance
+                                .collection('Orders')
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snap) {
+                              var orderID, status;
+                              if (snap.hasData &&
+                                  !snap.hasError &&
+                                  snap.data != null) {
+                                for (int i = 0;
+                                    i < snap.data.documents.length;
+                                    i++) {
+                                  if (snap.data.documents[i]['UserID'] ==
+                                          user.uid &&
+                                      snap.data.documents[i]['Status'] ==
+                                          'Awaiting Confirmation') {
+                                    orderID = snap.data.documents[i].documentID;
+                                    status = snap.data.documents[i]['Status'];
+                                  }
+                                }
+                              }
+                              return status != null
+                                  ? Container(
+//                                  color: Colors.red.withOpacity(0.8),
+                                      child: Stack(children: [
+                                      Positioned(
+                                        child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(2),
+                                          child: Image.network(
+                                            'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FDosa%20Batter%2F1-3.JPG?alt=media&token=c44f9c9e-4b1a-49b0-b555-00fed6042384',
+                                            width: double.infinity,
+                                            height: 100,
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        child: Opacity(
+                                          opacity: 0.65,
+                                          child: Container(
+                                            height: 100,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              gradient: gradients[0],
+                                              borderRadius:
+                                                  BorderRadius.circular(2),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            height: 100,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Spacer(),
+                                                    Text(
+                                                        '$status for your order',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.white)),
+                                                    Text('ID - $orderID',
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                            color:
+                                                                Colors.white)),
+                                                    Spacer(),
+                                                  ],
+                                                ),
+                                                Spacer(),
+                                                Icon(Icons.info), Spacer(),
+//                                            Container(
+//                                                width: MediaQuery.of(context)
+//                                                        .size
+//                                                        .width *
+//                                                    0.25,
+//                                                child: Text(
+//                                                    'Click to view details',
+//                                                    textAlign: TextAlign.center,
+//                                                    style: TextStyle(
+//                                                        fontWeight:
+//                                                            FontWeight.bold,
+//                                                        color:
+//                                                            Colors.blueGrey))),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ]))
+                                  : Container();
+                            })
+                        : Container(),
                     FoodyBiteSearchInputField(
-                      ImagePath.searchIcon,
+                      Icons.search,
                       controller: controller,
                       textFormFieldStyle: Styles.customNormalTextStyle(
                           color: AppColors.accentText),
                       hintText: StringConst.HINT_TEXT_HOME_SEARCH_BAR,
                       hintTextStyle: Styles.customNormalTextStyle(
                           color: AppColors.accentText),
-                      suffixIconImagePath: ImagePath.settingsIcon,
+                      suffixIconImagePath: Icons.sort,
                       borderWidth: 0.0,
                       onTapOfLeadingIcon: () => R.Router.navigator.pushNamed(
                         R.Router.searchResultsScreen,
@@ -354,86 +480,86 @@ class _HomeScreenState extends State<HomeScreen> {
 //                          .pushNamed(R.Router.trendingRestaurantsScreen),
 //                    ),
 
-//                    StreamBuilder(
-//                        stream:
-//                            Firestore.instance.collection('Offers').snapshots(),
-//                        builder: (BuildContext context,
-//                            AsyncSnapshot<QuerySnapshot> snap) {
-//                          if (snap.hasData &&
-//                              !snap.hasError &&
-//                              snap.data != null) {
-//                            offers.clear();
-//                            imageList.clear();
-//                            for (int i = 0;
-//                                i < snap.data.documents.length;
-//                                i++) {
-//                              imageList.add(snap.data.documents[i]['ImageURL']);
-//                              offers.add(Offer(
-//                                  snap.data.documents[i]['Title'],
-//                                  snap.data.documents[i]['Subtitle'],
-//                                  snap.data.documents[i]['ImageURL'],
-//                                  snap.data.documents[i]
-//                                      ['discountPercentage']));
-//                            }
-//
-//                            return Container(
-//                              height: 220,
-//                              width: MediaQuery.of(context).size.width,
-//                              child: GFCarousel(
-//                                items: imageList.map(
-//                                  (url) {
+                    StreamBuilder(
+                        stream:
+                            Firestore.instance.collection('Offers').snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snap) {
+                          if (snap.hasData &&
+                              !snap.hasError &&
+                              snap.data != null) {
+                            offers.clear();
+                            imageList.clear();
+                            for (int i = 0;
+                                i < snap.data.documents.length;
+                                i++) {
+                              imageList.add(snap.data.documents[i]['ImageURL']);
+                              offers.add(Offer(
+                                  snap.data.documents[i]['Title'],
+                                  snap.data.documents[i]['Subtitle'],
+                                  snap.data.documents[i]['ImageURL'],
+                                  snap.data.documents[i]
+                                      ['discountPercentage']));
+                            }
+
+                            return Container(
+                              height: 220,
+                              width: MediaQuery.of(context).size.width,
+                              child: GFCarousel(
+                                items: imageList.map(
+                                  (url) {
+                                    return Container(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(1.0),
+                                        child: Image.network('$url',
+                                            fit: BoxFit.fitWidth,
+                                            width: 10000.0),
+                                      ),
+                                    );
+                                  },
+                                ).toList(),
+                                onPageChanged: (index) {
+                                  setState(() {
+//                                    print('change');
+                                  });
+                                },
+                                autoPlay: true,
+                                enlargeMainPage: true,
+                                pagination: true,
+                                passiveIndicator: Colors.black,
+                                activeIndicator: Colors.grey,
+                                pauseAutoPlayOnTouch: Duration(seconds: 8),
+                                pagerSize: 8,
+                              ),
+//                              ListView.builder(
+//                                  scrollDirection: Axis.horizontal,
+//                                  itemCount: offers.length,
+//                                  itemBuilder: (context, index) {
 //                                    return Container(
-//                                      child: Padding(
-//                                        padding: const EdgeInsets.all(1.0),
-//                                        child: Image.network('$url',
-//                                            fit: BoxFit.fitWidth,
-//                                            width: 10000.0),
+//                                      margin: EdgeInsets.only(right: 4.0),
+//                                      child: OfferCard(
+//                                        onTap: () {
+//                                          Navigator.push(context,
+//                                              MaterialPageRoute(builder:
+//                                                  (BuildContext context) {
+//                                            return Checkout();
+//                                          }));
+//                                        },
+//                                        imagePath: offers[index].imageURL,
+//                                        // status: '90% OFF',
+//                                        cardTitle: offers[index].title,
+//                                        // rating: ratings[index],
+//                                        // category: category[index],
+//                                        // distance: '',
+//                                        details: offers[index].subtitle,
 //                                      ),
 //                                    );
-//                                  },
-//                                ).toList(),
-//                                onPageChanged: (index) {
-//                                  setState(() {
-////                                    print('change');
-//                                  });
-//                                },
-//                                autoPlay: true,
-//                                enlargeMainPage: true,
-//                                pagination: true,
-//                                passiveIndicator: Colors.black,
-//                                activeIndicator: Colors.grey,
-//                                pauseAutoPlayOnTouch: Duration(seconds: 8),
-//                                pagerSize: 8,
-//                              ),
-////                              ListView.builder(
-////                                  scrollDirection: Axis.horizontal,
-////                                  itemCount: offers.length,
-////                                  itemBuilder: (context, index) {
-////                                    return Container(
-////                                      margin: EdgeInsets.only(right: 4.0),
-////                                      child: OfferCard(
-////                                        onTap: () {
-////                                          Navigator.push(context,
-////                                              MaterialPageRoute(builder:
-////                                                  (BuildContext context) {
-////                                            return Checkout();
-////                                          }));
-////                                        },
-////                                        imagePath: offers[index].imageURL,
-////                                        // status: '90% OFF',
-////                                        cardTitle: offers[index].title,
-////                                        // rating: ratings[index],
-////                                        // category: category[index],
-////                                        // distance: '',
-////                                        details: offers[index].subtitle,
-////                                      ),
-////                                    );
-////                                  }),
-//                            );
-//                          } else {
-//                            return Container();
-//                          }
-//                        }),
+//                                  }),
+                            );
+                          } else {
+                            return Container();
+                          }
+                        }),
                     SizedBox(height: 16.0),
                     HeadingRow(
                       title: StringConst.CATEGORY,
@@ -935,9 +1061,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   textStyle: textTheme.button
                       .copyWith(color: AppColors.secondaryElement),
                   onPressed: () {
-                    setState(() {
-                      location = pass.text;
-                    });
+                    setState(() {});
                     Navigator.of(context).pop(true);
                   })
             ],

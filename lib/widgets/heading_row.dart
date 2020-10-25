@@ -21,7 +21,7 @@ class HeadingRow extends StatelessWidget {
             style: Styles.customTitleTextStyle(
               color: AppColors.headingText,
               fontWeight: FontWeight.w600,
-              fontSize: Sizes.TEXT_SIZE_20,
+              fontSize: Sizes.TEXT_SIZE_18,
             ),
           ),
           InkWell(
