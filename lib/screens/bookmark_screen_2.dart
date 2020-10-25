@@ -13,13 +13,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 
 import 'checkout.dart';
 
-class BookmarksScreen extends StatefulWidget {
+class BookmarksScreen2 extends StatefulWidget {
   @override
-  _BookmarksScreenState createState() => _BookmarksScreenState();
+  _BookmarksScreen2State createState() => _BookmarksScreen2State();
 }
 
 //TODO:Enter Qty Tag
-class _BookmarksScreenState extends State<BookmarksScreen> {
+class _BookmarksScreen2State extends State<BookmarksScreen2> {
   List<Cart> cartItems = [];
   double total;
   final dbHelper = DatabaseHelper.instance;
@@ -129,7 +129,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                 right: Sizes.MARGIN_16,
                 top: Sizes.MARGIN_16,
               ),
-              height: MediaQuery.of(context).size.height * 0.7,
+              height: MediaQuery.of(context).size.height * 0.8,
               child: ListView.separated(
                 scrollDirection: Axis.vertical,
                 itemCount: cartItems.length,

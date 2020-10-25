@@ -48,10 +48,14 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> categories = new List();
   List<Widget> categoriesTop = new List();
   var location = 'Dubai';
-  var delivery = '6 Hrs';
+  var deliveryDate = '23 October';
+  var deliveryTime = '6 pm';
+  DateTime date;
+  DateTime selectedDate;
   @override
   void initState() {
     getBanners();
+    date = DateTime.now();
     _getCurrentLocation();
     super.initState();
   }
@@ -64,6 +68,22 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Offer> offers = new List<Offer>();
   @override
   Widget build(BuildContext context) {
+    _pickTime() async {
+      DateTime t = await showDatePicker(
+          context: context,
+          initialDate: date,
+          lastDate: DateTime(2020, DateTime.now().month, 30),
+          firstDate: DateTime(
+            2020,
+            DateTime.now().month,
+          ));
+      if (t != null)
+        setState(() {
+          date = t;
+        });
+      return date;
+    }
+
     return Scaffold(
       appBar: AppBar(
         actions: [
@@ -264,10 +284,33 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(
                           width: 5,
                         ),
-                        Text('Estimated Delivery by $delivery'),
-                        SizedBox(
-                          width: 10,
-                        ),
+                        Text('Delivery by '),
+                        InkWell(
+                            onTap: () {
+                              _pickTime().then((value) {
+                                setState(() {
+                                  selectedDate = value;
+                                });
+                              });
+                            },
+                            child: selectedDate != null
+                                ? Theme(
+                                    data: Theme.of(context).copyWith(
+                                      primaryColor: Colors.black,
+                                      canvasColor: Colors.black,
+                                      backgroundColor: Colors.black,
+                                    ),
+                                    child: Text(
+                                        '${selectedDate.day.toString()}-${selectedDate.month.toString()} '))
+                                : Theme(
+                                    data: Theme.of(context).copyWith(
+                                      primaryColor: Colors.black,
+                                    ),
+                                    child: Text(
+                                        '${date.day.toString()}-${date.month.toString()} '),
+                                  )),
+                        Text('at '),
+                        Text(deliveryTime),
 //                        InkWell(
 //                            onTap: () {
 //                              _locationDialog(context);
@@ -549,7 +592,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 300,
+                      height: 180,
                       child: top.length != 0
                           ? ListView(
                               scrollDirection: Axis.horizontal,
@@ -577,7 +620,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 300,
+                      height: 180,
                       child: special.length != 0
                           ? ListView(
                               scrollDirection: Axis.horizontal,

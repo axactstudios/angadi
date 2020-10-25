@@ -1,4 +1,5 @@
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/widgets/foody_bite_card_2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -28,6 +29,8 @@ class CategoryDetailScreen extends StatefulWidget {
   _CategoryDetailScreenState createState() => _CategoryDetailScreenState();
 }
 
+String listType = 'Grid';
+
 class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
   @override
   Widget build(BuildContext context) {
@@ -41,81 +44,101 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     List<Dish> dishes = new List<Dish>();
 
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(80.0),
-        child: AppBar(
-          automaticallyImplyLeading: false,
-          flexibleSpace: Stack(
-            children: <Widget>[
-              Positioned(
-                child: Image.network(
-                  widget.imagePath,
-                  width: MediaQuery.of(context).size.width,
-                  height: 130,
-                  fit: BoxFit.cover,
-                ),
-              ),
-              Positioned(
-                child: Opacity(
-                  opacity: 0.85,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      gradient: widget.gradient,
-                    ),
-                  ),
-                ),
-              ),
-              Positioned(
-                child: SafeArea(
-                  child: Container(
-                    height: 80,
-                    width: MediaQuery.of(context).size.width,
-                    margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
-                    child: Column(
-                      children: <Widget>[
-                        Row(
-                          children: <Widget>[
-                            InkWell(
-                              onTap: () => R.Router.navigator.pop(),
-                              child: Image.asset(ImagePath.arrowBackIcon),
-                            ),
-                            Spacer(flex: 1),
-                            Text(
-                              widget.categoryName,
-                              style: textTheme.title.copyWith(
-                                fontSize: Sizes.TEXT_SIZE_22,
-                                color: AppColors.white,
-                              ),
-                            ),
-                            Spacer(flex: 1),
-                          ],
-                        ),
-                        SpaceH24(),
-                        Container(
-                          margin: const EdgeInsets.symmetric(horizontal: 30.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: generatePills(
-                              numberOfPills: widget.numberOfCategories,
-                              widthOfPill: widthOfEachPill,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              )
-            ],
-          ),
-          backgroundColor: Colors.transparent,
-        ),
+      appBar: AppBar(
+        leading: InkWell(
+            onTap: () => Navigator.pop(context),
+            child: Icon(Icons.arrow_back_ios)),
+        title: Text(widget.categoryName),
+        actions: [
+          InkWell(
+              onTap: () {
+                print(1);
+                R.Router.navigator.pushNamed(
+                  R.Router.bookmarksScreen2,
+                );
+              },
+              child: Icon(Icons.shopping_cart)),
+          SizedBox(
+            width: 14,
+          )
+        ],
+        elevation: 0,
       ),
+      // appBar: PreferredSize(
+      //   preferredSize: Size.fromHeight(80.0),
+      //   child: AppBar(
+      //     automaticallyImplyLeading: false,
+      //     flexibleSpace: Stack(
+      //       children: <Widget>[
+      //         Positioned(
+      //           child: Image.network(
+      //             widget.imagePath,
+      //             width: MediaQuery.of(context).size.width,
+      //             height: 130,
+      //             fit: BoxFit.cover,
+      //           ),
+      //         ),
+      //         Positioned(
+      //           child: Opacity(
+      //             opacity: 0.85,
+      //             child: Container(
+      //               decoration: BoxDecoration(
+      //                 gradient: widget.gradient,
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //         Positioned(
+      //           child: SafeArea(
+      //             child: Container(
+      //               height: 80,
+      //               width: MediaQuery.of(context).size.width,
+      //               margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
+      //               child: Column(
+      //                 children: <Widget>[
+      //                   Row(
+      //                     children: <Widget>[
+      //                       InkWell(
+      //                         onTap: () => R.Router.navigator.pop(),
+      //                         child: Image.asset(ImagePath.arrowBackIcon),
+      //                       ),
+      //                       Spacer(flex: 1),
+      //                       Text(
+      //                         widget.categoryName,
+      //                         style: textTheme.title.copyWith(
+      //                           fontSize: Sizes.TEXT_SIZE_22,
+      //                           color: AppColors.white,
+      //                         ),
+      //                       ),
+      //                       Spacer(flex: 1),
+      //                     ],
+      //                   ),
+      //                   SpaceH24(),
+      //                   Container(
+      //                     margin: const EdgeInsets.symmetric(horizontal: 30.0),
+      //                     child: Row(
+      //                       mainAxisAlignment: MainAxisAlignment.center,
+      //                       children: generatePills(
+      //                         numberOfPills: widget.numberOfCategories,
+      //                         widthOfPill: widthOfEachPill,
+      //                       ),
+      //                     ),
+      //                   ),
+      //                 ],
+      //               ),
+      //             ),
+      //           ),
+      //         )
+      //       ],
+      //     ),
+      //     backgroundColor: Colors.transparent,
+      //   ),
+      // ),
       body: Container(
         margin: const EdgeInsets.only(
           left: Sizes.MARGIN_16,
           right: Sizes.MARGIN_16,
-          top: Sizes.MARGIN_16,
+          // top: Sizes.MARGIN_16,
         ),
         child: StreamBuilder(
           stream: Firestore.instance.collection('Dishes').snapshots(),
@@ -139,42 +162,116 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
 
               return Column(
                 children: <Widget>[
-                  Expanded(
-                    child: ListView.separated(
-                      itemCount: dishes.length,
-                      separatorBuilder: (context, index) {
-                        return SpaceH8();
-                      },
-                      itemBuilder: (context, index) {
-                        print('============${dishes[index].price}');
-                        return Container(
-                          margin: EdgeInsets.only(right: 4.0),
-                          child: FoodyBiteCard(
-                            onTap: () => R.Router.navigator.pushNamed(
-                              R.Router.restaurantDetailsScreen,
-                              arguments: RestaurantDetails(
-                                url: dishes[index].url,
-                                name: dishes[index].name,
-                                desc: dishes[index].desc,
-                                category: dishes[index].category,
-                                rating: dishes[index].rating,
-                                price: dishes[index].price,
-                              ),
-                            ),
-                            imagePath: dishes[index].url,
-//                            status: status[index],
-                            cardTitle: dishes[index].name,
-                            rating: dishes[index].rating,
-                            price: dishes[index].price,
-                            iPrice: dishes[index].iPrice,
-                            category: dishes[index].category,
-//                            distance: distance[index],
-                            address: dishes[index].desc,
+                  Container(
+                      height: 50,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.grid_on, color: Colors.black),
+                            onPressed: () {
+                              setState(() {
+                                listType = 'Grid';
+                              });
+                              print(listType);
+                            },
                           ),
-                        );
-                      },
-                    ),
-                  ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          IconButton(
+                            icon: Icon(
+                              Icons.list,
+                              color: Colors.black,
+                            ),
+                            onPressed: () {
+                              setState(() {
+                                listType = 'List';
+                              });
+                              print(listType);
+                            },
+                          ),
+                          Spacer(),
+                          InkWell(
+                              onTap: () => R.Router.navigator
+                                  .pushNamed(R.Router.filterScreen),
+                              child: Image.asset(ImagePath.settingsIcon))
+                        ],
+                      )),
+                  listType == 'List'
+                      ? Expanded(
+                          child: ListView.separated(
+                            itemCount: dishes.length,
+                            separatorBuilder: (context, index) {
+                              return SpaceH8();
+                            },
+                            itemBuilder: (context, index) {
+                              print('============${dishes[index].price}');
+                              return Container(
+                                margin: EdgeInsets.only(right: 4.0),
+                                child: FoodyBiteCard(
+                                  onTap: () => R.Router.navigator.pushNamed(
+                                    R.Router.restaurantDetailsScreen,
+                                    arguments: RestaurantDetails(
+                                      url: dishes[index].url,
+                                      name: dishes[index].name,
+                                      desc: dishes[index].desc,
+                                      category: dishes[index].category,
+                                      rating: dishes[index].rating,
+                                      price: dishes[index].price,
+                                    ),
+                                  ),
+                                  imagePath: dishes[index].url,
+//                            status: status[index],
+                                  cardTitle: dishes[index].name,
+                                  rating: dishes[index].rating,
+                                  price: dishes[index].price,
+                                  iPrice: dishes[index].iPrice,
+                                  category: dishes[index].category,
+//                            distance: distance[index],
+                                  address: dishes[index].desc,
+                                ),
+                              );
+                            },
+                          ),
+                        )
+                      : Expanded(
+                          child: GridView.builder(
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 5.0,
+                                      mainAxisSpacing: 5.0,
+                                      childAspectRatio: 0.58),
+                              itemCount: dishes.length,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  margin: EdgeInsets.only(right: 4.0),
+                                  child: FoodyBiteCard2(
+                                    onTap: () => R.Router.navigator.pushNamed(
+                                      R.Router.restaurantDetailsScreen,
+                                      arguments: RestaurantDetails(
+                                        url: dishes[index].url,
+                                        name: dishes[index].name,
+                                        desc: dishes[index].desc,
+                                        category: dishes[index].category,
+                                        rating: dishes[index].rating,
+                                        price: dishes[index].price,
+                                      ),
+                                    ),
+                                    imagePath: dishes[index].url,
+//                            status: status[index],
+                                    cardTitle: dishes[index].name,
+                                    rating: dishes[index].rating,
+                                    price: dishes[index].price,
+                                    iPrice: dishes[index].iPrice,
+                                    category: dishes[index].category,
+//                            distance: distance[index],
+                                    address: dishes[index].desc,
+                                  ),
+                                );
+                              })),
                 ],
               );
             } else

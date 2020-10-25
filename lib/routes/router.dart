@@ -1,3 +1,4 @@
+import 'package:angadi/screens/bookmark_screen_2.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/auto_route_annotations.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,7 @@ class $Router {
   TrendingRestaurantsScreen trendingRestaurantsScreen;
   RestaurantDetailsScreen restaurantDetailsScreen;
   BookmarksScreen bookmarksScreen;
+  BookmarksScreen2 bookmarksScreen2;
 
   FilterScreen filterScreen;
   SearchResultsScreen searchResultsScreen;

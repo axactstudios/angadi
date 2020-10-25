@@ -4,6 +4,7 @@
 // AutoRouteGenerator
 // **************************************************************************
 
+import 'package:angadi/screens/bookmark_screen_2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:auto_route/auto_route.dart';
@@ -50,6 +51,7 @@ class Router {
   static const trendingRestaurantsScreen = '/trending-restaurants-screen';
   static const restaurantDetailsScreen = '/restaurant-details-screen';
   static const bookmarksScreen = '/bookmarks-screen';
+  static const bookmarksScreen2 = '/bookmarks-screen2';
   static const filterScreen = '/filter-screen';
   static const searchResultsScreen = '/search-results-screen';
   static const reviewRatingScreen = '/review-rating-screen';
@@ -146,6 +148,11 @@ class Router {
       case Router.bookmarksScreen:
         return CupertinoPageRoute<dynamic>(
           builder: (_) => BookmarksScreen(),
+          settings: settings,
+        );
+      case Router.bookmarksScreen2:
+        return CupertinoPageRoute<dynamic>(
+          builder: (_) => BookmarksScreen2(),
           settings: settings,
         );
       case Router.filterScreen:

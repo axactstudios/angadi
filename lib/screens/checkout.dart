@@ -76,6 +76,10 @@ class _CheckoutState extends State<Checkout> {
         textTheme.subtitle.copyWith(color: AppColors.accentText);
     return Scaffold(
         appBar: AppBar(
+          leading: InkWell(
+            onTap: () => Navigator.pop(context),
+            child: Icon(Icons.arrow_back_ios),
+          ),
           elevation: 0.0,
           centerTitle: true,
           title: Text(

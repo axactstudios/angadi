@@ -101,15 +101,15 @@ class _RootScreenState extends State<RootScreen>
           animation: _controller,
           child: angle == 0
               ? Icon(
-            Icons.shopping_cart_outlined,
-            size: 36,
-            color: AppColors.white,
-          )
+                  Icons.outlined_flag,
+                  size: 36,
+                  color: AppColors.white,
+                )
               : Icon(
-            Icons.add,
-            size: 36,
-            color: AppColors.white,
-          ),
+                  Icons.add,
+                  size: 36,
+                  color: AppColors.white,
+                ),
           builder: (context, child) => Transform.rotate(
             angle: angle,
             child: child,
@@ -122,13 +122,13 @@ class _RootScreenState extends State<RootScreen>
           _isPanelVisible ? _controller.forward() : _controller.reverse();
           _isPanelVisible
               ? changeScreen(
-            currentScreen: BookmarksScreen(),
-            currentTab: 5,
-          )
+                  currentScreen: BookmarksScreen(),
+                  currentTab: 5,
+                )
               : changeScreen(
-            currentScreen: HomeScreen(),
-            currentTab: HomeScreen.TAB_NO,
-          );
+                  currentScreen: HomeScreen(),
+                  currentTab: HomeScreen.TAB_NO,
+                );
         },
       ),
       bottomNavigationBar: BottomAppBar(
@@ -155,7 +155,7 @@ class _RootScreenState extends State<RootScreen>
                   color: AppColors.secondaryElement,
                 ),
                 nonActiveIcon: Icon(
-                  Icons.home_outlined,
+                  Icons.outlined_flag,
                   color: AppColors.secondaryElement,
                 ),
               ),
@@ -163,11 +163,11 @@ class _RootScreenState extends State<RootScreen>
                 destination: CategoriesScreen(),
                 currentTab: CategoriesScreen.TAB_NO,
                 activeIcon: Icon(
-                  Icons.category_rounded,
+                  Icons.outlined_flag,
                   color: AppColors.secondaryElement,
                 ),
                 nonActiveIcon: Icon(
-                  Icons.category_outlined,
+                  Icons.outlined_flag,
                   color: AppColors.secondaryElement,
                 ),
               ),
@@ -205,7 +205,7 @@ class _RootScreenState extends State<RootScreen>
                   color: AppColors.secondaryElement,
                 ),
                 nonActiveIcon: Icon(
-                  Icons.settings_outlined,
+                  Icons.outlined_flag,
                   color: AppColors.secondaryElement,
                 ),
               ),
@@ -237,4 +237,3 @@ class _RootScreenState extends State<RootScreen>
     );
   }
 }
-

@@ -214,291 +214,265 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
       onTap: widget.onTap,
       child: Container(
         width: widget.width,
-        height: widget.cardHeight,
         child: Card(
           elevation: widget.cardElevation,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(4),
           ),
-          child: Stack(
+          child: Row(
             children: <Widget>[
-              Positioned(
-                child: Column(
-                  children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Image.network(
-                        widget.imagePath,
-                        width: MediaQuery.of(context).size.width,
-                        height: widget.imageHeight,
-                        fit: BoxFit.cover,
-                      ),
+              Stack(children: [
+                Positioned(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(4),
+                    child: Image.network(
+                      widget.imagePath,
+                      width: MediaQuery.of(context).size.width * 0.35,
+                      height: 180,
+                      fit: BoxFit.cover,
                     ),
-                    Container(
-                      margin: EdgeInsets.symmetric(
-                        horizontal: Sizes.MARGIN_16,
-                        vertical: 8,
-                      ),
-                      child: Column(
-                        children: <Widget>[
-                          Row(
-                            children: <Widget>[
-                              Text(
-                                widget.cardTitle,
-                                textAlign: TextAlign.left,
-                                style: Styles.customTitleTextStyle(
-                                  color: AppColors.headingText,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: Sizes.TEXT_SIZE_20,
-                                ),
-                              ),
-                              SizedBox(width: Sizes.WIDTH_4),
-                              CardTags(
-                                title: widget.category,
-                                decoration: BoxDecoration(
-                                  gradient: Gradients.secondaryGradient,
-                                  boxShadow: [
-                                    Shadows.secondaryShadow,
-                                  ],
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(widget.tagRadius),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              DropDown<String>(
-                                initialValue: '500 ML',
-                                items: <String>[
-                                  '500 ML',
-                                  '1 Ltr',
-                                  '2 Ltr',
-                                  '5 Ltr',
-                                  '10 Ltr'
-                                ],
-                                hint: Text("Select quantity"),
-                                onChanged: (value) async {
-                                  await getAllItems();
-                                  if (value == '500 ML') {
-                                    factor = await 1;
-                                    qtyTag = await '500 ML';
-                                    choice = await 0;
-                                    await checkInCart('500 ML');
-                                    qty = await getQuantity(
-                                        widget.cardTitle, '500 ML');
-                                  }
-                                  if (value == '1 Ltr') {
-                                    factor = await 2;
-                                    qtyTag = await '1 Ltr';
-                                    choice = await 1;
-                                    await checkInCart('1 Ltr');
-                                    qty = await getQuantity(
-                                        widget.cardTitle, '1 Ltr');
-                                  }
-                                  if (value == '2 Ltr') {
-                                    factor = await 4;
-                                    choice = await 2;
-                                    qtyTag = await '2 Ltr';
-                                    await checkInCart('2 Ltr');
-                                    qty = await getQuantity(
-                                        widget.cardTitle, '2 Ltr');
-                                  }
-                                  if (value == '5 Ltr') {
-                                    factor = await 10;
-                                    choice = await 3;
-                                    qtyTag = await '5 Ltr';
-                                    await checkInCart('5 Ltr');
-                                    qty = await getQuantity(
-                                        widget.cardTitle, '5 Ltr');
-                                  }
-                                  if (value == '10 Ltr') {
-                                    factor = await 20;
-                                    choice = await 4;
-                                    qtyTag = await '10 Ltr';
-                                    await checkInCart('10 Ltr');
-                                    qty = await getQuantity(
-                                        widget.cardTitle, '10 Ltr');
-                                  }
-                                  setState(() {
-                                    print(factor);
-                                    print(choice);
-                                    print(qtyTag);
-                                    print(qty);
-                                  });
-                                },
-                              ),
-                            ],
-                          ),
-                          SizedBox(height: 6.0),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Row(
-                                  children: [
-                                    Container(
-                                      child: Text(
-                                        'Rs. ${(int.parse(widget.price) * factor).toString()}',
-                                        textAlign: TextAlign.left,
-                                        style: Styles.customMediumTextStyle(
-                                          color: AppColors.black,
-                                          fontSize: Sizes.TEXT_SIZE_22,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      child: Text(
-                                          'Rs. ${(int.parse(widget.iPrice) * factor).toString()}',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              fontSize: 20,
-                                              decoration:
-                                                  TextDecoration.lineThrough)),
-                                    ),
-                                  ],
-                                ),
-                              ),
-
-//                              color: AppColors.accentText,
-//                              fontSize: Sizes.TEXT_SIZE_22,
-                              qty == 0 || qty == null
-                                  ? InkWell(
-                                      onTap: () {
-                                        print('===========$qtyTag=======');
-                                        addToCart(
-                                            name: widget.cardTitle,
-                                            imgUrl: widget.imagePath,
-                                            price: widget.price,
-                                            qty: 1,
-                                            qtyTag: qtyTag);
-                                      },
-                                      child: angadiButton(
-                                        'Add',
-                                        buttonHeight: 30,
-                                        buttonWidth: 100,
-                                      ),
-                                    )
-                                  : Container(
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.all(
-                                              Radius.circular(5)),
-                                          color: AppColors.secondaryElement),
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          InkWell(
-                                            onTap: () async {
-                                              await getAllItems();
-                                              for (var v in cartItems) {
-                                                if (v.productName ==
-                                                    widget.cardTitle) {
-                                                  var newQty = v.qty + 1;
-                                                  updateItem(
-                                                      id: v.id,
-                                                      name: v.productName,
-                                                      imgUrl: v.imgUrl,
-                                                      price: v.price,
-                                                      qty: newQty,
-                                                      qtyTag: qtyTag);
-                                                }
-                                              }
-                                            },
-                                            child: Icon(
-                                              Icons.add,
-                                              color: AppColors.secondaryColor,
-                                            ),
-                                          ),
-                                          Text(
-                                            qty.toString(),
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          InkWell(
-                                            onTap: () async {
-                                              await getAllItems();
-
-                                              for (var v in cartItems) {
-                                                if (v.productName ==
-                                                    widget.cardTitle) {
-                                                  if (v.qty == 1) {
-                                                    removeItem(
-                                                        v.productName, qtyTag);
-                                                  } else {
-                                                    var newQty = v.qty - 1;
-                                                    updateItem(
-                                                        id: v.id,
-                                                        name: v.productName,
-                                                        imgUrl: v.imgUrl,
-                                                        price: v.price,
-                                                        qty: newQty,
-                                                        qtyTag: qtyTag);
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            child: Icon(
-                                              Icons.remove,
-                                              color: AppColors.secondaryColor,
-                                            ),
-                                          )
-                                        ],
-                                      ),
-                                      height: 30,
-                                      width: 100,
-                                    )
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-              Positioned(
-                left: 16.0,
-                right: 16.0,
-                top: 8.0,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    widget.isThereRatings
-                        ? Card(
-                            elevation: widget.ratingsAndStatusCardElevation,
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                horizontal: Sizes.WIDTH_8,
-                                vertical: Sizes.WIDTH_4,
-                              ),
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.end,
-                                children: <Widget>[
+                Positioned(
+                  right: 2,
+                  // right: 16.0,
+                  top: 2,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      widget.isThereRatings
+                          ? Card(
+                              elevation: widget.ratingsAndStatusCardElevation,
+                              child: Container(
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: 4,
+                                  vertical: 2,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: <Widget>[
 //                                  Image.asset(
 //                                    ImagePath.starIcon,
 //                                    height: Sizes.WIDTH_14,
 //                                    width: Sizes.WIDTH_14,
 //                                  ),
-                                  SizedBox(width: Sizes.WIDTH_4),
-                                  Text(
-                                    ('${((int.parse(widget.iPrice) - int.parse(widget.price)) / int.parse(widget.iPrice) * 100).toStringAsFixed(0)} % off'),
-                                    style: Styles.customTitleTextStyle(
-                                      color: Colors.deepOrangeAccent,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 17,
+
+                                    Text(
+                                      ('${((int.parse(widget.iPrice) - int.parse(widget.price)) / int.parse(widget.iPrice) * 100).toStringAsFixed(0)} % off'),
+                                      style: Styles.customTitleTextStyle(
+                                        color: Colors.deepOrangeAccent,
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                      ),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
+                            )
+                          : Container(),
+                    ],
+                  ),
+                ),
+              ]),
+              Container(
+                margin: EdgeInsets.symmetric(
+                  horizontal: 8,
+                  vertical: 8,
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      width: MediaQuery.of(context).size.width * 0.45,
+                      child: Text(
+                        widget.cardTitle,
+                        textAlign: TextAlign.left,
+                        style: Styles.customTitleTextStyle(
+                          color: AppColors.headingText,
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    CardTags(
+                      title: widget.category,
+                      decoration: BoxDecoration(
+                        gradient: Gradients.secondaryGradient,
+                        boxShadow: [
+                          Shadows.secondaryShadow,
+                        ],
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(widget.tagRadius),
+                        ),
+                      ),
+                    ),
+                    DropDown<String>(
+                      initialValue: '500 ML',
+                      items: <String>[
+                        '500 ML',
+                        '1 Ltr',
+                        '2 Ltr',
+                        '5 Ltr',
+                        '10 Ltr'
+                      ],
+                      hint: Text("Select quantity"),
+                      onChanged: (value) async {
+                        await getAllItems();
+                        if (value == '500 ML') {
+                          factor = await 1;
+                          qtyTag = await '500 ML';
+                          choice = await 0;
+                          await checkInCart('500 ML');
+                          qty = await getQuantity(widget.cardTitle, '500 ML');
+                        }
+                        if (value == '1 Ltr') {
+                          factor = await 2;
+                          qtyTag = await '1 Ltr';
+                          choice = await 1;
+                          await checkInCart('1 Ltr');
+                          qty = await getQuantity(widget.cardTitle, '1 Ltr');
+                        }
+                        if (value == '2 Ltr') {
+                          factor = await 4;
+                          choice = await 2;
+                          qtyTag = await '2 Ltr';
+                          await checkInCart('2 Ltr');
+                          qty = await getQuantity(widget.cardTitle, '2 Ltr');
+                        }
+                        if (value == '5 Ltr') {
+                          factor = await 10;
+                          choice = await 3;
+                          qtyTag = await '5 Ltr';
+                          await checkInCart('5 Ltr');
+                          qty = await getQuantity(widget.cardTitle, '5 Ltr');
+                        }
+                        if (value == '10 Ltr') {
+                          factor = await 20;
+                          choice = await 4;
+                          qtyTag = await '10 Ltr';
+                          await checkInCart('10 Ltr');
+                          qty = await getQuantity(widget.cardTitle, '10 Ltr');
+                        }
+                        setState(() {
+                          print(factor);
+                          print(choice);
+                          print(qtyTag);
+                          print(qty);
+                        });
+                      },
+                    ),
+                    SizedBox(height: 6.0),
+                    Row(
+                      children: [
+                        Container(
+                          child: Text(
+                            'Rs. ${(int.parse(widget.price) * factor).toString()}',
+                            textAlign: TextAlign.left,
+                            style: Styles.customMediumTextStyle(
+                              color: AppColors.black,
+                              fontSize: 15,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          child: Text(
+                              'Rs. ${(int.parse(widget.iPrice) * factor).toString()}',
+                              textAlign: TextAlign.left,
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  decoration: TextDecoration.lineThrough)),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+//                              color: AppColors.accentText,
+//                              fontSize: Sizes.TEXT_SIZE_22,
+                    qty == 0 || qty == null
+                        ? InkWell(
+                            onTap: () {
+                              print('===========$qtyTag=======');
+                              addToCart(
+                                  name: widget.cardTitle,
+                                  imgUrl: widget.imagePath,
+                                  price: widget.price,
+                                  qty: 1,
+                                  qtyTag: qtyTag);
+                            },
+                            child: angadiButton(
+                              'Add',
+                              buttonHeight: 25,
+                              buttonWidth: 90,
                             ),
                           )
-                        : Container(),
+                        : Container(
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(5)),
+                                color: AppColors.secondaryElement),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                              children: [
+                                InkWell(
+                                  onTap: () async {
+                                    await getAllItems();
+                                    for (var v in cartItems) {
+                                      if (v.productName == widget.cardTitle) {
+                                        var newQty = v.qty + 1;
+                                        updateItem(
+                                            id: v.id,
+                                            name: v.productName,
+                                            imgUrl: v.imgUrl,
+                                            price: v.price,
+                                            qty: newQty,
+                                            qtyTag: qtyTag);
+                                      }
+                                    }
+                                  },
+                                  child: Icon(
+                                    Icons.add,
+                                    color: AppColors.secondaryColor,
+                                  ),
+                                ),
+                                Text(
+                                  qty.toString(),
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                                InkWell(
+                                  onTap: () async {
+                                    await getAllItems();
+
+                                    for (var v in cartItems) {
+                                      if (v.productName == widget.cardTitle) {
+                                        if (v.qty == 1) {
+                                          removeItem(v.productName, qtyTag);
+                                        } else {
+                                          var newQty = v.qty - 1;
+                                          updateItem(
+                                              id: v.id,
+                                              name: v.productName,
+                                              imgUrl: v.imgUrl,
+                                              price: v.price,
+                                              qty: newQty,
+                                              qtyTag: qtyTag);
+                                        }
+                                      }
+                                    }
+                                  },
+                                  child: Icon(
+                                    Icons.remove,
+                                    color: AppColors.secondaryColor,
+                                  ),
+                                )
+                              ],
+                            ),
+                            height: 25,
+                            width: 90,
+                          ),
                   ],
                 ),
               ),
