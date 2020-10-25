@@ -2,6 +2,7 @@ import 'package:angadi/classes/dish.dart';
 import 'package:angadi/classes/offer.dart';
 import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/screens/trending_restaurant_screen.dart';
+import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/nav_drawer.dart';
 import 'package:angadi/widgets/offer_card.dart';
@@ -21,11 +22,13 @@ import 'package:angadi/widgets/search_input_field.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:getflutter/components/carousel/gf_carousel.dart';
 import 'package:location/location.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../routes/router.gr.dart';
 import '../values/values.dart';
+import 'category_detail_screen.dart';
 import 'checkout.dart';
 
 var cat, money, rat;
@@ -85,6 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     return Scaffold(
+      floatingActionButton: CustomFloatingButton(CurrentScreen(
+          currentScreen: HomeScreen(), tab_no: HomeScreen.TAB_NO)),
       appBar: AppBar(
         actions: [
           InkWell(
@@ -440,9 +445,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
 //                                    print(
 //                                        '---------==========${snap.data.documents[i]['imageURL']}');
-                                    R.Router.navigator.pushNamed(
-                                      R.Router.categoryDetailScreen,
-                                      arguments: CategoryDetailScreenArguments(
+                                    pushNewScreen(
+                                      context,
+                                      screen: CategoryDetailScreen(
                                         categoryName: snap.data.documents[i]
                                             ['catName'],
                                         imagePath: snap.data.documents[i]
@@ -452,7 +457,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                             snap.data.documents.length,
                                         gradient: gradients[i],
                                       ),
+                                      withNavBar:
+                                          true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
                                     );
+//                                    R.Router.navigator.pushNamed(
+//                                      R.Router.categoryDetailScreen,
+//                                      arguments: CategoryDetailScreenArguments(
+//                                        categoryName: snap.data.documents[i]
+//                                            ['catName'],
+//                                        imagePath: snap.data.documents[i]
+//                                            ['imageURL'],
+//                                        selectedCategory: i,
+//                                        numberOfCategories:
+//                                            snap.data.documents.length,
+//                                        gradient: gradients[i],
+//                                      ),
+//                                    );
                                   },
                                 ),
                               ));
@@ -516,9 +538,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   onTap: () {
 //                                    print(
 //                                        '---------==========${snap.data.documents[i]['imageURL']}');
-                                    R.Router.navigator.pushNamed(
-                                      R.Router.categoryDetailScreen,
-                                      arguments: CategoryDetailScreenArguments(
+                                    pushNewScreen(
+                                      context,
+                                      screen: CategoryDetailScreen(
                                         categoryName: snap.data.documents[i]
                                             ['catName'],
                                         imagePath: snap.data.documents[i]
@@ -528,7 +550,24 @@ class _HomeScreenState extends State<HomeScreen> {
                                             snap.data.documents.length,
                                         gradient: gradients[i],
                                       ),
+                                      withNavBar:
+                                          true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
                                     );
+//                                    R.Router.navigator.pushNamed(
+//                                      R.Router.categoryDetailScreen,
+//                                      arguments: CategoryDetailScreenArguments(
+//                                        categoryName: snap.data.documents[i]
+//                                            ['catName'],
+//                                        imagePath: snap.data.documents[i]
+//                                            ['imageURL'],
+//                                        selectedCategory: i,
+//                                        numberOfCategories:
+//                                            snap.data.documents.length,
+//                                        gradient: gradients[i],
+//                                      ),
+//                                    );
                                   },
                                 ));
                               }

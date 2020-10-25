@@ -1,4 +1,5 @@
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
@@ -125,6 +126,8 @@ class SearchScreen extends StatelessWidget {
     var controller = TextEditingController();
 
     return Scaffold(
+      floatingActionButton: CustomFloatingButton(CurrentScreen(
+          tab_no: SearchScreen.TAB_NO, currentScreen: SearchScreen())),
       body: SafeArea(
         child: Container(
           margin: const EdgeInsets.only(

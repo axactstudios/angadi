@@ -1,3 +1,4 @@
+import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -6,6 +7,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/category_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 
+import '../routes/router.dart';
 import '../routes/router.gr.dart';
 
 class CategoriesScreen extends StatefulWidget {
@@ -20,6 +22,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      floatingActionButton: CustomFloatingButton(CurrentScreen(
+          tab_no: CategoriesScreen.TAB_NO, currentScreen: CategoriesScreen())),
       appBar: AppBar(
         elevation: 0.0,
 //        leading: InkWell(

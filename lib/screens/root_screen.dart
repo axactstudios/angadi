@@ -1,14 +1,20 @@
 import 'package:angadi/screens/search_results.dart';
+import 'package:angadi/widgets/navbar_items.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/screens/profile_screen.dart';
 import 'package:angadi/values/values.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'dart:math' as math;
 
 import 'bookmarks_screen.dart';
 import 'categories_screen.dart';
+import 'categories_screen.dart';
+import 'home_screen.dart';
 import 'home_screen.dart';
 import 'notification_screen.dart';
+import 'notification_screen.dart';
+import 'search_results.dart';
 
 class RootScreen extends StatefulWidget {
   RootScreen({this.currentScreen});
@@ -75,11 +81,42 @@ class _RootScreenState extends State<RootScreen>
     }
   }
 
+  PersistentTabController _controllerTab =
+      PersistentTabController(initialIndex: 0);
+
   @override
   Widget build(BuildContext context) {
-    //set statusBarColor color to secondary color
-    //This is done to make the statusBarColor consistent
-    // because there are screens inside the app that AppBar is not being used
+    return PersistentTabView(
+      controller: _controllerTab,
+      items: navBarItems,
+      screens: _buildScreens(),
+//      showElevation: true,
+//      navBarCurve: NavBarCurve.upperCorners,
+      confineInSafeArea: true,
+      handleAndroidBackButtonPress: true,
+      iconSize: 26.0,
+      navBarStyle:
+          NavBarStyle.style9, // Choose the nav bar style with this property
+      onItemSelected: (index) {
+        print(index);
+      },
+    );
+  }
+
+  List<Widget> _buildScreens() {
+    return [
+      HomeScreen(),
+      CategoriesScreen(),
+      SearchScreen(),
+      NotificationsScreen(),
+      ProfileScreen(),
+    ];
+  }
+//  @override
+//  Widget build(BuildContext context) {
+  //set statusBarColor color to secondary color
+  //This is done to make the statusBarColor consistent
+  // because there are screens inside the app that AppBar is not being used
 //    SystemChrome.setSystemUIOverlayStyle(
 //      SystemUiOverlayStyle.dark.copyWith(
 //        // statusBarColor is used to set Status bar color in Android devices.
@@ -91,149 +128,262 @@ class _RootScreenState extends State<RootScreen>
 //        // Here light means dark color Status bar icons.
 //      ),
 //    );
-    return Scaffold(
-      body: PageStorage(
-        child: currentScreen,
-        bucket: bucket,
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: AnimatedBuilder(
-          animation: _controller,
-          child: angle == 0
-              ? Icon(
-                  Icons.outlined_flag,
-                  size: 36,
-                  color: AppColors.white,
-                )
-              : Icon(
-                  Icons.add,
-                  size: 36,
-                  color: AppColors.white,
-                ),
-          builder: (context, child) => Transform.rotate(
-            angle: angle,
-            child: child,
-          ),
-        ),
-        backgroundColor: AppColors.secondaryElement,
-        elevation: 8.0,
-        onPressed: () {
-          changeAngle();
-          _isPanelVisible ? _controller.forward() : _controller.reverse();
-          _isPanelVisible
-              ? changeScreen(
-                  currentScreen: BookmarksScreen(),
-                  currentTab: 5,
-                )
-              : changeScreen(
-                  currentScreen: HomeScreen(),
-                  currentTab: HomeScreen.TAB_NO,
-                );
-        },
-      ),
-      bottomNavigationBar: BottomAppBar(
-        elevation: 8.0,
-        shape: AutomaticNotchedShape(
-          RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(20),
-              topLeft: Radius.circular(20),
-            ),
-          ),
-        ),
-        child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 24.0),
-          height: 60,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-              bottomNavigationIcon(
-                destination: HomeScreen(),
-                currentTab: HomeScreen.TAB_NO,
-                activeIcon: Icon(
-                  Icons.home,
-                  color: AppColors.secondaryElement,
-                ),
-                nonActiveIcon: Icon(
-                  Icons.outlined_flag,
-                  color: AppColors.secondaryElement,
-                ),
-              ),
-              bottomNavigationIcon(
-                destination: CategoriesScreen(),
-                currentTab: CategoriesScreen.TAB_NO,
-                activeIcon: Icon(
-                  Icons.outlined_flag,
-                  color: AppColors.secondaryElement,
-                ),
-                nonActiveIcon: Icon(
-                  Icons.outlined_flag,
-                  color: AppColors.secondaryElement,
-                ),
-              ),
-              bottomNavigationIcon(
-                destination: SearchScreen(),
-                currentTab: SearchScreen.TAB_NO,
-//                destination: SearchResultsScreen(),
-//                currentTab: SearchResultsScreen.TAB_NO,
-                activeIcon: Icon(
-                  Icons.search,
-                  color: AppColors.secondaryElement,
-                ),
-                nonActiveIcon: Icon(
-                  Icons.search,
-                  color: AppColors.secondaryElement,
-                ),
-              ),
-              bottomNavigationIcon(
-                destination: NotificationsScreen(),
-                currentTab: NotificationsScreen.TAB_NO,
-                activeIcon: Icon(
-                  Icons.notifications,
-                  color: AppColors.secondaryElement,
-                ),
-                nonActiveIcon: Icon(
-                  Icons.notifications_none,
-                  color: AppColors.secondaryElement,
-                ),
-              ),
-              bottomNavigationIcon(
-                destination: ProfileScreen(),
-                currentTab: ProfileScreen.TAB_NO,
-                activeIcon: Icon(
-                  Icons.settings,
-                  color: AppColors.secondaryElement,
-                ),
-                nonActiveIcon: Icon(
-                  Icons.outlined_flag,
-                  color: AppColors.secondaryElement,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget bottomNavigationIcon({
-    @required Widget destination,
-    @required int currentTab,
-    @required Icon activeIcon,
-    @required Icon nonActiveIcon,
-  }) {
-    return InkWell(
-      onTap: () {
-        if (angle == tilt90Degrees) {
-          setState(() {
-            angle = math.pi;
-          });
-        }
-        changeScreen(currentScreen: destination, currentTab: currentTab);
-      },
-      child: Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: (this.currentTab == currentTab) ? activeIcon : nonActiveIcon),
-    );
-  }
+//    return Scaffold(
+//      body: PageStorage(
+//        child: currentScreen,
+//        bucket: bucket,
+//      ),
+//      floatingActionButton: FloatingActionButton(
+//        child: AnimatedBuilder(
+//          animation: _controller,
+//          child: angle == 0
+//              ? Icon(
+//            Icons.shopping_cart_outlined,
+//            size: 36,
+//            color: AppColors.white,
+//          )
+//              : Icon(
+//            Icons.add,
+//            size: 36,
+//            color: AppColors.white,
+//          ),
+//          builder: (context, child) => Transform.rotate(
+//            angle: angle,
+//            child: child,
+//          ),
+//        ),
+//        backgroundColor: AppColors.secondaryElement,
+//        elevation: 8.0,
+//        onPressed: () {
+//          changeAngle();
+//          _isPanelVisible ? _controller.forward() : _controller.reverse();
+//          _isPanelVisible
+//              ? changeScreen(
+//            currentScreen: BookmarksScreen(),
+//            currentTab: 5,
+//          )
+//              : changeScreen(
+//            currentScreen: HomeScreen(),
+//            currentTab: HomeScreen.TAB_NO,
+//          );
+//        },
+//      ),
+//      bottomNavigationBar: BottomAppBar(
+//        elevation: 8.0,
+//        shape: AutomaticNotchedShape(
+//          RoundedRectangleBorder(
+//            borderRadius: BorderRadius.only(
+//              topRight: Radius.circular(20),
+//              topLeft: Radius.circular(20),
+//            ),
+//          ),
+//        ),
+//        child: Container(
+//          margin: EdgeInsets.symmetric(horizontal: 24.0),
+//          height: 60,
+//          child: Row(
+//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//            children: <Widget>[
+//              bottomNavigationIcon(
+//                destination: HomeScreen(),
+//                currentTab: HomeScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.home,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.home_outlined,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//              bottomNavigationIcon(
+//                destination: CategoriesScreen(),
+//                currentTab: CategoriesScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.category_rounded,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.category_outlined,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//              bottomNavigationIcon(
+//                destination: SearchScreen(),
+//                currentTab: SearchScreen.TAB_NO,
+////                destination: SearchResultsScreen(),
+////                currentTab: SearchResultsScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.search,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.search,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//              bottomNavigationIcon(
+//                destination: NotificationsScreen(),
+//                currentTab: NotificationsScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.notifications,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.notifications_none,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//              bottomNavigationIcon(
+//                destination: ProfileScreen(),
+//                currentTab: ProfileScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.settings,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.settings_outlined,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//            ],
+//          ),
+//        ),
+//      ),
+//    );
+//  }
+//                  Icons.shopping_cart_outlined,
+//                  size: 36,
+//                  color: AppColors.white,
+//                )
+//              : Icon(
+//                  Icons.add,
+//                  size: 36,
+//                  color: AppColors.white,
+//                ),
+//          builder: (context, child) => Transform.rotate(
+//            angle: angle,
+//            child: child,
+//          ),
+//        ),
+//        backgroundColor: AppColors.secondaryElement,
+//        elevation: 8.0,
+//        onPressed: () {
+//          changeAngle();
+//          _isPanelVisible ? _controller.forward() : _controller.reverse();
+//          _isPanelVisible
+//              ? changeScreen(
+//                  currentScreen: BookmarksScreen(),
+//                  currentTab: 5,
+//                )
+//              : changeScreen(
+//                  currentScreen: HomeScreen(),
+//                  currentTab: HomeScreen.TAB_NO,
+//                );
+//        },
+//      ),
+//      bottomNavigationBar: BottomAppBar(
+//        elevation: 8.0,
+//        shape: AutomaticNotchedShape(
+//          RoundedRectangleBorder(
+//            borderRadius: BorderRadius.only(
+//              topRight: Radius.circular(20),
+//              topLeft: Radius.circular(20),
+//            ),
+//          ),
+//        ),
+//        child: Container(
+//          margin: EdgeInsets.symmetric(horizontal: 24.0),
+//          height: 60,
+//          child: Row(
+//            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//            children: <Widget>[
+//              bottomNavigationIcon(
+//                destination: HomeScreen(),
+//                currentTab: HomeScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.home,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.home_outlined,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//              bottomNavigationIcon(
+//                destination: CategoriesScreen(),
+//                currentTab: CategoriesScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.category_rounded,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.category_outlined,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//              bottomNavigationIcon(
+//                destination: SearchScreen(),
+//                currentTab: SearchScreen.TAB_NO,
+////                destination: SearchResultsScreen(),
+////                currentTab: SearchResultsScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.search,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.search,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//              bottomNavigationIcon(
+//                destination: NotificationsScreen(),
+//                currentTab: NotificationsScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.notifications,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.notifications_none,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//              bottomNavigationIcon(
+//                destination: ProfileScreen(),
+//                currentTab: ProfileScreen.TAB_NO,
+//                activeIcon: Icon(
+//                  Icons.settings,
+//                  color: AppColors.secondaryElement,
+//                ),
+//                nonActiveIcon: Icon(
+//                  Icons.settings_outlined,
+//                  color: AppColors.secondaryElement,
+//                ),
+//              ),
+//            ],
+//          ),
+//        ),
+//      ),
+//    );
 }
+
+//  Widget bottomNavigationIcon({
+//    @required Widget destination,
+//    @required int currentTab,
+//    @required Icon activeIcon,
+//    @required Icon nonActiveIcon,
+//  }) {
+//    return InkWell(
+//      onTap: () {
+//        if (angle == tilt90Degrees) {
+//          setState(() {
+//            angle = math.pi;
+//          });
+//        }
+//        changeScreen(currentScreen: destination, currentTab: currentTab);
+//      },
+//      child: Padding(
+//          padding: const EdgeInsets.all(8.0),
+//          child: (this.currentTab == currentTab) ? activeIcon : nonActiveIcon),
+//    );
+//  }

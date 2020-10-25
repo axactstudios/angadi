@@ -1,4 +1,5 @@
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:angadi/widgets/foody_bite_card_2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 
 import '../routes/router.dart';
+import '../routes/router.gr.dart';
 
 class CategoryDetailScreen extends StatefulWidget {
   CategoryDetailScreen({
@@ -44,6 +46,84 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     List<Dish> dishes = new List<Dish>();
 
     return Scaffold(
+//      floatingActionButton: CustomFloatingButton(CurrentScreen(
+//          tab_no: 7,
+//          currentScreen: CategoryDetailScreen(
+//              categoryName: widget.categoryName,
+//              numberOfCategories: widget.numberOfCategories,
+//              selectedCategory: widget.selectedCategory,
+//              imagePath: widget.imagePath,
+//              gradient: widget.gradient))),
+//      appBar: PreferredSize(
+//        preferredSize: Size.fromHeight(80.0),
+//        child: AppBar(
+//          automaticallyImplyLeading: false,
+//          flexibleSpace: Stack(
+//            children: <Widget>[
+//              Positioned(
+//                child: Image.network(
+//                  widget.imagePath,
+//                  width: MediaQuery.of(context).size.width,
+//                  height: 130,
+//                  fit: BoxFit.cover,
+//                ),
+//              ),
+//              Positioned(
+//                child: Opacity(
+//                  opacity: 0.85,
+//                  child: Container(
+//                    decoration: BoxDecoration(
+//                      gradient: widget.gradient,
+//                    ),
+//                  ),
+//                ),
+//              ),
+//              Positioned(
+//                child: SafeArea(
+//                  child: Container(
+//                    height: 80,
+//                    width: MediaQuery.of(context).size.width,
+//                    margin: const EdgeInsets.only(left: 16, top: 16, right: 16),
+//                    child: Column(
+//                      children: <Widget>[
+//                        Row(
+//                          children: <Widget>[
+//                            InkWell(
+//                              onTap: () => R.Router.navigator
+//                                  .pushNamed(R.Router.rootScreen),
+//                              child: Image.asset(ImagePath.arrowBackIcon),
+//                            ),
+//                            Spacer(flex: 1),
+//                            Text(
+//                              widget.categoryName,
+//                              style: textTheme.title.copyWith(
+//                                fontSize: Sizes.TEXT_SIZE_22,
+//                                color: AppColors.white,
+//                              ),
+//                            ),
+//                            Spacer(flex: 1),
+//                          ],
+//                        ),
+//                        SpaceH24(),
+//                        Container(
+//                          margin: const EdgeInsets.symmetric(horizontal: 30.0),
+//                          child: Row(
+//                            mainAxisAlignment: MainAxisAlignment.center,
+//                            children: generatePills(
+//                              numberOfPills: widget.numberOfCategories,
+//                              widthOfPill: widthOfEachPill,
+//                            ),
+//                          ),
+//                        ),
+//                      ],
+//                    ),
+//                  ),
+//                ),
+//              )
+//            ],
+//          ),
+//          backgroundColor: Colors.transparent,
+//        ),
       appBar: AppBar(
         leading: InkWell(
             onTap: () => Navigator.pop(context),

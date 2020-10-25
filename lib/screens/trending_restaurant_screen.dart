@@ -1,4 +1,5 @@
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
@@ -42,7 +43,7 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
           appBar: AppBar(
             elevation: 0.0,
             leading: InkWell(
-              onTap: () => R.Router.navigator.pop(),
+              onTap: () => R.Router.navigator.pushNamed(R.Router.rootScreen),
               child: Image.asset(
                 ImagePath.arrowBackIcon,
                 color: AppColors.headingText,
@@ -220,10 +221,13 @@ class _TrendingRestaurantsScreen1State
         }
       },
       child: Scaffold(
+          floatingActionButton: CustomFloatingButton(CurrentScreen(
+              tab_no: 6,
+              currentScreen: TrendingRestaurantsScreen1(widget.type))),
           appBar: AppBar(
             elevation: 0.0,
             leading: InkWell(
-              onTap: () => R.Router.navigator.pop(),
+              onTap: () => R.Router.navigator.pushNamed(R.Router.rootScreen),
               child: Image.asset(
                 ImagePath.arrowBackIcon,
                 color: AppColors.headingText,
