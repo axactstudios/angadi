@@ -76,12 +76,12 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton>
         animation: _controller,
         child: angle == 0
             ? Icon(
-                Icons.shopping_cart_outlined,
+                Icons.shopping_cart,
                 size: 36,
                 color: AppColors.white,
               )
             : Icon(
-                Icons.shopping_cart_outlined,
+                Icons.shopping_cart,
                 size: 36,
                 color: AppColors.white,
               ),

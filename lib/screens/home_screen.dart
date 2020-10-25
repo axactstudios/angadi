@@ -10,6 +10,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -55,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var deliveryTime = '6 pm';
   DateTime date;
   DateTime selectedDate;
+  String selectedTime = '9 AM';
   @override
   void initState() {
     getBanners();
@@ -73,13 +75,20 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     _pickTime() async {
       DateTime t = await showDatePicker(
-          context: context,
-          initialDate: date,
-          lastDate: DateTime(2020, DateTime.now().month, 30),
-          firstDate: DateTime(
-            2020,
-            DateTime.now().month,
-          ));
+        context: context,
+        initialDate: date,
+        lastDate: DateTime(2020, DateTime.now().month, 30),
+        firstDate: DateTime(
+          2020,
+          DateTime.now().month,
+        ),
+        builder: (BuildContext context, Widget child) {
+          return Theme(
+            data: ThemeData.dark(),
+            child: child,
+          );
+        },
+      );
       if (t != null)
         setState(() {
           date = t;
@@ -299,23 +308,23 @@ class _HomeScreenState extends State<HomeScreen> {
                               });
                             },
                             child: selectedDate != null
-                                ? Theme(
-                                    data: Theme.of(context).copyWith(
-                                      primaryColor: Colors.black,
-                                      canvasColor: Colors.black,
-                                      backgroundColor: Colors.black,
-                                    ),
-                                    child: Text(
-                                        '${selectedDate.day.toString()}-${selectedDate.month.toString()} '))
-                                : Theme(
-                                    data: Theme.of(context).copyWith(
-                                      primaryColor: Colors.black,
-                                    ),
-                                    child: Text(
-                                        '${date.day.toString()}-${date.month.toString()} '),
+                                ? Text(
+                                    '${selectedDate.day.toString()}/${selectedDate.month.toString()}/${selectedDate.year.toString()} ',
+                                    style: TextStyle(color: Colors.blueAccent),
+                                  )
+                                : Text(
+                                    '${date.day.toString()}/${date.month.toString()}/${date.month.toString()} ',
+                                    style: TextStyle(color: Colors.blueAccent),
                                   )),
-                        Text('at '),
-                        Text(deliveryTime),
+                        Text(' at '),
+                        InkWell(
+                            onTap: () {
+                              _timeDialog(context);
+                            },
+                            child: Text(
+                              '$selectedTime ',
+                              style: TextStyle(color: Colors.blueAccent),
+                            )),
 //                        InkWell(
 //                            onTap: () {
 //                              _locationDialog(context);
@@ -826,6 +835,95 @@ class _HomeScreenState extends State<HomeScreen> {
                       }),
                 ],
               )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Future<void> _timeDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return _buildTimeDialog(context);
+      },
+    );
+  }
+
+  Widget _buildTimeDialog(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+
+    var hintTextStyle =
+        textTheme.subtitle.copyWith(color: AppColors.accentText);
+    var textFormFieldTextStyle =
+        textTheme.subtitle.copyWith(color: AppColors.accentText);
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(Sizes.RADIUS_32),
+        ),
+      ),
+      child: AlertDialog(
+        contentPadding: EdgeInsets.fromLTRB(
+          Sizes.PADDING_0,
+          Sizes.PADDING_36,
+          Sizes.PADDING_0,
+          Sizes.PADDING_0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizes.RADIUS_20),
+        ),
+        elevation: Sizes.ELEVATION_4,
+        content: Container(
+          height: Sizes.HEIGHT_160,
+          width: Sizes.WIDTH_300,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SingleChildScrollView(
+                child: Center(
+                  child: Text(
+                    'Change delivery time',
+                    style: textTheme.title.copyWith(
+                      fontSize: Sizes.TEXT_SIZE_20,
+                    ),
+                  ),
+                ),
+              ),
+              Spacer(flex: 1),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: DropDown<String>(
+                  initialValue: '9 AM',
+                  items: <String>['9 AM', '12 PM', '2 PM', '5 PM', '7 PM'],
+                  hint: Text("Select quantity"),
+                  onChanged: (value) async {
+                    setState(() {
+                      selectedTime = value;
+                    });
+                  },
+                ),
+              ),
+              Spacer(flex: 1),
+              AlertDialogButton(
+                  buttonText: "Change",
+                  width: 280,
+                  border: Border(
+                    top: BorderSide(
+                      width: 1,
+                      color: AppColors.greyShade1,
+                    ),
+                  ),
+                  textStyle: textTheme.button
+                      .copyWith(color: AppColors.secondaryElement),
+                  onPressed: () {
+                    setState(() {
+                      location = pass.text;
+                    });
+                    Navigator.of(context).pop(true);
+                  })
             ],
           ),
         ),

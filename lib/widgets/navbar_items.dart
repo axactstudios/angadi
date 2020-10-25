@@ -12,7 +12,7 @@ List<PersistentBottomNavBarItem> navBarItems = [
     inactiveColor: Colors.black87,
   ),
   PersistentBottomNavBarItem(
-    icon: Icon(Icons.category_rounded),
+    icon: Icon(Icons.category),
     title: ("Categories"),
     activeColor: AppColors.secondaryElement,
     inactiveColor: Colors.black87,
