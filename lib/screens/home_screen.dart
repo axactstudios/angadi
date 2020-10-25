@@ -284,7 +284,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(
                           width: 5,
                         ),
-                        Text('Deliver to $location'),
+                        Container(
+                            width: MediaQuery.of(context).size.width * 0.6,
+                            child: Text('Deliver to $location')),
                         SizedBox(
                           width: 10,
                         ),
