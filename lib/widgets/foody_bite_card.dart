@@ -149,7 +149,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     setState(() {
       item;
 //      print(item.qtyTag);
-      print('-------------Updated');
+//      print('-------------Updated');
     });
     return item;
   }

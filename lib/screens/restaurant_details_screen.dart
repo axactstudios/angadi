@@ -163,7 +163,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     setState(() {
       item;
 //      print(item.qtyTag);
-      print('-------------Updated');
+//      print('-------------Updated');
     });
     return item;
   }

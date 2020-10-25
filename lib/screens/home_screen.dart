@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
@@ -20,6 +21,8 @@ import 'package:angadi/widgets/search_input_field.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:getflutter/components/carousel/gf_carousel.dart';
 import 'package:location/location.dart';
+import 'package:place_picker/entities/location_result.dart';
+import 'package:place_picker/widgets/place_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../routes/router.gr.dart';
 import '../values/values.dart';
@@ -50,7 +53,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     getBanners();
     _getCurrentLocation();
-
     super.initState();
   }
 
@@ -75,7 +77,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
               onTap: () {
-                print(1);
+//                print(1);
                 launch(
                     'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
               },
@@ -249,7 +251,9 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                         InkWell(
                             onTap: () {
-                              _locationDialog(context);
+                              showPlacePicker();
+
+//                              _locationDialog(context);
                             },
                             child: Icon(Icons.edit))
                       ],
@@ -279,86 +283,86 @@ class _HomeScreenState extends State<HomeScreen> {
 //                          .pushNamed(R.Router.trendingRestaurantsScreen),
 //                    ),
 
-                    StreamBuilder(
-                        stream:
-                            Firestore.instance.collection('Offers').snapshots(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snap) {
-                          if (snap.hasData &&
-                              !snap.hasError &&
-                              snap.data != null) {
-                            offers.clear();
-                            imageList.clear();
-                            for (int i = 0;
-                                i < snap.data.documents.length;
-                                i++) {
-                              imageList.add(snap.data.documents[i]['ImageURL']);
-                              offers.add(Offer(
-                                  snap.data.documents[i]['Title'],
-                                  snap.data.documents[i]['Subtitle'],
-                                  snap.data.documents[i]['ImageURL'],
-                                  snap.data.documents[i]
-                                      ['discountPercentage']));
-                            }
-
-                            return Container(
-                              height: 220,
-                              width: MediaQuery.of(context).size.width,
-                              child: GFCarousel(
-                                items: imageList.map(
-                                  (url) {
-                                    return Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(1.0),
-                                        child: Image.network('$url',
-                                            fit: BoxFit.fitWidth,
-                                            width: 10000.0),
-                                      ),
-                                    );
-                                  },
-                                ).toList(),
-                                onPageChanged: (index) {
-                                  setState(() {
-//                                    print('change');
-                                  });
-                                },
-                                autoPlay: true,
-                                enlargeMainPage: true,
-                                pagination: true,
-                                passiveIndicator: Colors.black,
-                                activeIndicator: Colors.grey,
-                                pauseAutoPlayOnTouch: Duration(seconds: 8),
-                                pagerSize: 8,
-                              ),
-//                              ListView.builder(
-//                                  scrollDirection: Axis.horizontal,
-//                                  itemCount: offers.length,
-//                                  itemBuilder: (context, index) {
+//                    StreamBuilder(
+//                        stream:
+//                            Firestore.instance.collection('Offers').snapshots(),
+//                        builder: (BuildContext context,
+//                            AsyncSnapshot<QuerySnapshot> snap) {
+//                          if (snap.hasData &&
+//                              !snap.hasError &&
+//                              snap.data != null) {
+//                            offers.clear();
+//                            imageList.clear();
+//                            for (int i = 0;
+//                                i < snap.data.documents.length;
+//                                i++) {
+//                              imageList.add(snap.data.documents[i]['ImageURL']);
+//                              offers.add(Offer(
+//                                  snap.data.documents[i]['Title'],
+//                                  snap.data.documents[i]['Subtitle'],
+//                                  snap.data.documents[i]['ImageURL'],
+//                                  snap.data.documents[i]
+//                                      ['discountPercentage']));
+//                            }
+//
+//                            return Container(
+//                              height: 220,
+//                              width: MediaQuery.of(context).size.width,
+//                              child: GFCarousel(
+//                                items: imageList.map(
+//                                  (url) {
 //                                    return Container(
-//                                      margin: EdgeInsets.only(right: 4.0),
-//                                      child: OfferCard(
-//                                        onTap: () {
-//                                          Navigator.push(context,
-//                                              MaterialPageRoute(builder:
-//                                                  (BuildContext context) {
-//                                            return Checkout();
-//                                          }));
-//                                        },
-//                                        imagePath: offers[index].imageURL,
-//                                        // status: '90% OFF',
-//                                        cardTitle: offers[index].title,
-//                                        // rating: ratings[index],
-//                                        // category: category[index],
-//                                        // distance: '',
-//                                        details: offers[index].subtitle,
+//                                      child: Padding(
+//                                        padding: const EdgeInsets.all(1.0),
+//                                        child: Image.network('$url',
+//                                            fit: BoxFit.fitWidth,
+//                                            width: 10000.0),
 //                                      ),
 //                                    );
-//                                  }),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }),
+//                                  },
+//                                ).toList(),
+//                                onPageChanged: (index) {
+//                                  setState(() {
+////                                    print('change');
+//                                  });
+//                                },
+//                                autoPlay: true,
+//                                enlargeMainPage: true,
+//                                pagination: true,
+//                                passiveIndicator: Colors.black,
+//                                activeIndicator: Colors.grey,
+//                                pauseAutoPlayOnTouch: Duration(seconds: 8),
+//                                pagerSize: 8,
+//                              ),
+////                              ListView.builder(
+////                                  scrollDirection: Axis.horizontal,
+////                                  itemCount: offers.length,
+////                                  itemBuilder: (context, index) {
+////                                    return Container(
+////                                      margin: EdgeInsets.only(right: 4.0),
+////                                      child: OfferCard(
+////                                        onTap: () {
+////                                          Navigator.push(context,
+////                                              MaterialPageRoute(builder:
+////                                                  (BuildContext context) {
+////                                            return Checkout();
+////                                          }));
+////                                        },
+////                                        imagePath: offers[index].imageURL,
+////                                        // status: '90% OFF',
+////                                        cardTitle: offers[index].title,
+////                                        // rating: ratings[index],
+////                                        // category: category[index],
+////                                        // distance: '',
+////                                        details: offers[index].subtitle,
+////                                      ),
+////                                    );
+////                                  }),
+//                            );
+//                          } else {
+//                            return Container();
+//                          }
+//                        }),
                     SizedBox(height: 16.0),
                     HeadingRow(
                       title: StringConst.CATEGORY,
@@ -391,8 +395,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width: 100,
                                   category: snap.data.documents[i]['catName'],
                                   onTap: () {
-                                    print(
-                                        '---------==========${snap.data.documents[i]['imageURL']}');
+//                                    print(
+//                                        '---------==========${snap.data.documents[i]['imageURL']}');
                                     R.Router.navigator.pushNamed(
                                       R.Router.categoryDetailScreen,
                                       arguments: CategoryDetailScreenArguments(
@@ -467,8 +471,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   gradient: gradients[i],
                                   category: snap.data.documents[i]['catName'],
                                   onTap: () {
-                                    print(
-                                        '---------==========${snap.data.documents[i]['imageURL']}');
+//                                    print(
+//                                        '---------==========${snap.data.documents[i]['imageURL']}');
                                     R.Router.navigator.pushNamed(
                                       R.Router.categoryDetailScreen,
                                       arguments: CategoryDetailScreenArguments(
@@ -781,7 +785,21 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
   }
+
+  LocationResult result;
+
+  void showPlacePicker() async {
+    result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            PlacePicker("AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw")));
+    setState(() {
+      location = result.formattedAddress;
+    });
+    // Handle the result in your way
+    print(location);
+  }
 }
+
 //url: snap.data.documents[i]['url'],
 //name: snap.data.documents[i]['name'],
 //desc: snap.data.documents[i]['description'],

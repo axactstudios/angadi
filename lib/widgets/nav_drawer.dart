@@ -8,6 +8,7 @@ import 'package:expandable/expandable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
+import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 
 import 'package:getflutter/components/avatar/gf_avatar.dart';
@@ -34,6 +35,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
   Location loc = new Location();
   LocationData _currentPosition;
 
+  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+
+  String currentAddress = 'Enter Address';
   Future<Position> _getCurrentLocation() async {
     _currentPosition = await loc.getLocation();
 //    Position position = await geolocator.getCurrentPosition(
@@ -49,11 +53,6 @@ class _CustomDrawerState extends State<CustomDrawer> {
     _getAddressFromLatLng();
     print(_currentPosition);
   }
-
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
-  String currentAddress = 'Enter Address';
-  var location = 'Dubai';
-  final pass = TextEditingController();
 
   _getAddressFromLatLng() async {
     try {
@@ -72,6 +71,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
       print(e);
     }
   }
+
+  var location = 'Dubai';
+  final pass = TextEditingController();
 
   Future<void> _locationDialog(BuildContext context) async {
     return showDialog<void>(

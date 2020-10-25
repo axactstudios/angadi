@@ -29,9 +29,10 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
     }
 
     _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.denied) {
+    if (_permissionGranted == PermissionStatus.DENIED ||
+        _permissionGranted == PermissionStatus.DENIED_FOREVER) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.granted) {
+      if (_permissionGranted != PermissionStatus.GRANTED) {
         return;
       }
     }

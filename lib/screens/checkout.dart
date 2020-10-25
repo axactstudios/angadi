@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'order_placed.dart';
@@ -559,7 +560,7 @@ class _CheckoutState extends State<Checkout> {
     getAllItems();
   }
 
-  final Geolocator geolocator = Geolocator()..forceAndroidLocationManager;
+  final Geolocator geolocator = Geolocator();
 
   LocationData _currentPosition;
 
@@ -583,14 +584,17 @@ class _CheckoutState extends State<Checkout> {
 
   _getAddressFromLatLng() async {
     try {
-      List<Placemark> p = await geolocator.placemarkFromCoordinates(
-          _currentPosition.latitude, _currentPosition.longitude);
+      final coordinates =
+          Coordinates(_currentPosition.latitude, _currentPosition.longitude);
 
-      Placemark place = p[0];
+// this fetches multiple address, but you need to get the first address by doing the following two codes
+      var addresses =
+          await Geocoder.local.findAddressesFromCoordinates(coordinates);
+      var first = addresses.first;
 
       setState(() {
         currentAddress =
-            "<Your House No.>, ${place.subLocality}, ${place.locality}, ${place.postalCode}, ${place.country},  ${place.administrativeArea} ";
+            "<Your House No.>, ${first.subLocality}, ${first.locality}, ${first.postalCode}, ${first.countryName},  ${first.adminArea} ";
         print(currentAddress);
         addressController.text = currentAddress;
       });
