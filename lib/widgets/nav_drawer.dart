@@ -440,7 +440,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     fontWeight: FontWeight.w600),
               ),
             ),
-            onTap: () {  pushNewScreen(context, screen: ProfileScreen());},
+            onTap: () {
+              pushNewScreen(context, screen: ProfileScreen());
+            },
           ),
           Container(
             margin: EdgeInsets.symmetric(horizontal: 20),
