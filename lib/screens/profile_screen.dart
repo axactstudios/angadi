@@ -47,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           margin: EdgeInsets.only(top: Sizes.MARGIN_8),
           child: ListView(
             children: <Widget>[
-              FirebaseAuth.instance.currentUser() != null
+              user != null
                   ? Column(
                       children: <Widget>[
                         CircleAvatar(
@@ -137,7 +137,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   angadiButton(
                     'Edit Profile',
                     onTap: () {
-                      FirebaseAuth.instance.currentUser() != null
+                      user != null
                           ? R.Router.navigator
                               .pushNamed(R.Router.editProfileScreen)
                           : Fluttertoast.showToast(msg: 'Log In First !');
@@ -172,7 +172,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 color: Colors.grey[200],
               ),
 
-              FirebaseAuth.instance.currentUser() != null
+              user != null
                   ? Container(
                       height: MediaQuery.of(context).size.height * 0.7,
                       child: StreamBuilder(
@@ -525,12 +525,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  FirebaseUser user;
   String name,
       email,
       url =
           'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e';
   getUserDetails() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    user = await FirebaseAuth.instance.currentUser();
     Firestore.instance
         .collection('Users')
         .where('id', isEqualTo: user.uid)

@@ -16,23 +16,24 @@ class SetLocationScreen extends StatefulWidget {
 class _SetLocationScreenState extends State<SetLocationScreen> {
   Location location = new Location();
 
-  bool _serviceEnabled;
+  bool _serviceEnabled = false;
   PermissionStatus _permissionGranted;
   LocationData _locationData;
   getLocation() async {
     _serviceEnabled = await location.serviceEnabled();
+    print(_serviceEnabled);
     if (!_serviceEnabled) {
       _serviceEnabled = await location.requestService();
+
       if (!_serviceEnabled) {
         return;
       }
     }
 
     _permissionGranted = await location.hasPermission();
-    if (_permissionGranted == PermissionStatus.DENIED ||
-        _permissionGranted == PermissionStatus.DENIED_FOREVER) {
+    if (_permissionGranted != PermissionStatus.GRANTED) {
       _permissionGranted = await location.requestPermission();
-      if (_permissionGranted != PermissionStatus.GRANTED) {
+      if (_permissionGranted == PermissionStatus.GRANTED) {
         return;
       }
     }
@@ -75,14 +76,14 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
                     SpaceH40(),
                     Align(
                       alignment: Alignment.topRight,
-                      child: _buildSkipButton(),
+                      child: _serviceEnabled ? _buildSkipButton() : Container(),
                     ),
                     SpaceH200(),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: <Widget>[
                         Text(
-                          StringConst.HELLO_MESSAGE,
+                          'Hi there,',
                           textAlign: TextAlign.left,
                           style: Styles.customTitleTextStyle(
                             fontSize: Sizes.TEXT_SIZE_32,
@@ -99,7 +100,7 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
                               TextSpan(
                                 text: StringConst.FOODY_BITE,
                                 style: Styles.customTitleTextStyle(
-                                  fontSize: Sizes.TEXT_SIZE_32,
+                                  fontSize: 32,
                                   color: AppColors.kFoodyBiteYellow,
                                 ),
                               ),
@@ -114,7 +115,7 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
                         StringConst.TURN_GPS_DESCRIPTION,
                         textAlign: TextAlign.left,
                         style: Styles.customMediumTextStyle(
-                          fontSize: Sizes.TEXT_SIZE_22,
+                          fontSize: 20,
                         ),
                       ),
                     ),
@@ -122,8 +123,9 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
                     angadiButton(
                       StringConst.TURN_GPS,
                       buttonWidth: widthOfScreen,
-                      onTap: () {
-                        getLocation();
+                      onTap: () async {
+                        await getLocation();
+
                         R.Router.navigator.pushNamedAndRemoveUntil(
                           R.Router.rootScreen,
                           (Route<dynamic> route) => false,
@@ -157,7 +159,7 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
         ),
         child: Center(
           child: Text(
-            StringConst.SKIP,
+            'Next',
             textAlign: TextAlign.center,
             style: Styles.customNormalTextStyle(),
           ),

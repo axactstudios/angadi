@@ -4,6 +4,10 @@ import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
 import 'dart:math' as math;
 
+import 'package:geocoder/geocoder.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:location/location.dart';
+
 class SplashScreen extends StatefulWidget {
   @override
   _SplashScreenState createState() => _SplashScreenState();
@@ -58,11 +62,21 @@ class _SplashScreenState extends State<SplashScreen>
   void textControllerListener() {
     if (_textController.status == AnimationStatus.completed) {
       Future.delayed(Duration(milliseconds: 1000), () async {
-        MySharedPreferences msp = new MySharedPreferences();
-        String status = await msp.getText('status');
-        if (status == 'loggedin') {
+//        MySharedPreferences msp = new MySharedPreferences();
+//        String status = await msp.getText('status');
+//        if (status == 'loggedin') {
+//          R.Router.navigator.pushNamedAndRemoveUntil(
+//            R.Router.rootScreen,
+//            (Route<dynamic> route) => false,
+//          );
+//        } else {
+        PermissionStatus _permissionGranted;
+        Location location = new Location();
+
+        _permissionGranted = await location.hasPermission();
+        if (_permissionGranted != PermissionStatus.GRANTED) {
           R.Router.navigator.pushNamedAndRemoveUntil(
-            R.Router.rootScreen,
+            R.Router.setLocationScreen,
             (Route<dynamic> route) => false,
           );
         } else {

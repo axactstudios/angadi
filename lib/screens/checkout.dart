@@ -36,9 +36,6 @@ class _CheckoutState extends State<Checkout> {
     final allRows = await dbHelper.queryAllRows();
     cartItems.clear();
     allRows.forEach((row) => cartItems.add(Cart.fromMap(row)));
-    setState(() {
-//      print(cartItems[1]);
-    });
   }
 
   double totalAmount() {
@@ -536,11 +533,9 @@ class _CheckoutState extends State<Checkout> {
     //     'ImageURL': cartItems[i].imgUrl
     //   });
     // }
-    setState(() {
-      print(orderType);
-    });
-    Navigator.of(context).pop();
+
     removeAll();
+
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
       return OrderPlaced(Bill(), docID);
@@ -548,33 +543,28 @@ class _CheckoutState extends State<Checkout> {
   }
 
   showAlertDialog(BuildContext context) {
-    Widget cancelButton = FlatButton(
-      color: Colors.red,
-      child: Text("Cancel"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-    Widget continueButton = FlatButton(
-      color: AppColors.secondaryElement,
-      child: Text("Place Order"),
-      onPressed: () {
-        placeOrder(type);
-      },
-    );
-
-    AlertDialog alert = AlertDialog(
-      title: Text("Place Order"),
-      content: Text("Your order will be placed!"),
-      actions: [
-        cancelButton,
-        continueButton,
-      ],
-    );
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return alert;
+        return AlertDialog(
+          title: Text("Place Order"),
+          content: Text("Your order will be placed!"),
+          actions: [
+            FlatButton(
+              color: Colors.red,
+              child: Text("Cancel"),
+              onPressed: () {},
+            ),
+            FlatButton(
+              color: AppColors.secondaryElement,
+              child: Text("Place Order"),
+              onPressed: () {
+                placeOrder(type);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
       },
     );
   }
@@ -584,8 +574,6 @@ class _CheckoutState extends State<Checkout> {
     for (var v in cartItems) {
       final rowsDeleted = await dbHelper.delete(v.productName, v.qtyTag);
     }
-
-    getAllItems();
   }
 
   final Geolocator geolocator = Geolocator();
@@ -640,43 +628,46 @@ class _CheckoutState extends State<Checkout> {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Sub Total'),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.187,
-                  ),
-                  Text(':'),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
+                  Text('Sub Total-'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.187,
+//                  ),
+//                  Text(':'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.03,
+//                  ),
                   Text('Rs. ${totalAmount().toString()}')
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Discount'),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.2,
-                  ),
-                  Text(':'),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
+                  Text('Discount-'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.2,
+//                  ),
+//                  Text(':'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.03,
+//                  ),
                   Text(discount != null
                       ? 'Rs. ${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}'
                       : 'Rs. 0'),
                 ],
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Taxes and Charges'),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
-                  Text(':'),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
+                  Text('Taxes and Charges-'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.03,
+//                  ),
+//                  Text(':'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.03,
+//                  ),
                   Text('Rs. ${(totalAmount() * 0.18).toStringAsFixed(2)}'),
                 ],
               ),
@@ -691,15 +682,16 @@ class _CheckoutState extends State<Checkout> {
                 height: 20,
               ),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Grand Total'),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.147,
-                  ),
-                  Text(':'),
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width * 0.03,
-                  ),
+                  Text('Grand Total-'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.147,
+//                  ),
+//                  Text(':'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.03,
+//                  ),
                   Text(discount != null
                       ? 'Rs. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)}'
                       : 'Rs. ${((totalAmount() * 0.18) + totalAmount())}'),

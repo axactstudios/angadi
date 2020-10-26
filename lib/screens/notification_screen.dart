@@ -2,6 +2,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/values/values.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+
+import 'order_placed.dart';
 
 class NotificationsScreen extends StatefulWidget {
   static const int TAB_NO = 3;
@@ -116,7 +119,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             if (snap.hasData && !snap.hasError && snap.data != null) {
               notifications.clear();
               for (int i = 0; i < snap.data.documents.length; i++) {
-                if (snap.data.documents[i]['UserID'] == user.uid) {
+                if (snap.data.documents[i]['UserID'] == user?.uid) {
                   notifications.add(NotificationInfo(
                       imageUrl: 'null',
                       title: 'Order ID - ${snap.data.documents[i]['OrderID']}',
@@ -134,7 +137,13 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       return Card(
                         child: ListTile(
 // leading: Image.asset(notifications[index].imageUrl),
-                          onTap: () {},
+                          onTap: () async {
+                            await fetchOrderDetail(
+                                snap.data.documents[index]['OrderID']);
+                            pushNewScreen(context,
+                                screen: OrderPlaced(bill(),
+                                    snap.data.documents[index]['OrderID']));
+                          },
                           title: Row(
                             children: <Widget>[
                               Text(
@@ -142,7 +151,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 style: Styles.customTitleTextStyle(
                                   color: AppColors.headingText,
                                   fontWeight: FontWeight.w400,
-                                  fontSize: Sizes.TEXT_SIZE_16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ],
@@ -167,6 +176,123 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
             }
           }),
     );
+  }
+
+  Widget bill() {
+    return Card(
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Order Id- $id1',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              Container(
+                color: Colors.black.withOpacity(0.1),
+                height: 1,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Items',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                str,
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Ordered On',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                timestamp.toDate().day.toString() +
+                    '-' +
+                    timestamp.toDate().month.toString() +
+                    '-' +
+                    timestamp.toDate().year.toString() +
+                    ' at ' +
+                    timestamp.toDate().hour.toString() +
+                    ':' +
+                    timestamp.toDate().minute.toString(),
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Total',
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                'Rs. ' + total,
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              Container(
+                color: Colors.black.withOpacity(0.1),
+                height: 1,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                status,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  var str = '', timestamp, status, total, id1;
+  fetchOrderDetail(id) {
+    Firestore.instance.collection('Orders').document(id).get().then((value) {
+      setState(() {
+        id1 = id;
+        str = '';
+        for (int it = 0; it < value['Items'].length; it++) {
+          it != value['Items'].length - 1
+              ? str = str + '${value['Qty'][it]} x ${value['Items'][it]}, '
+              : str = str + '${value['Qty'][it]} x ${value['Items'][it]}';
+        }
+        timestamp = value['TimeStamp'];
+        status = value["Status"];
+        total = value["GrandTotal"];
+      });
+    });
   }
 }
 

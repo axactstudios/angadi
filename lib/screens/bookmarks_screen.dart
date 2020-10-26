@@ -1,6 +1,7 @@
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/cart_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
@@ -67,8 +68,31 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     return sum;
   }
 
+  FirebaseUser user;
+  String name,
+      email,
+      url =
+          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e';
+  getUserDetails() async {
+    user = await FirebaseAuth.instance.currentUser();
+    Firestore.instance
+        .collection('Users')
+        .where('id', isEqualTo: user.uid)
+        .getDocuments()
+        .then((value) {
+      value.documents.forEach((element) {
+        setState(() {
+          name = element['Name'];
+          email = element['mail'];
+          url = element['pUrl'];
+        });
+      });
+    });
+  }
+
   @override
   void initState() {
+    getUserDetails();
     getAllItems();
   }
 
@@ -101,7 +125,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                 margin: EdgeInsets.only(right: Sizes.MARGIN_16),
                 child: InkWell(
                   onTap: () {
-                    FirebaseAuth.instance.currentUser() != null
+                    user != null
                         ? Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
                             return Checkout();

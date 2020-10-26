@@ -304,7 +304,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
         padding: EdgeInsets.zero,
         children: <Widget>[
           SafeArea(
-              child: FirebaseAuth.instance.currentUser() != null
+              child: user != null
                   ? Container(
                       color: AppColors.secondaryElement,
                       height: 80,
@@ -515,12 +515,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
+  FirebaseUser user;
+
   String name = 'John',
       email = 'support@gmail.com',
       url =
           'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e';
   getUserDetails() async {
-    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    user = await FirebaseAuth.instance.currentUser();
     Firestore.instance
         .collection('Users')
         .where('id', isEqualTo: user.uid)

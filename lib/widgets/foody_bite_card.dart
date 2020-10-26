@@ -41,7 +41,7 @@ class FoodyBiteCard extends StatefulWidget {
     this.address,
     this.price,
     this.iPrice,
-    this.width = 300,
+    this.width = 320,
     this.cardHeight = 305.0,
     this.imageHeight = 169.0,
     this.tagRadius = 8.0,
@@ -210,7 +210,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width * 0.85;
+    var width = MediaQuery.of(context).size.width * 0.91;
 
     return InkWell(
       onTap: widget.onTap,
@@ -285,7 +285,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.42,
+                      width: MediaQuery.of(context).size.width * 0.49,
                       child: Text(
                         widget.cardTitle,
                         textAlign: TextAlign.left,

@@ -37,7 +37,7 @@ class FoodyBiteSearchInputField extends StatelessWidget {
     this.borderRadius = Sizes.RADIUS_12,
     this.borderWidth = Sizes.WIDTH_0,
     this.contentPaddingHorizontal = Sizes.PADDING_0,
-    this.contentPaddingVertical = Sizes.PADDING_22,
+    this.contentPaddingVertical = 10,
     this.hintText,
     this.suffixIconImagePath,
     this.borderColor = Colors.grey,

@@ -362,7 +362,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                   style: Styles.customTitleTextStyle(
                     color: AppColors.accentText,
                     fontWeight: FontWeight.w300,
-                    fontSize: Sizes.TEXT_SIZE_20,
+                    fontSize: 17,
                   ),
                 ),
               ),
@@ -372,7 +372,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                   style: Styles.customTitleTextStyle(
                     color: AppColors.accentText,
                     fontWeight: FontWeight.w300,
-                    fontSize: Sizes.TEXT_SIZE_20,
+                    fontSize: 17,
                   ),
                 ),
               ),
@@ -516,7 +516,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                         },
                         child: Text(
                           'Liked the service? Or annoyed by something? Write a feedback and let us now.',
-                          style: TextStyle(color: Colors.blue, fontSize: 20),
+                          style: TextStyle(color: Colors.blue, fontSize: 17),
                         ),
                       ),
                     ),

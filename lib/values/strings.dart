@@ -24,7 +24,7 @@ class StringConst {
   static const String REGISTER = "Register";
   static const String TURN_GPS = "Turn On GPS";
   static const String TURN_GPS_DESCRIPTION =
-      "Please turn on your GPS to find out popular dish suggestionsnear you.";
+      "Please turn on your GPS to get best prices near you. You can manually change your location inside the app.";
   // ignore: non_constant_identifier_names
   static String HELLO_MESSAGE = "Hi $n,";
   static const String WELCOME_MESSAGE = "Welcome to";

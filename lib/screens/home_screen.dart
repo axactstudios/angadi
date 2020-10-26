@@ -29,13 +29,16 @@ import 'package:place_picker/widgets/place_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../routes/router.gr.dart';
 import '../values/values.dart';
+import '../values/values.dart';
 import 'categories_screen.dart';
 import 'category_detail_screen.dart';
 import 'checkout.dart';
 import 'filter_screen.dart';
+import 'order_placed.dart';
 import 'restaurant_details_screen.dart';
 
 var cat, money, rat;
+bool showStatus = true;
 
 class HomeScreen extends StatefulWidget {
   static const int TAB_NO = 0;
@@ -274,7 +277,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 child: ListView(
                   children: <Widget>[
-                    FirebaseAuth.instance.currentUser() != null
+                    user != null
                         ? StreamBuilder(
                             stream: Firestore.instance
                                 .collection('Orders')
@@ -289,95 +292,129 @@ class _HomeScreenState extends State<HomeScreen> {
                                     i < snap.data.documents.length;
                                     i++) {
                                   if (snap.data.documents[i]['UserID'] ==
-                                          user.uid &&
+                                          user?.uid &&
                                       snap.data.documents[i]['Status'] ==
                                           'Awaiting Confirmation') {
                                     orderID = snap.data.documents[i].documentID;
                                     status = snap.data.documents[i]['Status'];
                                   }
                                 }
+                                fetchOrderDetail(orderID);
                               }
                               return status != null
-                                  ? Container(
+                                  ? showStatus
+                                      ? Container(
 //                                  color: Colors.red.withOpacity(0.8),
-                                      child: Stack(children: [
-                                      Positioned(
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          child: Image.network(
-                                            'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FDosa%20Batter%2F1-3.JPG?alt=media&token=c44f9c9e-4b1a-49b0-b555-00fed6042384',
-                                            width: double.infinity,
-                                            height: 100,
-                                            fit: BoxFit.cover,
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        child: Opacity(
-                                          opacity: 0.65,
-                                          child: Container(
-                                            height: 100,
-                                            width: double.infinity,
-                                            decoration: BoxDecoration(
-                                              gradient: gradients[0],
+                                          child: Stack(children: [
+                                          Positioned(
+                                            child: ClipRRect(
                                               borderRadius:
                                                   BorderRadius.circular(2),
+                                              child: Image.network(
+                                                'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FDosa%20Batter%2F1-3.JPG?alt=media&token=c44f9c9e-4b1a-49b0-b555-00fed6042384',
+                                                width: double.infinity,
+                                                height: 100,
+                                                fit: BoxFit.cover,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            height: 100,
-                                            child: Row(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                Column(
+                                          Positioned(
+                                            child: Opacity(
+                                              opacity: 0.65,
+                                              child: Container(
+                                                height: 100,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  gradient: gradients[0],
+                                                  borderRadius:
+                                                      BorderRadius.circular(2),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          Positioned(
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: 100,
+                                                child: Row(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.center,
                                                   children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Spacer(),
+                                                        Text(
+                                                            '$status for your order',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white)),
+                                                        Text('ID - $orderID',
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white)),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            pushNewScreen(
+                                                                context,
+                                                                screen:
+                                                                    OrderPlaced(
+                                                                        bill(),
+                                                                        orderID));
+                                                          },
+                                                          child: Container(
+                                                              width: MediaQuery.of(
+                                                                          context)
+                                                                      .size
+                                                                      .width *
+                                                                  0.4,
+                                                              child: Text(
+                                                                  'Click to view details',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: TextStyle(
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .underline,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Colors
+                                                                          .blueAccent))),
+                                                        ),
+                                                        Spacer(),
+                                                      ],
+                                                    ),
                                                     Spacer(),
-                                                    Text(
-                                                        '$status for your order',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color:
-                                                                Colors.white)),
-                                                    Text('ID - $orderID',
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.bold,
-                                                            color:
-                                                                Colors.white)),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        showStatus = false;
+                                                      },
+                                                      child: Icon(
+                                                        Icons.clear,
+                                                        color: Colors.black,
+                                                        size: 30,
+                                                      ),
+                                                    ),
                                                     Spacer(),
                                                   ],
                                                 ),
-                                                Spacer(),
-                                                Icon(Icons.info), Spacer(),
-//                                            Container(
-//                                                width: MediaQuery.of(context)
-//                                                        .size
-//                                                        .width *
-//                                                    0.25,
-//                                                child: Text(
-//                                                    'Click to view details',
-//                                                    textAlign: TextAlign.center,
-//                                                    style: TextStyle(
-//                                                        fontWeight:
-//                                                            FontWeight.bold,
-//                                                        color:
-//                                                            Colors.blueGrey))),
-                                              ],
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    ]))
+                                        ]))
+                                      : Container()
                                   : Container();
                             })
                         : Container(),
@@ -403,74 +440,96 @@ class _HomeScreenState extends State<HomeScreen> {
                       })),
                       borderStyle: BorderStyle.solid,
                     ),
-                    SizedBox(height: 16.0),
-                    Row(
-                      children: [
-                        Icon(Icons.location_on),
-                        SizedBox(
-                          width: 5,
-                        ),
-                        Container(
-                            width: MediaQuery.of(context).size.width * 0.6,
-                            child: Text('Deliver to $location')),
-                        SizedBox(
-                          width: 10,
-                        ),
-                        InkWell(
-                            onTap: () {
-                              _locationDialog(context);
+                    SizedBox(height: 1.0),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      color: AppColors.secondaryElement,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.location_on, color: Colors.white),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Text('Deliver to $location',
+                                    style: TextStyle(color: Colors.white))),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                                onTap: () {
+                                  _locationDialog(context);
 
 //
-                            },
-                            child: Icon(Icons.edit)),
-                        InkWell(
-                            onTap: () {
-                              showPlacePicker();
+                                },
+                                child: Icon(Icons.edit, color: Colors.white)),
+                            InkWell(
+                                onTap: () {
+                                  showPlacePicker();
 
 //                              _locationDialog(context);
-                            },
-                            child: Icon(Icons.map))
-                      ],
-                    ),
-                    Row(
-                      children: [
-                        Icon(Icons.local_dining),
-                        SizedBox(
-                          width: 5,
+                                },
+                                child: Icon(Icons.map, color: Colors.white))
+                          ],
                         ),
-                        Text('Delivery by '),
-                        InkWell(
-                            onTap: () {
-                              _pickTime().then((value) {
-                                setState(() {
-                                  selectedDate = value;
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.secondaryElement),
+                          borderRadius: BorderRadius.all(Radius.zero)),
+                      child: Row(
+                        children: [
+                          Text('    Next Delivery: '),
+                          Icon(
+                            Icons.delivery_dining,
+                            color: AppColors.secondaryElement,
+                          ),
+                          SizedBox(width: 5),
+                          InkWell(
+                              onTap: () {
+                                _pickTime().then((value) {
+                                  setState(() {
+                                    selectedDate = value;
+                                  });
                                 });
-                              });
-                            },
-                            child: selectedDate != null
-                                ? Text(
-                                    '${selectedDate.day.toString()}/${selectedDate.month.toString()}/${selectedDate.year.toString()} ',
-                                    style: TextStyle(color: Colors.blueAccent),
-                                  )
-                                : Text(
-                                    '${date.day.toString()}/${date.month.toString()}/${date.month.toString()} ',
-                                    style: TextStyle(color: Colors.blueAccent),
-                                  )),
-                        Text(' at '),
-                        InkWell(
-                            onTap: () {
-                              _timeDialog(context);
-                            },
-                            child: Text(
-                              '$selectedTime ',
-                              style: TextStyle(color: Colors.blueAccent),
-                            )),
+                              },
+                              child: selectedDate != null
+                                  ? Text(
+                                      '${selectedDate.day.toString()}/${selectedDate.month.toString()}/${selectedDate.year.toString()} ',
+                                      style:
+                                          TextStyle(color: Colors.blueAccent),
+                                    )
+                                  : Text(
+                                      '${date.day.toString()}/${date.month.toString()}/${date.month.toString()} ',
+                                      style:
+                                          TextStyle(color: Colors.blueAccent),
+                                    )),
+                          Text(' at '),
+                          Icon(
+                            Icons.timer,
+                            size: 19,
+                            color: AppColors.secondaryElement,
+                          ),
+                          SizedBox(width: 5),
+                          InkWell(
+                              onTap: () {
+                                _timeDialog(context);
+                              },
+                              child: Text(
+                                '$selectedTime ',
+                                style: TextStyle(color: Colors.blueAccent),
+                              )),
 //                        InkWell(
 //                            onTap: () {
 //                              _locationDialog(context);
 //                            },
 //                            child: Icon(Icons.edit))
-                      ],
+                        ],
+                      ),
                     ),
 
 //                    HeadingRow(
@@ -863,9 +922,9 @@ class _HomeScreenState extends State<HomeScreen> {
           _currentPosition.latitude, _currentPosition.longitude);
 
       Placemark place = p[0];
-
+//      ${place.subLocality},
       setState(() {
-        currentAddress = "${place.subLocality}, ${place.locality}";
+        currentAddress = "${place.subAdministrativeArea}, ${place.locality}";
         print(currentAddress);
         location = currentAddress;
         pass.text = currentAddress;
@@ -921,7 +980,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text(
                     'Change location',
                     style: textTheme.title.copyWith(
-                      fontSize: Sizes.TEXT_SIZE_20,
+                      fontSize: 17,
                     ),
                   ),
                 ),
@@ -943,7 +1002,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 children: <Widget>[
                   AlertDialogButton(
                     buttonText: "Cancel",
-                    width: Sizes.WIDTH_150,
+                    width: MediaQuery.of(context).size.width * 0.38,
                     border: Border(
                       top: BorderSide(
                         width: 1,
@@ -960,7 +1019,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   AlertDialogButton(
                       buttonText: "Change",
-                      width: Sizes.WIDTH_150,
+                      width: MediaQuery.of(context).size.width * 0.38,
                       border: Border(
                         top: BorderSide(
                           width: 1,
@@ -1117,6 +1176,123 @@ class _HomeScreenState extends State<HomeScreen> {
     });
     // Handle the result in your way
     print(location);
+  }
+
+  Widget bill() {
+    return Card(
+      elevation: 5,
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          decoration: BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Order Id- $id1',
+                style: TextStyle(
+                    fontSize: 15,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              Container(
+                color: Colors.black.withOpacity(0.1),
+                height: 1,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Items',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                str,
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Ordered On',
+                style: TextStyle(
+                    fontSize: 13,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                timestamp.toDate().day.toString() +
+                    '-' +
+                    timestamp.toDate().month.toString() +
+                    '-' +
+                    timestamp.toDate().year.toString() +
+                    ' at ' +
+                    timestamp.toDate().hour.toString() +
+                    ':' +
+                    timestamp.toDate().minute.toString(),
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                'Total',
+                style: TextStyle(
+                    fontSize: 14,
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold),
+              ),
+              Text(
+                'Rs. ' + total,
+                style: TextStyle(fontSize: 14),
+              ),
+              SizedBox(
+                height: 3,
+              ),
+              Container(
+                color: Colors.black.withOpacity(0.1),
+                height: 1,
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Text(
+                status,
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  var str = '', timestamp, status, total, id1;
+  fetchOrderDetail(id) {
+    Firestore.instance.collection('Orders').document(id).get().then((value) {
+      setState(() {
+        id1 = id;
+        str = '';
+        for (int it = 0; it < value['Items'].length; it++) {
+          it != value['Items'].length - 1
+              ? str = str + '${value['Qty'][it]} x ${value['Items'][it]}, '
+              : str = str + '${value['Qty'][it]} x ${value['Items'][it]}';
+        }
+        timestamp = value['TimeStamp'];
+        status = value["Status"];
+        total = value["GrandTotal"];
+      });
+    });
   }
 }
 
