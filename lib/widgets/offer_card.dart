@@ -165,7 +165,7 @@ class OfferCardApply extends StatelessWidget {
     // this.distance,
     this.details,
     this.width = 340.0,
-    this.cardHeight = 240.0,
+    this.cardHeight = 150,
     this.imageHeight = 190.0,
     this.tagRadius = 8.0,
     this.onTap,
@@ -181,7 +181,7 @@ class OfferCardApply extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: width,
-      height: cardHeight,
+      height: 150,
       child: Card(
         elevation: cardElevation,
         shape: RoundedRectangleBorder(
@@ -197,13 +197,13 @@ class OfferCardApply extends StatelessWidget {
                     child: Image.network(
                       imagePath,
                       width: MediaQuery.of(context).size.width,
-                      height: imageHeight,
+                      height: 190,
                       fit: BoxFit.cover,
                     ),
                   ),
                   Container(
                     margin: EdgeInsets.symmetric(
-                      horizontal: Sizes.MARGIN_16,
+                      horizontal: 10,
                       vertical: Sizes.MARGIN_16,
                     ),
                     child: Row(
@@ -222,7 +222,7 @@ class OfferCardApply extends StatelessWidget {
                                         style: Styles.customTitleTextStyle(
                                           color: AppColors.headingText,
                                           fontWeight: FontWeight.w600,
-                                          fontSize: Sizes.TEXT_SIZE_20,
+                                          fontSize: 18,
                                         ),
                                       ),
                                     )),
@@ -241,7 +241,6 @@ class OfferCardApply extends StatelessWidget {
                                 // ),
                               ],
                             ),
-                            SizedBox(height: 12.0),
                             Row(
                               children: <Widget>[
                                 Align(
@@ -253,7 +252,7 @@ class OfferCardApply extends StatelessWidget {
                                       textAlign: TextAlign.left,
                                       style: Styles.customNormalTextStyle(
                                         color: AppColors.accentText,
-                                        fontSize: Sizes.TEXT_SIZE_14,
+                                        fontSize: 12,
                                       ),
                                     ),
                                   ),
@@ -268,7 +267,7 @@ class OfferCardApply extends StatelessWidget {
                             'Apply',
                             style: TextStyle(
                                 color: Colors.blue,
-                                fontSize: 23,
+                                fontSize: 18,
                                 fontWeight: FontWeight.bold),
                           ),
                         )
