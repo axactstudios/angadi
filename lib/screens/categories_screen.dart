@@ -13,6 +13,8 @@ import 'category_detail_screen.dart';
 
 class CategoriesScreen extends StatefulWidget {
   static const int TAB_NO = 1;
+  String sCat;
+  CategoriesScreen(this.sCat);
   @override
   _CategoriesScreenState createState() => _CategoriesScreenState();
 }
@@ -24,7 +26,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
     var textTheme = Theme.of(context).textTheme;
     return Scaffold(
       floatingActionButton: CustomFloatingButton(CurrentScreen(
-          tab_no: CategoriesScreen.TAB_NO, currentScreen: CategoriesScreen())),
+          tab_no: CategoriesScreen.TAB_NO,
+          currentScreen: CategoriesScreen('Both'))),
       appBar: AppBar(
         elevation: 0.0,
 //        leading: InkWell(
@@ -63,69 +66,90 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 categoriesTop.clear();
 
                 for (int i = 0; i < snap.data.documents.length; i++) {
-                  categoriesTop.add(Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8.0),
-                    child: Column(
-                      children: [
-                        Container(
-                          child: FoodyBiteCategoryCard(
-                            onTap: () {
-                              print('L');
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                return CategoryDetailScreen(
-                                  categoryName: snap.data.documents[i]
-                                      ['catName'],
-                                  imagePath: snap.data.documents[i]['imageURL'],
-                                  selectedCategory: i,
-                                  numberOfCategories: categoriesTop.length,
-                                  gradient: gradients[i],
-                                );
-                              }));
-                            },
-                            width: MediaQuery.of(context).size.width,
-                            imagePath: snap.data.documents[i]['imageURL'],
-                            gradient: gradients[i],
-                            category: snap.data.documents[i]['catName'],
-                            hasHandle: true,
-                            opacity: 0.85,
-                            categoryTextStyle: textTheme.title.copyWith(
-                              color: AppColors.primaryColor,
-                              fontSize: Sizes.TEXT_SIZE_22,
+                  if (widget.sCat == 'Food' || widget.sCat == 'Grocery') {
+                    if (snap.data.documents[i]['catName'] == widget.sCat) {
+                      categoriesTop.add(Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Column(
+                          children: [
+                            Container(
+                              child: FoodyBiteCategoryCard(
+                                onTap: () {
+                                  print('L');
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                    return CategoryDetailScreen(
+                                      categoryName: snap.data.documents[i]
+                                          ['catName'],
+                                      imagePath: snap.data.documents[i]
+                                          ['imageURL'],
+                                      selectedCategory: i,
+                                      numberOfCategories: categoriesTop.length,
+                                      gradient: gradients[i], sCat: widget.sCat,
+                                    );
+                                  }));
+                                },
+                                width: MediaQuery.of(context).size.width,
+                                imagePath: snap.data.documents[i]['imageURL'],
+                                gradient: gradients[i],
+                                category: snap.data.documents[i]['catName'],
+                                hasHandle: true,
+                                opacity: 0.7,
+                                categoryTextStyle: textTheme.title.copyWith(
+                                  color: AppColors.primaryColor,
+                                  fontSize: Sizes.TEXT_SIZE_22,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 12,
+                            )
+                          ],
+                        ),
+                      ));
+                    }
+                  } else {
+                    categoriesTop.add(Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Column(
+                        children: [
+                          Container(
+                            child: FoodyBiteCategoryCard(
+                              onTap: () {
+                                print('L');
+                                Navigator.push(context, MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                                  return CategoryDetailScreen(
+                                    categoryName: snap.data.documents[i]
+                                        ['catName'],
+                                    imagePath: snap.data.documents[i]
+                                        ['imageURL'],
+                                    selectedCategory: i,
+                                    numberOfCategories: categoriesTop.length,
+                                    gradient: gradients[i],
+                                    sCat: widget.sCat,
+                                  );
+                                }));
+                              },
+                              width: MediaQuery.of(context).size.width,
+                              imagePath: snap.data.documents[i]['imageURL'],
+                              gradient: gradients[i],
+                              category: snap.data.documents[i]['catName'],
+                              hasHandle: true,
+                              opacity: 0.7,
+                              categoryTextStyle: textTheme.title.copyWith(
+                                color: AppColors.primaryColor,
+                                fontSize: Sizes.TEXT_SIZE_22,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(
-                          height: 12,
-                        )
-                      ],
-                    ),
-
-//    FoodyBiteCategoryCard(
-//    imagePath: snap.data.documents[i]
-//    ['imageURL'],
-//    gradient: gradients[i],
-//    category: snap.data.documents[i]['catName'],
-//    onTap: () {
-//    print(
-//    '---------==========${snap.data.documents[i]['imageURL']}');
-//    R.Router.navigator.pushNamed(
-//    R.Router.categoryDetailScreen,
-//    arguments:
-//    CategoryDetailScreenArguments(
-//    categoryName: snap.data.documents[i]
-//    ['catName'],
-//    imagePath: snap.data.documents[i]
-//    ['imageURL'],
-//    selectedCategory: i,
-//    numberOfCategories:
-//    snap.data.documents.length,
-//    gradient: gradients[i],
-//    ),
-//    );
-//    },
-//    ),
-                  ));
+                          SizedBox(
+                            height: 12,
+                          )
+                        ],
+                      ),
+                    ));
+                  }
                 }
               }
               return categoriesTop.length != 0

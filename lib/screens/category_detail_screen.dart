@@ -25,9 +25,10 @@ class CategoryDetailScreen extends StatefulWidget {
     @required this.numberOfCategories,
     @required this.selectedCategory,
     @required this.gradient,
+    @required this.sCat,
   });
 
-  final String categoryName;
+  final String categoryName;final String sCat;
   final int numberOfCategories;
   final int selectedCategory;
   final String imagePath;

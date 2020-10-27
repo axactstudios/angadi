@@ -193,7 +193,7 @@ class Router {
         );
       case Router.categoriesScreen:
         return CupertinoPageRoute<dynamic>(
-          builder: (_) => CategoriesScreen(),
+          builder: (_) => CategoriesScreen('Both'),
           settings: settings,
         );
       case Router.categoryDetailScreen:

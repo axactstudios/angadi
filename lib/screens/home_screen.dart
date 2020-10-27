@@ -112,12 +112,16 @@ class _HomeScreenState extends State<HomeScreen> {
       floatingActionButton: CustomFloatingButton(CurrentScreen(
           currentScreen: HomeScreen(), tab_no: HomeScreen.TAB_NO)),
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: AppColors.secondaryElement,
         actions: [
           InkWell(
               onTap: () {
                 launch('tel:+919027553376');
               },
-              child: Icon(Icons.phone)),
+              child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
             width: 8,
           ),
@@ -127,7 +131,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 launch(
                     'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
               },
-              child: Icon(Icons.person)),
+              child: Icon(Icons.mail, color: Color(0xFF6b3600))),
           SizedBox(
             width: 14,
           )
@@ -137,7 +141,7 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text(
           'Angadi.ae',
           style: Styles.customTitleTextStyle(
-            color: AppColors.headingText,
+            color: Color(0xFF6b3600),
             fontWeight: FontWeight.w600,
             fontSize: Sizes.TEXT_SIZE_22,
           ),
@@ -304,120 +308,99 @@ class _HomeScreenState extends State<HomeScreen> {
                               return status != null
                                   ? showStatus
                                       ? Container(
-//                                  color: Colors.red.withOpacity(0.8),
-                                          child: Stack(children: [
-                                          Positioned(
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              child: Image.network(
-                                                'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FDosa%20Batter%2F1-3.JPG?alt=media&token=c44f9c9e-4b1a-49b0-b555-00fed6042384',
-                                                width: double.infinity,
-                                                height: 100,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            child: Opacity(
-                                              opacity: 0.65,
-                                              child: Container(
-                                                height: 100,
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
-                                                  gradient: gradients[0],
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          Positioned(
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              child: Container(
-                                                height: 100,
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Column(
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Spacer(),
-                                                        Text(
-                                                            '$status for your order',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .white)),
-                                                        Text('ID - $orderID',
-                                                            style: TextStyle(
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .white)),
-                                                        InkWell(
-                                                          onTap: () {
-                                                            pushNewScreen(
-                                                                context,
-                                                                screen:
-                                                                    OrderPlaced(
-                                                                        bill(),
-                                                                        orderID));
-                                                          },
-                                                          child: Container(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.4,
-                                                              child: Text(
-                                                                  'Click to view details',
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  style: TextStyle(
-                                                                      decoration:
-                                                                          TextDecoration
-                                                                              .underline,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .bold,
-                                                                      color: Colors
-                                                                          .blueAccent))),
-                                                        ),
-                                                        Spacer(),
-                                                      ],
-                                                    ),
-                                                    Spacer(),
-                                                    InkWell(
-                                                      onTap: () {
-                                                        showStatus = false;
-                                                      },
-                                                      child: Icon(
-                                                        Icons.clear,
-                                                        color: Colors.black,
-                                                        size: 30,
+                                          decoration: BoxDecoration(
+                                              color: AppColors.secondaryElement,
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5))),
+                                          child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Container(
+                                              height: 70,
+                                              child: Row(
+//                                                crossAxisAlignment:
+//                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Spacer(),
+                                                      Text('$status!',
+                                                          style: TextStyle(
+                                                              fontSize: 18,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                              color: Colors
+                                                                  .white)),
+                                                      SizedBox(
+                                                        width: 20,
                                                       ),
+                                                      Row(
+                                                        children: [
+                                                          Text('ID: $orderID',
+                                                              style: TextStyle(
+                                                                  fontSize: 13,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .white)),
+                                                          SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          InkWell(
+                                                            onTap: () {
+                                                              pushNewScreen(
+                                                                  context,
+                                                                  screen: OrderPlaced(
+                                                                      bill(),
+                                                                      orderID));
+                                                            },
+                                                            child: Text(
+                                                                'View Details',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style: TextStyle(
+                                                                    decoration:
+                                                                        TextDecoration
+                                                                            .underline,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                    color: Color(
+                                                                        0xFF6b3600))),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Spacer(),
+                                                    ],
+                                                  ),
+                                                  Spacer(),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      showStatus = false;
+                                                    },
+                                                    child: Icon(
+                                                      Icons.cancel,
+                                                      color: Color(0xFF6b3600),
+                                                      size: 30,
                                                     ),
-                                                    Spacer(),
-                                                  ],
-                                                ),
+                                                  ),
+                                                  Spacer(),
+                                                ],
                                               ),
                                             ),
-                                          ),
-                                        ]))
+                                          ))
                                       : Container()
                                   : Container();
                             })
                         : Container(),
+                    SizedBox(
+                      height: 2,
+                    ),
                     FoodyBiteSearchInputField(
                       Icons.search,
                       controller: controller,
@@ -499,12 +482,12 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: selectedDate != null
                                   ? Text(
-                                      '${selectedDate.day.toString()}/${selectedDate.month.toString()}/${selectedDate.year.toString()} ',
+                                      '${selectedDate.day.toString()}/${selectedDate.month.toString()}/20 ',
                                       style:
                                           TextStyle(color: Colors.blueAccent),
                                     )
                                   : Text(
-                                      '${date.day.toString()}/${date.month.toString()}/${date.month.toString()} ',
+                                      '${date.day.toString()}/${date.month.toString()}/20 ',
                                       style:
                                           TextStyle(color: Colors.blueAccent),
                                     )),
@@ -622,10 +605,48 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 16.0),
                     HeadingRow(
                       title: StringConst.CATEGORY,
+                      number: '',
+                      onTapOfNumber: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return CategoriesScreen('Both');
+                      })),
+                    ),
+                    SizedBox(height: 16.0),
+                    Row(
+                      children: [
+                        FoodyBiteCategoryCard(
+                          imagePath:
+                              'https://drive.google.com/file/d/1_sUiRTwJS7Zb_f5IPtmLNBAc0NlpP5If/view?usp=sharing',
+                          category: 'Food Items',
+                          gradient: gradients[2],
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return CategoriesScreen('Food');
+                            }));
+                          },
+                        ),
+                        FoodyBiteCategoryCard(
+                          imagePath:
+                              'https://drive.google.com/file/d/1PsheNSOF6UO20k6t3XZE3TGGvA4SB4w-/view?usp=sharing',
+                          category: 'Grocery Items',
+                          gradient: gradients[2],
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return CategoriesScreen('Grocery');
+                            }));
+                          },
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 16.0),
+                    HeadingRow(
+                      title: 'Shop Food Items',
                       number: 'All Categories ',
                       onTapOfNumber: () => Navigator.push(context,
                           MaterialPageRoute(builder: (BuildContext context) {
-                        return CategoriesScreen();
+                        return CategoriesScreen('Food');
                       })),
                     ),
                     SizedBox(height: 16.0),

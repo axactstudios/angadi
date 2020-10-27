@@ -285,7 +285,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.49,
+                      width: MediaQuery.of(context).size.width * 0.47,
                       child: Text(
                         widget.cardTitle,
                         textAlign: TextAlign.left,

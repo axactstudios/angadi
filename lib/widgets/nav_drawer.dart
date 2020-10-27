@@ -22,6 +22,8 @@ import '../screens/login_screen.dart';
 import '../screens/profile_screen.dart';
 import '../screens/settings_screen.dart';
 
+//            ao@oswalconsultants.com
+
 class CustomDrawer extends StatefulWidget {
   @override
   _CustomDrawerState createState() => _CustomDrawerState();
@@ -420,7 +422,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ),
             onTap: () {
-              pushNewScreen(context, screen: CategoriesScreen());
+              pushNewScreen(context, screen: CategoriesScreen('Both'));
             },
           ),
           Container(

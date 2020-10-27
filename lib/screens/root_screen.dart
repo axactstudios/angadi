@@ -87,6 +87,8 @@ class _RootScreenState extends State<RootScreen>
   @override
   Widget build(BuildContext context) {
     return PersistentTabView(
+      backgroundColor: AppColors.secondaryElement,
+
       controller: _controllerTab,
       items: navBarItems,
       screens: _buildScreens(),
@@ -106,7 +108,7 @@ class _RootScreenState extends State<RootScreen>
   List<Widget> _buildScreens() {
     return [
       HomeScreen(),
-      CategoriesScreen(),
+      CategoriesScreen('Both'),
       SearchScreen(),
       NotificationsScreen(),
       ProfileScreen(),
