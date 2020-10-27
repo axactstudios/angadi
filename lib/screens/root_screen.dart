@@ -1,3 +1,4 @@
+import 'package:angadi/screens/filtered_search.dart';
 import 'package:angadi/screens/search_results.dart';
 import 'package:angadi/widgets/navbar_items.dart';
 import 'package:flutter/material.dart';
@@ -110,7 +111,7 @@ class _RootScreenState extends State<RootScreen>
     return [
       HomeScreen(),
       MainCategoriesScreen(),
-      SearchScreen(),
+      FilteredSearch(),
       NotificationsScreen(),
       ProfileScreen(),
     ];

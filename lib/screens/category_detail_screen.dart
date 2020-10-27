@@ -15,6 +15,7 @@ import '../classes/cart.dart';
 import '../routes/router.dart';
 import '../routes/router.gr.dart';
 import '../services/database_helper.dart';
+import 'filtered_search.dart';
 import 'restaurant_details_screen.dart';
 import 'search_results.dart';
 
@@ -28,7 +29,8 @@ class CategoryDetailScreen extends StatefulWidget {
     @required this.sCat,
   });
 
-  final String categoryName;final String sCat;
+  final String categoryName;
+  final String sCat;
   final int numberOfCategories;
   final int selectedCategory;
   final String imagePath;
@@ -152,7 +154,12 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                 pushNewScreen(context,
                     screen: SearchScreen(), withNavBar: true);
               },
-              child: Icon(Icons.search)),
+              child: InkWell(
+                  onTap: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return FilteredSearch();
+                      })),
+                  child: Icon(Icons.search))),
           SizedBox(
             width: 14,
           )

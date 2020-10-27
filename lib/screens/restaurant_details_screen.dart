@@ -249,8 +249,14 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     qty = await getQuantity(widget.restaurantDetail.name, '500 ML');
   }
 
+  String urlUniv;
+  String url2 =
+          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FBajji%20Bonda%20Butter%2F1-2.JPG?alt=media&token=1363302b-3013-4cd4-aebf-d2f04c25a764',
+      url3 =
+          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FBajji%20Bonda%20Butter%2F1-2.JPG?alt=media&token=1363302b-3013-4cd4-aebf-d2f04c25a764';
   @override
   void initState() {
+    urlUniv = widget.restaurantDetail.url;
     choice = 0;
     first();
     checkInCart('500 ML');
@@ -269,6 +275,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     return Scaffold(
       appBar: AppBar(
         elevation: 0.0,
+        title: Text(widget.restaurantDetail.category,
+            style: TextStyle(fontSize: 20)),
+        centerTitle: true,
         leading: InkWell(
             onTap: () => Navigator.pop(context),
             child: Icon(Icons.arrow_back_ios)),
@@ -346,6 +355,18 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
             similarProducts.clear();
 
             for (int i = 0; i < snap.data.documents.length; i++) {
+              if (snap.data.documents[i]['name'] ==
+                  widget.restaurantDetail.name) {
+                if (snap.data.documents[i]['url2'] != null) {
+                  url2 = snap.data.documents[i]['url2'];
+                  url3 = snap.data.documents[i]['url3'];
+                } else {
+                  url2 =
+                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FBajji%20Bonda%20Butter%2F1-2.JPG?alt=media&token=1363302b-3013-4cd4-aebf-d2f04c25a764';
+                  url3 =
+                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FBajji%20Bonda%20Butter%2F1-2.JPG?alt=media&token=1363302b-3013-4cd4-aebf-d2f04c25a764';
+                }
+              }
               if (snap.data.documents[i]['category'] ==
                   widget.restaurantDetail.category) {
                 dishesBought.add(Container(
@@ -423,27 +444,27 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               style: addressTextStyle,
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 3, 8, 2),
-                            child: Text(
-                              'Rs. ${widget.restaurantDetail.price}',
-                              style: Styles.customMediumTextStyle(
-                                color: AppColors.headingText,
-                                // fontWeight: FontWeight.w600,
-                                fontSize: 15,
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
-                            child: Text(
-                              '(Inclusive of all taxes)',
-                              style: TextStyle(
-                                color: AppColors.accentText,
-                                fontSize: 10,
-                              ),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.fromLTRB(8.0, 3, 8, 2),
+                          //   child: Text(
+                          //     'Rs. ${widget.restaurantDetail.price}',
+                          //     style: Styles.customMediumTextStyle(
+                          //       color: AppColors.headingText,
+                          //       // fontWeight: FontWeight.w600,
+                          //       fontSize: 15,
+                          //     ),
+                          //   ),
+                          // ),
+                          // Padding(
+                          //   padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
+                          //   child: Text(
+                          //     '(Inclusive of all taxes)',
+                          //     style: TextStyle(
+                          //       color: AppColors.accentText,
+                          //       fontSize: 10,
+                          //     ),
+                          //   ),
+                          // ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(8.0, 3, 8, 10),
                             child: Row(
@@ -477,7 +498,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             children: <Widget>[
                               Positioned(
                                 child: Image.network(
-                                  widget.restaurantDetail.url,
+                                  urlUniv,
                                   width: MediaQuery.of(context).size.width,
                                   height: heightOfStack,
                                   fit: BoxFit.cover,
@@ -590,6 +611,76 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                           ),
 //                         )
                             ],
+                          ),
+                          Container(
+                            height: 100,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    flex: 1,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          urlUniv = widget.restaurantDetail.url;
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Image.network(
+                                            widget.restaurantDetail.url),
+                                      ),
+                                    )),
+                                Expanded(
+                                    flex: 1,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          urlUniv = url2;
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Image.network(url2),
+                                      ),
+                                    )),
+                                Expanded(
+                                    flex: 1,
+                                    child: InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          urlUniv = url3;
+                                        });
+                                      },
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(4.0),
+                                        child: Image.network(url3),
+                                      ),
+                                    )),
+                                Expanded(
+                                    flex: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 8.0),
+                                      child: Container(
+                                          decoration: BoxDecoration(
+                                              color: Color.fromRGBO(
+                                                  255, 176, 0, 0.7),
+                                              borderRadius: BorderRadius.only(
+                                                  topLeft: Radius.circular(10),
+                                                  bottomLeft:
+                                                      Radius.circular(10))),
+                                          child: Center(
+                                              child: Text(
+                                            'AED ${widget.restaurantDetail.price}',
+                                            style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 25,
+                                                color: Color.fromRGBO(
+                                                    101, 54, 7, 1)),
+                                          ))),
+                                    )),
+                              ],
+                            ),
                           ),
                           Container(
                             height: 5,
@@ -854,41 +945,48 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: Container(
-                              height: 180,
+                              height: 405,
                               child: dishesLike.length != 0
-                                  ? ListView(
+                                  ? GridView(
                                       scrollDirection: Axis.horizontal,
+                                      shrinkWrap: true,
+                                      gridDelegate:
+                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 2,
+                                              crossAxisSpacing: 5.0,
+                                              mainAxisSpacing: 5.0,
+                                              childAspectRatio: 0.59),
                                       children: dishesLike,
                                     )
                                   : Container(),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: HeadingRow(
-                              title: 'People Also Bought',
-                              number: '',
-                              // onTapOfNumber: () {
-                              //   Navigator.push(context,
-                              //       MaterialPageRoute(builder: (BuildContext context) {
-                              //         return TrendingRestaurantsScreen1("top");
-                              //       }));
-                              // },
-                            ),
-                          ),
-
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 180,
-                              child: dishesLike.length != 0
-                                  ? ListView(
-                                      scrollDirection: Axis.horizontal,
-                                      children: dishesBought,
-                                    )
-                                  : Container(),
-                            ),
-                          ),
+                          // Padding(
+                          //   padding: const EdgeInsets.all(8.0),
+                          //   child: HeadingRow(
+                          //     title: 'People Also Bought',
+                          //     number: '',
+                          //     // onTapOfNumber: () {
+                          //     //   Navigator.push(context,
+                          //     //       MaterialPageRoute(builder: (BuildContext context) {
+                          //     //         return TrendingRestaurantsScreen1("top");
+                          //     //       }));
+                          //     // },
+                          //   ),
+                          // ),
+                          //
+                          // Padding(
+                          //   padding: const EdgeInsets.all(8.0),
+                          //   child: Container(
+                          //     height: 180,
+                          //     child: dishesLike.length != 0
+                          //         ? ListView(
+                          //             scrollDirection: Axis.horizontal,
+                          //             children: dishesBought,
+                          //           )
+                          //         : Container(),
+                          //   ),
+                          // ),
                         ],
                       ),
                     ),

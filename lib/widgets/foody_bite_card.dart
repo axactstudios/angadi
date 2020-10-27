@@ -223,59 +223,60 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
           ),
           child: Row(
             children: <Widget>[
-              Stack(children: [
-                Positioned(
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(4),
-                    child: Image.network(
-                      widget.imagePath,
-                      width: MediaQuery.of(context).size.width * 0.35,
-                      height: 180,
-                      fit: BoxFit.cover,
+              Expanded(
+                child: Stack(children: [
+                  Positioned(
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(4),
+                      child: Image.network(
+                        widget.imagePath,
+                        height: 180,
+                        fit: BoxFit.cover,
+                      ),
                     ),
                   ),
-                ),
-                Positioned(
-                  right: 2,
-                  // right: 16.0,
-                  top: 2,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: <Widget>[
-                      widget.isThereRatings
-                          ? Card(
-                              elevation: widget.ratingsAndStatusCardElevation,
-                              child: Container(
-                                padding: EdgeInsets.symmetric(
-                                  horizontal: 4,
-                                  vertical: 2,
-                                ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: <Widget>[
+                  Positioned(
+                    right: 2,
+                    // right: 16.0,
+                    top: 2,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: <Widget>[
+                        widget.isThereRatings
+                            ? Card(
+                                elevation: widget.ratingsAndStatusCardElevation,
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 4,
+                                    vertical: 2,
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    children: <Widget>[
 //                                  Image.asset(
 //                                    ImagePath.starIcon,
 //                                    height: Sizes.WIDTH_14,
 //                                    width: Sizes.WIDTH_14,
 //                                  ),
 
-                                    Text(
-                                      ('${((int.parse(widget.iPrice) - int.parse(widget.price)) / int.parse(widget.iPrice) * 100).toStringAsFixed(0)} % off'),
-                                      style: Styles.customTitleTextStyle(
-                                        color: Colors.deepOrangeAccent,
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14,
+                                      Text(
+                                        ('${((int.parse(widget.iPrice) - int.parse(widget.price)) / int.parse(widget.iPrice) * 100).toStringAsFixed(0)} % off'),
+                                        style: Styles.customTitleTextStyle(
+                                          color: Colors.deepOrangeAccent,
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            )
-                          : Container(),
-                    ],
+                              )
+                            : Container(),
+                      ],
+                    ),
                   ),
-                ),
-              ]),
+                ]),
+              ),
               Container(
                 margin: EdgeInsets.symmetric(
                   horizontal: 8,
@@ -285,7 +286,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
                     Container(
-                      width: MediaQuery.of(context).size.width * 0.47,
+                      width: MediaQuery.of(context).size.width * 0.4,
                       child: Text(
                         widget.cardTitle,
                         textAlign: TextAlign.left,
@@ -375,7 +376,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       children: [
                         Container(
                           child: Text(
-                            'Rs. ${(int.parse(widget.price) * factor).toString()}',
+                            'Rs. ${(int.parse(widget.price) * factor).toString()}  ',
                             textAlign: TextAlign.left,
                             style: Styles.customMediumTextStyle(
                               color: AppColors.black,
