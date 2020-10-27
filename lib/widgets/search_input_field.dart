@@ -55,54 +55,69 @@ class FoodyBiteSearchInputField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: TextFormField(
-        controller: controller,
-        style: textFormFieldStyle,
-        decoration: InputDecoration(
-          enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: borderColor, width: borderWidth),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: borderColor, width: borderWidth),
-          ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(borderRadius),
-            borderSide: BorderSide(
-              color: borderColor,
-              width: borderWidth,
-              style: borderStyle,
+      width: MediaQuery.of(context).size.width * 0.8,
+      height: 70,
+      child: Row(
+        children: [
+          Container(
+            width: MediaQuery.of(context).size.width * 0.7,
+            height: 70,
+            child: InkWell(
+              onTap: onTapOfLeadingIcon,
+              child: TextFormField(
+                controller: controller,
+                enabled: false,
+                style: textFormFieldStyle,
+                decoration: InputDecoration(
+                  enabledBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: borderColor, width: borderWidth),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide:
+                        BorderSide(color: borderColor, width: borderWidth),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(borderRadius),
+                    borderSide: BorderSide(
+                      color: borderColor,
+                      width: borderWidth,
+                      style: borderStyle,
+                    ),
+                  ),
+                  prefixIcon: InkWell(
+                    onTap: onTapOfLeadingIcon,
+                    child: prefixIcon ?? defaultPrefixIcon(),
+                  ),
+                  contentPadding: EdgeInsets.symmetric(
+                    horizontal: contentPaddingHorizontal,
+                    vertical: contentPaddingVertical,
+                  ),
+                  hintText: hintText,
+                  hintStyle: hintTextStyle,
+                  filled: filled,
+                  fillColor: fillColor,
+                ),
+                obscureText: obscured,
+                onChanged: onChanged,
+              ),
             ),
           ),
-          prefixIcon: InkWell(
-            onTap: onTapOfLeadingIcon,
-            child: prefixIcon ?? defaultPrefixIcon(),
-          ),
-          suffixIcon: hasSuffixIcon
-              ? InkWell(
-                  onTap: onTapOfSuffixIcon,
-                  child: suffixIcon ?? defaultSuffixIcon(),
-                )
-              : null,
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: contentPaddingHorizontal,
-            vertical: contentPaddingVertical,
-          ),
-          hintText: hintText,
-          hintStyle: hintTextStyle,
-          filled: filled,
-          fillColor: fillColor,
-        ),
-        obscureText: obscured,
-        onChanged: onChanged,
+          Container(
+            width: 40,
+            height: 70,
+            child: InkWell(
+              onTap: onTapOfSuffixIcon,
+              child: suffixIcon,
+            ),
+          )
+        ],
       ),
     );
   }
 
   Widget defaultSuffixIcon() {
-    return Icon(
-      suffixIconImagePath,
-      color: suffixIconColor,
-    );
+    return Icon(suffixIconImagePath, color: suffixIconColor);
   }
 
   Widget defaultPrefixIcon() {

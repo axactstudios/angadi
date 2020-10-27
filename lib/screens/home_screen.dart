@@ -1,5 +1,6 @@
 import 'package:angadi/classes/dish.dart';
 import 'package:angadi/classes/offer.dart';
+import 'package:angadi/screens/filtered_search.dart';
 import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/screens/trending_restaurant_screen.dart';
 import 'package:angadi/widgets/custom_floating_button.dart';
@@ -71,6 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    addDishParams();
     getUser();
     getBanners();
     date = DateTime.now();
@@ -412,12 +414,16 @@ class _HomeScreenState extends State<HomeScreen> {
                           color: AppColors.accentText),
                       suffixIconImagePath: Icons.sort,
                       borderWidth: 0.0,
-                      onTapOfLeadingIcon: () => R.Router.navigator.pushNamed(
-                        R.Router.searchResultsScreen,
-                        arguments: SearchValue(
-                          controller.text,
-                        ),
-                      ),
+                      onTapOfLeadingIcon: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return FilteredSearch();
+                      })),
+                      // onTapOfLeadingIcon: () => R.Router.navigator.pushNamed(
+                      //   R.Router.searchResultsScreen,
+                      //   arguments: SearchValue(
+                      //     controller.text,
+                      //   ),
+                      // ),
                       onTapOfSuffixIcon: () => Navigator.push(context,
                           MaterialPageRoute(builder: (BuildContext context) {
                         return FilterScreen();
@@ -1372,6 +1378,30 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  addDishParams() {
+    Firestore.instance.collection('Dishes').getDocuments().then((value) {
+      value.documents.forEach((element) {
+        Firestore.instance
+            .collection('Dishes')
+            .document(element.documentID)
+            .updateData({
+          'nameSearch': setSearchParam(element['name']),
+          'categorySearch': setSearchParam(element['category']),
+        });
+      });
+    });
+  }
+
+  setSearchParam(String caseString) {
+    List<String> caseSearchList = List();
+    String temp = "";
+    for (int i = 0; i < caseString.length; i++) {
+      temp = temp + caseString[i];
+      caseSearchList.add(temp);
+    }
+    return caseSearchList;
   }
 
   var str = '', timestamp, status, total, id1;
