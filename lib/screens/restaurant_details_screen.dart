@@ -256,7 +256,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
           'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FBajji%20Bonda%20Butter%2F1-2.JPG?alt=media&token=1363302b-3013-4cd4-aebf-d2f04c25a764';
   @override
   void initState() {
-    urlUniv = widget.restaurantDetail.url;
+    setState(() {
+      urlUniv = widget.restaurantDetail.url;
+    });
+
     choice = 0;
     first();
     checkInCart('500 ML');
@@ -626,8 +629,23 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
-                                        child: Image.network(
-                                            widget.restaurantDetail.url),
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5)),
+                                              border: Border.all(
+                                                width: 2,
+                                                color: urlUniv !=
+                                                        widget.restaurantDetail
+                                                            .url
+                                                    ? Color.fromRGBO(
+                                                        255, 176, 0, 0.7)
+                                                    : Color.fromRGBO(
+                                                        101, 54, 7, 1),
+                                              )),
+                                          child: Image.network(
+                                              widget.restaurantDetail.url),
+                                        ),
                                       ),
                                     )),
                                 Expanded(
@@ -640,7 +658,19 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
-                                        child: Image.network(url2),
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(5)),
+                                                border: Border.all(
+                                                  width: 2,
+                                                  color: urlUniv != url2
+                                                      ? Color.fromRGBO(
+                                                          255, 176, 0, 0.7)
+                                                      : Color.fromRGBO(
+                                                          101, 54, 7, 1),
+                                                )),
+                                            child: Image.network(url2)),
                                       ),
                                     )),
                                 Expanded(
@@ -653,7 +683,19 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       },
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
-                                        child: Image.network(url3),
+                                        child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(5)),
+                                                border: Border.all(
+                                                  width: 2,
+                                                  color: urlUniv != url3
+                                                      ? Color.fromRGBO(
+                                                          255, 176, 0, 0.7)
+                                                      : Color.fromRGBO(
+                                                          101, 54, 7, 1),
+                                                )),
+                                            child: Image.network(url3)),
                                       ),
                                     )),
                                 Expanded(
@@ -663,20 +705,41 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                           vertical: 8.0),
                                       child: Container(
                                           decoration: BoxDecoration(
-                                              color: Color.fromRGBO(
-                                                  255, 176, 0, 0.7),
+                                              border: Border.all(
+                                                width: 2,
+                                                color:
+                                                    AppColors.secondaryElement,
+                                              ),
                                               borderRadius: BorderRadius.only(
                                                   topLeft: Radius.circular(10),
                                                   bottomLeft:
                                                       Radius.circular(10))),
                                           child: Center(
-                                              child: Text(
-                                            'AED ${widget.restaurantDetail.price}',
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 25,
-                                                color: Color.fromRGBO(
-                                                    101, 54, 7, 1)),
+                                              child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'Rs. ${widget.restaurantDetail.price}',
+                                                textAlign: TextAlign.left,
+                                                style: Styles
+                                                    .customMediumTextStyle(
+                                                  color: AppColors.headingText,
+                                                  // fontWeight: FontWeight.w600,
+                                                  fontSize: Sizes.TEXT_SIZE_20,
+                                                ),
+                                              ),
+                                              Text(
+                                                '(500 ML)',
+                                                textAlign: TextAlign.left,
+                                                style: Styles
+                                                    .customMediumTextStyle(
+                                                  color: AppColors.headingText,
+                                                  // fontWeight: FontWeight.w600,
+                                                  fontSize: Sizes.TEXT_SIZE_20,
+                                                ),
+                                              ),
+                                            ],
                                           ))),
                                     )),
                               ],
