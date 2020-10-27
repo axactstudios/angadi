@@ -56,6 +56,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> special = new List();
   List<Widget> top = new List();
   List<Widget> categories = new List();
+  List<Widget> categoriesGrocery = new List();
   List<Widget> categoriesTop = new List();
   var location = 'Dubai';
   var deliveryDate = '23 October';
@@ -444,18 +445,19 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             InkWell(
                                 onTap: () {
-                                  _locationDialog(context);
+//                                  _locationDialog(context);
+                                  showPlacePicker();
 
 //
                                 },
                                 child: Icon(Icons.edit, color: Colors.white)),
-                            InkWell(
-                                onTap: () {
-                                  showPlacePicker();
-
-//                              _locationDialog(context);
-                                },
-                                child: Icon(Icons.map, color: Colors.white))
+//                            InkWell(
+//                                onTap: () {
+//                                  showPlacePicker();
+//
+////                              _locationDialog(context);
+//                                },
+//                                child: Icon(Icons.map, color: Colors.white))
                           ],
                         ),
                       ),
@@ -484,12 +486,12 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ? Text(
                                       '${selectedDate.day.toString()}/${selectedDate.month.toString()}/20 ',
                                       style:
-                                          TextStyle(color: Colors.blueAccent),
+                                          TextStyle(color: Color(0xFF6b3600)),
                                     )
                                   : Text(
                                       '${date.day.toString()}/${date.month.toString()}/20 ',
                                       style:
-                                          TextStyle(color: Colors.blueAccent),
+                                          TextStyle(color: Color(0xFF6b3600)),
                                     )),
                           Text(' at '),
                           Icon(
@@ -504,7 +506,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               },
                               child: Text(
                                 '$selectedTime ',
-                                style: TextStyle(color: Colors.blueAccent),
+                                style: TextStyle(color: Color(0xFF6b3600)),
                               )),
 //                        InkWell(
 //                            onTap: () {
@@ -545,7 +547,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
 
                             return Container(
-                              height: 220,
+                              height: 190,
                               width: MediaQuery.of(context).size.width,
                               child: GFCarousel(
                                 items: imageList.map(
@@ -602,7 +604,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             return Container();
                           }
                         }),
-                    SizedBox(height: 16.0),
+                    SizedBox(height: 0.0),
                     HeadingRow(
                       title: StringConst.CATEGORY,
                       number: '',
@@ -615,8 +617,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         FoodyBiteCategoryCard(
+                          width: MediaQuery.of(context).size.width * 0.44,
                           imagePath:
-                              'https://drive.google.com/file/d/1_sUiRTwJS7Zb_f5IPtmLNBAc0NlpP5If/view?usp=sharing',
+                              'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
                           category: 'Food Items',
                           gradient: gradients[2],
                           onTap: () {
@@ -626,9 +629,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             }));
                           },
                         ),
+                        SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.025),
                         FoodyBiteCategoryCard(
+                          width: MediaQuery.of(context).size.width * 0.44,
                           imagePath:
-                              'https://drive.google.com/file/d/1PsheNSOF6UO20k6t3XZE3TGGvA4SB4w-/view?usp=sharing',
+                              'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
                           category: 'Grocery Items',
                           gradient: gradients[2],
                           onTap: () {
@@ -666,13 +672,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             for (int i = 0;
                                 i < snap.data.documents.length;
                                 i++) {
-                              categories.add(Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 8.0),
-                                child: FoodyBiteCategoryCard(
-                                  imagePath: snap.data.documents[i]['imageURL'],
-                                  gradient: gradients[i],
-                                  width: 100,
-                                  category: snap.data.documents[i]['catName'],
+                              if (snap.data.documents[i]['sCat'] == 'Food')
+                                categories.add(InkWell(
                                   onTap: () {
 //                                    print(
 //                                        '---------==========${snap.data.documents[i]['imageURL']}');
@@ -682,33 +683,29 @@ class _HomeScreenState extends State<HomeScreen> {
                                         categoryName: snap.data.documents[i]
                                             ['catName'],
                                         imagePath: snap.data.documents[i]
-                                            ['imageURL'],
+                                            ['liveImageURL'],
                                         selectedCategory: i,
                                         numberOfCategories:
                                             snap.data.documents.length,
                                         gradient: gradients[i],
+                                        sCat: 'Food',
                                       ),
                                       withNavBar:
                                           true, // OPTIONAL VALUE. True by default.
                                       pageTransitionAnimation:
                                           PageTransitionAnimation.cupertino,
                                     );
-//                                    R.Router.navigator.pushNamed(
-//                                      R.Router.categoryDetailScreen,
-//                                      arguments: CategoryDetailScreenArguments(
-//                                        categoryName: snap.data.documents[i]
-//                                            ['catName'],
-//                                        imagePath: snap.data.documents[i]
-//                                            ['imageURL'],
-//                                        selectedCategory: i,
-//                                        numberOfCategories:
-//                                            snap.data.documents.length,
-//                                        gradient: gradients[i],
-//                                      ),
-//                                    );
+//
                                   },
-                                ),
-                              ));
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: foodCard(
+                                      snap.data.documents[i]['imageURL'],
+                                      snap.data.documents[i]['catName'],
+                                    ),
+                                  ),
+                                ));
                             }
                             return categories.length != 0
                                 ? ListView(
@@ -763,7 +760,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width:
                                       (MediaQuery.of(context).size.width - 52) /
                                           2,
-                                  imagePath: snap.data.documents[i]['imageURL'],
+                                  imagePath: snap.data.documents[i]
+                                      ['liveImageURL'],
                                   gradient: gradients[i],
                                   category: snap.data.documents[i]['catName'],
                                   onTap: () {
@@ -772,10 +770,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     pushNewScreen(
                                       context,
                                       screen: CategoryDetailScreen(
+                                        sCat: 'Food',
                                         categoryName: snap.data.documents[i]
                                             ['catName'],
                                         imagePath: snap.data.documents[i]
-                                            ['imageURL'],
+                                            ['liveImageURL'],
                                         selectedCategory: i,
                                         numberOfCategories:
                                             snap.data.documents.length,
@@ -828,6 +827,83 @@ class _HomeScreenState extends State<HomeScreen> {
                                         ],
                                       )
                                     ],
+                                  )
+                                : Container();
+                          } else
+                            return Container(
+                                child: Center(
+                                    child: Text(
+                              "No Data",
+                              style: TextStyle(color: Colors.black),
+                            )));
+                        },
+                      ),
+                    ),
+                    SizedBox(height: 16.0),
+                    HeadingRow(
+                      title: 'Shop Grocery Items',
+                      number: 'All Categories ',
+                      onTapOfNumber: () => Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return CategoriesScreen('Grocery');
+                      })),
+                    ),
+                    SizedBox(height: 16.0),
+                    Container(
+                      height: 100,
+                      child: StreamBuilder(
+                        stream: Firestore.instance
+                            .collection('Categories')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snap) {
+                          if (snap.hasData &&
+                              !snap.hasError &&
+                              snap.data != null) {
+                            categoriesGrocery.clear();
+
+                            for (int i = 0;
+                                i < snap.data.documents.length;
+                                i++) {
+                              if (snap.data.documents[i]['sCat'] == 'Grocery')
+                                categoriesGrocery.add(InkWell(
+                                  onTap: () {
+//                                    print(
+//                                        '---------==========${snap.data.documents[i]['imageURL']}');
+                                    pushNewScreen(
+                                      context,
+                                      screen: CategoryDetailScreen(
+                                        categoryName: snap.data.documents[i]
+                                            ['catName'],
+                                        imagePath: snap.data.documents[i]
+                                            ['liveImageURL'],
+                                        selectedCategory: i,
+                                        numberOfCategories:
+                                            snap.data.documents.length,
+                                        gradient: gradients[i],
+                                        sCat: 'Grocery',
+                                      ),
+                                      withNavBar:
+                                          true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
+                                    );
+//
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 8.0),
+                                    child: foodCard(
+                                      snap.data.documents[i]['imageURL'],
+                                      snap.data.documents[i]['catName'],
+                                    ),
+                                  ),
+                                ));
+                            }
+                            return categoriesGrocery.length != 0
+                                ? ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: categoriesGrocery,
                                   )
                                 : Container();
                           } else
@@ -1323,3 +1399,8 @@ class _HomeScreenState extends State<HomeScreen> {
 //category: snap.data.documents[i]['category'],
 //rating: snap.data.documents[i]['rating'],
 //price: snap.data.documents[i]['price'],
+
+//5. On categories page two main categories are to be displayed and inside them other 8 categories are to be displayed.
+//7. In quantity drop down, prices need to be added against quantity.
+//8. Product page needs to be made catchy and attractive in accordance to the photoshop design that will be provided.
+//9. Colours to be changed in accordance to the logo scheme.

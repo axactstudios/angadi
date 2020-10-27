@@ -67,7 +67,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
                 for (int i = 0; i < snap.data.documents.length; i++) {
                   if (widget.sCat == 'Food' || widget.sCat == 'Grocery') {
-                    if (snap.data.documents[i]['catName'] == widget.sCat) {
+                    if (snap.data.documents[i]['sCat'] == widget.sCat) {
                       categoriesTop.add(Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
                         child: Column(
@@ -85,12 +85,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                           ['imageURL'],
                                       selectedCategory: i,
                                       numberOfCategories: categoriesTop.length,
-                                      gradient: gradients[i], sCat: widget.sCat,
+                                      gradient: gradients[i],
+                                      sCat: widget.sCat,
                                     );
                                   }));
                                 },
                                 width: MediaQuery.of(context).size.width,
-                                imagePath: snap.data.documents[i]['imageURL'],
+                                imagePath: snap.data.documents[i]
+                                    ['liveImageURL'],
                                 gradient: gradients[i],
                                 category: snap.data.documents[i]['catName'],
                                 hasHandle: true,
@@ -132,7 +134,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 }));
                               },
                               width: MediaQuery.of(context).size.width,
-                              imagePath: snap.data.documents[i]['imageURL'],
+                              imagePath: snap.data.documents[i]['liveImageURL'],
                               gradient: gradients[i],
                               category: snap.data.documents[i]['catName'],
                               hasHandle: true,

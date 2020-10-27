@@ -99,7 +99,7 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton>
                 alignment: Alignment.center,
                 children: <Widget>[
                   Icon(
-                    Icons.shopping_cart,
+                    Icons.shopping_cart_outlined,
                     size: 36,
                     color: AppColors.white,
                   ),

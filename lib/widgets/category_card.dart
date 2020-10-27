@@ -104,3 +104,28 @@ class FoodyBiteCategoryCard extends StatelessWidget {
     );
   }
 }
+
+Widget foodCard(url, name) {
+  return Container(
+    color: Colors.white,
+    child: Column(
+      children: [
+        Image.network(
+          url,
+          height: 60,
+          width: 60,
+        ),
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          name,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Color(0xFF6b3600),
+          ),
+        ),
+      ],
+    ),
+  );
+}
