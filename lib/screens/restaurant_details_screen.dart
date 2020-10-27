@@ -647,7 +647,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                               widget.restaurantDetail.url),
                                         ),
                                       ),
-                                    )),
+                                    )), //just to push
                                 Expanded(
                                     flex: 1,
                                     child: InkWell(
