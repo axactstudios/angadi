@@ -28,7 +28,8 @@ class CategoryDetailScreen extends StatefulWidget {
     @required this.sCat,
   });
 
-  final String categoryName;final String sCat;
+  final String categoryName;
+  final String sCat;
   final int numberOfCategories;
   final int selectedCategory;
   final String imagePath;

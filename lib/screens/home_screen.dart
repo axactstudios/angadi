@@ -944,10 +944,17 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 180,
+                      height: 405,
                       child: top.length != 0
-                          ? ListView(
+                          ? GridView(
                               scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 5.0,
+                                      mainAxisSpacing: 5.0,
+                                      childAspectRatio: 0.59),
                               children: top,
                             )
                           : Container(),
@@ -972,10 +979,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         }),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 180,
+                      height: 405,
                       child: special.length != 0
-                          ? ListView(
+                          ? GridView(
                               scrollDirection: Axis.horizontal,
+                              shrinkWrap: true,
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      crossAxisSpacing: 5.0,
+                                      mainAxisSpacing: 5.0,
+                                      childAspectRatio: 0.65),
                               children: special,
                             )
                           : Container(),

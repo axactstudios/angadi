@@ -225,13 +225,15 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
               Positioned(
                 child: Column(
                   children: <Widget>[
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: Image.network(
-                        widget.imagePath,
-                        width: widget.width,
-                        height: 95,
-                        fit: BoxFit.cover,
+                    Expanded(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: Image.network(
+                          widget.imagePath,
+                          width: widget.width,
+                          // height: 95,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                     Container(
@@ -242,13 +244,16 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: <Widget>[
-                          Text(
-                            widget.cardTitle,
-                            textAlign: TextAlign.left,
-                            style: Styles.customTitleTextStyle(
-                              color: AppColors.headingText,
-                              fontWeight: FontWeight.w600,
-                              fontSize: 16,
+                          Container(
+                            height: 50,
+                            child: Text(
+                              widget.cardTitle,
+                              textAlign: TextAlign.left,
+                              style: Styles.customTitleTextStyle(
+                                color: AppColors.headingText,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16,
+                              ),
                             ),
                           ),
                           SizedBox(

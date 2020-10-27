@@ -34,7 +34,7 @@ class FoodyBiteSearchInputField extends StatelessWidget {
     this.borderStyle = BorderStyle.none,
     this.onTapOfSuffixIcon,
     this.onTapOfLeadingIcon,
-    this.borderRadius = Sizes.RADIUS_12,
+    this.borderRadius = 5,
     this.borderWidth = Sizes.WIDTH_0,
     this.contentPaddingHorizontal = Sizes.PADDING_0,
     this.contentPaddingVertical = 10,
@@ -60,8 +60,8 @@ class FoodyBiteSearchInputField extends StatelessWidget {
       child: Row(
         children: [
           Container(
-            width: MediaQuery.of(context).size.width * 0.7,
-            height: 70,
+            width: MediaQuery.of(context).size.width * 0.84,
+            // height: 60,
             child: InkWell(
               onTap: onTapOfLeadingIcon,
               child: TextFormField(
@@ -103,12 +103,10 @@ class FoodyBiteSearchInputField extends StatelessWidget {
               ),
             ),
           ),
-          Container(
-            width: 40,
-            height: 70,
+          Center(
             child: InkWell(
               onTap: onTapOfSuffixIcon,
-              child: suffixIcon,
+              child: Icon(Icons.sort),
             ),
           )
         ],
