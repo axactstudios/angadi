@@ -92,6 +92,7 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton>
   Widget build(BuildContext context) {
     getAllItems();
     return FloatingActionButton(
+      heroTag: null,
       child: AnimatedBuilder(
         animation: _controller,
         child: angle == 0
@@ -101,7 +102,7 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton>
                   Icon(
                     Icons.shopping_cart_outlined,
                     size: 36,
-                    color: AppColors.white,
+                    color: Color(0xFF6b3600),
                   ),
                   total != null
                       ? total > 0
@@ -133,9 +134,9 @@ class _CustomFloatingButtonState extends State<CustomFloatingButton>
                 alignment: Alignment.center,
                 children: <Widget>[
                   Icon(
-                    Icons.shopping_cart,
+                    Icons.shopping_cart_outlined,
                     size: 36,
-                    color: AppColors.white,
+                    color: Color(0xFF6b3600),
                   ),
                   total != null
                       ? total > 0

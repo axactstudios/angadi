@@ -64,8 +64,8 @@ class FoodyBiteCategoryCard extends StatelessWidget {
             ),
             Positioned(
               top: hasHandle ? Sizes.SIZE_36 : (height / 2) - 4,
-              right: hasHandle ? Sizes.SIZE_24 : width / 8,
-              left: hasHandle ? Sizes.SIZE_8 : width / 8,
+              right: hasHandle ? Sizes.SIZE_24 : width / 15,
+              left: hasHandle ? Sizes.SIZE_8 : width / 15,
               child: hasHandle
                   ? Row(
                       children: <Widget>[

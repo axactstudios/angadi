@@ -90,16 +90,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                     );
                                   }));
                                 },
+                                height:
+                                    MediaQuery.of(context).size.height * 0.2,
                                 width: MediaQuery.of(context).size.width,
                                 imagePath: snap.data.documents[i]
                                     ['liveImageURL'],
                                 gradient: gradients[i],
                                 category: snap.data.documents[i]['catName'],
-                                hasHandle: true,
                                 opacity: 0.7,
                                 categoryTextStyle: textTheme.title.copyWith(
                                   color: AppColors.primaryColor,
-                                  fontSize: Sizes.TEXT_SIZE_22,
+                                  fontSize: Sizes.TEXT_SIZE_16,
                                 ),
                               ),
                             ),
@@ -137,11 +138,10 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               imagePath: snap.data.documents[i]['liveImageURL'],
                               gradient: gradients[i],
                               category: snap.data.documents[i]['catName'],
-                              hasHandle: true,
                               opacity: 0.7,
                               categoryTextStyle: textTheme.title.copyWith(
                                 color: AppColors.primaryColor,
-                                fontSize: Sizes.TEXT_SIZE_22,
+                                fontSize: Sizes.TEXT_SIZE_16,
                               ),
                             ),
                           ),
@@ -155,7 +155,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 }
               }
               return categoriesTop.length != 0
-                  ? ListView(
+                  ? GridView.count(
+                      crossAxisCount: 2,
                       scrollDirection: Axis.vertical,
                       children: categoriesTop,
                     )

@@ -26,6 +26,7 @@ class _CheckoutState extends State<Checkout> {
   List<Cart> cartItems = [];
   double total;
   final addressController = TextEditingController();
+  final hnoController = TextEditingController();
   final notesController = TextEditingController();
 
   final dbHelper = DatabaseHelper.instance;
@@ -233,6 +234,27 @@ class _CheckoutState extends State<Checkout> {
                                 )),
                           ],
                         ),
+                      )
+                    : Container(),
+                type != 'Takeaway'
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: CustomTextFormField(
+                          controller: hnoController,
+                          textFormFieldStyle: textFormFieldTextStyle,
+                          prefixIconColor: AppColors.secondaryElement,
+                          hintTextStyle: hintTextStyle,
+                          borderStyle: BorderStyle.solid,
+                          borderWidth: Sizes.WIDTH_1,
+                          hintText: 'Enter House No, Street Name',
+                          hasPrefixIcon: true,
+                          prefixIconImagePath: ImagePath.homeIcon,
+                        ),
+                      )
+                    : Container(),
+                type != 'Takeaway'
+                    ? SizedBox(
+                        height: 10,
                       )
                     : Container(),
                 type != 'Takeaway'
@@ -499,7 +521,7 @@ class _CheckoutState extends State<Checkout> {
                 'Qty': quantities,
                 'Type': orderType,
                 'UserID': user.uid,
-                'Address': addressController.text,
+                'Address': '${hnoController.text},${addressController.text} ',
                 'TimeStamp': DateTime.now(),
                 'Status': 'Awaiting Confirmation',
                 'DeliveryTime': selectedTime.format(context).toString(),
@@ -610,7 +632,7 @@ class _CheckoutState extends State<Checkout> {
 
       setState(() {
         currentAddress =
-            "<Your House No.>, ${first.subLocality}, ${first.locality}, ${first.postalCode}, ${first.countryName},  ${first.adminArea} ";
+            "${first.subLocality}, ${first.locality}, ${first.postalCode}, ${first.countryName},  ${first.adminArea} ";
         print(currentAddress);
         addressController.text = currentAddress;
       });

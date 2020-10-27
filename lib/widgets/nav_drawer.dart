@@ -349,7 +349,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   : InkWell(
                       onTap: () {
                         pushNewScreen(context,
-                            screen: LoginScreen(), withNavBar: false);
+                            screen: LoginScreen(),
+                            withNavBar: false,
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.slideRight);
                       },
                       child: Container(
                         color: AppColors.secondaryElement,
