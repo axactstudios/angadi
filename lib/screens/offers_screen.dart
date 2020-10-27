@@ -7,6 +7,9 @@ import 'package:flutter/material.dart';
 Offer discount;
 
 class ApplyOffers extends StatefulWidget {
+  State state;
+  BuildContext ctxt;
+  ApplyOffers(this.state, this.ctxt);
   @override
   _ApplyOffersState createState() => _ApplyOffersState();
 }
@@ -53,12 +56,18 @@ class _ApplyOffersState extends State<ApplyOffers> {
                         margin: EdgeInsets.only(right: 4.0),
                         child: OfferCardApply(
                           onTap: () {
-                            discount = Offer(
-                                offers[index].title,
-                                offers[index].subtitle,
-                                offers[index].imageURL,
-                                offers[index].discount);
-                            Navigator.of(context).pop();
+                            setState(() {
+                              discount = Offer(
+                                  offers[index].title,
+                                  offers[index].subtitle,
+                                  offers[index].imageURL,
+                                  offers[index].discount);
+
+                              widget.state.setState(() {
+                                print(1);
+                              });
+                              Navigator.of(context).pop();
+                            });
                           },
                           imagePath: offers[index].imageURL,
                           // status: '90% OFF',

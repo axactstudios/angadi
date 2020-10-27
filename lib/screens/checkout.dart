@@ -292,7 +292,7 @@ class _CheckoutState extends State<Checkout> {
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                return ApplyOffers();
+                                return ApplyOffers(this, context);
                               }));
                             },
                             child: Text(
@@ -310,7 +310,7 @@ class _CheckoutState extends State<Checkout> {
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
                                   builder: (BuildContext context) {
-                                return ApplyOffers();
+                                return ApplyOffers(this, context);
                               }));
                             },
                             child: Text(
