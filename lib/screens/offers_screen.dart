@@ -21,7 +21,7 @@ class _ApplyOffersState extends State<ApplyOffers> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        elevation: 0.0,
+        elevation: 0,
         centerTitle: true,
         title: Text(
           'Apply Coupon',
