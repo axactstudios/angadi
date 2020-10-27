@@ -1401,6 +1401,4 @@ class _HomeScreenState extends State<HomeScreen> {
 //price: snap.data.documents[i]['price'],
 
 //5. On categories page two main categories are to be displayed and inside them other 8 categories are to be displayed.
-//7. In quantity drop down, prices need to be added against quantity.
 //8. Product page needs to be made catchy and attractive in accordance to the photoshop design that will be provided.
-//9. Colours to be changed in accordance to the logo scheme.

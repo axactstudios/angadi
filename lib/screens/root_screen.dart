@@ -12,6 +12,7 @@ import 'categories_screen.dart';
 import 'categories_screen.dart';
 import 'home_screen.dart';
 import 'home_screen.dart';
+import 'main_categories_screen.dart';
 import 'notification_screen.dart';
 import 'notification_screen.dart';
 import 'search_results.dart';
@@ -108,7 +109,7 @@ class _RootScreenState extends State<RootScreen>
   List<Widget> _buildScreens() {
     return [
       HomeScreen(),
-      CategoriesScreen('Both'),
+      MainCategoriesScreen(),
       SearchScreen(),
       NotificationsScreen(),
       ProfileScreen(),
