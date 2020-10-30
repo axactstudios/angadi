@@ -61,6 +61,7 @@ class _CheckoutState extends State<Checkout> {
 
   @override
   Widget build(BuildContext context) {
+    print(_result);
     _pickTime() async {
       TimeOfDay t = await showTimePicker(context: context, initialTime: time);
       if (t != null)
@@ -420,45 +421,51 @@ class _CheckoutState extends State<Checkout> {
                                 ],
                               ))
                     : Container(),
-                Padding(
+                _result != '833' ?    Padding(
                   padding:
                       const EdgeInsets.only(left: 12.0, bottom: 0, top: 10),
                   child: HeadingRow(
                     title: 'Choose Payment Method',
                     number: '',
                   ),
-                ),
-                SizedBox(
+                ) : Container(),
+                _result != '833' ?  SizedBox(
                   height: 20,
-                ),
+                ): Container(),
                 Column(
                   children: [
+                    _result != '833'
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 14.0),
+                            child: angadiButton(
+                              'Cash On Delivery',
+                              buttonWidth: MediaQuery.of(context).size.width,
+                              onTap: () {
+                                showAlertDialog(context);
+                              },
+                            ),
+                          )
+                        : Container(),
+                    _result != '833'
+                        ?  SizedBox(
+                      height: 20,
+                    ): Container(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14.0),
                       child: angadiButton(
-                        'Cash On Delivery',
-                        buttonWidth: MediaQuery.of(context).size.width,
+                        _result != '833' ? 'Proceed to pay online' : 'Proceed',
                         onTap: () {
-                          showAlertDialog(context);
+                          _result != '833'
+                              ? payPressed()
+                              : placeOnlinePaidOrder();
                         },
+                        buttonWidth: MediaQuery.of(context).size.width,
                       ),
                     ),
                     SizedBox(
                       height: 20,
                     ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                      child: angadiButton(
-                        'Proceed to pay online',
-                        onTap: () {
-                          payPressed().then((value) {
-                            print(value);
-                            placeOnlinePaidOrder();
-                          });
-                        },
-                        buttonWidth: MediaQuery.of(context).size.width,
-                      ),
-                    )
                   ],
                 )
               ],
@@ -751,7 +758,7 @@ class _CheckoutState extends State<Checkout> {
 
   String _result = '---';
   String _instructions = 'Tap on "Pay" Button to try PayTabs plugin';
-  Future<String> payPressed() async {
+  Future<void> payPressed() async {
     var args = {
       'pt_merchant_email': "vkumarsaraswat@gmail.com",
       'pt_secret_key':
@@ -795,7 +802,6 @@ class _CheckoutState extends State<Checkout> {
         }
       });
     });
-    return 'Success';
   }
 
   placeOnlinePaidOrder() {
