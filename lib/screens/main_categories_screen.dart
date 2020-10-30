@@ -74,33 +74,115 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      FoodyBiteCategoryCard(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.width * 0.65,
-                        imagePath:
-                            'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
-                        category: 'Food Items',
-                        gradient: gradients[2],
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (BuildContext context) {
-                            return CategoriesScreen('Food');
-                          }));
-                        },
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return CategoriesScreen('Food');
+                            }));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.25,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
+                              Container(
+                                height: 25,
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(8),
+                                        bottomLeft: Radius.circular(8))),
+                                child: Text(
+                                  'Food Items',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color(0xFF6b3600),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Container(
+                                height: 2,
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                color: AppColors.secondaryElement,
+                              )
+                            ],
+                          ),
+                        ),
                       ),
-                      FoodyBiteCategoryCard(
-                        width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.width * 0.65,
-                        imagePath:
-                            'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
-                        category: 'Grocery Items',
-                        gradient: gradients[2],
-                        onTap: () {
-                          Navigator.push(context, MaterialPageRoute(
-                              builder: (BuildContext context) {
-                            return CategoriesScreen('Grocery');
-                          }));
-                        },
+                      Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return CategoriesScreen('Food');
+                            }));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.25,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.8,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                  ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
+                              Container(
+                                height: 25,
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.only(
+                                        bottomRight: Radius.circular(8),
+                                        bottomLeft: Radius.circular(8))),
+                                child: Text(
+                                  'Grocery Items',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color(0xFF6b3600),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 3,
+                              ),
+                              Container(
+                                height: 2,
+                                width: MediaQuery.of(context).size.width * 0.8,
+                                color: AppColors.secondaryElement,
+                              )
+                            ],
+                          ),
+                        ),
                       ),
                     ],
                   ),

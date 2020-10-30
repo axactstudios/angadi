@@ -628,33 +628,109 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 16.0),
                     Row(
                       children: [
-                        FoodyBiteCategoryCard(
-                          width: MediaQuery.of(context).size.width * 0.44,
-                          imagePath:
-                              'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
-                          category: 'Food Items',
-                          gradient: gradients[2],
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                              return CategoriesScreen('Food');
-                            }));
-                          },
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return CategoriesScreen('Food');
+                              }));
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                    height: 130,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.network(
+                                        'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )),
+                                Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                    height: 25,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    decoration: BoxDecoration(
+                                        color: AppColors.secondaryElement,
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(8),
+                                            bottomLeft: Radius.circular(8))),
+                                    child: Text(
+                                      'Food Items',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Color(0xFF6b3600),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.025),
-                        FoodyBiteCategoryCard(
-                          width: MediaQuery.of(context).size.width * 0.44,
-                          imagePath:
-                              'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
-                          category: 'Grocery Items',
-                          gradient: gradients[2],
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                              return CategoriesScreen('Grocery');
-                            }));
-                          },
+                        Padding(
+                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          child: InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return CategoriesScreen('Food');
+                              }));
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                    height: 130,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: Image.network(
+                                        'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )),
+                                Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                    height: 25,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.4,
+                                    decoration: BoxDecoration(
+                                        color: AppColors.secondaryElement,
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(8),
+                                            bottomLeft: Radius.circular(8))),
+                                    child: Text(
+                                      'Grocery Items',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Color(0xFF6b3600),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -744,7 +820,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 220,
+                      height: 230,
                       child: StreamBuilder(
                         stream: Firestore.instance
                             .collection('Categories')
@@ -768,56 +844,128 @@ class _HomeScreenState extends State<HomeScreen> {
                                 //     color: Colors.red,
                                 //   ),
                                 // ));
-                                categoriesTop.add(FoodyBiteCategoryCard(
-                                  width:
-                                      (MediaQuery.of(context).size.width - 52) /
-                                          2,
-                                  imagePath: snap.data.documents[i]
-                                      ['liveImageURL'],
-                                  gradient: gradients[i],
-                                  category: snap.data.documents[i]['catName'],
-                                  onTap: () {
-//                                    print(
-//                                        '---------==========${snap.data.documents[i]['imageURL']}');
-                                    pushNewScreen(
-                                      context,
-                                      screen: CategoryDetailScreen(
-                                        sCat: 'Food',
-                                        categoryName: snap.data.documents[i]
-                                            ['catName'],
-                                        imagePath: snap.data.documents[i]
-                                            ['liveImageURL'],
-                                        selectedCategory: i,
-                                        numberOfCategories:
-                                            snap.data.documents.length,
-                                        gradient: gradients[i],
+
+                                categoriesTop.add(Padding(
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 8.0),
+                                  child: InkWell(
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                        return CategoryDetailScreen(
+                                          categoryName: snap.data.documents[i]
+                                              ['catName'],
+                                          imagePath: snap.data.documents[i]
+                                              ['imageURL'],
+                                          selectedCategory: i,
+                                          numberOfCategories:
+                                              categoriesTop.length,
+                                          gradient: gradients[i],
+                                          sCat: snap.data.documents[i]['sCat'],
+                                        );
+                                      }));
+                                    },
+                                    child: Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.35,
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                            width: 2, color: Color(0xFF6b3600)),
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(8)),
                                       ),
-                                      withNavBar:
-                                          true, // OPTIONAL VALUE. True by default.
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    );
-//                                    R.Router.navigator.pushNamed(
-//                                      R.Router.categoryDetailScreen,
-//                                      arguments: CategoryDetailScreenArguments(
-//                                        categoryName: snap.data.documents[i]
-//                                            ['catName'],
-//                                        imagePath: snap.data.documents[i]
-//                                            ['imageURL'],
-//                                        selectedCategory: i,
-//                                        numberOfCategories:
-//                                            snap.data.documents.length,
-//                                        gradient: gradients[i],
-//                                      ),
-//                                    );
-                                  },
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                              height: 70,
+                                              width: double.infinity,
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(8.0),
+                                                child: Image.network(snap.data
+                                                    .documents[i]['imageURL']),
+                                              )),
+                                          SizedBox(
+                                            height: 5,
+                                          ),
+                                          Container(
+                                            height: 25,
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                                color:
+                                                    AppColors.secondaryElement,
+                                                borderRadius: BorderRadius.only(
+                                                    bottomRight:
+                                                        Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8))),
+                                            child: Text(
+                                              snap.data.documents[i]['catName'],
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Color(0xFF6b3600),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),
+                                            ),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                  ),
                                 ));
+
+//                                 categoriesTop.add(FoodyBiteCategoryCard(
+//                                   width:
+//                                       (MediaQuery.of(context).size.width - 52) /
+//                                           2,
+//                                   imagePath: snap.data.documents[i]
+//                                       ['liveImageURL'],
+//                                   gradient: gradients[i],
+//                                   category: snap.data.documents[i]['catName'],
+//                                   onTap: () {
+// //                                    print(
+// //                                        '---------==========${snap.data.documents[i]['imageURL']}');
+//                                     pushNewScreen(
+//                                       context,
+//                                       screen: CategoryDetailScreen(
+//                                         sCat: 'Food',
+//                                         categoryName: snap.data.documents[i]
+//                                             ['catName'],
+//                                         imagePath: snap.data.documents[i]
+//                                             ['liveImageURL'],
+//                                         selectedCategory: i,
+//                                         numberOfCategories:
+//                                             snap.data.documents.length,
+//                                         gradient: gradients[i],
+//                                       ),
+//                                       withNavBar:
+//                                           true, // OPTIONAL VALUE. True by default.
+//                                       pageTransitionAnimation:
+//                                           PageTransitionAnimation.cupertino,
+//                                     );
+// //                                    R.Router.navigator.pushNamed(
+// //                                      R.Router.categoryDetailScreen,
+// //                                      arguments: CategoryDetailScreenArguments(
+// //                                        categoryName: snap.data.documents[i]
+// //                                            ['catName'],
+// //                                        imagePath: snap.data.documents[i]
+// //                                            ['imageURL'],
+// //                                        selectedCategory: i,
+// //                                        numberOfCategories:
+// //                                            snap.data.documents.length,
+// //                                        gradient: gradients[i],
+// //                                      ),
+// //                                    );
+//                                   },
+//                                 ));
                               }
                             }
                             return categoriesTop.length != 0
                                 ? Column(
                                     children: [
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
                                           categoriesTop[0],
                                           SizedBox(
@@ -830,6 +978,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                         height: 20,
                                       ),
                                       Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
                                         children: [
                                           categoriesTop[2],
                                           SizedBox(

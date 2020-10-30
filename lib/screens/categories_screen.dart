@@ -2,7 +2,7 @@ import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
-import 'package:angadi/values/data.dart';
+import '../values/data.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/category_card.dart';
 import 'package:angadi/widgets/spaces.dart';
@@ -102,44 +102,56 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     if (snap.data.documents[i]['sCat'] == widget.sCat) {
                       categoriesTop.add(Padding(
                         padding: EdgeInsets.symmetric(horizontal: 8.0),
-                        child: Column(
-                          children: [
-                            Container(
-                              child: FoodyBiteCategoryCard(
-                                onTap: () {
-                                  print('L');
-                                  Navigator.push(context, MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                    return CategoryDetailScreen(
-                                      categoryName: snap.data.documents[i]
-                                          ['catName'],
-                                      imagePath: snap.data.documents[i]
-                                          ['imageURL'],
-                                      selectedCategory: i,
-                                      numberOfCategories: categoriesTop.length,
-                                      gradient: gradients[i],
-                                      sCat: widget.sCat,
-                                    );
-                                  }));
-                                },
-                                height:
-                                    MediaQuery.of(context).size.height * 0.2,
-                                width: MediaQuery.of(context).size.width,
-                                imagePath: snap.data.documents[i]
-                                    ['liveImageURL'],
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return CategoryDetailScreen(
+                                categoryName: snap.data.documents[i]['catName'],
+                                imagePath: snap.data.documents[i]['imageURL'],
+                                selectedCategory: i,
+                                numberOfCategories: categoriesTop.length,
                                 gradient: gradients[i],
-                                category: snap.data.documents[i]['catName'],
-                                opacity: 0.7,
-                                categoryTextStyle: textTheme.title.copyWith(
-                                  color: AppColors.primaryColor,
-                                  fontSize: Sizes.TEXT_SIZE_16,
-                                ),
+                                sCat: widget.sCat,
+                              );
+                            }));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        width: 2, color: Color(0xFF6b3600)),
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                  ),
+                                  height: 100,
+                                  width: double.infinity,
+                                  child: Image.network(
+                                      snap.data.documents[i]['imageURL'])),
+                              SizedBox(
+                                height: 5,
                               ),
-                            ),
-                            SizedBox(
-                              height: 12,
-                            )
-                          ],
+                              Column(
+                                children: [
+                                  Text(
+                                    snap.data.documents[i]['catName'],
+                                    style: TextStyle(
+                                        color: Color(0xFF6b3600),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20),
+                                  ),
+                                  SizedBox(
+                                    height: 5,
+                                  ),
+                                  Container(
+                                    height: 2,
+                                    color: AppColors.secondaryElement,
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
                         ),
                       ));
                     }
