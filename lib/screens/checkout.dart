@@ -421,17 +421,21 @@ class _CheckoutState extends State<Checkout> {
                                 ],
                               ))
                     : Container(),
-                _result != '833' ?    Padding(
-                  padding:
-                      const EdgeInsets.only(left: 12.0, bottom: 0, top: 10),
-                  child: HeadingRow(
-                    title: 'Choose Payment Method',
-                    number: '',
-                  ),
-                ) : Container(),
-                _result != '833' ?  SizedBox(
-                  height: 20,
-                ): Container(),
+                _result != '833'
+                    ? Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12.0, bottom: 0, top: 10),
+                        child: HeadingRow(
+                          title: 'Choose Payment Method',
+                          number: '',
+                        ),
+                      )
+                    : Container(),
+                _result != '833'
+                    ? SizedBox(
+                        height: 20,
+                      )
+                    : Container(),
                 Column(
                   children: [
                     _result != '833'
@@ -448,9 +452,10 @@ class _CheckoutState extends State<Checkout> {
                           )
                         : Container(),
                     _result != '833'
-                        ?  SizedBox(
-                      height: 20,
-                    ): Container(),
+                        ? SizedBox(
+                            height: 20,
+                          )
+                        : Container(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14.0),
                       child: angadiButton(
