@@ -81,7 +81,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             children: <Widget>[
               Center(
                 child: Text(
-                  'Profile',
+                  'PROFILE',
                   style: Styles.customTitleTextStyle(
                     color: Color(0xFF6b3600),
                     fontWeight: FontWeight.w600,

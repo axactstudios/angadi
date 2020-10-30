@@ -531,7 +531,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                      onTapOfNumber: () => R.Router.navigator
 //                          .pushNamed(R.Router.trendingRestaurantsScreen),
 //                    ),
-
+                    SizedBox(height: 15),
                     StreamBuilder(
                         stream:
                             Firestore.instance.collection('Offers').snapshots(),
@@ -555,7 +555,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
 
                             return Container(
-                              height: 190,
+                              height: 170,
                               width: MediaQuery.of(context).size.width,
                               child: GFCarousel(
                                 items: imageList.map(
@@ -575,8 +575,12 @@ class _HomeScreenState extends State<HomeScreen> {
 //                                    print('change');
                                   });
                                 },
+                                viewportFraction: 1.0,
+                                aspectRatio:
+                                    (MediaQuery.of(context).size.width / 18) /
+                                        (MediaQuery.of(context).size.width /
+                                            40),
                                 autoPlay: true,
-                                enlargeMainPage: true,
                                 pagination: true,
                                 passiveIndicator: Colors.black,
                                 activeIndicator: Colors.grey,

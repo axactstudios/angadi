@@ -63,7 +63,7 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
                 horizontal: Sizes.MARGIN_16, vertical: Sizes.MARGIN_16),
             child: Column(
               children: [
-                Text(StringConst.CATEGORY,
+                Text(StringConst.CATEGORY.toUpperCase(),
                     style: Styles.customTitleTextStyle(
                       color: Color(0xFF6b3600),
                       fontWeight: FontWeight.w600,

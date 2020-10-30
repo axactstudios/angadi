@@ -189,11 +189,17 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
               return categoriesTop.length != 0
                   ? Column(
                       children: [
-                        Text(StringConst.CATEGORY,
+                        Text(StringConst.CATEGORY.toUpperCase(),
                             style: Styles.customTitleTextStyle(
                               color: Color(0xFF6b3600),
                               fontWeight: FontWeight.w600,
                               fontSize: Sizes.TEXT_SIZE_20,
+                            )),
+                        Text('${widget.sCat} ITEMS'.toUpperCase(),
+                            style: Styles.customTitleTextStyle(
+                              color: AppColors.secondaryElement,
+                              fontWeight: FontWeight.w600,
+                              fontSize: Sizes.TEXT_SIZE_28,
                             )),
                         SizedBox(height: 20),
                         Expanded(

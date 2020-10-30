@@ -170,7 +170,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                         children: [
                           index == 0
                               ? Text(
-                                  'Notifications',
+                                  'NOTIFICATIONS',
                                   style: Styles.customTitleTextStyle(
                                     color: Color(0xFF6b3600),
                                     fontWeight: FontWeight.w600,
