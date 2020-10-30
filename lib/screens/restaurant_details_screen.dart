@@ -121,7 +121,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     await allRows.forEach((row) => cartItems.add(Cart.fromMap(row)));
     setState(() {
       total = cartItems.length;
+
       for (var v in cartItems) {
+        print('######${v.productName}');
         if (v.productName == widget.restaurantDetail.name &&
             v.qtyTag == listOfQuantities[choice]) {
           qty = v.qty;
@@ -711,7 +713,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                'Rs. ${widget.restaurantDetail.price}',
+                                                'Rs. ${int.parse(widget.restaurantDetail.price) * priceFactors[choice]}',
                                                 textAlign: TextAlign.left,
                                                 style: Styles
                                                     .customMediumTextStyle(
@@ -722,7 +724,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 ),
                                               ),
                                               Text(
-                                                '(500 ML)',
+                                                '(${sizes[choice].toString()})',
                                                 textAlign: TextAlign.left,
                                                 style: Styles
                                                     .customMediumTextStyle(
@@ -828,7 +830,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                           await getAllItems();
                                           factor = await 1;
                                           qtyTag = await sizes[index];
-                                          choice = await 0;
+                                          choice = await index;
+
                                           await checkInCart(sizes[index]);
                                           qty = await getQuantity(
                                               widget.restaurantDetail.name,
@@ -1125,7 +1128,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   addToCart(context,
                                       name: widget.restaurantDetail.name,
                                       imgUrl: widget.restaurantDetail.url,
-                                      price: widget.restaurantDetail.price,
+                                      price: (int.parse(widget
+                                                  .restaurantDetail.price) *
+                                              priceFactors[choice])
+                                          .toString(),
                                       qty: 1,
                                       qtyTag: sizes[choice]);
                                   // else

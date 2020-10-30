@@ -119,17 +119,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           child: Column(
                             children: [
                               Container(
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        width: 2, color: Color(0xFF6b3600)),
+                                  height: 130,
+                                  width: double.infinity,
+                                  child: ClipRRect(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8)),
-                                  ),
-                                  height: 100,
-                                  width: double.infinity,
-                                  child: Image.network(
-                                    snap.data.documents[i]['liveImageURL'],
-                                    fit: BoxFit.fill,
+                                    child: Image.network(
+                                      snap.data.documents[i]['liveImageURL'],
+                                      fit: BoxFit.fill,
+                                    ),
                                   )),
                               SizedBox(
                                 height: 5,
@@ -160,41 +158,56 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                   } else {
                     categoriesTop.add(Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        children: [
-                          Container(
-                            child: FoodyBiteCategoryCard(
-                              onTap: () {
-                                print('L');
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                                  return CategoryDetailScreen(
-                                    categoryName: snap.data.documents[i]
-                                        ['catName'],
-                                    imagePath: snap.data.documents[i]
-                                        ['imageURL'],
-                                    selectedCategory: i,
-                                    numberOfCategories: categoriesTop.length,
-                                    gradient: gradients[i],
-                                    sCat: widget.sCat,
-                                  );
-                                }));
-                              },
-                              width: MediaQuery.of(context).size.width,
-                              imagePath: snap.data.documents[i]['liveImageURL'],
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(context, MaterialPageRoute(
+                              builder: (BuildContext context) {
+                            return CategoryDetailScreen(
+                              categoryName: snap.data.documents[i]['catName'],
+                              imagePath: snap.data.documents[i]['imageURL'],
+                              selectedCategory: i,
+                              numberOfCategories: categoriesTop.length,
                               gradient: gradients[i],
-                              category: snap.data.documents[i]['catName'],
-                              opacity: 0.7,
-                              categoryTextStyle: textTheme.title.copyWith(
-                                color: AppColors.primaryColor,
-                                fontSize: Sizes.TEXT_SIZE_16,
-                              ),
+                              sCat: widget.sCat,
+                            );
+                          }));
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                                height: 130,
+                                width: double.infinity,
+                                child: ClipRRect(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(8)),
+                                  child: Image.network(
+                                    snap.data.documents[i]['liveImageURL'],
+                                    fit: BoxFit.fill,
+                                  ),
+                                )),
+                            SizedBox(
+                              height: 5,
                             ),
-                          ),
-                          SizedBox(
-                            height: 12,
-                          )
-                        ],
+                            Column(
+                              children: [
+                                Text(
+                                  snap.data.documents[i]['catName'],
+                                  style: TextStyle(
+                                      color: Color(0xFF6b3600),
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 20),
+                                ),
+                                SizedBox(
+                                  height: 5,
+                                ),
+                                Container(
+                                  height: 2,
+                                  color: AppColors.secondaryElement,
+                                )
+                              ],
+                            )
+                          ],
+                        ),
                       ),
                     ));
                   }

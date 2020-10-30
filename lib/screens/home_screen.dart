@@ -820,7 +820,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 230,
+                      height: 260,
                       child: StreamBuilder(
                         stream: Firestore.instance
                             .collection('Categories')
@@ -865,30 +865,30 @@ class _HomeScreenState extends State<HomeScreen> {
                                         );
                                       }));
                                     },
-                                    child: Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.35,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                            width: 2, color: Color(0xFF6b3600)),
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(8)),
-                                      ),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                              height: 70,
-                                              width: double.infinity,
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                            height: 120,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.4,
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8)),
                                               child: Image.network(
                                                   snap.data.documents[i]
                                                       ['liveImageURL'],
-                                                  fit: BoxFit.fill)),
-                                          SizedBox(
-                                            height: 5,
-                                          ),
-                                          Container(
+                                                  fit: BoxFit.fill),
+                                            )),
+                                        Positioned(
+                                          bottom: 0,
+                                          child: Container(
                                             height: 25,
-                                            width: double.infinity,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.4,
                                             decoration: BoxDecoration(
                                                 color:
                                                     AppColors.secondaryElement,
@@ -905,9 +905,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   fontWeight: FontWeight.bold,
                                                   fontSize: 15),
                                             ),
-                                          )
-                                        ],
-                                      ),
+                                          ),
+                                        )
+                                      ],
                                     ),
                                   ),
                                 ));
@@ -967,7 +967,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           categoriesTop[0],
                                           SizedBox(
-                                            width: 20,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
                                           ),
                                           categoriesTop[1]
                                         ],
@@ -981,7 +984,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                         children: [
                                           categoriesTop[2],
                                           SizedBox(
-                                            width: 20,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.04,
                                           ),
                                           categoriesTop[3]
                                         ],
