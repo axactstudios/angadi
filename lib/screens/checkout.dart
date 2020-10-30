@@ -9,6 +9,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paytabs_sdk/flutter_paytabs_sdk.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
@@ -449,6 +450,12 @@ class _CheckoutState extends State<Checkout> {
                       padding: const EdgeInsets.symmetric(horizontal: 14.0),
                       child: angadiButton(
                         'Proceed to pay online',
+                        onTap: () {
+                          payPressed().then((value) {
+                            print(value);
+                            placeOnlinePaidOrder();
+                          });
+                        },
                         buttonWidth: MediaQuery.of(context).size.width,
                       ),
                     )
@@ -740,5 +747,61 @@ class _CheckoutState extends State<Checkout> {
     });
     // Handle the result in your way
     print(addressController.text);
+  }
+
+  String _result = '---';
+  String _instructions = 'Tap on "Pay" Button to try PayTabs plugin';
+  Future<String> payPressed() async {
+    var args = {
+      'pt_merchant_email': "vkumarsaraswat@gmail.com",
+      'pt_secret_key':
+          "P45UE6iY0pIhWSWx5vLPmN5icCio1PXQT2Ky82w8repo7mVcRG2eu7wGKP5LE2By4l6coDkPRKeZ69bXQdbklH15w6Qb8sKcOQoc", // Add your Secret Key Here
+      'pt_transaction_title': "Mr. John Doe",
+      'pt_amount': "39",
+      'pt_currency_code': "INR",
+      'pt_customer_email': "test@example.com",
+      'pt_customer_phone_number': "+91333109781",
+      'pt_order_id': "1234567",
+      'pt_product_name': "Angadi Bill",
+      'pt_timeout_in_seconds': "300", //Optional
+      'pt_address_billing': currentAddress,
+      'pt_city_billing': "Juffair",
+      'pt_state_billing': "state",
+      'pt_country_billing': "BHR",
+      'pt_postal_code_billing': "243001",
+      'pt_address_shipping': "test test",
+      'pt_city_shipping': "Juffair",
+      'pt_state_shipping': "state",
+      'pt_country_shipping': "BHR",
+      'pt_postal_code_shipping': "00973", //Put Country Phone code if Postal
+      'pt_color': "#ffb000",
+      'pt_language': 'en', // 'en', 'ar'
+      'pt_tokenization': true,
+      'pt_preauth': false
+    };
+    FlutterPaytabsSdk.startPayment(args, (event) {
+      setState(() {
+        print(event);
+        List<dynamic> eventList = event;
+        Map firstEvent = eventList.first;
+        if (firstEvent.keys.first == "EventPreparePaypage") {
+          //_result = firstEvent.values.first.toString();
+//          _result = firstEvent["pt_response_code"];
+          print(
+              '========================================================================');
+        } else {
+          _result = firstEvent["pt_response_code"];
+          print(_result);
+        }
+      });
+    });
+    return 'Success';
+  }
+
+  placeOnlinePaidOrder() {
+    print(_result);
+    if (_result == '100' || _result == '833') {
+      placeOrder(type);
+    }
   }
 }

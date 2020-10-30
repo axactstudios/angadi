@@ -128,7 +128,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                   height: 100,
                                   width: double.infinity,
                                   child: Image.network(
-                                      snap.data.documents[i]['imageURL'])),
+                                    snap.data.documents[i]['liveImageURL'],
+                                    fit: BoxFit.fill,
+                                  )),
                               SizedBox(
                                 height: 5,
                               ),

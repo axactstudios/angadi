@@ -629,7 +629,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Row(
                       children: [
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
+                          padding: EdgeInsets.symmetric(horizontal: 7.0),
                           child: InkWell(
                             onTap: () {
                               Navigator.push(context, MaterialPageRoute(
@@ -879,12 +879,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                           Container(
                                               height: 70,
                                               width: double.infinity,
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: Image.network(snap.data
-                                                    .documents[i]['imageURL']),
-                                              )),
+                                              child: Image.network(
+                                                  snap.data.documents[i]
+                                                      ['liveImageURL'],
+                                                  fit: BoxFit.fill)),
                                           SizedBox(
                                             height: 5,
                                           ),
