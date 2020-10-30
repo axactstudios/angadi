@@ -197,7 +197,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     setState(() {
       item;
 //      print(item.qtyTag);
-//      print('-------------Updated');
+      print('-------------Updated');
     });
     return item;
   }
@@ -1117,22 +1117,22 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                  await dbHelper.onCreate();
 //                  int l = await dbHelper.check(widget.restaurantDetail.name);
 //                  print(l);
-                                  var temp = await _query(
-                                      widget.restaurantDetail.name,
-                                      sizes[choice]);
-                                  print(temp);
-                                  if (temp == null)
-                                    addToCart(context,
-                                        name: widget.restaurantDetail.name,
-                                        imgUrl: widget.restaurantDetail.url,
-                                        price: widget.restaurantDetail.price,
-                                        qty: 1,
-                                        qtyTag: sizes[choice]);
-                                  else
-                                    setState(() {
-                                      print('Item already exists');
-                                      check[choice] = true;
-                                    });
+//                                   var temp = await _query(
+//                                       widget.restaurantDetail.name,
+//                                       sizes[choice]);
+//                                   print(temp);
+//                                   if (temp == null)
+                                  addToCart(context,
+                                      name: widget.restaurantDetail.name,
+                                      imgUrl: widget.restaurantDetail.url,
+                                      price: widget.restaurantDetail.price,
+                                      qty: 1,
+                                      qtyTag: sizes[choice]);
+                                  // else
+                                  //   setState(() {
+                                  //     print('Item already exists');
+                                  //     check[choice] = true;
+                                  //   });
                                 },
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
                                 buttonHeight: 65,
