@@ -10,6 +10,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../classes/cart.dart';
 import '../routes/router.dart';
@@ -143,29 +144,65 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
             gradient: widget.gradient,
           ))),
       appBar: AppBar(
-        leading: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: Icon(Icons.arrow_back_ios)),
-        title: Text(widget.categoryName),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: AppColors.secondaryElement,
         actions: [
           InkWell(
               onTap: () {
-                print(1);
-                pushNewScreen(context,
-                    screen: SearchScreen(), withNavBar: true);
+                launch('tel:+919027553376');
               },
-              child: InkWell(
-                  onTap: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return FilteredSearch();
-                      })),
-                  child: Icon(Icons.search))),
+              child: Icon(Icons.phone, color: Color(0xFF6b3600))),
+          SizedBox(
+            width: 8,
+          ),
+          InkWell(
+              onTap: () {
+//                print(1);
+                launch(
+                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+              },
+              child: Icon(Icons.mail, color: Color(0xFF6b3600))),
           SizedBox(
             width: 14,
           )
         ],
-        elevation: 0,
+        elevation: 0.0,
+        centerTitle: true,
+        title: Text(
+          widget.categoryName,
+          style: Styles.customTitleTextStyle(
+            color: Color(0xFF6b3600),
+            fontWeight: FontWeight.w600,
+            fontSize: Sizes.TEXT_SIZE_18,
+          ),
+        ),
       ),
+//      appBar: AppBar(
+//        leading: InkWell(
+//            onTap: () => Navigator.pop(context),
+//            child: Icon(Icons.arrow_back_ios)),
+//        title: Text(widget.categoryName),
+//        actions: [
+//          InkWell(
+//              onTap: () {
+//                print(1);
+//                pushNewScreen(context,
+//                    screen: SearchScreen(), withNavBar: true);
+//              },
+//              child: InkWell(
+//                  onTap: () => Navigator.push(context,
+//                          MaterialPageRoute(builder: (BuildContext context) {
+//                        return FilteredSearch();
+//                      })),
+//                  child: Icon(Icons.search))),
+//          SizedBox(
+//            width: 14,
+//          )
+//        ],
+//        elevation: 0,
+//      ),
       // appBar: PreferredSize(
       //   preferredSize: Size.fromHeight(80.0),
       //   child: AppBar(

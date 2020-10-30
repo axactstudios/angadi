@@ -88,6 +88,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Offer> offers = new List<Offer>();
   @override
   Widget build(BuildContext context) {
+//    print(MediaQuery.of(context).size.width);
+
     _pickTime() async {
       DateTime t = await showDatePicker(
         context: context,

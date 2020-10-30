@@ -6,6 +6,7 @@ import 'package:angadi/values/data.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/category_card.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../routes/router.dart';
 import '../routes/router.gr.dart';
@@ -29,33 +30,64 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           tab_no: CategoriesScreen.TAB_NO,
           currentScreen: CategoriesScreen('Both'))),
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: AppColors.secondaryElement,
+        actions: [
+          InkWell(
+              onTap: () {
+                launch('tel:+919027553376');
+              },
+              child: Icon(Icons.phone, color: Color(0xFF6b3600))),
+          SizedBox(
+            width: 8,
+          ),
+          InkWell(
+              onTap: () {
+//                print(1);
+                launch(
+                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+              },
+              child: Icon(Icons.mail, color: Color(0xFF6b3600))),
+          SizedBox(
+            width: 14,
+          )
+        ],
         elevation: 0.0,
-//        leading: InkWell(
-//          onTap: () => R.Router.navigator.pop(),
-//          child: Image.asset(
-//            ImagePath.arrowBackIcon,
-//            color: AppColors.headingText,
-//          ),
-//        ),
         centerTitle: true,
         title: Text(
-          StringConst.CATEGORY,
+          'Angadi.ae',
           style: Styles.customTitleTextStyle(
-            color: AppColors.headingText,
+            color: Color(0xFF6b3600),
             fontWeight: FontWeight.w600,
-            fontSize: Sizes.TEXT_SIZE_20,
+            fontSize: Sizes.TEXT_SIZE_22,
           ),
         ),
-//        actions: <Widget>[
-//          InkWell(
-//            onTap: () {},
-//            child: Image.asset(
-//              ImagePath.searchIcon,
-//              color: AppColors.headingText,
-//            ),
-//          )
-//        ],
       ),
+//      appBar: AppBar(
+//        elevation: 0.0,
+////        leading: InkWell(
+////          onTap: () => R.Router.navigator.pop(),
+////          child: Image.asset(
+////            ImagePath.arrowBackIcon,
+////            color: AppColors.headingText,
+////          ),
+////        ),
+//        centerTitle: true,
+//        title:
+//          ),
+//        ),
+////        actions: <Widget>[
+////          InkWell(
+////            onTap: () {},
+////            child: Image.asset(
+////              ImagePath.searchIcon,
+////              color: AppColors.headingText,
+////            ),
+////          )
+////        ],
+//      ),
       body: Container(
         margin: EdgeInsets.symmetric(
             horizontal: Sizes.MARGIN_16, vertical: Sizes.MARGIN_16),
@@ -155,10 +187,23 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                 }
               }
               return categoriesTop.length != 0
-                  ? GridView.count(
-                      crossAxisCount: 2,
-                      scrollDirection: Axis.vertical,
-                      children: categoriesTop,
+                  ? Column(
+                      children: [
+                        Text(StringConst.CATEGORY,
+                            style: Styles.customTitleTextStyle(
+                              color: Color(0xFF6b3600),
+                              fontWeight: FontWeight.w600,
+                              fontSize: Sizes.TEXT_SIZE_20,
+                            )),
+                        SizedBox(height: 20),
+                        Expanded(
+                          child: GridView.count(
+                            crossAxisCount: 2,
+                            scrollDirection: Axis.vertical,
+                            children: categoriesTop,
+                          ),
+                        ),
+                      ],
                     )
                   : Container();
             }),

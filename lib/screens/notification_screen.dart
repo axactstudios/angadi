@@ -1,8 +1,10 @@
+import 'package:angadi/widgets/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/values/values.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'order_placed.dart';
 
@@ -100,17 +102,47 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: AppColors.secondaryElement,
+        actions: [
+          InkWell(
+              onTap: () {
+                launch('tel:+919027553376');
+              },
+              child: Icon(Icons.phone, color: Color(0xFF6b3600))),
+          SizedBox(
+            width: 8,
+          ),
+          InkWell(
+              onTap: () {
+//                print(1);
+                launch(
+                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+              },
+              child: Icon(Icons.mail, color: Color(0xFF6b3600))),
+          SizedBox(
+            width: 14,
+          )
+        ],
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          'Notifications',
+          'Angadi.ae',
           style: Styles.customTitleTextStyle(
-            color: AppColors.headingText,
+            color: Color(0xFF6b3600),
             fontWeight: FontWeight.w600,
-            fontSize: Sizes.TEXT_SIZE_22,
+            fontSize: Sizes.TEXT_SIZE_18,
           ),
         ),
       ),
+      drawer: CustomDrawer(),
+//      appBar: AppBar(
+//        elevation: 0.0,
+//        centerTitle: true,
+//        title:
+//      ),
       body: StreamBuilder(
           stream: Firestore.instance.collection('Notifications').snapshots(),
           // ignore: missing_return
@@ -134,40 +166,59 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 child: ListView.builder(
                     itemCount: notifications.length,
                     itemBuilder: (BuildContext context, int index) {
-                      return Card(
-                        child: ListTile(
+                      return Column(
+                        children: [
+                          index == 0
+                              ? Text(
+                                  'Notifications',
+                                  style: Styles.customTitleTextStyle(
+                                    color: Color(0xFF6b3600),
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: Sizes.TEXT_SIZE_22,
+                                  ),
+                                )
+                              : Container(),
+                          index == 0
+                              ? SizedBox(
+                                  height: 20,
+                                )
+                              : Container(),
+                          Card(
+                            child: ListTile(
 // leading: Image.asset(notifications[index].imageUrl),
-                          onTap: () async {
-                            await fetchOrderDetail(
-                                snap.data.documents[index]['OrderID']);
-                            pushNewScreen(context,
-                                screen: OrderPlaced(bill(),
-                                    snap.data.documents[index]['OrderID']));
-                          },
-                          title: Row(
-                            children: <Widget>[
-                              Text(
-                                '${(index + 1).toString()}. ${notifications[index].subtitle}',
-                                style: Styles.customTitleTextStyle(
-                                  color: AppColors.headingText,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14,
-                                ),
+                              onTap: () async {
+                                await fetchOrderDetail(
+                                    snap.data.documents[index]['OrderID']);
+                                pushNewScreen(context,
+                                    screen: OrderPlaced(bill(),
+                                        snap.data.documents[index]['OrderID']));
+                              },
+                              title: Row(
+                                children: <Widget>[
+                                  Text(
+                                    '${(index + 1).toString()}. ${notifications[index].subtitle}',
+                                    style: Styles.customTitleTextStyle(
+                                      color: AppColors.headingText,
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 14,
+                                    ),
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
 
-                          subtitle: Container(
-                            margin: EdgeInsets.only(top: 8.0),
-                            child: Text(
-                              notifications[index].title,
-                              style: Styles.customNormalTextStyle(
-                                color: AppColors.accentText,
-                                fontSize: Sizes.TEXT_SIZE_14,
+                              subtitle: Container(
+                                margin: EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  notifications[index].title,
+                                  style: Styles.customNormalTextStyle(
+                                    color: AppColors.accentText,
+                                    fontSize: Sizes.TEXT_SIZE_14,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       );
                     }),
               );

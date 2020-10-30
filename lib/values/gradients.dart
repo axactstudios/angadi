@@ -34,8 +34,9 @@ class Gradients {
       1,
     ],
     colors: [
-      Color.fromARGB(255, 255, 174, 139),
-      Color.fromARGB(255, 255, 150, 159),
+//      AppColors.secondaryElement,
+//      AppColors.secondaryElement,
+      Color(0xFF6b3600), Color(0xFF6b3600)
     ],
   );
   static const Gradient fullScreenOverGradient = LinearGradient(

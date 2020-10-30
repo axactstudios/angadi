@@ -167,8 +167,7 @@ class _FilterScreenState extends State<FilterScreen> {
                   buttonHeight: 65,
                   buttonWidth: (MediaQuery.of(context).size.width / 2) - 0.25,
                   decoration: Decorations.customHalfCurvedButtonDecoration(
-                    topleftRadius: Sizes.RADIUS_24,
-                  ),
+                      topleftRadius: Sizes.RADIUS_24, color: Color(0xFF6b3600)),
                   buttonTextStyle: buttonTextStyle,
                 ),
                 IntrinsicHeight(
@@ -188,8 +187,8 @@ class _FilterScreenState extends State<FilterScreen> {
                   buttonHeight: 65,
                   buttonWidth: (MediaQuery.of(context).size.width / 2) - 0.25,
                   decoration: Decorations.customHalfCurvedButtonDecoration(
-                    topRightRadius: Sizes.RADIUS_24,
-                  ),
+                      topRightRadius: Sizes.RADIUS_24,
+                      color: Color(0xFF6b3600)),
                   buttonTextStyle: buttonTextStyle,
                 ),
               ],

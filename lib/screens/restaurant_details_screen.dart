@@ -277,19 +277,32 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     var aPieceOfTheHeightOfStack = heightOfStack - heightOfStack / 3.5;
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.secondaryElement,
         elevation: 0.0,
-        title: Text(widget.restaurantDetail.category,
-            style: TextStyle(fontSize: 20)),
+        title: Text(
+          'Angadi.ae',
+          style: Styles.customTitleTextStyle(
+            color: Color(0xFF6b3600),
+            fontWeight: FontWeight.w600,
+            fontSize: Sizes.TEXT_SIZE_22,
+          ),
+        ),
         centerTitle: true,
         leading: InkWell(
             onTap: () => Navigator.pop(context),
-            child: Icon(Icons.arrow_back_ios)),
+            child: Icon(
+              Icons.arrow_back_ios,
+              color: Colors.white,
+            )),
         actions: [
           InkWell(
               onTap: () {
                 // launch('tel:+919027553376');
               },
-              child: Icon(Icons.share)),
+              child: Icon(
+                Icons.share,
+                color: Color(0xFF6b3600),
+              )),
           SizedBox(
             width: 8,
           ),
@@ -307,7 +320,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 children: <Widget>[
                   Icon(
                     Icons.shopping_cart,
-                    color: AppColors.black,
+                    color: Color(0xFF6b3600),
                   ),
                   total != null
                       ? total > 0
@@ -429,7 +442,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                         shrinkWrap: true,
                         children: <Widget>[
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),
+                            padding: const EdgeInsets.fromLTRB(16.0, 8, 8, 2),
                             child: Text(
                               widget.restaurantDetail.name,
                               textAlign: TextAlign.left,
@@ -441,7 +454,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             ),
                           ),
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 0, 8, 8),
+                            padding: const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
                             child: Text(
                               widget.restaurantDetail.category,
                               style: addressTextStyle,
@@ -468,54 +481,29 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           //     ),
                           //   ),
                           // ),
+
                           Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 3, 8, 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 16.0),
+                            child: Stack(
                               children: <Widget>[
-                                Ratings(widget.restaurantDetail.rating),
-                                InkWell(
-                                  onTap: () {
-                                    R.Router.navigator.pushNamed(
-                                        R.Router.reviewRatingScreen,
-                                        arguments: ReviewRating(
-                                            widget.restaurantDetail.name));
-                                  },
-                                  child: Padding(
-                                    padding:
-                                        const EdgeInsets.fromLTRB(8.0, 0, 8, 0),
-                                    child: Text(
-                                      'See All Reviews',
-                                      style: TextStyle(
-                                        color: AppColors.accentText,
-                                        fontSize: 12,
-                                      ),
+                                Positioned(
+                                  child: Image.network(
+                                    urlUniv,
+                                    width: MediaQuery.of(context).size.width,
+                                    height: heightOfStack,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                                DarkOverLay(
+                                    gradient:
+                                        Gradients.restaurantDetailsGradient),
+                                Positioned(
+                                  child: Container(
+                                    padding: EdgeInsets.only(
+                                      right: Sizes.MARGIN_16,
+                                      top: Sizes.MARGIN_16,
                                     ),
-                                  ),
-                                ),
-                                Spacer(flex: 1),
-                              ],
-                            ),
-                          ),
-                          Stack(
-                            children: <Widget>[
-                              Positioned(
-                                child: Image.network(
-                                  urlUniv,
-                                  width: MediaQuery.of(context).size.width,
-                                  height: heightOfStack,
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                              DarkOverLay(
-                                  gradient:
-                                      Gradients.restaurantDetailsGradient),
-                              Positioned(
-                                child: Container(
-                                  padding: EdgeInsets.only(
-                                    right: Sizes.MARGIN_16,
-                                    top: Sizes.MARGIN_16,
-                                  ),
 //                            child: Row(
 //                              children: <Widget>[
 //                                InkWell(
@@ -542,8 +530,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                                ),
 //                              ],
 //                            ),
+                                  ),
                                 ),
-                              ),
 //                         Positioned(
 //                           top: aPieceOfTheHeightOfStack,
 //                           left: 24,
@@ -613,12 +601,14 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                             ),
 //                           ),
 //                         )
-                            ],
+                              ],
+                            ),
                           ),
                           Container(
                             height: 100,
                             child: Row(
                               children: [
+                                SizedBox(width: 14),
                                 Expanded(
                                     flex: 1,
                                     child: InkWell(
@@ -705,6 +695,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                           vertical: 8.0),
                                       child: Container(
                                           decoration: BoxDecoration(
+                                              color: AppColors.secondaryElement,
                                               border: Border.all(
                                                 width: 2,
                                                 color:
@@ -724,9 +715,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 textAlign: TextAlign.left,
                                                 style: Styles
                                                     .customMediumTextStyle(
-                                                  color: AppColors.headingText,
+                                                  fontWeight: FontWeight.w600,
+                                                  color: Color(0xFF6b3600),
                                                   // fontWeight: FontWeight.w600,
-                                                  fontSize: Sizes.TEXT_SIZE_20,
+                                                  fontSize: 24,
                                                 ),
                                               ),
                                               Text(
@@ -734,14 +726,43 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 textAlign: TextAlign.left,
                                                 style: Styles
                                                     .customMediumTextStyle(
-                                                  color: AppColors.headingText,
+                                                  color: Color(0xFF6b3600),
                                                   // fontWeight: FontWeight.w600,
-                                                  fontSize: Sizes.TEXT_SIZE_20,
+                                                  fontSize: Sizes.TEXT_SIZE_18,
                                                 ),
                                               ),
                                             ],
                                           ))),
                                     )),
+                              ],
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16.0, 3, 8, 10),
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Ratings(widget.restaurantDetail.rating),
+                                InkWell(
+                                  onTap: () {
+                                    R.Router.navigator.pushNamed(
+                                        R.Router.reviewRatingScreen,
+                                        arguments: ReviewRating(
+                                            widget.restaurantDetail.name));
+                                  },
+                                  child: Padding(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(8.0, 0, 8, 0),
+                                    child: Text(
+                                      'See All Reviews',
+                                      style: TextStyle(
+                                        color: AppColors.accentText,
+                                        fontSize: 14,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Spacer(flex: 1),
                               ],
                             ),
                           ),
@@ -1091,6 +1112,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                         qty == 0 || qty == null
                             ? angadiButton(
                                 'Add to Cart ',
+
                                 onTap: () async {
 //                  await dbHelper.onCreate();
 //                  int l = await dbHelper.check(widget.restaurantDetail.name);
@@ -1118,6 +1140,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                     MediaQuery.of(context).size.width * 0.5,
                                 decoration: Decorations
                                     .customHalfCurvedButtonDecoration(
+                                  color: Color(0xFF6b3600),
                                   topleftRadius: Sizes.RADIUS_14,
                                   topRightRadius: Sizes.RADIUS_14,
                                 ),
@@ -1129,7 +1152,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.all(
                                             Radius.circular(5)),
-                                        color: AppColors.secondaryElement),
+                                        color: Color(0xFF6b3600)),
                                     child: Center(
                                       child: Row(
                                         mainAxisAlignment:
