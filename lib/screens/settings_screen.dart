@@ -9,11 +9,40 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: Size.fromHeight(56.0),
-        child: CustomAppBar(
-          title: "Settings",
-          hasTrailing: false,
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: AppColors.secondaryElement,
+        actions: [
+          InkWell(
+              onTap: () {
+                launch('tel:+919027553376');
+              },
+              child: Icon(Icons.phone, color: Color(0xFF6b3600))),
+          SizedBox(
+            width: 8,
+          ),
+          InkWell(
+              onTap: () {
+//                print(1);
+                launch(
+                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+              },
+              child: Icon(Icons.mail, color: Color(0xFF6b3600))),
+          SizedBox(
+            width: 14,
+          )
+        ],
+        elevation: 0.0,
+        centerTitle: true,
+        title: Text(
+          'Angadi.ae',
+          style: Styles.customTitleTextStyle(
+            color: Color(0xFF6b3600),
+            fontWeight: FontWeight.w600,
+            fontSize: Sizes.TEXT_SIZE_18,
+          ),
         ),
       ),
       body: Column(
