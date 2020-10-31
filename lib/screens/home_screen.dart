@@ -72,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    addDishParams();
+//    addDishParams();
     getUser();
     getBanners();
     date = DateTime.now();
