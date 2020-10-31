@@ -1,5 +1,6 @@
 import 'package:angadi/routes/router.gr.dart';
 import 'package:angadi/screens/settings_screen.dart';
+import 'package:angadi/screens/wishlist_screen.dart';
 import 'package:angadi/values/data.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
@@ -426,6 +427,27 @@ class _CustomDrawerState extends State<CustomDrawer> {
             ),
             onTap: () {
               pushNewScreen(context, screen: CategoriesScreen('Both'));
+            },
+          ),
+          Container(
+            margin: EdgeInsets.symmetric(horizontal: 20),
+            height: 0.5,
+            color: Colors.black26,
+          ),
+          ListTile(
+            title: Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+              child: Text(
+                'My Wishlist',
+                style: TextStyle(
+                    fontSize: 18,
+                    fontFamily: 'nunito',
+                    fontWeight: FontWeight.w600),
+              ),
+            ),
+            onTap: () {
+              pushNewScreen(context, screen: WishlistScreen());
             },
           ),
           Container(

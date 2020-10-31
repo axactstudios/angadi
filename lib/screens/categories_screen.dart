@@ -119,7 +119,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                           child: Column(
                             children: [
                               Container(
-                                  height: 130,
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.35,
                                   width: double.infinity,
                                   child: ClipRRect(
                                     borderRadius:
@@ -175,7 +176,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         child: Column(
                           children: [
                             Container(
-                                height: 130,
+                                height:
+                                    MediaQuery.of(context).size.width * 0.35,
                                 width: double.infinity,
                                 child: ClipRRect(
                                   borderRadius:

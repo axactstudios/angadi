@@ -281,7 +281,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
               return Container(
                 margin: EdgeInsets.symmetric(
-                  horizontal: Sizes.MARGIN_16,
+                  horizontal: MediaQuery.of(context).size.width * 0.04,
                   vertical: Sizes.MARGIN_8,
                 ),
                 child: ListView(
@@ -627,109 +627,104 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 7.0),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                return CategoriesScreen('Food');
-                              }));
-                            },
-                            child: Stack(
-                              children: [
-                                Container(
-                                    height: 130,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Image.network(
-                                        'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
-                                Positioned(
-                                  bottom: 0,
-                                  child: Container(
-                                    height: 25,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.secondaryElement,
-                                        borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8))),
-                                    child: Text(
-                                      'Food Items',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Color(0xFF6b3600),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return CategoriesScreen('Food');
+                            }));
+                          },
+                          child: Stack(
+                            children: [
+                              Container(
+                                  height: 130,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
                                   ),
-                                )
-                              ],
-                            ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                  height: 25,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.secondaryElement,
+                                      borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(8),
+                                          bottomLeft: Radius.circular(8))),
+                                  child: Text(
+                                    'Food Items',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xFF6b3600),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                         SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.025),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 8.0),
-                          child: InkWell(
-                            onTap: () {
-                              Navigator.push(context, MaterialPageRoute(
-                                  builder: (BuildContext context) {
-                                return CategoriesScreen('Food');
-                              }));
-                            },
-                            child: Stack(
-                              children: [
-                                Container(
-                                    height: 130,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    decoration: BoxDecoration(
-                                      borderRadius:
-                                          BorderRadius.all(Radius.circular(8)),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(8.0),
-                                      child: Image.network(
-                                        'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
-                                        fit: BoxFit.cover,
-                                      ),
-                                    )),
-                                Positioned(
-                                  bottom: 0,
-                                  child: Container(
-                                    height: 25,
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.4,
-                                    decoration: BoxDecoration(
-                                        color: AppColors.secondaryElement,
-                                        borderRadius: BorderRadius.only(
-                                            bottomRight: Radius.circular(8),
-                                            bottomLeft: Radius.circular(8))),
-                                    child: Text(
-                                      'Grocery Items',
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          color: Color(0xFF6b3600),
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 15),
-                                    ),
+                            width: MediaQuery.of(context).size.width * 0.02),
+                        InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return CategoriesScreen('Food');
+                            }));
+                          },
+                          child: Stack(
+                            children: [
+                              Container(
+                                  height: 130,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
                                   ),
-                                )
-                              ],
-                            ),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(8.0),
+                                    child: Image.network(
+                                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )),
+                              Positioned(
+                                bottom: 0,
+                                child: Container(
+                                  height: 25,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.45,
+                                  decoration: BoxDecoration(
+                                      color: AppColors.secondaryElement,
+                                      borderRadius: BorderRadius.only(
+                                          bottomRight: Radius.circular(8),
+                                          bottomLeft: Radius.circular(8))),
+                                  child: Text(
+                                    'Grocery Items',
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        color: Color(0xFF6b3600),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 15),
+                                  ),
+                                ),
+                              )
+                            ],
                           ),
                         ),
                       ],
@@ -820,7 +815,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 260,
+                      height: 300,
                       child: StreamBuilder(
                         stream: Firestore.instance
                             .collection('Categories')
@@ -845,70 +840,65 @@ class _HomeScreenState extends State<HomeScreen> {
                                 //   ),
                                 // ));
 
-                                categoriesTop.add(Padding(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 8.0),
-                                  child: InkWell(
-                                    onTap: () {
-                                      Navigator.push(context, MaterialPageRoute(
-                                          builder: (BuildContext context) {
-                                        return CategoryDetailScreen(
-                                          categoryName: snap.data.documents[i]
-                                              ['catName'],
-                                          imagePath: snap.data.documents[i]
-                                              ['imageURL'],
-                                          selectedCategory: i,
-                                          numberOfCategories:
-                                              categoriesTop.length,
-                                          gradient: gradients[i],
-                                          sCat: snap.data.documents[i]['sCat'],
-                                        );
-                                      }));
-                                    },
-                                    child: Stack(
-                                      children: [
-                                        Container(
-                                            height: 120,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.4,
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(8)),
-                                              child: Image.network(
-                                                  snap.data.documents[i]
-                                                      ['liveImageURL'],
-                                                  fit: BoxFit.fill),
-                                            )),
-                                        Positioned(
-                                          bottom: 0,
-                                          child: Container(
-                                            height: 25,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.4,
-                                            decoration: BoxDecoration(
-                                                color:
-                                                    AppColors.secondaryElement,
-                                                borderRadius: BorderRadius.only(
-                                                    bottomRight:
-                                                        Radius.circular(8),
-                                                    bottomLeft:
-                                                        Radius.circular(8))),
-                                            child: Text(
-                                              snap.data.documents[i]['catName'],
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                  color: Color(0xFF6b3600),
-                                                  fontWeight: FontWeight.bold,
-                                                  fontSize: 15),
-                                            ),
+                                categoriesTop.add(InkWell(
+                                  onTap: () {
+                                    Navigator.push(context, MaterialPageRoute(
+                                        builder: (BuildContext context) {
+                                      return CategoryDetailScreen(
+                                        categoryName: snap.data.documents[i]
+                                            ['catName'],
+                                        imagePath: snap.data.documents[i]
+                                            ['imageURL'],
+                                        selectedCategory: i,
+                                        numberOfCategories:
+                                            categoriesTop.length,
+                                        gradient: gradients[i],
+                                        sCat: snap.data.documents[i]['sCat'],
+                                      );
+                                    }));
+                                  },
+                                  child: Stack(
+                                    children: [
+                                      Container(
+                                          height: 140,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.45,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(8)),
+                                            child: Image.network(
+                                                snap.data.documents[i]
+                                                    ['liveImageURL'],
+                                                fit: BoxFit.fill),
+                                          )),
+                                      Positioned(
+                                        bottom: 0,
+                                        child: Container(
+                                          height: 25,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.45,
+                                          decoration: BoxDecoration(
+                                              color: AppColors.secondaryElement,
+                                              borderRadius: BorderRadius.only(
+                                                  bottomRight:
+                                                      Radius.circular(8),
+                                                  bottomLeft:
+                                                      Radius.circular(8))),
+                                          child: Text(
+                                            snap.data.documents[i]['catName'],
+                                            textAlign: TextAlign.center,
+                                            style: TextStyle(
+                                                color: Color(0xFF6b3600),
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 15),
                                           ),
-                                        )
-                                      ],
-                                    ),
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ));
 
@@ -970,7 +960,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.04,
+                                                0.02,
                                           ),
                                           categoriesTop[1]
                                         ],
@@ -987,7 +977,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.04,
+                                                0.02,
                                           ),
                                           categoriesTop[3]
                                         ],

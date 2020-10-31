@@ -2,8 +2,11 @@ import 'dart:ui';
 
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/classes/wishlist.dart';
 import 'package:angadi/routes/router.gr.dart';
+import 'package:angadi/screens/wishlist_screen.dart';
 import 'package:angadi/services/database_helper.dart';
+import 'package:angadi/services/database_helper_wishlist.dart';
 import 'package:angadi/widgets/category_card.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -79,11 +82,16 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   );
 
   final dbHelper = DatabaseHelper.instance;
+  final dbHelperWishlist = DatabaseHelper2.instance;
   Cart item;
+  Wishlist itemWishlist;
   var length;
+  var lengthWishlist;
   var qty = 1;
+  bool present = false;
   int choice = 0;
   List<Cart> cartItems = [];
+  List<Wishlist> wishlistItems = [];
   List<Widget> youMayAlsoLike = new List();
   List<Widget> similarProducts = new List();
   List<Widget> dishesLike = new List<Widget>();
@@ -103,6 +111,21 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     getAllItems();
   }
 
+  void updateItemWishlist(
+      {int id,
+      String name,
+      String imgUrl,
+      String price,
+      String qtyTag,
+      String details}) async {
+    // row to update
+    Wishlist item = Wishlist(id, name, imgUrl, price);
+    final rowsAffected = await dbHelperWishlist.update(item);
+    Fluttertoast.showToast(
+        msg: 'Updated Wishlist', toastLength: Toast.LENGTH_SHORT);
+    getAllItemsWishlist();
+  }
+
   void removeItem(String name, String qtyTag) async {
     // Assuming that the number of rows is the id for the last row.
     final rowsDeleted = await dbHelper.delete(name, qtyTag);
@@ -113,6 +136,15 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     });
     Fluttertoast.showToast(
         msg: 'Removed from cart', toastLength: Toast.LENGTH_SHORT);
+  }
+
+  void removeItemWishlist(String name, String qtyTag) async {
+    // Assuming that the number of rows is the id for the last row.
+    final rowsDeleted = await dbHelperWishlist.delete(name);
+    getAllItemsWishlist();
+    setState(() {});
+    Fluttertoast.showToast(
+        msg: 'Removed from Wishlist', toastLength: Toast.LENGTH_SHORT);
   }
 
   void getAllItems() async {
@@ -133,7 +165,64 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     });
   }
 
+  void getAllItemsWishlist() async {
+    final allRows = await dbHelperWishlist.queryAllRows();
+    wishlistItems.clear();
+    await allRows.forEach((row) => wishlistItems.add(Wishlist.fromMap(row)));
+    setState(() {
+      totalWishlist = wishlistItems.length;
+
+      for (var v in wishlistItems) {
+        print('######${v.productName}');
+        if (v.productName == widget.restaurantDetail.name) {
+          present = true;
+        }
+      }
+//      print(cartItems[1]);
+    });
+  }
+
   int total;
+  int totalWishlist;
+  void addToWishlist(ctxt, {String name, String imgUrl, String price}) async {
+    Map<String, dynamic> row = {
+      DatabaseHelper2.columnProductName: name,
+      DatabaseHelper2.columnImageUrl: imgUrl,
+      DatabaseHelper2.columnPrice: price
+    };
+    Wishlist item = Wishlist.fromMap(row);
+    final id = await dbHelperWishlist.insert(item);
+    final snackBar = SnackBar(
+        content: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text('Added to Wishlist'),
+          InkWell(
+            onTap: () {
+              pushNewScreen(context,
+                  screen: WishlistScreen(), withNavBar: true);
+            },
+            child: Text(
+              'View Wishlist',
+              style: TextStyle(fontWeight: FontWeight.bold, color: Colors.blue),
+            ),
+          ),
+        ],
+      ),
+    ));
+    setState(() {
+      present = true;
+    });
+// Find the Scaffold in the widget tree and use it to show a SnackBar.
+    Scaffold.of(ctxt).showSnackBar(snackBar);
+//    Fluttertoast.showToast(
+//        msg: 'Added to cart', toastLength: Toast.LENGTH_SHORT);
+
+    await getAllItemsWishlist();
+    getWishlistLength();
+  }
 
   void addToCart(ctxt,
       {String name,
@@ -182,12 +271,21 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     getCartLength();
   }
 
-  getCartLength() async {
-    int x = await dbHelper.queryRowCount();
+  getWishlistLength() async {
+    int x = await dbHelperWishlist.queryRowCount();
     length = x;
     setState(() {
       print('Length Updated');
       length;
+    });
+  }
+
+  getCartLength() async {
+    int x = await dbHelper.queryRowCount();
+    lengthWishlist = x;
+    setState(() {
+      print('Length Updated');
+      lengthWishlist;
     });
   }
 
@@ -202,6 +300,19 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       print('-------------Updated');
     });
     return item;
+  }
+
+  Future<Wishlist> _queryWishlist(String name) async {
+    final allRows = await dbHelperWishlist.queryRows(name);
+    print(allRows);
+
+    allRows.forEach((row) => itemWishlist = Wishlist.fromMap(row));
+    setState(() {
+      itemWishlist;
+//      print(item.qtyTag);
+      print('-------------Updated');
+    });
+    return itemWishlist;
   }
 
   var factor = 1;
@@ -246,9 +357,28 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     }
   }
 
+  Future<bool> checkInWishlist() async {
+    print('called');
+    var temp = await _queryWishlist(widget.restaurantDetail.name);
+    print(temp);
+    if (temp != null) {
+      if (temp.productName == widget.restaurantDetail.name) {
+        setState(() {
+          print('Item already exists ${temp.productName}');
+        });
+        return true;
+      } else {
+        setState(() {});
+        return false;
+      }
+    }
+  }
+
   var l = 0;
   first() async {
     qty = await getQuantity(widget.restaurantDetail.name, '500 ML');
+    present = await checkInWishlist();
+    print('-------------%%%%%$present');
   }
 
   String urlUniv;
@@ -1079,39 +1209,53 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                     ),
                     Row(
                       children: [
-                        angadiButton(
-                          'Save For Later',
-                          buttonTextStyle: addressTextStyle,
-                          onTap: () async {
-//                  await dbHelper.onCreate();
-//                  int l = await dbHelper.check(widget.restaurantDetail.name);
-//                  print(l);
-                            var temp = await _query(
-                                widget.restaurantDetail.name, sizes[choice]);
-                            print(temp);
-                            if (temp == null)
-                              addToCart(context,
-                                  name: widget.restaurantDetail.name,
-                                  imgUrl: widget.restaurantDetail.url,
-                                  price: widget.restaurantDetail.price,
-                                  qty: 1,
-                                  qtyTag: sizes[choice]);
-                            else
-                              setState(() {
-                                print('Item already exists');
-                                check[choice] = true;
-                              });
-                          },
+                        present == false || present == null
+                            ? angadiButton(
+                                'Save For Later',
+                                buttonTextStyle: addressTextStyle,
+                                onTap: () async {
+                                  var temp = await _queryWishlist(
+                                      widget.restaurantDetail.name);
+                                  print(temp);
+                                  if (temp == null)
+                                    addToWishlist(
+                                      context,
+                                      name: widget.restaurantDetail.name,
+                                      imgUrl: widget.restaurantDetail.url,
+                                      price: widget.restaurantDetail.price,
+                                    );
+                                  else
+                                    setState(() {
+                                      print('Item already exists');
+                                      present = true;
+                                    });
+                                },
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                          buttonHeight: 65,
-                          buttonWidth: MediaQuery.of(context).size.width * 0.5,
-                          decoration:
-                              Decorations.customHalfCurvedButtonDecoration(
-                            color: AppColors.secondaryColor,
-                            topleftRadius: Sizes.RADIUS_14,
-                            topRightRadius: Sizes.RADIUS_14,
-                          ),
-                        ),
+                                buttonHeight: 65,
+                                buttonWidth:
+                                    MediaQuery.of(context).size.width * 0.5,
+                                decoration: Decorations
+                                    .customHalfCurvedButtonDecoration(
+                                  color: AppColors.secondaryColor,
+                                  topleftRadius: Sizes.RADIUS_14,
+                                  topRightRadius: Sizes.RADIUS_14,
+                                ),
+                              )
+                            : angadiButton(
+                                'Saved In Wishlist',
+                                buttonTextStyle: addressTextStyle,
+                                onTap: () async {},
+//                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
+                                buttonHeight: 65,
+                                buttonWidth:
+                                    MediaQuery.of(context).size.width * 0.5,
+                                decoration: Decorations
+                                    .customHalfCurvedButtonDecoration(
+                                  color: AppColors.secondaryColor,
+                                  topleftRadius: Sizes.RADIUS_14,
+                                  topRightRadius: Sizes.RADIUS_14,
+                                ),
+                              ),
                         qty == 0 || qty == null
                             ? angadiButton(
                                 'Add to Cart ',
