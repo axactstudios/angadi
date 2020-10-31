@@ -15,6 +15,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'order_placed.dart';
 
 class Checkout extends StatefulWidget {
@@ -78,18 +79,38 @@ class _CheckoutState extends State<Checkout> {
         textTheme.subtitle.copyWith(color: AppColors.accentText);
     return Scaffold(
         appBar: AppBar(
-          leading: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: Icon(Icons.arrow_back_ios),
+          iconTheme: IconThemeData(
+            color: Colors.white,
           ),
+          backgroundColor: AppColors.secondaryElement,
+          actions: [
+            InkWell(
+                onTap: () {
+                  launch('tel:+919027553376');
+                },
+                child: Icon(Icons.phone, color: Color(0xFF6b3600))),
+            SizedBox(
+              width: 8,
+            ),
+            InkWell(
+                onTap: () {
+//                print(1);
+                  launch(
+                      'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+                },
+                child: Icon(Icons.mail, color: Color(0xFF6b3600))),
+            SizedBox(
+              width: 14,
+            )
+          ],
           elevation: 0.0,
           centerTitle: true,
           title: Text(
-            'Checkout',
+            'Angadi.ae',
             style: Styles.customTitleTextStyle(
-              color: AppColors.headingText,
+              color: Color(0xFF6b3600),
               fontWeight: FontWeight.w600,
-              fontSize: Sizes.TEXT_SIZE_22,
+              fontSize: Sizes.TEXT_SIZE_18,
             ),
           ),
         ),

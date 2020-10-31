@@ -1,6 +1,8 @@
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:flutter/material.dart';
+import 'package:place_picker/entities/location_result.dart';
+import 'package:place_picker/widgets/place_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyAddresses extends StatefulWidget {
@@ -9,6 +11,21 @@ class MyAddresses extends StatefulWidget {
 }
 
 class _MyAddressesState extends State<MyAddresses> {
+  var location = 'Dubai';
+
+  LocationResult result;
+
+  void showPlacePicker() async {
+    result = await Navigator.of(context).push(MaterialPageRoute(
+        builder: (context) =>
+            PlacePicker("AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw")));
+    setState(() {
+      location = result.formattedAddress;
+    });
+    // Handle the result in your way
+    print(location);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,10 +70,15 @@ class _MyAddressesState extends State<MyAddresses> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: angadiButton(
-                '+ Add new address',
-                buttonWidth: double.infinity,
-                onTap: () {},
+              child: InkWell(
+                onTap: () {
+                  showPlacePicker();
+                },
+                child: angadiButton(
+                  '+ Add new address',
+                  buttonWidth: double.infinity,
+                  onTap: () {},
+                ),
               ),
             )
           ],

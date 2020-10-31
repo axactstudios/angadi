@@ -331,23 +331,38 @@ class _OrderPlacedState extends State<OrderPlaced> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(
-            onTap: () {
-              removeAll();
-              R.Router.navigator.pushNamedAndRemoveUntil(
-                R.Router.rootScreen,
-                (Route<dynamic> route) => false,
-              );
-            },
-            child: Icon(Icons.arrow_back_ios)),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+        backgroundColor: AppColors.secondaryElement,
+        actions: [
+          InkWell(
+              onTap: () {
+                launch('tel:+919027553376');
+              },
+              child: Icon(Icons.phone, color: Color(0xFF6b3600))),
+          SizedBox(
+            width: 8,
+          ),
+          InkWell(
+              onTap: () {
+//                print(1);
+                launch(
+                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+              },
+              child: Icon(Icons.mail, color: Color(0xFF6b3600))),
+          SizedBox(
+            width: 14,
+          )
+        ],
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          'Order Placed',
+          'Angadi.ae',
           style: Styles.customTitleTextStyle(
-            color: AppColors.headingText,
+            color: Color(0xFF6b3600),
             fontWeight: FontWeight.w600,
-            fontSize: Sizes.TEXT_SIZE_22,
+            fontSize: Sizes.TEXT_SIZE_18,
           ),
         ),
       ),

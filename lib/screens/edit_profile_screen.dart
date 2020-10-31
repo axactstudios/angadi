@@ -16,6 +16,7 @@ import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class EditProfileScreen extends StatefulWidget {
   @override
@@ -73,29 +74,40 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        appBar: PreferredSize(
-          preferredSize: Size.fromHeight(56.0),
-          child: CustomAppBar(
-            title: "Edit Profile",
-            trailing: <Widget>[
-              InkWell(
-                onTap: () => R.Router.navigator.pop(),
-                child: Center(
-                  child: Container(
-                    margin:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    child: Text(
-                      'Cancel',
-                      style: textTheme.body1.copyWith(
-                        color: AppColors.accentText,
-                        fontSize: Sizes.TEXT_SIZE_20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+          backgroundColor: AppColors.secondaryElement,
+          actions: [
+            InkWell(
+                onTap: () {
+                  launch('tel:+919027553376');
+                },
+                child: Icon(Icons.phone, color: Color(0xFF6b3600))),
+            SizedBox(
+              width: 8,
+            ),
+            InkWell(
+                onTap: () {
+//                print(1);
+                  launch(
+                      'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+                },
+                child: Icon(Icons.mail, color: Color(0xFF6b3600))),
+            SizedBox(
+              width: 14,
+            )
+          ],
+          elevation: 0.0,
+          centerTitle: true,
+          title: Text(
+            'Angadi.ae',
+            style: Styles.customTitleTextStyle(
+              color: Color(0xFF6b3600),
+              fontWeight: FontWeight.w600,
+              fontSize: Sizes.TEXT_SIZE_18,
+            ),
           ),
         ),
         body: Container(

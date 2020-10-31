@@ -143,12 +143,19 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                         fontSize: 20),
                                   ),
                                   SizedBox(
-                                    height: 5,
+                                    height: 2.5,
                                   ),
                                   Container(
                                     height: 2,
+                                    width: snap.data.documents[i]['catName']
+                                            .toString()
+                                            .length *
+                                        10.0,
                                     color: AppColors.secondaryElement,
-                                  )
+                                  ),
+                                  SizedBox(
+                                    height: 2.5,
+                                  ),
                                 ],
                               )
                             ],
@@ -200,12 +207,19 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                       fontSize: 20),
                                 ),
                                 SizedBox(
-                                  height: 5,
+                                  height: 2.5,
                                 ),
                                 Container(
                                   height: 2,
+                                  width: snap.data.documents[i]['catName']
+                                          .toString()
+                                          .length *
+                                      0.5,
                                   color: AppColors.secondaryElement,
-                                )
+                                ),
+                                SizedBox(
+                                  height: 2.5,
+                                ),
                               ],
                             )
                           ],
@@ -233,6 +247,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         SizedBox(height: 20),
                         Expanded(
                           child: GridView.count(
+                            childAspectRatio: 0.87,
                             crossAxisCount: 2,
                             scrollDirection: Axis.vertical,
                             children: categoriesTop,
