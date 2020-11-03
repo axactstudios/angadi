@@ -16,6 +16,7 @@ class _MyAddressesState extends State<MyAddresses> {
   LocationResult result;
 
   void showPlacePicker() async {
+    print('called');
     result = await Navigator.of(context).push(MaterialPageRoute(
         builder: (context) =>
             PlacePicker("AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw")));
@@ -70,15 +71,12 @@ class _MyAddressesState extends State<MyAddresses> {
           children: [
             Padding(
               padding: const EdgeInsets.all(16.0),
-              child: InkWell(
+              child: angadiButton(
+                '+ Add new address',
+                buttonWidth: double.infinity,
                 onTap: () {
                   showPlacePicker();
                 },
-                child: angadiButton(
-                  '+ Add new address',
-                  buttonWidth: double.infinity,
-                  onTap: () {},
-                ),
               ),
             )
           ],

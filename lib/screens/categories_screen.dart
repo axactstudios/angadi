@@ -147,10 +147,8 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                   ),
                                   Container(
                                     height: 2,
-                                    width: snap.data.documents[i]['catName']
-                                            .toString()
-                                            .length *
-                                        10.0,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.35,
                                     color: AppColors.secondaryElement,
                                   ),
                                   SizedBox(
