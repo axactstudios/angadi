@@ -1,4 +1,5 @@
 import 'package:angadi/classes/cart.dart';
+import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/offers_screen.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/values/values.dart';
@@ -6,6 +7,7 @@ import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/heading_row.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -193,7 +195,10 @@ class _CheckoutState extends State<Checkout> {
                             child: Row(
                               children: [
                                 Container(
-                                  child: Image.network(cartItems[i].imgUrl),
+                                  child: FancyShimmerImage(
+                                    imageUrl: cartItems[i].imgUrl,
+                                    shimmerDuration: Duration(seconds: 2),
+                                  ),
                                   height: 80,
                                   width: 80,
                                 ),
@@ -245,16 +250,16 @@ class _CheckoutState extends State<Checkout> {
                                 number: '',
                               ),
                             ),
-                            InkWell(
-                                onTap: () {
-                                  showPlacePicker();
-
-//                              _locationDialog(context);
-                                },
-                                child: Icon(
-                                  Icons.map,
-                                  size: 30,
-                                )),
+//                             InkWell(
+//                                 onTap: () {
+//                                   showPlacePicker();
+//
+// //                              _locationDialog(context);
+//                                 },
+//                                 child: Icon(
+//                                   Icons.map,
+//                                   size: 30,
+//                                 )),
                           ],
                         ),
                       )
@@ -297,6 +302,20 @@ class _CheckoutState extends State<Checkout> {
                         ),
                       )
                     : Container(),
+                Padding(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 14.0, vertical: 10),
+                  child: angadiButton(
+                    'Saved addresses',
+                    buttonWidth: MediaQuery.of(context).size.width,
+                    onTap: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return MyAddresses();
+                      }));
+                    },
+                  ),
+                ),
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 12.0, bottom: 0, top: 20),

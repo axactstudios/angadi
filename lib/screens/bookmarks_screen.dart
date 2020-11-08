@@ -2,6 +2,7 @@ import 'package:angadi/classes/cart.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/cart_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
@@ -181,11 +182,12 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                               children: <Widget>[
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(4),
-                                  child: Image.network(
-                                    cartItems[index].imgUrl,
+                                  child: FancyShimmerImage(
+                                    imageUrl: cartItems[index].imgUrl,
                                     width: MediaQuery.of(context).size.width,
                                     height: 180,
-                                    fit: BoxFit.cover,
+                                    boxFit: BoxFit.cover,
+                                    shimmerDuration: Duration(seconds: 2),
                                   ),
                                 ),
                                 Container(

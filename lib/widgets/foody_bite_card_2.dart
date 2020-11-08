@@ -1,6 +1,7 @@
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/values/values.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
@@ -228,11 +229,12 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                     Expanded(
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
-                        child: Image.network(
-                          widget.imagePath,
+                        child: FancyShimmerImage(
+                          shimmerDuration: Duration(seconds: 2),
+                          imageUrl: widget.imagePath,
                           width: widget.width,
                           // height: 95,
-                          fit: BoxFit.cover,
+                          boxFit: BoxFit.cover,
                         ),
                       ),
                     ),
@@ -354,7 +356,10 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                         textAlign: TextAlign.left,
                                         style: Styles.customMediumTextStyle(
                                           color: AppColors.black,
-                                          fontSize: 15,
+                                          fontSize: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.035,
                                         ),
                                       ),
                                     ),
@@ -366,7 +371,10 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                           'Rs. ${(int.parse(widget.iPrice) * factor).toString()}',
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
-                                              fontSize: 15,
+                                              fontSize: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.035,
                                               decoration:
                                                   TextDecoration.lineThrough)),
                                     ),

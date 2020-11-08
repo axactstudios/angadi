@@ -8,6 +8,7 @@ import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/nav_drawer.dart';
 import 'package:angadi/widgets/offer_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -563,9 +564,11 @@ class _HomeScreenState extends State<HomeScreen> {
                                     return Container(
                                       child: Padding(
                                         padding: const EdgeInsets.all(1.0),
-                                        child: Image.network('$url',
-                                            fit: BoxFit.fitWidth,
-                                            width: 10000.0),
+                                        child: FancyShimmerImage(
+                                          shimmerDuration: Duration(seconds: 2),
+                                          imageUrl: '$url',
+                                          width: 10000.0,
+                                        ),
                                       ),
                                     );
                                   },
@@ -648,9 +651,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
-                                      fit: BoxFit.cover,
+                                    child: FancyShimmerImage(
+                                      shimmerDuration: Duration(seconds: 2),
+                                      imageUrl:
+                                          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
                                     ),
                                   )),
                               Positioned(
@@ -698,9 +702,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
-                                      fit: BoxFit.cover,
+                                    child: FancyShimmerImage(
+                                      shimmerDuration: Duration(seconds: 2),
+                                      imageUrl:
+                                          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
                                     ),
                                   )),
                               Positioned(
@@ -723,7 +728,47 @@ class _HomeScreenState extends State<HomeScreen> {
                                         fontSize: 15),
                                   ),
                                 ),
-                              )
+                              ),
+                              Positioned(
+                                right: 2,
+                                // right: 16.0,
+                                top: 2,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: <Widget>[
+                                    Card(
+                                      // elevation: widget.ratingsAndStatusCardElevation,
+                                      child: Container(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: 4,
+                                          vertical: 2,
+                                        ),
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.end,
+                                          children: <Widget>[
+//                                  Image.asset(
+//                                    ImagePath.starIcon,
+//                                    height: Sizes.WIDTH_14,
+//                                    width: Sizes.WIDTH_14,
+//                                  ),
+
+                                            Text(
+                                              ('Coming Soon'),
+                                              style:
+                                                  Styles.customTitleTextStyle(
+                                                color: Colors.deepOrangeAccent,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -798,11 +843,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 : Container();
                           } else
                             return Container(
-                                child: Center(
-                                    child: Text(
-                              "No Data",
-                              style: TextStyle(color: Colors.black),
-                            )));
+                                height: 100,
+                                width: 100,
+                                child:
+                                    Center(child: CircularProgressIndicator()));
                         },
                       ),
                     ),
@@ -866,13 +910,15 @@ class _HomeScreenState extends State<HomeScreen> {
                                                   .width *
                                               0.45,
                                           child: ClipRRect(
-                                            borderRadius: BorderRadius.all(
-                                                Radius.circular(8)),
-                                            child: Image.network(
-                                                snap.data.documents[i]
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(8)),
+                                              child: FancyShimmerImage(
+                                                shimmerDuration:
+                                                    Duration(seconds: 2),
+                                                imageUrl: snap.data.documents[i]
                                                     ['liveImageURL'],
-                                                fit: BoxFit.fill),
-                                          )),
+                                                boxFit: BoxFit.fill,
+                                              ))),
                                       Positioned(
                                         bottom: 0,
                                         child: Container(
@@ -988,10 +1034,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else
                             return Container(
                                 child: Center(
-                                    child: Text(
-                              "No Data",
-                              style: TextStyle(color: Colors.black),
-                            )));
+                                    child: Container(
+                                        height: 100,
+                                        width: 100,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()))));
                         },
                       ),
                     ),
@@ -1065,10 +1113,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           } else
                             return Container(
                                 child: Center(
-                                    child: Text(
-                              "No Data",
-                              style: TextStyle(color: Colors.black),
-                            )));
+                                    child: Container(
+                                        height: 100,
+                                        width: 100,
+                                        child: Center(
+                                            child:
+                                                CircularProgressIndicator()))));
                         },
                       ),
                     ),
@@ -1076,9 +1126,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 16.0),
                     Container(
                       height: 110,
-                      child: Image.network(
-                        banner1Url,
-                        fit: BoxFit.fitWidth,
+                      child: FancyShimmerImage(
+                        shimmerDuration: Duration(seconds: 2),
+                        imageUrl: banner1Url,
+                        boxFit: BoxFit.fitWidth,
                       ),
                     ),
                     SizedBox(height: 16.0),
@@ -1112,9 +1163,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     SizedBox(height: 16.0),
                     Container(
                       height: 110,
-                      child: Image.network(
-                        banner2Url,
-                        fit: BoxFit.fitWidth,
+                      child: FancyShimmerImage(
+                        shimmerDuration: Duration(seconds: 2),
+                        imageUrl: banner2Url,
+                        boxFit: BoxFit.fitWidth,
                       ),
                     ),
                     SizedBox(height: 16.0),
@@ -1151,10 +1203,10 @@ class _HomeScreenState extends State<HomeScreen> {
             } else
               return Container(
                   child: Center(
-                      child: Text(
-                "No Data",
-                style: TextStyle(color: Colors.black),
-              )));
+                      child: Container(
+                          height: 100,
+                          width: 100,
+                          child: Center(child: CircularProgressIndicator()))));
           },
         ),
       ),

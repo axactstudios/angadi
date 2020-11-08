@@ -1,5 +1,6 @@
 import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import '../values/data.dart';
@@ -125,9 +126,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                   child: ClipRRect(
                                     borderRadius:
                                         BorderRadius.all(Radius.circular(8)),
-                                    child: Image.network(
-                                      snap.data.documents[i]['liveImageURL'],
-                                      fit: BoxFit.fill,
+                                    child: FancyShimmerImage(
+                                      shimmerDuration: Duration(seconds: 2),
+                                      imageUrl: snap.data.documents[i]
+                                          ['liveImageURL'],
+                                      boxFit: BoxFit.fill,
                                     ),
                                   )),
                               SizedBox(
@@ -140,7 +143,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                     style: TextStyle(
                                         color: Color(0xFF6b3600),
                                         fontWeight: FontWeight.bold,
-                                        fontSize: 20),
+                                        fontSize: 17),
                                   ),
                                   SizedBox(
                                     height: 2.5,
@@ -187,9 +190,11 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                                 child: ClipRRect(
                                   borderRadius:
                                       BorderRadius.all(Radius.circular(8)),
-                                  child: Image.network(
-                                    snap.data.documents[i]['liveImageURL'],
-                                    fit: BoxFit.fill,
+                                  child: FancyShimmerImage(
+                                    shimmerDuration: Duration(seconds: 2),
+                                    imageUrl: snap.data.documents[i]
+                                        ['liveImageURL'],
+                                    boxFit: BoxFit.fill,
                                   ),
                                 )),
                             SizedBox(

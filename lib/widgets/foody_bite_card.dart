@@ -1,6 +1,7 @@
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/values/values.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
@@ -228,10 +229,11 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                   Positioned(
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(4),
-                      child: Image.network(
-                        widget.imagePath,
+                      child: FancyShimmerImage(
+                        shimmerDuration: Duration(seconds: 2),
+                        imageUrl: widget.imagePath,
                         height: 180,
-                        fit: BoxFit.cover,
+                        boxFit: BoxFit.cover,
                       ),
                     ),
                   ),

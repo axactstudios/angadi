@@ -10,6 +10,7 @@ import 'package:angadi/services/database_helper_wishlist.dart';
 import 'package:angadi/widgets/category_card.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_feather_icons/flutter_feather_icons.dart';
 import 'package:angadi/routes/router.dart';
@@ -620,11 +621,12 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             child: Stack(
                               children: <Widget>[
                                 Positioned(
-                                  child: Image.network(
-                                    urlUniv,
+                                  child: FancyShimmerImage(
+                                    shimmerDuration: Duration(seconds: 2),
+                                    imageUrl: urlUniv,
                                     width: MediaQuery.of(context).size.width,
                                     height: heightOfStack,
-                                    fit: BoxFit.cover,
+                                    boxFit: BoxFit.cover,
                                   ),
                                 ),
                                 DarkOverLay(
@@ -752,6 +754,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Container(
+                                          height: 65,
                                           decoration: BoxDecoration(
                                               borderRadius: BorderRadius.all(
                                                   Radius.circular(5)),
@@ -765,8 +768,16 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                     : Color.fromRGBO(
                                                         101, 54, 7, 1),
                                               )),
-                                          child: Image.network(
-                                              widget.restaurantDetail.url),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(4.0),
+                                            child: FancyShimmerImage(
+                                              shimmerDuration:
+                                                  Duration(seconds: 2),
+                                              imageUrl:
+                                                  widget.restaurantDetail.url,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     )), //just to push
@@ -781,6 +792,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Container(
+                                            height: 65,
                                             decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(5)),
@@ -792,7 +804,16 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                       : Color.fromRGBO(
                                                           101, 54, 7, 1),
                                                 )),
-                                            child: Image.network(url2)),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(4.0),
+                                              child: FancyShimmerImage(
+                                                shimmerDuration:
+                                                    Duration(seconds: 2),
+                                                // height: 80,
+                                                imageUrl: url2,
+                                              ),
+                                            )),
                                       ),
                                     )),
                                 Expanded(
@@ -806,6 +827,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(4.0),
                                         child: Container(
+                                            height: 65,
                                             decoration: BoxDecoration(
                                                 borderRadius: BorderRadius.all(
                                                     Radius.circular(5)),
@@ -817,7 +839,15 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                       : Color.fromRGBO(
                                                           101, 54, 7, 1),
                                                 )),
-                                            child: Image.network(url3)),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(4.0),
+                                              child: FancyShimmerImage(
+                                                imageUrl: url3,
+                                                shimmerDuration:
+                                                    Duration(seconds: 2),
+                                              ),
+                                            )),
                                       ),
                                     )),
                                 Expanded(
@@ -930,19 +960,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),
                             child: Text(
-                              'About this product',
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
-                            child: Text(
-                              widget.restaurantDetail.desc,
-                              style: addressTextStyle,
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),
-                            child: Text(
                               'Pack Sizes',
                             ),
                           ),
@@ -951,6 +968,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ListView.builder(
+                                  physics: const NeverScrollableScrollPhysics(),
                                   itemCount: sizes.length,
                                   itemBuilder: (context, index) {
                                     return Padding(
@@ -995,6 +1013,20 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       ),
                                     );
                                   }),
+                            ),
+                          ),
+
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),
+                            child: Text(
+                              'About this product',
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(8.0, 2, 8, 2),
+                            child: Text(
+                              widget.restaurantDetail.desc,
+                              style: addressTextStyle,
                             ),
                           ),
 

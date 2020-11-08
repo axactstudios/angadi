@@ -4,6 +4,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/category_card.dart';
 import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:angadi/widgets/nav_drawer.dart';
+import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -96,9 +97,11 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
                                   ),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
-                                      fit: BoxFit.cover,
+                                    child: FancyShimmerImage(
+                                      shimmerDuration: Duration(seconds: 2),
+                                      imageUrl:
+                                          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
+                                      boxFit: BoxFit.cover,
                                     ),
                                   )),
                               Container(
@@ -122,7 +125,7 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
                               ),
                               Container(
                                 height: 2,
-                                width: MediaQuery.of(context).size.width * 0.8,
+                                width: MediaQuery.of(context).size.width * 0.65,
                                 color: AppColors.secondaryElement,
                               )
                             ],
@@ -135,27 +138,72 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
                           onTap: () {
                             Navigator.push(context, MaterialPageRoute(
                                 builder: (BuildContext context) {
-                              return CategoriesScreen('Food');
+                              return CategoriesScreen('Grocery');
                             }));
                           },
                           child: Column(
                             children: [
-                              Container(
-                                  height:
-                                      MediaQuery.of(context).size.height * 0.25,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.8,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: Image.network(
-                                      'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
-                                      fit: BoxFit.cover,
+                              Stack(children: [
+                                Container(
+                                    height: MediaQuery.of(context).size.height *
+                                        0.25,
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.8,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
                                     ),
-                                  )),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: FancyShimmerImage(
+                                        shimmerDuration: Duration(seconds: 2),
+                                        imageUrl:
+                                            'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
+                                        boxFit: BoxFit.cover,
+                                      ),
+                                    )),
+                                Positioned(
+                                  right: 2,
+                                  // right: 16.0,
+                                  top: 2,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      Card(
+                                        // elevation: widget.ratingsAndStatusCardElevation,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 4,
+                                            vertical: 2,
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: <Widget>[
+//                                  Image.asset(
+//                                    ImagePath.starIcon,
+//                                    height: Sizes.WIDTH_14,
+//                                    width: Sizes.WIDTH_14,
+//                                  ),
+
+                                              Text(
+                                                ('Coming Soon'),
+                                                style:
+                                                    Styles.customTitleTextStyle(
+                                                  color:
+                                                      Colors.deepOrangeAccent,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ]),
                               Container(
                                 height: 25,
                                 width: MediaQuery.of(context).size.width * 0.8,
@@ -177,7 +225,7 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
                               ),
                               Container(
                                 height: 2,
-                                width: MediaQuery.of(context).size.width * 0.8,
+                                width: MediaQuery.of(context).size.width * 0.65,
                                 color: AppColors.secondaryElement,
                               )
                             ],

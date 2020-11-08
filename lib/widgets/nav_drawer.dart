@@ -1,5 +1,6 @@
 import 'package:angadi/routes/router.gr.dart';
 import 'package:angadi/screens/my_addresses.dart';
+import 'package:angadi/screens/my_orders.dart';
 import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/screens/wishlist_screen.dart';
 import 'package:angadi/values/data.dart';
@@ -490,7 +491,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ),
             onTap: () {
-              pushNewScreen(context, screen: ProfileScreen());
+              pushNewScreen(context, screen: MyOrders());
             },
           ),
           Container(
@@ -568,10 +569,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
 
   FirebaseUser user;
 
-  String name = 'John',
-      email = 'support@gmail.com',
+  String name = ' ',
+      email = ' ',
       url =
-          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e';
+          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/user%20.png?alt=media&token=4f8258f6-a74f-47b4-856e-f0c493179d67';
   getUserDetails() async {
     user = await FirebaseAuth.instance.currentUser();
     Firestore.instance
