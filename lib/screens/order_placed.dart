@@ -398,7 +398,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                   child: Column(
                 children: [
                   Example10Horizontal(),
-                  Lottie.asset('assets/animations/placed.json',
+                  Image.asset('assets/images/awaiting.jpg',
                       height: 150, width: 150),
                 ],
               )),

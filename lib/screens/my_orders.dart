@@ -2,6 +2,7 @@ import 'package:angadi/screens/order_placed.dart';
 import 'package:angadi/values/values.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -360,6 +361,80 @@ class _MyOrdersState extends State<MyOrders> {
                                               fontSize: 14,
                                               fontWeight: FontWeight.bold),
                                         ),
+                                        SizedBox(
+                                          height: 3,
+                                        ),
+                                        orders[index].status ==
+                                                'Order Delivered'
+                                            ? Container(
+                                                color: Colors.black
+                                                    .withOpacity(0.1),
+                                                height: 1,
+                                              )
+                                            : Container(),
+                                        orders[index].status ==
+                                                'Order Delivered'
+                                            ? SizedBox(
+                                                height: 10,
+                                              )
+                                            : Container(),
+                                        orders[index].status ==
+                                                'Order Delivered'
+                                            ? Container(
+                                                decoration: BoxDecoration(
+                                                    border: Border.all(
+                                                        color: Colors.grey,
+                                                        width: 2),
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                            Radius.circular(
+                                                                5))),
+                                                height: 40,
+                                                width: 300,
+                                                child: Row(
+                                                  children: [
+                                                    Container(
+                                                      height: 30,
+                                                      width: 200,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: Text(
+                                                          'Rate this product now'),
+                                                    ),
+                                                    Container(
+                                                      height: 30,
+                                                      width: 96,
+                                                      alignment:
+                                                          Alignment.center,
+                                                      child: RatingBar(
+                                                        initialRating: 3,
+                                                        minRating: 1,
+                                                        itemSize: 15,
+                                                        direction:
+                                                            Axis.horizontal,
+                                                        allowHalfRating: true,
+                                                        itemCount: 5,
+                                                        itemPadding: EdgeInsets
+                                                            .symmetric(
+                                                                horizontal:
+                                                                    2.0),
+                                                        itemBuilder:
+                                                            (context, _) =>
+                                                                Icon(
+                                                          Icons.star,
+                                                          color: Colors.amber,
+                                                          size: 15,
+                                                        ),
+                                                        onRatingUpdate:
+                                                            (rating) {
+                                                          print(rating);
+                                                        },
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              )
+                                            : Container()
                                       ],
                                     ),
                                   ),
