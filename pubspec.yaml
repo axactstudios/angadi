@@ -45,7 +45,7 @@ dependencies:
   timeline_tile: ^1.0.0
   flutter_polyline_points: ^0.2.4
   lottie: ^0.6.0
-  flutter_paytabs_sdk: ^1.0.0
+#  flutter_paytabs_sdk: ^1.0.0
   path_provider: ^1.6.11
   location: ^2.3.5
   flutter_feather_icons: ^1.0.3
