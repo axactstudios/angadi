@@ -382,13 +382,24 @@ class _OrderPlacedState extends State<OrderPlaced> {
                 ),
               ),
               Center(
-                child: Text(
-                  'Awaiting Restaurant Confirmation.',
-                  style: Styles.customTitleTextStyle(
-                    color: AppColors.accentText,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 17,
-                  ),
+                child: RichText(
+                  text: TextSpan(
+                      text: 'Awaiting',
+                      style: Styles.customTitleTextStyle(
+                        color: AppColors.black,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 17,
+                      ),
+                      children: <TextSpan>[
+                        TextSpan(
+                          text: ' for Angadi Confirmation',
+                          style: Styles.customTitleTextStyle(
+                            color: AppColors.accentText,
+                            fontWeight: FontWeight.w300,
+                            fontSize: 17,
+                          ),
+                        )
+                      ]),
                 ),
               ),
               SizedBox(
@@ -412,7 +423,6 @@ class _OrderPlacedState extends State<OrderPlaced> {
                   number: '',
                 ),
               ),
-              widget.bills,
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Card(
@@ -433,13 +443,19 @@ class _OrderPlacedState extends State<OrderPlaced> {
                         SizedBox(
                           height: 10,
                         ),
-                        Center(
-                          child: Text(
-                            'Expected Delivery in 40 mins.',
-                            style: Styles.customTitleTextStyle(
-                              color: AppColors.headingText,
-                              fontWeight: FontWeight.w400,
-                              fontSize: Sizes.TEXT_SIZE_20,
+                        Container(
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(5)),
+                              border: Border.all(color: Color(0xFF6b3600))),
+                          child: Center(
+                            child: Text(
+                              'Expected Delivery in 40 mins.',
+                              style: Styles.customNormalTextStyle(
+                                color: AppColors.headingText,
+                                // fontWeight: FontWeight.w400,
+                                fontSize: Sizes.TEXT_SIZE_20,
+                              ),
                             ),
                           ),
                         ),
@@ -448,10 +464,11 @@ class _OrderPlacedState extends State<OrderPlaced> {
                   ),
                 ),
               ),
+              widget.bills,
               Padding(
                 padding: const EdgeInsets.only(left: 12.0, bottom: 0, top: 20),
                 child: HeadingRow(
-                  title: 'Delivery Boy Details',
+                  title: 'Contact Details',
                   number: '',
                 ),
               ),
@@ -460,57 +477,29 @@ class _OrderPlacedState extends State<OrderPlaced> {
                 child: Card(
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
+                    child: Row(
                       children: [
-                        Row(
-                          children: [
-                            Text('Name'),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.094,
-                            ),
-                            Text(':'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('Confirmation Awaited')
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Phone No.'),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.02,
-                            ),
-                            Text(':'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            InkWell(
-                              onTap: () {
-                                launch('tel:+919027553376');
-                              },
-                              child: Text(
-                                'Confirmation Awaited',
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            ),
-                          ],
-                        ),
-                        Row(
-                          children: [
-                            Text('Vehicle'),
-                            SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.083,
-                            ),
-                            Text(':'),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            Text('Confirmation Awaited'),
-                          ],
+                        Icon(
+                          Icons.phone,
+                          size: 60,
                         ),
                         SizedBox(
-                          height: 10,
+                          width: 10,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            InkWell(
+                                onTap: () {
+                                  launch('tel:06 746 7406');
+                                },
+                                child: Text('Call Us : 06 746 7406')),
+                            Text('Whatsapp : +971 50 7175405'),
+                            Text('Email : info@misteridli.com'),
+                            SizedBox(
+                              height: 10,
+                            ),
+                          ],
                         ),
                       ],
                     ),

@@ -380,59 +380,61 @@ class _MyOrdersState extends State<MyOrders> {
                                             : Container(),
                                         orders[index].status ==
                                                 'Order Delivered'
-                                            ? Container(
-                                                decoration: BoxDecoration(
-                                                    border: Border.all(
-                                                        color: Colors.grey,
-                                                        width: 2),
-                                                    borderRadius:
-                                                        BorderRadius.all(
-                                                            Radius.circular(
-                                                                5))),
-                                                //hjh
-                                                height: 40,
-                                                width: 300,
-                                                child: Row(
-                                                  children: [
-                                                    Container(
-                                                      height: 30,
-                                                      width: 200,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: Text(
-                                                          'Rate this product now'),
-                                                    ),
-                                                    Container(
-                                                      height: 30,
-                                                      width: 96,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      child: RatingBar(
-                                                        initialRating: 3,
-                                                        minRating: 1,
-                                                        itemSize: 15,
-                                                        direction:
-                                                            Axis.horizontal,
-                                                        allowHalfRating: true,
-                                                        itemCount: 5,
-                                                        itemPadding: EdgeInsets
-                                                            .symmetric(
-                                                                horizontal:
-                                                                    2.0),
-                                                        itemBuilder:
-                                                            (context, _) =>
-                                                                Icon(
-                                                          Icons.star,
-                                                          color: Colors.amber,
-                                                          size: 15,
-                                                        ),
-                                                        onRatingUpdate:
-                                                            (rating) {
-                                                          print(rating);
-                                                        },
+                                            ? Center(
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color: Colors.grey,
+                                                          width: 2),
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  5))),
+                                                  //hjh
+                                                  height: 40,
+                                                  width: 320,
+                                                  child: Row(
+                                                    children: [
+                                                      Container(
+                                                        height: 30,
+                                                        width: 200,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: Text(
+                                                            'Rate this product now'),
                                                       ),
-                                                    ),
-                                                  ],
+                                                      Container(
+                                                        height: 30,
+                                                        width: 116,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        child: RatingBar(
+                                                          initialRating: 3,
+                                                          minRating: 1,
+                                                          itemSize: 20,
+                                                          direction:
+                                                              Axis.horizontal,
+                                                          allowHalfRating: true,
+                                                          itemCount: 5,
+                                                          itemPadding: EdgeInsets
+                                                              .symmetric(
+                                                                  horizontal:
+                                                                      1.0),
+                                                          itemBuilder:
+                                                              (context, _) =>
+                                                                  Icon(
+                                                            Icons.star,
+                                                            color: Colors.amber,
+                                                            size: 20,
+                                                          ),
+                                                          onRatingUpdate:
+                                                              (rating) {
+                                                            print(rating);
+                                                          },
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
                                                 ),
                                               )
                                             : Container()
