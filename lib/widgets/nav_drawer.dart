@@ -512,7 +512,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ),
             onTap: () {
-              pushNewScreen(context, screen: ProfileScreen());
+              pushNewScreen(context,
+                  screen: ProfileScreen(
+                    fromDrawer: true,
+                  ));
             },
           ),
           Container(

@@ -27,11 +27,110 @@ class Order {
       this.id});
 }
 
-List<Order> orders = List<Order>();
-
 class _MyOrdersState extends State<MyOrders> {
   @override
   Widget build(BuildContext context) {
+    List<Order> orders = List<Order>();
+
+    Widget bill(timestamp, total, id1, status, str) {
+      return Card(
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Container(
+            decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Order Id- $id1',
+                  style: TextStyle(
+                      fontSize: 15,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+                SizedBox(
+                  height: 3,
+                ),
+                Container(
+                  color: Colors.black.withOpacity(0.1),
+                  height: 1,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Items',
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  str,
+                  style: TextStyle(fontSize: 14),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Ordered On',
+                  style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  timestamp.toDate().day.toString() +
+                      '-' +
+                      timestamp.toDate().month.toString() +
+                      '-' +
+                      timestamp.toDate().year.toString() +
+                      ' at ' +
+                      timestamp.toDate().hour.toString() +
+                      ':' +
+                      timestamp.toDate().minute.toString(),
+                  style: TextStyle(fontSize: 14),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  'Total',
+                  style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold),
+                ),
+                Text(
+                  'Rs. ' + total,
+                  style: TextStyle(fontSize: 14),
+                ),
+                SizedBox(
+                  height: 3,
+                ),
+                Container(
+                  color: Colors.black.withOpacity(0.1),
+                  height: 1,
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Text(
+                  status,
+                  style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
         appBar: AppBar(
           iconTheme: IconThemeData(
@@ -106,10 +205,32 @@ class _MyOrdersState extends State<MyOrders> {
                           return Padding(
                             padding: EdgeInsets.fromLTRB(15.0, 8, 8, 8),
                             child: InkWell(
-                              onTap: () {
-                                pushNewScreen(context,
-                                    screen: OrderPlaced(bill(),
-                                        snap.data.documents[index]['OrderID']));
+                              onTap: () async {
+                                String status;
+                                await Firestore.instance
+                                    .collection('Orders')
+                                    .getDocuments()
+                                    .then((value) {
+                                  value.documents.forEach((element) {
+                                    print(orders[index].id);
+                                    print(element.documentID);
+                                    if (element.documentID ==
+                                        orders[index].id) {
+                                      status = element['Status'];
+                                      pushNewScreen(context,
+                                          screen: OrderPlaced(
+                                              bill(
+                                                  orders[index].timestamp,
+                                                  orders[index].total,
+                                                  orders[index].id,
+                                                  orders[index].status,
+                                                  orders[index].orderString),
+                                              orders[index].id,
+                                              status));
+                                      print('Push pressed');
+                                    }
+                                  });
+                                });
                               },
                               child: Card(
                                 elevation: 5,
@@ -457,105 +578,5 @@ class _MyOrdersState extends State<MyOrders> {
             },
           ),
         ));
-  }
-
-  var str = '', timestamp, status, total, id1;
-  Widget bill() {
-    return Card(
-      elevation: 5,
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Container(
-          decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(10))),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Order Id- $id1',
-                style: TextStyle(
-                    fontSize: 15,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-              SizedBox(
-                height: 3,
-              ),
-              Container(
-                color: Colors.black.withOpacity(0.1),
-                height: 1,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Items',
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                str,
-                style: TextStyle(fontSize: 14),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Ordered On',
-                style: TextStyle(
-                    fontSize: 13,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                timestamp.toDate().day.toString() +
-                    '-' +
-                    timestamp.toDate().month.toString() +
-                    '-' +
-                    timestamp.toDate().year.toString() +
-                    ' at ' +
-                    timestamp.toDate().hour.toString() +
-                    ':' +
-                    timestamp.toDate().minute.toString(),
-                style: TextStyle(fontSize: 14),
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                'Total',
-                style: TextStyle(
-                    fontSize: 14,
-                    color: Colors.black,
-                    fontWeight: FontWeight.bold),
-              ),
-              Text(
-                'Rs. ' + total,
-                style: TextStyle(fontSize: 14),
-              ),
-              SizedBox(
-                height: 3,
-              ),
-              Container(
-                color: Colors.black.withOpacity(0.1),
-                height: 1,
-              ),
-              SizedBox(
-                height: 10,
-              ),
-              Text(
-                status,
-                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
   }
 }

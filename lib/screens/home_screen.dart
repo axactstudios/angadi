@@ -357,12 +357,37 @@ class _HomeScreenState extends State<HomeScreen> {
                                                             width: 10,
                                                           ),
                                                           InkWell(
-                                                            onTap: () {
+                                                            onTap: () async {
+                                                              String status;
+                                                              await Firestore
+                                                                  .instance
+                                                                  .collection(
+                                                                      'Orders')
+                                                                  .getDocuments()
+                                                                  .then(
+                                                                      (value) {
+                                                                value.documents
+                                                                    .forEach(
+                                                                        (element) {
+                                                                  if (element
+                                                                          .documentID ==
+                                                                      orderID) {
+                                                                    status =
+                                                                        element[
+                                                                            'Status'];
+                                                                    print(
+                                                                        status);
+                                                                  }
+                                                                });
+                                                              });
+                                                              print(status);
+                                                              print(orderID);
                                                               pushNewScreen(
                                                                   context,
                                                                   screen: OrderPlaced(
                                                                       bill(),
-                                                                      orderID));
+                                                                      orderID,
+                                                                      status));
                                                             },
                                                             child: Text(
                                                                 'View Details',
@@ -1626,14 +1651,17 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         id1 = id;
         str = '';
-        for (int it = 0; it < value['Items'].length; it++) {
-          it != value['Items'].length - 1
-              ? str = str + '${value['Qty'][it]} x ${value['Items'][it]}, '
-              : str = str + '${value['Qty'][it]} x ${value['Items'][it]}';
+        // print('===============${value.data}');
+        if (value.data != null) {
+          for (int it = 0; it < value['Items'].length; it++) {
+            it != value['Items'].length - 1
+                ? str = str + '${value['Qty'][it]} x ${value['Items'][it]}, '
+                : str = str + '${value['Qty'][it]} x ${value['Items'][it]}';
+          }
+          timestamp = value['TimeStamp'];
+          status = value["Status"];
+          total = value["GrandTotal"];
         }
-        timestamp = value['TimeStamp'];
-        status = value["Status"];
-        total = value["GrandTotal"];
       });
     });
   }

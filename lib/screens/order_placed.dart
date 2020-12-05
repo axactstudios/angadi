@@ -321,7 +321,8 @@ import 'package:timeline_tile/timeline_tile.dart';
 class OrderPlaced extends StatefulWidget {
   Widget bills;
   String docID;
-  OrderPlaced(this.bills, this.docID);
+  String status;
+  OrderPlaced(this.bills, this.docID, this.status);
   @override
   _OrderPlacedState createState() => _OrderPlacedState();
 }
@@ -371,46 +372,102 @@ class _OrderPlacedState extends State<OrderPlaced> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              Center(
-                child: Text(
-                  'Your Order has been placed !',
-                  style: Styles.customTitleTextStyle(
-                    color: AppColors.accentText,
-                    fontWeight: FontWeight.w300,
-                    fontSize: 17,
-                  ),
-                ),
-              ),
-              Center(
-                child: RichText(
-                  text: TextSpan(
-                      text: 'Awaiting',
-                      style: Styles.customTitleTextStyle(
-                        color: AppColors.black,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 17,
+              widget.status == 'Awaiting Confirmation'
+                  ? Center(
+                      child: Text(
+                        'Your Order has been placed !',
+                        style: Styles.customTitleTextStyle(
+                          color: AppColors.accentText,
+                          fontWeight: FontWeight.w300,
+                          fontSize: 17,
+                        ),
                       ),
-                      children: <TextSpan>[
-                        TextSpan(
-                          text: ' for Angadi Confirmation',
-                          style: Styles.customTitleTextStyle(
-                            color: AppColors.accentText,
-                            fontWeight: FontWeight.w300,
-                            fontSize: 17,
+                    )
+                  : Container(),
+              widget.status == 'Awaiting Confirmation'
+                  ? Center(
+                      child: RichText(
+                        text: TextSpan(
+                            text: 'Awaiting',
+                            style: Styles.customTitleTextStyle(
+                              color: AppColors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 17,
+                            ),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: ' for Angadi Confirmation',
+                                style: Styles.customTitleTextStyle(
+                                  color: AppColors.accentText,
+                                  fontWeight: FontWeight.w300,
+                                  fontSize: 17,
+                                ),
+                              )
+                            ]),
+                      ),
+                    )
+                  : widget.status == 'Preparing Order'
+                      ? Center(
+                          child: RichText(
+                            text: TextSpan(
+                                text: 'Preparing',
+                                style: Styles.customTitleTextStyle(
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: ' your Order',
+                                    style: Styles.customTitleTextStyle(
+                                      color: AppColors.accentText,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 17,
+                                    ),
+                                  )
+                                ]),
                           ),
                         )
-                      ]),
-                ),
-              ),
+                      : Center(
+                          child: RichText(
+                            text: TextSpan(
+                                text: 'Order',
+                                style: Styles.customTitleTextStyle(
+                                  color: AppColors.black,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 17,
+                                ),
+                                children: <TextSpan>[
+                                  TextSpan(
+                                    text: ' has been delivered',
+                                    style: Styles.customTitleTextStyle(
+                                      color: AppColors.accentText,
+                                      fontWeight: FontWeight.w300,
+                                      fontSize: 17,
+                                    ),
+                                  )
+                                ]),
+                          ),
+                        ),
               SizedBox(
                 height: 10,
               ),
               Container(
                   child: Column(
                 children: [
-                  Example10Horizontal(),
-                  Image.asset('assets/images/awaiting.jpg',
-                      height: 150, width: 150),
+                  widget.status == 'Awaiting Confirmation'
+                      ? Example10Horizontal()
+                      : widget.status == 'Preparing Order'
+                          ? Example20Horizontal()
+                          : Example30Horizontal(),
+                  widget.status == 'Awaiting Confirmation'
+                      ? Image.asset('assets/images/awaiting.jpg',
+                          height: 150, width: 150)
+                      : widget.status == 'Preparing Order'
+                          ? Image.asset('assets/images/gettingReady.jpg',
+                              height: 150, width: 150)
+                          : Image.asset('assets/images/Delivered.jpg',
+                              height: 150, width: 150),
                 ],
               )),
               SizedBox(
@@ -553,6 +610,154 @@ class _OrderPlacedState extends State<OrderPlaced> {
     }
 
     getAllItems();
+  }
+}
+
+class Example30Horizontal extends StatefulWidget {
+  const Example30Horizontal({Key key}) : super(key: key);
+  @override
+  _Example30HorizontalState createState() => _Example30HorizontalState();
+}
+
+class _Example30HorizontalState extends State<Example30Horizontal> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(maxHeight: 25),
+      color: Colors.white,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        children: [
+          TimelineTile(
+            axis: TimelineAxis.horizontal,
+            alignment: TimelineAlign.manual,
+            lineXY: 0.1,
+            isFirst: true,
+            indicatorStyle: IndicatorStyle(
+              height: 20,
+              color: AppColors.secondaryElement,
+            ),
+            beforeLineStyle: LineStyle(
+              color: AppColors.secondaryElement,
+              thickness: 6,
+            ),
+          ),
+          TimelineTile(
+            axis: TimelineAxis.horizontal,
+            alignment: TimelineAlign.manual,
+            lineXY: 0.1,
+            beforeLineStyle: const LineStyle(
+              color: AppColors.secondaryElement,
+              thickness: 6,
+            ),
+            afterLineStyle: const LineStyle(
+              color: AppColors.secondaryElement,
+              thickness: 6,
+            ),
+            indicatorStyle: const IndicatorStyle(
+              height: 20,
+              color: AppColors.secondaryElement,
+            ),
+          ),
+//          const TimelineDivider(
+//            axis: TimelineAxis.vertical,
+//            begin: 0.1,
+//            end: 0.9,
+//            thickness: 6,
+//            color: Colors.deepOrange,
+//          ),
+          TimelineTile(
+            axis: TimelineAxis.horizontal,
+            alignment: TimelineAlign.manual,
+            lineXY: 0.1,
+            isLast: true,
+            beforeLineStyle: const LineStyle(
+              color: AppColors.secondaryElement,
+              thickness: 6,
+            ),
+            indicatorStyle: const IndicatorStyle(
+              height: 20,
+              color: AppColors.secondaryElement,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Example20Horizontal extends StatefulWidget {
+  const Example20Horizontal({Key key}) : super(key: key);
+  @override
+  _Example20HorizontalState createState() => _Example20HorizontalState();
+}
+
+class _Example20HorizontalState extends State<Example20Horizontal> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      constraints: const BoxConstraints(maxHeight: 25),
+      color: Colors.white,
+      child: ListView(
+        scrollDirection: Axis.horizontal,
+        shrinkWrap: true,
+        children: [
+          TimelineTile(
+            axis: TimelineAxis.horizontal,
+            alignment: TimelineAlign.manual,
+            lineXY: 0.1,
+            isFirst: true,
+            indicatorStyle: IndicatorStyle(
+              height: 20,
+              color: AppColors.secondaryElement,
+            ),
+            beforeLineStyle: LineStyle(
+              color: AppColors.secondaryElement,
+              thickness: 6,
+            ),
+          ),
+          TimelineTile(
+            axis: TimelineAxis.horizontal,
+            alignment: TimelineAlign.manual,
+            lineXY: 0.1,
+            beforeLineStyle: const LineStyle(
+              color: AppColors.secondaryElement,
+              thickness: 6,
+            ),
+            afterLineStyle: const LineStyle(
+              color: Colors.grey,
+              thickness: 6,
+            ),
+            indicatorStyle: const IndicatorStyle(
+              height: 20,
+              color: AppColors.secondaryElement,
+            ),
+          ),
+//          const TimelineDivider(
+//            axis: TimelineAxis.vertical,
+//            begin: 0.1,
+//            end: 0.9,
+//            thickness: 6,
+//            color: Colors.deepOrange,
+//          ),
+          TimelineTile(
+            axis: TimelineAxis.horizontal,
+            alignment: TimelineAlign.manual,
+            lineXY: 0.1,
+            isLast: true,
+            beforeLineStyle: const LineStyle(
+              color: Colors.grey,
+              thickness: 6,
+            ),
+            indicatorStyle: const IndicatorStyle(
+              height: 20,
+              color: Colors.grey,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }
 

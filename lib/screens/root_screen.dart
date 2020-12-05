@@ -113,7 +113,9 @@ class _RootScreenState extends State<RootScreen>
       MainCategoriesScreen(),
       FilteredSearch(),
       NotificationsScreen(),
-      ProfileScreen(),
+      ProfileScreen(
+        fromDrawer: false,
+      ),
     ];
   }
 //  @override

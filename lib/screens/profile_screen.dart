@@ -17,8 +17,9 @@ import 'login_screen.dart';
 
 class ProfileScreen extends StatefulWidget {
   static const int TAB_NO = 4;
+  bool fromDrawer;
 
-  ProfileScreen({Key key}) : super(key: key);
+  ProfileScreen({Key key, this.fromDrawer}) : super(key: key);
 
   @override
   _ProfileScreenState createState() => _ProfileScreenState();
@@ -71,8 +72,15 @@ class _ProfileScreenState extends State<ProfileScreen> {
               fontSize: Sizes.TEXT_SIZE_18,
             ),
           ),
+          leading: widget.fromDrawer == true
+              ? InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(Icons.arrow_back_ios_rounded))
+              : null,
         ),
-        drawer: CustomDrawer(),
+        drawer: widget.fromDrawer != true ? CustomDrawer() : null,
 //        appBar: AppBar(
 //          elevation: Sizes.ELEVATION_0,
 //          centerTitle: true,

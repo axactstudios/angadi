@@ -189,9 +189,24 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                               onTap: () async {
                                 await fetchOrderDetail(
                                     snap.data.documents[index]['OrderID']);
+                                String status;
+                                Firestore.instance
+                                    .collection('Orders')
+                                    .getDocuments()
+                                    .then((value) {
+                                  value.documents.forEach((element) {
+                                    if (element.documentID ==
+                                        snap.data.documents[index]['OrderID']) {
+                                      status = element['Status'];
+                                    }
+                                  });
+                                });
+
                                 pushNewScreen(context,
-                                    screen: OrderPlaced(bill(),
-                                        snap.data.documents[index]['OrderID']));
+                                    screen: OrderPlaced(
+                                        bill(),
+                                        snap.data.documents[index]['OrderID'],
+                                        status));
                               },
                               title: Row(
                                 children: <Widget>[

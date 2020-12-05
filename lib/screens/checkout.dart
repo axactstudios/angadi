@@ -615,10 +615,18 @@ class _CheckoutState extends State<Checkout> {
     // }
 
     removeAll();
+    String status;
+    Firestore.instance.collection('Orders').getDocuments().then((value) {
+      value.documents.forEach((element) {
+        if (element.documentID == docID) {
+          status = element['Status'];
+        }
+      });
+    });
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return OrderPlaced(Bill(), docID);
+      return OrderPlaced(Bill(), docID, status);
     }));
   }
 
