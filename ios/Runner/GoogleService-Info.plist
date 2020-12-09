@@ -3,9 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>CLIENT_ID</key>
-	<string>691892152218-24p2orh3se9isa6dvo7gn6mtq7g1c1kc.apps.googleusercontent.com</string>
+	<string>691892152218-alsh87maju8ut429h26vbb0b17ckvsii.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.691892152218-24p2orh3se9isa6dvo7gn6mtq7g1c1kc</string>
+	<string>com.googleusercontent.apps.691892152218-alsh87maju8ut429h26vbb0b17ckvsii</string>
 	<key>API_KEY</key>
 	<string>AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw</string>
 	<key>GCM_SENDER_ID</key>
@@ -13,7 +13,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.axactstudios.angadi</string>
+	<string>com.axactstudios.miangadi</string>
 	<key>PROJECT_ID</key>
 	<string>angadi-9c0e9</string>
 	<key>STORAGE_BUCKET</key>
@@ -29,7 +29,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:691892152218:ios:1903101be32e88faafbc23</string>
+	<string>1:691892152218:ios:b6b6222680a21006afbc23</string>
 	<key>DATABASE_URL</key>
 	<string>https://angadi-9c0e9.firebaseio.com</string>
 </dict>
