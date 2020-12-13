@@ -1,4 +1,5 @@
 import 'package:angadi/classes/cart.dart';
+import 'package:angadi/screens/login_screen.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/cart_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -96,6 +97,13 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     getUserDetails();
     getAllItems();
   }
+  void login(){
+    Fluttertoast.showToast(
+      msg: 'Login to checkout!',
+
+    );
+    Navigator.push(context,MaterialPageRoute(builder:(context)=>LoginScreen()));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -131,9 +139,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                             MaterialPageRoute(builder: (BuildContext context) {
                             return Checkout();
                           }))
-                        : Fluttertoast.showToast(
-                            msg: 'Login to checkout!',
-                          );
+                        : login();
                   },
                   child: Container(
                     child: Padding(

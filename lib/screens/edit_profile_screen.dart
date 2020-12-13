@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path/path.dart' as p;
 
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -56,6 +57,25 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   TextEditingController nameCtrl = new TextEditingController(),
       emailCtrl = new TextEditingController();
+  void launchWhatsApp({
+    @required String phone,
+    @required String message,
+  }) async {
+    String url() {
+      if (Platform.isIOS) {
+        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+      } else {
+        return "whatsapp://send?   phone=$phone&text=${Uri.parse(message)}";
+      }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -90,13 +110,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             InkWell(
                 onTap: () {
+                  launchWhatsApp(
+                      phone: '7060222315', message: 'Check out this awesome app');
+                },
+                child: Container(
+                    alignment: Alignment.center,
+                    child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
+            SizedBox(width:8),
+            InkWell(
+                onTap: () {
 //                print(1);
                   launch(
                       'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
             SizedBox(
-              width: 14,
+              width: 10,
             )
           ],
           elevation: 0.0,

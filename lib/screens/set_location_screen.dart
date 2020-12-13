@@ -58,7 +58,7 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
           children: [
             Positioned(
               child: Image.asset(
-                ImagePath.salad,
+                ImagePath.splashImage,
                 fit: BoxFit.cover,
                 height: heightOfScreen,
                 width: widthOfScreen,

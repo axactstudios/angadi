@@ -133,9 +133,9 @@ class _SplashScreenState extends State<SplashScreen>
                   child: AnimatedBuilder(
                     animation: _textController,
                     child: Text(
-                      'Angadi',
+                      'Angadi.ae',
                       style: Styles.customTitleTextStyle(
-                        color: AppColors.primaryText,
+                        color: Colors.white,
                       ),
                     ),
                     builder: (context, child) => Transform.scale(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/my_orders.dart';
 import 'package:angadi/screens/wishlist_screen.dart';
@@ -10,6 +12,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -33,6 +36,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   List<Order> orders = List<Order>();
+  void launchWhatsApp({
+    @required String phone,
+    @required String message,
+  }) async {
+    String url() {
+      if (Platform.isIOS) {
+        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+      } else {
+        return "whatsapp://send?   phone=$phone&text=${Uri.parse(message)}";
+      }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -53,13 +75,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             InkWell(
                 onTap: () {
+                  launchWhatsApp(
+                      phone: '7060222315', message: 'Check out this awesome app');
+                },
+                child: Container(
+                    alignment: Alignment.center,
+                    child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
+            SizedBox(width:8),
+            InkWell(
+                onTap: () {
 //                print(1);
                   launch(
                       'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
             SizedBox(
-              width: 14,
+              width: 10,
             )
           ],
           elevation: 0.0,

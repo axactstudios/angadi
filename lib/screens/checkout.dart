@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:math';
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/offers_screen.dart';
@@ -11,6 +14,8 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_paytabs_bridge_emulator/flutter_paytabs_bridge_emulator.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
@@ -35,6 +40,8 @@ class _CheckoutState extends State<Checkout> {
   final dbHelper = DatabaseHelper.instance;
 //  final dbRef = FirebaseDatabase.instance.reference();
   FirebaseAuth mAuth = FirebaseAuth.instance;
+  GlobalKey key = new GlobalKey();
+  final scaffoldState = GlobalKey<ScaffoldState>();
   int newQty;
   void getAllItems() async {
     final allRows = await dbHelper.queryAllRows();
@@ -50,9 +57,27 @@ class _CheckoutState extends State<Checkout> {
     }
     return sum;
   }
+  void launchWhatsApp({
+    @required String phone,
+    @required String message,
+  }) async {
+    String url() {
+      if (Platform.isIOS) {
+        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+      } else {
+        return "whatsapp://send?   phone=$phone&text=${Uri.parse(message)}";
+      }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
+  }
 
   TimeOfDay time;
-  TimeOfDay selectedTime;
+  String selectedTime;
   @override
   void initState() {
     getAllItems();
@@ -60,9 +85,72 @@ class _CheckoutState extends State<Checkout> {
     time = TimeOfDay.now();
     super.initState();
   }
+  Widget dropdown( BuildContext context, double height,
+      double width) {
+    return Padding(
+        padding: EdgeInsets.only(left: MediaQuery
+            .of(context)
+            .size
+            .height * 0.015),
+        child: Container(
+            decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 15.0, // soften the shadow
+                    spreadRadius: 1.0, //extend the shadow
+                    offset: Offset(
+                      0.0, // Move to right 10  horizontally
+                      0.0, // Move to bottom 10 Vertically
+                    ),
+                  )
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            margin: EdgeInsets.fromLTRB(MediaQuery
+                .of(context)
+                .size
+                .width * 0.02, MediaQuery
+                .of(context)
+                .size
+                .height * 0.02, MediaQuery
+                .of(context)
+                .size
+                .width * 0.02, MediaQuery
+                .of(context)
+                .size
+                .height * 0.02),
+            padding: EdgeInsets.all(MediaQuery
+                .of(context)
+                .size
+                .height * 0.02),
+            height: height,
+            width: width,
+            child:
+
+          DropdownButtonHideUnderline(
+            child: new DropdownButton<String>(
+              hint: Text('  Please choose a slot for delivery'),
+              items: <String>['10:00 a.m.-12:00 p.m.', '1:00 p.m.-3:00 p.m.', '4:00 p.m.-6:00 p.m.', '8:00 p.m.:10:00 p.m.'].map((String value) {
+                return new DropdownMenuItem<String>(
+                  value: value,
+                  child: new Text(value),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() {
+                  selectedTime=value;
+                });
+
+              },
+            ),
+          ),
+
+            ));}
 
   @override
   Widget build(BuildContext context) {
+
     print(_result);
     _pickTime() async {
       TimeOfDay t = await showTimePicker(context: context, initialTime: time);
@@ -73,12 +161,14 @@ class _CheckoutState extends State<Checkout> {
       return time;
     }
 
+
     var textTheme = Theme.of(context).textTheme;
     var hintTextStyle =
         textTheme.subtitle.copyWith(color: AppColors.accentText);
     var textFormFieldTextStyle =
         textTheme.subtitle.copyWith(color: AppColors.accentText);
     return Scaffold(
+      key:scaffoldState,
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Colors.white,
@@ -91,7 +181,18 @@ class _CheckoutState extends State<Checkout> {
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
-              width: 8,
+              width: 6,
+            ),
+            InkWell(
+                onTap: () {
+                  launchWhatsApp(
+                      phone: '7060222315', message: 'Check out this awesome app');
+                },
+                child: Container(
+                    alignment: Alignment.center,
+                    child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
+            SizedBox(
+              width: 6,
             ),
             InkWell(
                 onTap: () {
@@ -100,9 +201,8 @@ class _CheckoutState extends State<Checkout> {
                       'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
-            SizedBox(
-              width: 14,
-            )
+SizedBox(width:7)
+
           ],
           elevation: 0.0,
           centerTitle: true,
@@ -404,11 +504,21 @@ class _CheckoutState extends State<Checkout> {
                 type == 'Schedule Delivery'
                     ? InkWell(
                         onTap: () {
-                          _pickTime().then((value) {
-                            setState(() {
-                              selectedTime = value;
+                          scaffoldState.currentState.showBottomSheet((context) {
+                            return StatefulBuilder(builder:
+                                (BuildContext context, StateSetter state) {
+                              return dropdown(
+
+                                  context,
+                                  MediaQuery.of(context).size.height * 0.12,
+                                  MediaQuery.of(context).size.width*0.9);
                             });
                           });
+//                          _pickTime().then((value) {
+//                            setState(() {
+//                              selectedTime = value;
+//                            });
+//                          });
                         },
                         child: selectedTime == null
                             ? Padding(
@@ -437,29 +547,107 @@ class _CheckoutState extends State<Checkout> {
                                           width: MediaQuery.of(context)
                                                   .size
                                                   .width *
-                                              0.9,
-                                          child: selectedTime.hour < 23 &&
-                                                  selectedTime.hour > 10
-                                              ? Text(
-                                                  'Delivery Time is ${selectedTime.format(context)}. Your order will reach to you on time. Click to edit time.',
+                                              0.89,
+//                                        child: selectedTime.hour < 23 &&
+////                                                  selectedTime.hour > 10
+                                              child: Text(
+                                                  'Delivery Time is ${selectedTime}. Your order will reach to you on time. Click to edit time.',
                                                   style: TextStyle(
+                                                    fontSize: MediaQuery.of(context).size.height*0.015,
                                                       color: Colors.blue,
                                                       fontWeight:
                                                           FontWeight.bold),
                                                 )
-                                              : Text(
-                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
-                                                  style: TextStyle(
-                                                      color: Colors.red,
-                                                      fontWeight:
-                                                          FontWeight.bold)),
+//                                              : Text(
+//                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
+//                                                  style: TextStyle(
+//                                                      color: Colors.red,
+//                                                      fontWeight:
+//                                                          FontWeight.bold)),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
                               ))
+                    : type=='Delivery'? Padding(
+                  padding: const EdgeInsets.only(
+                      left: 12.0, bottom: 0, top: 10),
+                  child: HeadingRow(
+                    title: 'Delivery Time',
+                    number: '',
+                  ),
+                )
                     : Container(),
+                type == 'Delivery'
+                    ? InkWell(
+                    onTap: () {
+                      scaffoldState.currentState.showBottomSheet((context) {
+                        return StatefulBuilder(builder:
+                            (BuildContext context, StateSetter state) {
+                          return dropdown(
+
+                              context,
+                              MediaQuery.of(context).size.height * 0.12,
+                              MediaQuery.of(context).size.width*0.9);
+                        });
+                      });
+//                          _pickTime().then((value) {
+//                            setState(() {
+//                              selectedTime = value;
+//                            });
+//                          });
+                    },
+                    child: selectedTime == null
+                        ? Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Card(
+                        elevation: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            'Schedule Delivery Time',
+                            style: TextStyle(
+                                color: Colors.blue, fontSize: 20),
+                          ),
+                        ),
+                      ),
+                    )
+                        : Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Container(
+                                  width: MediaQuery.of(context)
+                                      .size
+                                      .width *
+                                      0.89,
+//                                        child: selectedTime.hour < 23 &&
+////                                                  selectedTime.hour > 10
+                                  child: Text(
+                                    'Delivery Time is ${selectedTime}. Your order will reach to you on time. Click to edit time.',
+                                    style: TextStyle(
+                                        fontSize: MediaQuery.of(context).size.height*0.015,
+                                        color: Colors.blue,
+                                        fontWeight:
+                                        FontWeight.bold),
+                                  )
+//                                              : Text(
+//                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
+//                                                  style: TextStyle(
+//                                                      color: Colors.red,
+//                                                      fontWeight:
+//                                                          FontWeight.bold)),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )):Container(),
                 _result != '833'
                     ? Padding(
                         padding: const EdgeInsets.only(
@@ -500,8 +688,10 @@ class _CheckoutState extends State<Checkout> {
                       child: angadiButton(
                         _result != '833' ? 'Proceed to pay online' : 'Proceed',
                         onTap: () {
-                          _result != '833'
-                              ? placeOnlinePaidOrder()
+                          _result != '833'?payPressed()
+//                              ? onlineorder((discount != null)
+//                              ?  ((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)
+//                              :  ((totalAmount() * 0.18) + totalAmount()).toString())
                               : placeOnlinePaidOrder();
                         },
                         buttonWidth: MediaQuery.of(context).size.width,
@@ -524,8 +714,16 @@ class _CheckoutState extends State<Checkout> {
     user = await FirebaseAuth.instance.currentUser();
   }
 
-  var docID;
+  var docID;var id;
   placeOrder(orderType) async {
+
+    var rng = new Random();
+    var code = rng.nextInt(90000) + 10000;
+    print('ANG${code.toString()}');
+    setState(() {
+       id='ANG${code.toString()}';
+    });
+
     await getUserDetails();
     List items = [];
     List prices = [];
@@ -538,7 +736,7 @@ class _CheckoutState extends State<Checkout> {
     }
     final databaseReference = Firestore.instance;
     orderType == 'Delivery'
-        ? await databaseReference.collection('Orders').add({
+        ? await databaseReference.collection('Orders').document(id).setData({
             'Items': items,
             'Price': prices,
             'Qty': quantities,
@@ -553,11 +751,11 @@ class _CheckoutState extends State<Checkout> {
                 ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
           }).then((value) {
             setState(() {
-              docID = value.documentID;
+//              docID = value;
             });
           })
         : orderType == 'Takeaway'
-            ? await databaseReference.collection('Orders').add({
+            ? await databaseReference.collection('Orders').document(id).setData({
                 'Items': items,
                 'Price': prices,
                 'Qty': quantities,
@@ -570,10 +768,10 @@ class _CheckoutState extends State<Checkout> {
                     ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
               }).then((value) {
                 setState(() {
-                  docID = value.documentID;
+//                  docID = value.documentID;
                 });
               })
-            : await databaseReference.collection('Orders').add({
+            : await databaseReference.collection('Orders').document(id).setData({
                 'Items': items,
                 'Price': prices,
                 'Qty': quantities,
@@ -582,7 +780,7 @@ class _CheckoutState extends State<Checkout> {
                 'Address': '${hnoController.text},${addressController.text} ',
                 'TimeStamp': DateTime.now(),
                 'Status': 'Awaiting Confirmation',
-                'DeliveryTime': selectedTime.format(context).toString(),
+                'DeliveryTime': selectedTime.toString(),
                 'Notes': notesController.text != null
                     ? notesController.text
                     : 'None',
@@ -590,12 +788,12 @@ class _CheckoutState extends State<Checkout> {
                     ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
               }).then((value) {
                 setState(() {
-                  docID = value.documentID;
+//                  docID = value.documentID;
                 });
               });
     await databaseReference.collection('Notifications').add({
       'UserID': user.uid,
-      'OrderID': docID,
+      'OrderID': id,
       'Notification': 'Order Placed. Awaiting confirmation.',
       'TimeStamp': DateTime.now(),
       'Type': orderType,
@@ -810,56 +1008,104 @@ class _CheckoutState extends State<Checkout> {
 
   String _result = '---';
   String _instructions = 'Tap on "Pay" Button to try PayTabs plugin';
-//  Future<void> payPressed() async {
-//    var args = {
+  Future<void> payPressed() async {
+    var args = {
 //      'pt_merchant_email': "vkumarsaraswat@gmail.com",
+    pt_merchant_email:'test@example.com',
+   pt_secret_key: "kuTEjyEMhpVSWTwXBSOSeiiDAeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",
 //      'pt_secret_key':
 //          "P45UE6iY0pIhWSWx5vLPmN5icCio1PXQT2Ky82w8repo7mVcRG2eu7wGKP5LE2By4l6coDkPRKeZ69bXQdbklH15w6Qb8sKcOQoc", // Add your Secret Key Here
-//      'pt_transaction_title': "Mr. John Doe",
-//      'pt_amount': "39",
-//      'pt_currency_code': "INR",
-//      'pt_customer_email': "test@example.com",
-//      'pt_customer_phone_number': "+91333109781",
-//      'pt_order_id': "1234567",
-//      'pt_product_name': "Angadi Bill",
-//      'pt_timeout_in_seconds': "300", //Optional
-//      'pt_address_billing': currentAddress,
-//      'pt_city_billing': "Juffair",
-//      'pt_state_billing': "state",
-//      'pt_country_billing': "BHR",
-//      'pt_postal_code_billing': "243001",
-//      'pt_address_shipping': "test test",
-//      'pt_city_shipping': "Juffair",
-//      'pt_state_shipping': "state",
-//      'pt_country_shipping': "BHR",
-//      'pt_postal_code_shipping': "00973", //Put Country Phone code if Postal
-//      'pt_color': "#ffb000",
-//      'pt_language': 'en', // 'en', 'ar'
-//      'pt_tokenization': true,
-//      'pt_preauth': false
-//    };
-//    FlutterPaytabsSdk.startPayment(args, (event) {
-//      setState(() {
-//        print(event);
-//        List<dynamic> eventList = event;
-//        Map firstEvent = eventList.first;
-//        if (firstEvent.keys.first == "EventPreparePaypage") {
-//          //_result = firstEvent.values.first.toString();
-////          _result = firstEvent["pt_response_code"];
-//          print(
-//              '========================================================================');
-//        } else {
+      pt_transaction_title: "Mr. John Doe",
+      pt_amount: "39",
+      pt_currency_code: "INR",
+      'pt_customer_email': "test@example.com",
+      'pt_customer_phone_number': "+91333109781",
+      'pt_order_id': "1234567",
+      'pt_product_name': "Angadi Bill",
+      'pt_timeout_in_seconds': "300", //Optional
+      'pt_address_billing': currentAddress,
+      'pt_city_billing': "Juffair",
+      'pt_state_billing': "state",
+      'pt_country_billing': "BHR",
+      'pt_postal_code_billing': "243001",
+      'pt_address_shipping': "test test",
+      'pt_city_shipping': "Juffair",
+      'pt_state_shipping': "state",
+      'pt_country_shipping': "BHR",
+      'pt_postal_code_shipping': "00973", //Put Country Phone code if Postal
+      'pt_color': "#ffb000",
+      'pt_language': 'en', // 'en', 'ar'
+      'pt_tokenization': true,
+      'pt_preauth': false
+    };
+    FlutterPaytabsSdk.startPayment(args, (event) {
+      setState(() {
+        print(event);
+        List<dynamic> eventList = event;
+        Map firstEvent = eventList.first;
+        if (firstEvent.keys.first == "EventPreparePaypage") {
+          //_result = firstEvent.values.first.toString();
 //          _result = firstEvent["pt_response_code"];
-//          print(_result);
-//        }
-//      });
-//    });
-//  }
+          print(
+              '========================================================================');
+        } else {
+          _result = firstEvent["pt_response_code"];
+          print(_result);
+        }
+      });
+    });
+  }
+  Map<String,dynamic> map;
+Future<String>onlineorder(String price)async{
+  HttpClient httpClient = new HttpClient();
+  httpClient.badCertificateCallback =
+  ((X509Certificate cert, String host, int port) => true);
+  final String apiUrl = "https://paytab.herokuapp.com/pay";
+  Map map = {
+ "price":price
+  };
+  HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));
 
+  request.headers.set('content-type', 'application/json');
+  request.add(utf8.encode(json.encode(map)));
+  HttpClientResponse response = await request.close();
+  var reply = await response.transform(utf8.decoder).join();
+  httpClient.close();
+  print(reply);
+  var decode=jsonDecode(reply);
+  map=decode;
+
+
+  _launchURL(map['payment_url']);
+
+
+  }
   placeOnlinePaidOrder() {
     print(_result);
     if (_result == '100' || _result == '833') {
       placeOrder(type);
     }
   }
+  _launchURL(reply) async {
+    if (await canLaunch(reply)) {
+      await launch(reply);
+      await Checksuccess();
+    } else {
+      throw 'Could not launch $reply';
+    }
+  }
+  Future<String>Checksuccess()async{
+    HttpClient httpClient = new HttpClient();
+    httpClient.badCertificateCallback =
+    ((X509Certificate cert, String host, int port) => true);
+    final String apiUrl = 'https://paytab.herokuapp.com/success';
+    HttpClientRequest request = await httpClient.getUrl(Uri.parse(apiUrl));
+    request.headers.set('content-type', 'application/json');
+
+    HttpClientResponse response = await request.close();
+
+    response.transform(utf8.decoder).listen((contents) {
+      print(contents);
+      httpClient.close();
+      });}
 }

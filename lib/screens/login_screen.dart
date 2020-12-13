@@ -34,7 +34,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Positioned(
                 top: 0.0,
                 child: Image.asset(
-                  ImagePath.boiledEggs,
+                  ImagePath.splashImage,
                   height: heightOfScreen,
                   width: widthOfScreen,
                   fit: BoxFit.cover,

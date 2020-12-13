@@ -23,6 +23,7 @@ dependencies:
   fancy_shimmer_image: ^1.2.0
   google_fonts: ^0.3.10
   fluttertoast: ^7.1.1
+  flutter_paytabs_bridge_emulator: ^1.0.1-beta
   cached_network_image: ^2.3.3
   persistent_bottom_nav_bar: ^2.1.0
 #  intl: ^0.16.1
@@ -50,6 +51,7 @@ dependencies:
   path_provider: ^1.6.11
   location: ^2.3.5
   flutter_feather_icons: ^1.0.3
+  font_awesome_flutter: ^8.10.0
 
 
 dev_dependencies:

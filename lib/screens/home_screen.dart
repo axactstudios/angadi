@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:angadi/classes/dish.dart';
 import 'package:angadi/classes/offer.dart';
 import 'package:angadi/screens/filtered_search.dart';
@@ -13,6 +15,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -70,6 +73,25 @@ class _HomeScreenState extends State<HomeScreen> {
   getUser() async {
     user = await FirebaseAuth.instance.currentUser();
   }
+  void launchWhatsApp({
+    @required String phone,
+    @required String message,
+  }) async {
+    String url() {
+      if (Platform.isIOS) {
+        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+      } else {
+        return "whatsapp://send?   phone=$phone&text=${Uri.parse(message)}";
+      }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
+  }
+
 
   @override
   void initState() {
@@ -133,13 +155,22 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
               onTap: () {
+                launchWhatsApp(
+                    phone: '7060222315', message: 'Check out this awesome app');
+              },
+              child: Container(
+                  alignment: Alignment.center,
+                  child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
+          SizedBox(width:8),
+          InkWell(
+              onTap: () {
 //                print(1);
                 launch(
                     'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),
           SizedBox(
-            width: 14,
+            width: 10,
           )
         ],
         elevation: 0.0,
