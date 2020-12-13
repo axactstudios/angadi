@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:angadi/routes/router.gr.dart';
 import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/my_orders.dart';
@@ -11,6 +13,7 @@ import 'package:expandable/expandable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 
@@ -19,6 +22,7 @@ import 'package:getflutter/components/drawer/gf_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:location/location.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../screens/categories_screen.dart';
 import '../screens/login_screen.dart';
@@ -63,6 +67,25 @@ class _CustomDrawerState extends State<CustomDrawer> {
     print(_currentPosition);
     _getAddressFromLatLng();
     print(_currentPosition);
+  }
+
+  void launchWhatsApp({
+    @required String phone,
+    @required String message,
+  }) async {
+    String url() {
+      if (Platform.isIOS) {
+        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+      } else {
+        return "whatsapp://send?   phone=$phone&text=${Uri.parse(message)}";
+      }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
   }
 
   _getAddressFromLatLng() async {
@@ -565,6 +588,64 @@ class _CustomDrawerState extends State<CustomDrawer> {
             height: 0.5,
             color: Colors.black26,
           ),
+          ListTile(
+            title: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        launchWhatsApp(phone: '7060222315', message: 'Test');
+                      },
+                      child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
+                              border: Border.all(
+                                  color: Color(0xFF6b3600), width: 2)),
+                          alignment: Alignment.center,
+                          child: FaIcon(
+                            FontAwesomeIcons.whatsapp,
+                            color: Color(0xFF6b3600),
+                          )),
+                    ),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                            border:
+                                Border.all(color: Color(0xFF6b3600), width: 2)),
+                        alignment: Alignment.center,
+                        child: FaIcon(
+                          FontAwesomeIcons.instagram,
+                          color: Color(0xFF6b3600),
+                        )),
+                    SizedBox(
+                      width: 5,
+                    ),
+                    Container(
+                        height: 50,
+                        width: 50,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(25)),
+                            border:
+                                Border.all(color: Color(0xFF6b3600), width: 2)),
+                        alignment: Alignment.center,
+                        child: FaIcon(
+                          FontAwesomeIcons.facebook,
+                          color: Color(0xFF6b3600),
+                        ))
+                  ],
+                )),
+          )
         ],
       ),
     );

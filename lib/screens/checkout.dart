@@ -58,6 +58,7 @@ class _CheckoutState extends State<Checkout> {
     }
     return sum;
   }
+
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -86,72 +87,69 @@ class _CheckoutState extends State<Checkout> {
     time = TimeOfDay.now();
     super.initState();
   }
-  Widget dropdown( BuildContext context, double height,
-      double width) {
+
+  Widget dropdown(BuildContext context, double height, double width) {
     return Padding(
-        padding: EdgeInsets.only(left: MediaQuery
-            .of(context)
-            .size
-            .height * 0.015),
+        padding:
+            EdgeInsets.only(left: MediaQuery.of(context).size.height * 0.015),
         child: Container(
-            decoration: BoxDecoration(
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 15.0, // soften the shadow
-                    spreadRadius: 1.0, //extend the shadow
-                    offset: Offset(
-                      0.0, // Move to right 10  horizontally
-                      0.0, // Move to bottom 10 Vertically
-                    ),
-                  )
-                ],
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            margin: EdgeInsets.fromLTRB(MediaQuery
-                .of(context)
-                .size
-                .width * 0.02, MediaQuery
-                .of(context)
-                .size
-                .height * 0.02, MediaQuery
-                .of(context)
-                .size
-                .width * 0.02, MediaQuery
-                .of(context)
-                .size
-                .height * 0.02),
-            padding: EdgeInsets.all(MediaQuery
-                .of(context)
-                .size
-                .height * 0.02),
-            height: height,
-            width: width,
-            child:
-
-          DropdownButtonHideUnderline(
-            child: new DropdownButton<String>(
-              hint: Text('  Please choose a slot for delivery'),
-              items: <String>['10:00 a.m.-12:00 p.m.', '1:00 p.m.-3:00 p.m.', '4:00 p.m.-6:00 p.m.', '8:00 p.m.:10:00 p.m.'].map((String value) {
-                return new DropdownMenuItem<String>(
-                  value: value,
-                  child: new Text(value),
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  selectedTime=value;
-                });
-
-              },
-            ),
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 15.0, // soften the shadow
+                  spreadRadius: 1.0, //extend the shadow
+                  offset: Offset(
+                    0.0, // Move to right 10  horizontally
+                    0.0, // Move to bottom 10 Vertically
+                  ),
+                )
+              ],
+              color: Colors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10))),
+          margin: EdgeInsets.fromLTRB(
+              MediaQuery.of(context).size.width * 0.02,
+              MediaQuery.of(context).size.height * 0.02,
+              MediaQuery.of(context).size.width * 0.02,
+              MediaQuery.of(context).size.height * 0.02),
+          padding: EdgeInsets.all(MediaQuery.of(context).size.height * 0.02),
+          height: 110,
+          width: width,
+          child: Column(
+            children: [
+              HeadingRow(
+                title: 'Choose Delivery Time',
+                number: '',
+              ),
+              DropdownButtonHideUnderline(
+                child: new DropdownButton<String>(
+                  hint: Text('  Please choose a slot for delivery'),
+                  items: <String>[
+                    '10:00 a.m.-12:00 p.m.',
+                    '1:00 p.m.-3:00 p.m.',
+                    '4:00 p.m.-6:00 p.m.',
+                    '8:00 p.m.:10:00 p.m.'
+                  ].map((String value) {
+                    return new DropdownMenuItem<String>(
+                      value: value,
+                      child: new Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    setState(() {
+                      selectedTime = value;
+                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ),
+            ],
           ),
-
-            ));}
+        ));
+  }
 
   @override
   Widget build(BuildContext context) {
-
     print(_result);
     _pickTime() async {
       TimeOfDay t = await showTimePicker(context: context, initialTime: time);
@@ -162,14 +160,13 @@ class _CheckoutState extends State<Checkout> {
       return time;
     }
 
-
     var textTheme = Theme.of(context).textTheme;
     var hintTextStyle =
         textTheme.subtitle.copyWith(color: AppColors.accentText);
     var textFormFieldTextStyle =
         textTheme.subtitle.copyWith(color: AppColors.accentText);
     return Scaffold(
-      key:scaffoldState,
+        key: scaffoldState,
         appBar: AppBar(
           iconTheme: IconThemeData(
             color: Colors.white,
@@ -187,11 +184,13 @@ class _CheckoutState extends State<Checkout> {
             InkWell(
                 onTap: () {
                   launchWhatsApp(
-                      phone: '7060222315', message: 'Check out this awesome app');
+                      phone: '7060222315',
+                      message: 'Check out this awesome app');
                 },
                 child: Container(
                     alignment: Alignment.center,
-                    child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
+                    child: FaIcon(FontAwesomeIcons.whatsapp,
+                        color: Color(0xFF6b3600)))),
             SizedBox(
               width: 6,
             ),
@@ -202,8 +201,7 @@ class _CheckoutState extends State<Checkout> {
                       'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
-SizedBox(width:7)
-
+            SizedBox(width: 7)
           ],
           elevation: 0.0,
           centerTitle: true,
@@ -509,10 +507,9 @@ SizedBox(width:7)
                             return StatefulBuilder(builder:
                                 (BuildContext context, StateSetter state) {
                               return dropdown(
-
                                   context,
-                                  MediaQuery.of(context).size.height * 0.12,
-                                  MediaQuery.of(context).size.width*0.9);
+                                  MediaQuery.of(context).size.height * 0.3,
+                                  MediaQuery.of(context).size.width * 0.9);
                             });
                           });
 //                          _pickTime().then((value) {
@@ -545,110 +542,117 @@ SizedBox(width:7)
                                       child: Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.89,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.89,
 //                                        child: selectedTime.hour < 23 &&
 ////                                                  selectedTime.hour > 10
-                                              child: Text(
-                                                  'Delivery Time is ${selectedTime}. Your order will reach to you on time. Click to edit time.',
-                                                  style: TextStyle(
-                                                    fontSize: MediaQuery.of(context).size.height*0.015,
-                                                      color: Colors.blue,
-                                                      fontWeight:
-                                                          FontWeight.bold),
-                                                )
+                                            child: Text(
+                                              'Delivery Time is ${selectedTime}. Your order will reach to you on time. Click to edit time.',
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.015,
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.bold),
+                                            )
 //                                              : Text(
 //                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
 //                                                  style: TextStyle(
 //                                                      color: Colors.red,
 //                                                      fontWeight:
 //                                                          FontWeight.bold)),
-                                        ),
+                                            ),
                                       ),
                                     ),
                                   ),
                                 ],
                               ))
-                    : type=='Delivery'? Padding(
-                  padding: const EdgeInsets.only(
-                      left: 12.0, bottom: 0, top: 10),
-                  child: HeadingRow(
-                    title: 'Delivery Time',
-                    number: '',
-                  ),
-                )
-                    : Container(),
+                    : type == 'Delivery'
+                        ? Padding(
+                            padding: const EdgeInsets.only(
+                                left: 12.0, bottom: 0, top: 10),
+                            child: HeadingRow(
+                              title: 'Delivery Time',
+                              number: '',
+                            ),
+                          )
+                        : Container(),
                 type == 'Delivery'
                     ? InkWell(
-                    onTap: () {
-                      scaffoldState.currentState.showBottomSheet((context) {
-                        return StatefulBuilder(builder:
-                            (BuildContext context, StateSetter state) {
-                          return dropdown(
-
-                              context,
-                              MediaQuery.of(context).size.height * 0.12,
-                              MediaQuery.of(context).size.width*0.9);
-                        });
-                      });
+                        onTap: () {
+                          scaffoldState.currentState.showBottomSheet((context) {
+                            return StatefulBuilder(builder:
+                                (BuildContext context, StateSetter state) {
+                              return dropdown(
+                                  context,
+                                  MediaQuery.of(context).size.height * 0.12,
+                                  MediaQuery.of(context).size.width * 0.9);
+                            });
+                          });
 //                          _pickTime().then((value) {
 //                            setState(() {
 //                              selectedTime = value;
 //                            });
 //                          });
-                    },
-                    child: selectedTime == null
-                        ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Card(
-                        elevation: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Schedule Delivery Time',
-                            style: TextStyle(
-                                color: Colors.blue, fontSize: 20),
-                          ),
-                        ),
-                      ),
-                    )
-                        : Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Card(
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                  width: MediaQuery.of(context)
-                                      .size
-                                      .width *
-                                      0.89,
+                        },
+                        child: selectedTime == null
+                            ? Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Card(
+                                  elevation: 5,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      'Schedule Delivery Time',
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 20),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : Row(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Card(
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.89,
 //                                        child: selectedTime.hour < 23 &&
 ////                                                  selectedTime.hour > 10
-                                  child: Text(
-                                    'Delivery Time is ${selectedTime}. Your order will reach to you on time. Click to edit time.',
-                                    style: TextStyle(
-                                        fontSize: MediaQuery.of(context).size.height*0.015,
-                                        color: Colors.blue,
-                                        fontWeight:
-                                        FontWeight.bold),
-                                  )
+                                            child: Text(
+                                              'Delivery Time is ${selectedTime}. Your order will reach to you on time. Click to edit time.',
+                                              style: TextStyle(
+                                                  fontSize:
+                                                      MediaQuery.of(context)
+                                                              .size
+                                                              .height *
+                                                          0.015,
+                                                  color: Colors.blue,
+                                                  fontWeight: FontWeight.bold),
+                                            )
 //                                              : Text(
 //                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
 //                                                  style: TextStyle(
 //                                                      color: Colors.red,
 //                                                      fontWeight:
 //                                                          FontWeight.bold)),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )):Container(),
+                                            ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ))
+                    : Container(),
                 _result != '833'
                     ? Padding(
                         padding: const EdgeInsets.only(
@@ -687,12 +691,23 @@ SizedBox(width:7)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14.0),
                       child: angadiButton(
-                        _result != '833'&&j!=1 ? 'Proceed to pay online' : 'Check your status',
+                        _result != '833' && j != 1
+                            ? 'Proceed to pay online'
+                            : 'Check your status',
                         onTap: () {
-                          _result != '833'&&j!=1
-                              ? onlineorder((discount != null)
-                              ?  ((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)
-                              :  ((totalAmount() * 0.18) + totalAmount()).toString(),type)
+                          _result != '833' && j != 1
+                              ? onlineorder(
+                                  (discount != null)
+                                      ? ((totalAmount() * 0.18) +
+                                              totalAmount() -
+                                              (totalAmount() *
+                                                  (double.parse(
+                                                          discount.discount) /
+                                                      100)))
+                                          .toStringAsFixed(2)
+                                      : ((totalAmount() * 0.18) + totalAmount())
+                                          .toString(),
+                                  type)
                               : Checksuccess();
                         },
                         buttonWidth: MediaQuery.of(context).size.width,
@@ -715,14 +730,14 @@ SizedBox(width:7)
     user = await FirebaseAuth.instance.currentUser();
   }
 
-  var docID;var id;
+  var docID;
+  var id;
   placeOrder(orderType) async {
-
     var rng = new Random();
     var code = rng.nextInt(90000) + 10000;
     print('ANG${code.toString()}');
     setState(() {
-       id='ANG${code.toString()}';
+      id = 'ANG${code.toString()}';
     });
 
     await getUserDetails();
@@ -756,7 +771,10 @@ SizedBox(width:7)
             });
           })
         : orderType == 'Takeaway'
-            ? await databaseReference.collection('Orders').document(id).setData({
+            ? await databaseReference
+                .collection('Orders')
+                .document(id)
+                .setData({
                 'Items': items,
                 'Price': prices,
                 'Qty': quantities,
@@ -772,7 +790,10 @@ SizedBox(width:7)
 //                  docID = value.documentID;
                 });
               })
-            : await databaseReference.collection('Orders').document(id).setData({
+            : await databaseReference
+                .collection('Orders')
+                .document(id)
+                .setData({
                 'Items': items,
                 'Price': prices,
                 'Qty': quantities,
@@ -1012,8 +1033,9 @@ SizedBox(width:7)
   Future<void> payPressed() async {
     var args = {
 //      'pt_merchant_email': "vkumarsaraswat@gmail.com",
-    pt_merchant_email:'test@example.com',
-   pt_secret_key: "kuTEjyEMhpVSWTwXBSOSeiiDAeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",
+      pt_merchant_email: 'test@example.com',
+      pt_secret_key:
+          "kuTEjyEMhpVSWTwXBSOSeiiDAeMCOdyeuFZKiXAlhzjSKqswUWAgbCaYFivjvYzCWaWJbRszhjZuEQqsUycVzLSyMIaZiQLlRqlp",
 //      'pt_secret_key':
 //          "P45UE6iY0pIhWSWx5vLPmN5icCio1PXQT2Ky82w8repo7mVcRG2eu7wGKP5LE2By4l6coDkPRKeZ69bXQdbklH15w6Qb8sKcOQoc", // Add your Secret Key Here
       pt_transaction_title: "Mr. John Doe",
@@ -1056,59 +1078,59 @@ SizedBox(width:7)
       });
     });
   }
-  Map<String,dynamic> map;int j=0;
-Future<String>onlineorder(String price,String type)async{
-  await getUserDetails();
-  List items = [];
-  List prices = [];
-  List quantities = [];
-  j=0;
-  for (var v in cartItems) {
-    print(v.productName);
-    items.add(v.productName);
-    prices.add(v.price);
-    quantities.add(v.qty);
-  }
-  HttpClient httpClient = new HttpClient();
-  httpClient.badCertificateCallback =
-  ((X509Certificate cert, String host, int port) => true);
-  final String apiUrl = "https://paytab.herokuapp.com/pay";
-  Map map = {
-    'Items': items,
-    'Price': prices,
-    'Qty': quantities,
+
+  Map<String, dynamic> map;
+  int j = 0;
+  Future<String> onlineorder(String price, String type) async {
+    await getUserDetails();
+    List items = [];
+    List prices = [];
+    List quantities = [];
+    j = 0;
+    for (var v in cartItems) {
+      print(v.productName);
+      items.add(v.productName);
+      prices.add(v.price);
+      quantities.add(v.qty);
+    }
+    HttpClient httpClient = new HttpClient();
+    httpClient.badCertificateCallback =
+        ((X509Certificate cert, String host, int port) => true);
+    final String apiUrl = "https://paytab.herokuapp.com/pay";
+    Map map = {
+      'Items': items,
+      'Price': prices,
+      'Qty': quantities,
 //    'TimeStamp': DateTime.now(),
-    'GrandTotal':price,
-    'Status':'Order Placed',
-    'Type': type,
-    'UserID': user.uid,
-    'Notes':notesController.text,
-    'Address': addressController.text,
-    'Phone':user.phoneNumber
+      'GrandTotal': price,
+      'Status': 'Order Placed',
+      'Type': type,
+      'UserID': user.uid,
+      'Notes': notesController.text,
+      'Address': addressController.text,
+      'Phone': user.phoneNumber
+    };
+    HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));
 
-  };
-  HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));
+    request.headers.set('content-type', 'application/json');
+    request.add(utf8.encode(json.encode(map)));
+    HttpClientResponse response = await request.close();
+    var reply = await response.transform(utf8.decoder).join();
+    httpClient.close();
+    print(reply);
+    var decode = jsonDecode(reply);
+    map = decode;
 
-  request.headers.set('content-type', 'application/json');
-  request.add(utf8.encode(json.encode(map)));
-  HttpClientResponse response = await request.close();
-  var reply = await response.transform(utf8.decoder).join();
-  httpClient.close();
-  print(reply);
-  var decode=jsonDecode(reply);
-  map=decode;
-
-
-  _launchURL(map['payment_url']);
-
-
+    _launchURL(map['payment_url']);
   }
+
   placeOnlinePaidOrder() {
     print(_result);
     if (_result == '100' || _result == '833') {
       placeOrder(type);
     }
   }
+
   _launchURL(reply) async {
     if (await canLaunch(reply)) {
       await launch(reply);
@@ -1117,18 +1139,18 @@ Future<String>onlineorder(String price,String type)async{
         j++;
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (BuildContext context) {
-              return HomeScreen();
-            }));
+          return HomeScreen();
+        }));
       });
-
     } else {
       throw 'Could not launch $reply';
     }
   }
-  Future<String>Checksuccess()async{
+
+  Future<String> Checksuccess() async {
     HttpClient httpClient = new HttpClient();
     httpClient.badCertificateCallback =
-    ((X509Certificate cert, String host, int port) => true);
+        ((X509Certificate cert, String host, int port) => true);
     final String apiUrl = 'https://paytab.herokuapp.com/success';
     HttpClientRequest request = await httpClient.getUrl(Uri.parse(apiUrl));
     request.headers.set('content-type', 'application/json');
@@ -1136,8 +1158,8 @@ Future<String>onlineorder(String price,String type)async{
     HttpClientResponse response = await request.close();
 
     response.transform(utf8.decoder).listen((contents) {
-      print('------------------------------');
       print(contents);
       httpClient.close();
-      });}
+    });
+  }
 }

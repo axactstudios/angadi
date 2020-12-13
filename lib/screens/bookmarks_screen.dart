@@ -13,6 +13,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
 import 'checkout.dart';
 
@@ -97,12 +98,12 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     getUserDetails();
     getAllItems();
   }
-  void login(){
+
+  void login() {
     Fluttertoast.showToast(
       msg: 'Login to checkout!',
-
     );
-    Navigator.push(context,MaterialPageRoute(builder:(context)=>LoginScreen()));
+    pushNewScreen(context, screen: LoginScreen(), withNavBar: false);
   }
 
   @override

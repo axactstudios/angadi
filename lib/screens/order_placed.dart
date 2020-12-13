@@ -352,6 +352,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.status);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -374,8 +375,9 @@ class _OrderPlacedState extends State<OrderPlaced> {
               },
               child: Container(
                   alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-          SizedBox(width:8),
+                  child: FaIcon(FontAwesomeIcons.whatsapp,
+                      color: Color(0xFF6b3600)))),
+          SizedBox(width: 8),
           InkWell(
               onTap: () {
 //                print(1);

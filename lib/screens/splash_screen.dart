@@ -4,8 +4,6 @@ import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
 import 'dart:math' as math;
 
-import 'package:geocoder/geocoder.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 
 class SplashScreen extends StatefulWidget {

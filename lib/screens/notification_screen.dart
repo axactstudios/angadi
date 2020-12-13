@@ -144,8 +144,9 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               },
               child: Container(
                   alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-          SizedBox(width:8),
+                  child: FaIcon(FontAwesomeIcons.whatsapp,
+                      color: Color(0xFF6b3600)))),
+          SizedBox(width: 8),
           InkWell(
               onTap: () {
 //                print(1);
@@ -221,7 +222,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 await fetchOrderDetail(
                                     snap.data.documents[index]['OrderID']);
                                 String status;
-                                Firestore.instance
+                                await Firestore.instance
                                     .collection('Orders')
                                     .getDocuments()
                                     .then((value) {
@@ -380,6 +381,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
       setState(() {
         id1 = id;
         str = '';
+        print('==========${value.data}');
         for (int it = 0; it < value['Items'].length; it++) {
           it != value['Items'].length - 1
               ? str = str + '${value['Qty'][it]} x ${value['Items'][it]}, '
