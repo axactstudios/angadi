@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:angadi/classes/cart.dart';
+import 'package:angadi/screens/home_screen.dart';
 import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/offers_screen.dart';
 import 'package:angadi/services/database_helper.dart';
@@ -686,13 +687,13 @@ SizedBox(width:7)
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14.0),
                       child: angadiButton(
-                        _result != '833' ? 'Proceed to pay online' : 'Proceed',
+                        _result != '833'&&j!=1 ? 'Proceed to pay online' : 'Check your status',
                         onTap: () {
-                          _result != '833'?payPressed()
-//                              ? onlineorder((discount != null)
-//                              ?  ((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)
-//                              :  ((totalAmount() * 0.18) + totalAmount()).toString())
-                              : placeOnlinePaidOrder();
+                          _result != '833'&&j!=1
+                              ? onlineorder((discount != null)
+                              ?  ((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)
+                              :  ((totalAmount() * 0.18) + totalAmount()).toString(),type)
+                              : Checksuccess();
                         },
                         buttonWidth: MediaQuery.of(context).size.width,
                       ),
@@ -816,7 +817,7 @@ SizedBox(width:7)
     String status;
     Firestore.instance.collection('Orders').getDocuments().then((value) {
       value.documents.forEach((element) {
-        if (element.documentID == docID) {
+        if (element.documentID == id) {
           status = element['Status'];
         }
       });
@@ -824,7 +825,7 @@ SizedBox(width:7)
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return OrderPlaced(Bill(), docID, status);
+      return OrderPlaced(Bill(), id, status);
     }));
   }
 
@@ -1055,12 +1056,13 @@ SizedBox(width:7)
       });
     });
   }
-  Map<String,dynamic> map;
+  Map<String,dynamic> map;int j=0;
 Future<String>onlineorder(String price,String type)async{
   await getUserDetails();
   List items = [];
   List prices = [];
   List quantities = [];
+  j=0;
   for (var v in cartItems) {
     print(v.productName);
     items.add(v.productName);
@@ -1075,12 +1077,14 @@ Future<String>onlineorder(String price,String type)async{
     'Items': items,
     'Price': prices,
     'Qty': quantities,
-    'TimeStamp': DateTime.now(),
+//    'TimeStamp': DateTime.now(),
     'GrandTotal':price,
     'Status':'Order Placed',
     'Type': type,
     'UserID': user.uid,
+    'Notes':notesController.text,
     'Address': addressController.text,
+    'Phone':user.phoneNumber
 
   };
   HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));
@@ -1108,7 +1112,15 @@ Future<String>onlineorder(String price,String type)async{
   _launchURL(reply) async {
     if (await canLaunch(reply)) {
       await launch(reply);
-      await Checksuccess();
+      setState(() {
+        removeAll();
+        j++;
+        Navigator.pushReplacement(context,
+            MaterialPageRoute(builder: (BuildContext context) {
+              return HomeScreen();
+            }));
+      });
+
     } else {
       throw 'Could not launch $reply';
     }
@@ -1124,6 +1136,7 @@ Future<String>onlineorder(String price,String type)async{
     HttpClientResponse response = await request.close();
 
     response.transform(utf8.decoder).listen((contents) {
+      print('------------------------------');
       print(contents);
       httpClient.close();
       });}
