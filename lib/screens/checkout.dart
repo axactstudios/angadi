@@ -1056,13 +1056,32 @@ SizedBox(width:7)
     });
   }
   Map<String,dynamic> map;
-Future<String>onlineorder(String price)async{
+Future<String>onlineorder(String price,String type)async{
+  await getUserDetails();
+  List items = [];
+  List prices = [];
+  List quantities = [];
+  for (var v in cartItems) {
+    print(v.productName);
+    items.add(v.productName);
+    prices.add(v.price);
+    quantities.add(v.qty);
+  }
   HttpClient httpClient = new HttpClient();
   httpClient.badCertificateCallback =
   ((X509Certificate cert, String host, int port) => true);
   final String apiUrl = "https://paytab.herokuapp.com/pay";
   Map map = {
- "price":price
+    'Items': items,
+    'Price': prices,
+    'Qty': quantities,
+    'TimeStamp': DateTime.now(),
+    'GrandTotal':price,
+    'Status':'Order Placed',
+    'Type': type,
+    'UserID': user.uid,
+    'Address': addressController.text,
+
   };
   HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));
 
