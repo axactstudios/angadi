@@ -38,10 +38,19 @@ class _CheckoutState extends State<Checkout> {
   DateTime selectedDate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day+1);
   String selectedTime = '9 AM';
   DateTime date;
+  var addresstype='Apartment';
+  var color1=true;
+  var color2=false;
+  var color3=false;
   double total;
   final addressController = TextEditingController();
+  final buildingController=TextEditingController();
+  final floorcontroller=TextEditingController();
+  final flatcontroller=TextEditingController();
+  final additionalcontroller=TextEditingController();
   final hnoController = TextEditingController();
   final notesController = TextEditingController();
+
 
   final dbHelper = DatabaseHelper.instance;
 //  final dbRef = FirebaseDatabase.instance.reference();
@@ -551,7 +560,7 @@ class _CheckoutState extends State<Checkout> {
                               padding:
                                   const EdgeInsets.only(left: 12.0, bottom: 12),
                               child: HeadingRow(
-                                title: 'Address',
+                                title: ' Delivery Address',
                                 number: '',
                               ),
                             ),
@@ -570,43 +579,128 @@ class _CheckoutState extends State<Checkout> {
                       )
                     : Container(),
                 type != 'Takeaway'
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: CustomTextFormField(
-                          controller: hnoController,
-                          textFormFieldStyle: textFormFieldTextStyle,
-                          prefixIconColor: AppColors.secondaryElement,
-                          hintTextStyle: hintTextStyle,
-                          borderStyle: BorderStyle.solid,
-                          borderWidth: Sizes.WIDTH_1,
-                          hintText: 'Enter House No, Street Name',
-                          hasPrefixIcon: true,
-                          prefixIconImagePath: ImagePath.homeIcon,
-                        ),
-                      )
-                    : Container(),
+//                    ? Padding(
+//                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//                        child: CustomTextFormField(
+//                          controller: hnoController,
+//                          textFormFieldStyle: textFormFieldTextStyle,
+//                          prefixIconColor: AppColors.secondaryElement,
+//                          hintTextStyle: hintTextStyle,
+//                          borderStyle: BorderStyle.solid,
+//                          borderWidth: Sizes.WIDTH_1,
+//                          hintText: 'Enter House No, Street Name',
+//                          hasPrefixIcon: true,
+//                          prefixIconImagePath: ImagePath.homeIcon,
+//                        ),
+//                      )
+                    ?Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(children: [Container(
+                        width:MediaQuery.of(context).size.width*0.31,
+                        height:MediaQuery.of(context).size.height*0.08,
+                        child: OutlineButton(highlightedBorderColor:Color(0xFF6b3600),borderSide:BorderSide(color:(color1)?Color(0xFF6b3600):Colors.grey),onPressed: (){setState(() {
+                          color1=!color1;
+                          color2=false;
+                          color3=false;
+                          addresstype='Apartment';
+                        });},child:Padding(
+                          padding:  EdgeInsets.only(top:8.0),
+                          child: Column(children: [Image.asset('assets/images/apartment.png',height:25),Text('Apartment',style:TextStyle(fontSize:MediaQuery.of(context).size.height*0.016,color:Colors.black,fontWeight:FontWeight.w300))],),
+                        ),disabledBorderColor: Colors.grey,color:Color(0xFF6b3600),),
+                      ),
+                        SizedBox(width:MediaQuery.of(context).size.width*0.04),
+                        OutlineButton(highlightedBorderColor:Color(0xFF6b3600),borderSide:BorderSide(color:(color2)?Color(0xFF6b3600):Colors.grey),onPressed: (){
+                          setState(() {
+                            color2=!color2;
+                            color1=false;
+                            color3=false;
+                            addresstype='House';
+                          });
+                        },child:Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(children: [Image.asset('assets/images/house.png',height:25),Text('House',style:TextStyle(color:Colors.black,fontWeight:FontWeight.w300))],),
+                        ),disabledBorderColor: Colors.grey,color:Color(0xFF6b3600),),
+                        SizedBox(width:MediaQuery.of(context).size.width*0.04),
+                        OutlineButton(highlightedBorderColor:Color(0xFF6b3600),borderSide:BorderSide(color:(color3)?Color(0xFF6b3600):Colors.grey),onPressed: (){setState(() {
+                         color3=!color3;
+                         color2=false;
+                         color1=false;
+                          addresstype='Office';
+                        });},child:Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(children: [Image.asset('assets/images/office.png',height:25),Text('Office',style:TextStyle(color:Colors.black,fontWeight:FontWeight.w300))],),
+                        ),disabledBorderColor: Colors.grey,color:Color(0xFF6b3600),)],),
+                    ): Container(),
                 type != 'Takeaway'
                     ? SizedBox(
                         height: 10,
                       )
                     : Container(),
                 type != 'Takeaway'
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                        child: CustomTextFormField(
-                          controller: addressController,
-                          textFormFieldStyle: textFormFieldTextStyle,
-                          prefixIconColor: AppColors.secondaryElement,
-                          hintTextStyle: hintTextStyle,
-                          borderStyle: BorderStyle.solid,
-                          borderWidth: Sizes.WIDTH_1,
-                          hintText: 'Enter Address',
-                          maxLines: 4,
-                          hasPrefixIcon: true,
-                          prefixIconImagePath: ImagePath.homeIcon,
-                        ),
-                      )
-                    : Container(),
+//                    ? Padding(
+//                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+//                        child: CustomTextFormField(
+//                          controller: addressController,
+//                          textFormFieldStyle: textFormFieldTextStyle,
+//                          prefixIconColor: AppColors.secondaryElement,
+//                          hintTextStyle: hintTextStyle,
+//                          borderStyle: BorderStyle.solid,
+//                          borderWidth: Sizes.WIDTH_1,
+//                          hintText: 'Enter Address',
+//                          maxLines: 4,
+//                          hasPrefixIcon: true,
+//                          prefixIconImagePath: ImagePath.homeIcon,
+//                        ),
+//                      )
+                   ?(addresstype=='Apartment')?Column(children: [Padding(
+                     padding: const EdgeInsets.all(8.0),
+                     child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Building' ),   controller: buildingController,),
+                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Floor' ),   controller: floorcontroller,),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Apartment' ),   controller: flatcontroller,),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Additional Directions' ),  maxLines: 2, controller: additionalcontroller,        ),
+                  ),
+                ],):(addresstype=='House')?Column(children: [Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Street' ),   controller: buildingController,),
+                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Area' ),   controller: floorcontroller,),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Landmark' ),   controller: flatcontroller,),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Additional Directions' ),  maxLines: 2, controller: additionalcontroller,        ),
+                  ),
+                ],) :Column(children: [Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Building' ),   controller: buildingController,),
+                ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Floor' ),   controller: floorcontroller,),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Landmark' ),   controller: flatcontroller,),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(decoration:InputDecoration(border:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Colors.grey)),focusedBorder:OutlineInputBorder(borderRadius: BorderRadius.circular(2),borderSide: BorderSide(color:Color(0xFF6b3600))),hintText: 'Additional Directions' ),  maxLines: 2, controller: additionalcontroller,        ),
+                  ),
+                ],): Container(),
                 Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 14.0, vertical: 10),
@@ -1039,14 +1133,17 @@ class _CheckoutState extends State<Checkout> {
       quantities.add(v.qty);
     }
     final databaseReference = Firestore.instance;
-    orderType == 'Delivery'
+    orderType == 'Delivery'&&addresstype=='Apartment'
         ? await databaseReference.collection('Orders').document(id).setData({
             'Items': items,
             'Price': prices,
             'Qty': quantities,
             'Type': orderType,
             'UserID': user.uid,
-            'Address': addressController.text,
+            'Building':buildingController.text,
+             'Floor':floorcontroller.text,
+              'Apartment':flatcontroller.text,
+            'Additional Directions':additionalcontroller.text,
             'DeliveryDate':DateTime(selectedDate.year,selectedDate.month,selectedDate.day,dd),
              'DeliveryTime':selectedTime,
             'TimeStamp': DateTime.now(),
@@ -1059,7 +1156,52 @@ class _CheckoutState extends State<Checkout> {
             setState(() {
 //              docID = value;
             });
-          })
+          }):orderType == 'Delivery'&&addresstype=='House'?
+    await databaseReference.collection('Orders').document(id).setData({
+      'Items': items,
+      'Price': prices,
+      'Qty': quantities,
+      'Type': orderType,
+      'UserID': user.uid,
+      'Street':buildingController.text,
+      'Area':floorcontroller.text,
+      'Landmark':flatcontroller.text,
+      'Additional Directions':additionalcontroller.text,
+      'DeliveryDate':DateTime(selectedDate.year,selectedDate.month,selectedDate.day,dd),
+      'DeliveryTime':selectedTime,
+      'TimeStamp': DateTime.now(),
+      'Status': 'Awaiting Confirmation',
+      'Notes':
+      notesController.text != null ? notesController.text : 'None',
+      'GrandTotal':
+      ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
+    }).then((value) {
+      setState(() {
+//              docID = value;
+      });
+    }):orderType == 'Delivery'&&addresstype=='Office'?await databaseReference.collection('Orders').document(id).setData({
+      'Items': items,
+      'Price': prices,
+      'Qty': quantities,
+      'Type': orderType,
+      'UserID': user.uid,
+      'Building':buildingController.text,
+      'Floor':floorcontroller.text,
+      'Landmark':flatcontroller.text,
+      'Additional Directions':additionalcontroller.text,
+      'DeliveryDate':DateTime(selectedDate.year,selectedDate.month,selectedDate.day,dd),
+      'DeliveryTime':selectedTime,
+      'TimeStamp': DateTime.now(),
+      'Status': 'Awaiting Confirmation',
+      'Notes':
+      notesController.text != null ? notesController.text : 'None',
+      'GrandTotal':
+      ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
+    }).then((value) {
+      setState(() {
+//              docID = value;
+      });
+    })
         : orderType == 'Takeaway'
             ? await databaseReference
                 .collection('Orders')
