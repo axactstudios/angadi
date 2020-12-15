@@ -5,6 +5,7 @@ import 'package:angadi/classes/cart.dart';
 import 'package:angadi/screens/home_screen.dart';
 import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/offers_screen.dart';
+import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
@@ -15,6 +16,7 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:flutter_paytabs_bridge_emulator/flutter_paytabs_bridge_emulator.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder/geocoder.dart';
@@ -33,6 +35,9 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout> {
   String type = 'Delivery';
   List<Cart> cartItems = [];
+  DateTime selectedDate=DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day+1);
+  String selectedTime = '9 AM';
+  DateTime date;
   double total;
   final addressController = TextEditingController();
   final hnoController = TextEditingController();
@@ -43,6 +48,115 @@ class _CheckoutState extends State<Checkout> {
   FirebaseAuth mAuth = FirebaseAuth.instance;
   GlobalKey key = new GlobalKey();
   final scaffoldState = GlobalKey<ScaffoldState>();
+
+  _pickTime() async {
+    var today=DateTime.now();
+    DateTime t = await showDatePicker(
+      context: context,
+      initialDate: DateTime(today.year,today.month,today.day+1),
+      lastDate: DateTime(today.year, today.month, today.day+6),
+      firstDate: DateTime(
+        today.year,
+        DateTime.now().month,
+        today.day+1
+      ),
+      builder: (BuildContext context, Widget child) {
+        return Theme(
+          data: ThemeData.dark(),
+          child: child,
+        );
+      },
+    );
+    if (t != null)
+      setState(() {
+        date = t;
+      });
+    return date;}
+  Future<void> _timeDialog(BuildContext context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return _buildTimeDialog(context);
+      },
+    );
+  }
+  Widget _buildTimeDialog(BuildContext context) {
+    var textTheme = Theme.of(context).textTheme;
+
+    var hintTextStyle =
+    textTheme.subtitle.copyWith(color: AppColors.accentText);
+    var textFormFieldTextStyle =
+    textTheme.subtitle.copyWith(color: AppColors.accentText);
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.all(
+          Radius.circular(Sizes.RADIUS_32),
+        ),
+      ),
+      child: AlertDialog(
+        contentPadding: EdgeInsets.fromLTRB(
+          Sizes.PADDING_0,
+          Sizes.PADDING_36,
+          Sizes.PADDING_0,
+          Sizes.PADDING_0,
+        ),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(Sizes.RADIUS_20),
+        ),
+        elevation: Sizes.ELEVATION_4,
+        content: Container(
+          height: Sizes.HEIGHT_160,
+          width: Sizes.WIDTH_300,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SingleChildScrollView(
+                child: Center(
+                  child: Text(
+                    'Change delivery time',
+                    style: textTheme.title.copyWith(
+                      fontSize: Sizes.TEXT_SIZE_20,
+                    ),
+                  ),
+                ),
+              ),
+              Spacer(flex: 1),
+              Padding(
+                padding: const EdgeInsets.all(10.0),
+                child: DropDown<String>(
+                  initialValue: '9 AM',
+                  items: <String>['9 AM', '12 PM', '2 PM', '5 PM', '7 PM'],
+                  hint: Text("Select quantity"),
+                  onChanged: (value) async {
+                    setState(() {
+                      selectedTime = value;
+                    });
+                  },
+                ),
+              ),
+              Spacer(flex: 1),
+              AlertDialogButton(
+                  buttonText: "Change",
+                  width: 280,
+                  border: Border(
+                    top: BorderSide(
+                      width: 1,
+                      color: AppColors.greyShade1,
+                    ),
+                  ),
+                  textStyle: textTheme.button
+                      .copyWith(color: AppColors.secondaryElement),
+                  onPressed: () {
+                    setState(() {});
+                    Navigator.of(context).pop(true);
+                  })
+            ],
+          ),
+        ),
+      ),
+    );
+  }
   int newQty;
   void getAllItems() async {
     final allRows = await dbHelper.queryAllRows();
@@ -79,12 +193,13 @@ class _CheckoutState extends State<Checkout> {
   }
 
   TimeOfDay time;
-  String selectedTime;
+
   @override
   void initState() {
     getAllItems();
     _getCurrentLocation();
     time = TimeOfDay.now();
+    date = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day+1);
     super.initState();
   }
 
@@ -117,30 +232,122 @@ class _CheckoutState extends State<Checkout> {
           width: width,
           child: Column(
             children: [
-              HeadingRow(
-                title: 'Choose Delivery Time',
-                number: '',
-              ),
-              DropdownButtonHideUnderline(
-                child: new DropdownButton<String>(
-                  hint: Text('  Please choose a slot for delivery'),
-                  items: <String>[
-                    '10:00 a.m.-12:00 p.m.',
-                    '1:00 p.m.-3:00 p.m.',
-                    '4:00 p.m.-6:00 p.m.',
-                    '8:00 p.m.:10:00 p.m.'
-                  ].map((String value) {
-                    return new DropdownMenuItem<String>(
-                      value: value,
-                      child: new Text(value),
-                    );
-                  }).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      selectedTime = value;
-                      Navigator.pop(context);
-                    });
-                  },
+//              HeadingRow(
+//                title: 'Choose Delivery Time',
+//                number: '',
+//              ),
+//              DropdownButtonHideUnderline(
+//                child: new DropdownButton<String>(
+//                  hint: Text('  Please choose a slot for delivery'),
+//                  items: <String>[
+//                    '10:00 a.m.-12:00 p.m.',
+//                    '1:00 p.m.-3:00 p.m.',
+//                    '4:00 p.m.-6:00 p.m.',
+//                    '8:00 p.m.:10:00 p.m.'
+//                  ].map((String value) {
+//                    return new DropdownMenuItem<String>(
+//                      value: value,
+//                      child: new Text(value),
+//                    );
+//                  }).toList(),
+//                  onChanged: (value) {
+//                    setState(() {
+//                      selectedTime = value;
+//                      Navigator.pop(context);
+//                    });
+//                  },
+//                ),
+//              ),
+//              Container(
+//                width: MediaQuery.of(context).size.width,
+//                color: AppColors.secondaryElement,
+//                child: Padding(
+//                  padding: const EdgeInsets.all(8.0),
+//                  child: Row(
+//                    children: [
+//                      Icon(Icons.location_on, color: Colors.white),
+//                      SizedBox(
+//                        width: 5,
+//                      ),
+//                      Container(
+//                          width: MediaQuery.of(context).size.width * 0.6,
+//                          child: Text('Deliver to $location',
+//                              style: TextStyle(color: Colors.white))),
+//                      SizedBox(
+//                        width: 10,
+//                      ),
+//                      InkWell(
+//                          onTap: () {
+////                                  _locationDialog(context);
+//                            showPlacePicker();
+//
+////
+//                          },
+//                          child: Icon(Icons.edit, color: Colors.white)),
+////                            InkWell(
+////                                onTap: () {
+////                                  showPlacePicker();
+////
+//////                              _locationDialog(context);
+////                                },
+////                                child: Icon(Icons.map, color: Colors.white))
+//                    ],
+//                  ),
+//                ),
+//              ),
+              Container(
+                height: MediaQuery.of(context).size.height*0.05,
+                decoration: BoxDecoration(
+                    border: Border.all(color: AppColors.secondaryElement),
+                    borderRadius: BorderRadius.all(Radius.zero)),
+                child: Row(
+                  children: [
+                    Text('    Next Delivery: '),
+                    Icon(
+                      Icons.delivery_dining,
+                      color: AppColors.secondaryElement,
+                    ),
+                    SizedBox(width: 5),
+                    InkWell(
+                        onTap: () {
+                          _pickTime().then((value) {
+                            setState(() {
+                              selectedDate = value;
+                            });
+                          });
+                        },
+                        child: selectedDate != null
+                            ? Text(
+                          '${selectedDate.day.toString()}/${selectedDate.month.toString()}/20 ',
+                          style:
+                          TextStyle(color: Color(0xFF6b3600)),
+                        )
+                            : Text(
+                          '${date.day.toString()}/${date.month.toString()}/20 ',
+                          style:
+                          TextStyle(color: Color(0xFF6b3600)),
+                        )),
+                    Text(' at '),
+                    Icon(
+                      Icons.timer,
+                      size: 19,
+                      color: AppColors.secondaryElement,
+                    ),
+                    SizedBox(width: 5),
+                    InkWell(
+                        onTap: () {
+                          _timeDialog(context);
+                        },
+                        child: Text(
+                          '$selectedTime ',
+                          style: TextStyle(color: Color(0xFF6b3600)),
+                        )),
+//                        InkWell(
+//                            onTap: () {
+//                              _locationDialog(context);
+//                            },
+//                            child: Icon(Icons.edit))
+                  ],
                 ),
               ),
             ],
@@ -151,14 +358,14 @@ class _CheckoutState extends State<Checkout> {
   @override
   Widget build(BuildContext context) {
     print(_result);
-    _pickTime() async {
-      TimeOfDay t = await showTimePicker(context: context, initialTime: time);
-      if (t != null)
-        setState(() {
-          time = t;
-        });
-      return time;
-    }
+//    _pickTime() async {
+//      TimeOfDay t = await showTimePicker(context: context, initialTime: time);
+//      if (t != null)
+//        setState(() {
+//          time = t;
+//        });
+//      return time;
+//    }
 
     var textTheme = Theme.of(context).textTheme;
     var hintTextStyle =
@@ -255,21 +462,21 @@ class _CheckoutState extends State<Checkout> {
                     SizedBox(
                       width: 1,
                     ),
-                    Radio(
-                        activeColor: AppColors.secondaryElement,
-                        value: 'Schedule Delivery',
-                        groupValue: type,
-                        onChanged: (value) {
-                          setState(() {
-                            type = value;
-                          });
-                        }),
-                    Container(
-                        width: MediaQuery.of(context).size.width * 0.2,
-                        child: Text(
-                          'Schedule Delivery',
-                          style: TextStyle(fontSize: 15),
-                        )),
+//                    Radio(
+//                        activeColor: AppColors.secondaryElement,
+//                        value: 'Schedule Delivery',
+//                        groupValue: type,
+//                        onChanged: (value) {
+//                          setState(() {
+//                            type = value;
+//                          });
+//                        }),
+//                    Container(
+//                        width: MediaQuery.of(context).size.width * 0.2,
+//                        child: Text(
+//                          'Schedule Delivery',
+//                          style: TextStyle(fontSize: 15),
+//                        )),
                   ],
                 ),
                 SizedBox(
@@ -490,7 +697,7 @@ class _CheckoutState extends State<Checkout> {
                 SizedBox(
                   height: 20,
                 ),
-                type == 'Schedule Delivery'
+                type == 'Delivery'
                     ? Padding(
                         padding: const EdgeInsets.only(
                             left: 12.0, bottom: 0, top: 10),
@@ -500,158 +707,216 @@ class _CheckoutState extends State<Checkout> {
                         ),
                       )
                     : Container(),
-                type == 'Schedule Delivery'
-                    ? InkWell(
-                        onTap: () {
-                          scaffoldState.currentState.showBottomSheet((context) {
-                            return StatefulBuilder(builder:
-                                (BuildContext context, StateSetter state) {
-                              return dropdown(
-                                  context,
-                                  MediaQuery.of(context).size.height * 0.3,
-                                  MediaQuery.of(context).size.width * 0.9);
-                            });
-                          });
-//                          _pickTime().then((value) {
-//                            setState(() {
-//                              selectedTime = value;
-//                            });
-//                          });
-                        },
-                        child: selectedTime == null
-                            ? Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Card(
-                                  elevation: 5,
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Schedule Delivery Time',
-                                      style: TextStyle(
-                                          color: Colors.blue, fontSize: 20),
-                                    ),
-                                  ),
-                                ),
-                              )
-                            : Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Card(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.89,
-//                                        child: selectedTime.hour < 23 &&
-////                                                  selectedTime.hour > 10
-                                            child: Text(
-                                              'Delivery Time is ${selectedTime}. Your order will reach to you on time. Click to edit time.',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          0.015,
-                                                  color: Colors.blue,
-                                                  fontWeight: FontWeight.bold),
-                                            )
-//                                              : Text(
-//                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
-//                                                  style: TextStyle(
-//                                                      color: Colors.red,
-//                                                      fontWeight:
-//                                                          FontWeight.bold)),
-                                            ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ))
-                    : type == 'Delivery'
-                        ? Padding(
-                            padding: const EdgeInsets.only(
-                                left: 12.0, bottom: 0, top: 10),
-                            child: HeadingRow(
-                              title: 'Delivery Time',
-                              number: '',
-                            ),
-                          )
-                        : Container(),
                 type == 'Delivery'
                     ? InkWell(
                         onTap: () {
-                          scaffoldState.currentState.showBottomSheet((context) {
-                            return StatefulBuilder(builder:
-                                (BuildContext context, StateSetter state) {
-                              return dropdown(
-                                  context,
-                                  MediaQuery.of(context).size.height * 0.12,
-                                  MediaQuery.of(context).size.width * 0.9);
-                            });
-                          });
+
+
+//                          scaffoldState.currentState.showBottomSheet((context) {
+//                            return StatefulBuilder(builder:
+//                                (BuildContext context, StateSetter state) {
+//                              return dropdown(
+//                                  context,
+//                                  MediaQuery.of(context).size.height * 0.3,
+//                                  MediaQuery.of(context).size.width * 0.9);
+//                            });
+//                          });
 //                          _pickTime().then((value) {
 //                            setState(() {
 //                              selectedTime = value;
 //                            });
 //                          });
                         },
-                        child: selectedTime == null
-                            ? Padding(
+                        child:
+                             Padding(
                                 padding: const EdgeInsets.all(8.0),
                                 child: Card(
                                   elevation: 5,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
-                                    child: Text(
-                                      'Schedule Delivery Time',
-                                      style: TextStyle(
-                                          color: Colors.blue, fontSize: 20),
-                                    ),
+                       child: Container(
+                         height: MediaQuery.of(context).size.height*0.05,
+                         decoration: BoxDecoration(
+                             border: Border.all(color: AppColors.secondaryElement),
+                             borderRadius: BorderRadius.all(Radius.zero)),
+                         child: Row(
+                           children: [
+                             Text('    Next Delivery: '),
+                             Icon(
+                               Icons.delivery_dining,
+                               color: AppColors.secondaryElement,
+                             ),
+                             SizedBox(width: 5),
+                             InkWell(
+                                 onTap: () {
+                                   _pickTime().then((value) {
+                                     setState(() {
+                                      selectedDate = value;
+                                     });
+                                   });
+                                 },
+                                 child: selectedDate != null
+                                     ? Text(
+                                   '${selectedDate.day.toString()}/${selectedDate.month.toString()}/20 ',
+                                   style:
+                                   TextStyle(color: Color(0xFF6b3600)),
+                                 )
+                                     : Text(
+                                   '${date.day.toString()}/${date.month.toString()}/20 ',
+                                   style:
+                                   TextStyle(color: Color(0xFF6b3600)),
+                                 )),
+                             Text(' at '),
+                             Icon(
+                               Icons.timer,
+                               size: 19,
+                               color: AppColors.secondaryElement,
+                             ),
+                             SizedBox(width: 5),
+                             InkWell(
+                                 onTap: () {
+                                   _timeDialog(context);
+                                 },
+                                 child: Text(
+                                   '$selectedTime ',
+                                   style: TextStyle(color: Color(0xFF6b3600)),
+                                 )),
+//                        InkWell(
+//                            onTap: () {
+//                              _locationDialog(context);
+//                            },
+//                            child: Icon(Icons.edit))
+                           ],
+                         ),
+                       ),
+//                                    child: Text(
+//                                      'Schedule Delivery Time',
+//                                      style: TextStyle(
+//                                          color: Colors.blue, fontSize: 20),
+
                                   ),
-                                ),
+                                )
                               )
-                            : Row(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Card(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Container(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.89,
-//                                        child: selectedTime.hour < 23 &&
-////                                                  selectedTime.hour > 10
-                                            child: Text(
-                                              'Delivery Time is ${selectedTime}. Your order will reach to you on time. Click to edit time.',
-                                              style: TextStyle(
-                                                  fontSize:
-                                                      MediaQuery.of(context)
-                                                              .size
-                                                              .height *
-                                                          0.015,
-                                                  color: Colors.blue,
-                                                  fontWeight: FontWeight.bold),
-                                            )
-//                                              : Text(
-//                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
-//                                                  style: TextStyle(
-//                                                      color: Colors.red,
-//                                                      fontWeight:
-//                                                          FontWeight.bold)),
-                                            ),
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ))
+//                            : Row(
+//                                crossAxisAlignment: CrossAxisAlignment.start,
+//                                children: [
+//                                  Padding(
+//                                    padding: const EdgeInsets.all(8.0),
+//                                    child: Card(
+//                                      child: Padding(
+//                                        padding: const EdgeInsets.all(8.0),
+//                                        child: Container(
+//                                            width: MediaQuery.of(context)
+//                                                    .size
+//                                                    .width *
+//                                                0.89,
+////                                        child: selectedTime.hour < 23 &&
+//////                                                  selectedTime.hour > 10
+//                                            child: Text(
+//                                              'Delivery Date and Time is ${date.day}-${date.month}-${date.year} , ${selectedTime}. Your order will reach to you on time. Click to edit date and time.',
+//                                              style: TextStyle(
+//                                                  fontSize:
+//                                                      MediaQuery.of(context)
+//                                                              .size
+//                                                              .height *
+//                                                          0.015,
+//                                                  color: Colors.blue,
+//                                                  fontWeight: FontWeight.bold),
+//                                            )
+////                                              : Text(
+////                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
+////                                                  style: TextStyle(
+////                                                      color: Colors.red,
+////                                                      fontWeight:
+////                                                          FontWeight.bold)),
+//                                            ),
+//                                      ),
+//                                    ),
+//                                  ),
+//                                ],
+//                              ))
+//                    : type == 'Delivery'
+//                        ? Padding(
+//                            padding: const EdgeInsets.only(
+//                                left: 12.0, bottom: 0, top: 10),
+//                            child: HeadingRow(
+//                              title: 'Delivery Time',
+//                              number: '',
+//                            ),
+//                          )
+//                        : Container(),
+//                type == 'Delivery'
+//                    ? InkWell(
+//                        onTap: () {
+//                          scaffoldState.currentState.showBottomSheet((context) {
+//                            return StatefulBuilder(builder:
+//                                (BuildContext context, StateSetter state) {
+//                              return dropdown(
+//                                  context,
+//                                  MediaQuery.of(context).size.height * 0.12,
+//                                  MediaQuery.of(context).size.width * 0.9);
+//                            });
+//                          });
+////                          _pickTime().then((value) {
+////                            setState(() {
+////                              selectedTime = value;
+////                            });
+////                          });
+//                        },
+//                        child: selectedTime == null
+//                            ? Padding(
+//                                padding: const EdgeInsets.all(8.0),
+//                                child: Card(
+//                                  elevation: 5,
+//                                  child: Padding(
+//                                    padding: const EdgeInsets.all(8.0),
+//                                    child: Text(
+//                                      'Schedule Delivery Time',
+//                                      style: TextStyle(
+//                                          color: Colors.blue, fontSize: 20),
+//                                    ),
+//                                  ),
+//                                ),
+//                              )
+//                            : Row(
+//                                crossAxisAlignment: CrossAxisAlignment.start,
+//                                children: [
+//                                  Padding(
+//                                    padding: const EdgeInsets.all(8.0),
+//                                    child: Card(
+//                                      child: Padding(
+//                                        padding: const EdgeInsets.all(8.0),
+//                                        child: Container(
+//                                            width: MediaQuery.of(context)
+//                                                    .size
+//                                                    .width *
+//                                                0.89,
+////                                        child: selectedTime.hour < 23 &&
+//////                                                  selectedTime.hour > 10
+//                                            child: Text(
+//                                              'Delivery Time is ${selectedTime}. Your order will reach to you on time. Click to edit time.',
+//                                              style: TextStyle(
+//                                                  fontSize:
+//                                                      MediaQuery.of(context)
+//                                                              .size
+//                                                              .height *
+//                                                          0.015,
+//                                                  color: Colors.blue,
+//                                                  fontWeight: FontWeight.bold),
+//                                            )
+////                                              : Text(
+////                                                  'Sorry we do not deliver after 11:00 PM and before 10:00 AM. Click to choose another time.',
+////                                                  style: TextStyle(
+////                                                      color: Colors.red,
+////                                                      fontWeight:
+////                                                          FontWeight.bold)),
+//                                            ),
+//                                      ),
+//                                    ),
+//                                  ),
+//                                ],
+//                              ))
+                )
                     : Container(),
                 _result != '833'
                     ? Padding(
@@ -730,9 +995,32 @@ class _CheckoutState extends State<Checkout> {
     user = await FirebaseAuth.instance.currentUser();
   }
 
-  var docID;
+  var docID;var dd;
   var id;
   placeOrder(orderType) async {
+    print('----------------------');
+    print(selectedDate.year);
+    print(selectedTime.split(' ').join().toLowerCase());
+    var tt=selectedTime.split(' ').join().toLowerCase();
+    if(selectedTime.contains('AM')){
+      setState(() {
+        dd=int.parse(selectedTime.substring(0,1).trim());
+      });
+
+    }
+    else if(selectedTime.contains('12')){
+      setState(() {
+        dd=int.parse(selectedTime.substring(0,1).trim());
+      });
+
+    }
+    else if(selectedTime.contains('PM')&&!selectedTime.contains('12')){
+      setState(() {
+        dd=int.parse(selectedTime.substring(0,1).trim()) + 12;
+      });
+
+    }
+
     var rng = new Random();
     var code = rng.nextInt(90000) + 10000;
     print('ANG${code.toString()}');
@@ -759,6 +1047,8 @@ class _CheckoutState extends State<Checkout> {
             'Type': orderType,
             'UserID': user.uid,
             'Address': addressController.text,
+            'DeliveryDate':DateTime(selectedDate.year,selectedDate.month,selectedDate.day,dd),
+             'DeliveryTime':selectedTime,
             'TimeStamp': DateTime.now(),
             'Status': 'Awaiting Confirmation',
             'Notes':
@@ -799,10 +1089,12 @@ class _CheckoutState extends State<Checkout> {
                 'Qty': quantities,
                 'Type': orderType,
                 'UserID': user.uid,
+                 'DeliveryDate':selectedDate,
+                  'DeliveryTime':selectedTime,
                 'Address': '${hnoController.text},${addressController.text} ',
                 'TimeStamp': DateTime.now(),
                 'Status': 'Awaiting Confirmation',
-                'DeliveryTime': selectedTime.toString(),
+//                'DeliveryTime': selectedTime.toString(),
                 'Notes': notesController.text != null
                     ? notesController.text
                     : 'None',
@@ -817,6 +1109,8 @@ class _CheckoutState extends State<Checkout> {
       'UserID': user.uid,
       'OrderID': id,
       'Notification': 'Order Placed. Awaiting confirmation.',
+      'DeliveryDate':selectedDate,
+      'DeliveryTime':selectedTime,
       'TimeStamp': DateTime.now(),
       'Type': orderType,
       'GrandTotal': ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
@@ -846,7 +1140,7 @@ class _CheckoutState extends State<Checkout> {
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return OrderPlaced(Bill(), id, status);
+      return OrderPlaced(Bill(), id, status,selectedDate);
     }));
   }
 
@@ -1101,7 +1395,7 @@ class _CheckoutState extends State<Checkout> {
       'Items': items,
       'Price': prices,
       'Qty': quantities,
-//    'TimeStamp': DateTime.now(),
+   'TimeStamp': DateTime.now(),
       'GrandTotal': price,
       'Status': 'Order Placed',
       'Type': type,

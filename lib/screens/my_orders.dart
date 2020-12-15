@@ -16,7 +16,7 @@ class MyOrders extends StatefulWidget {
 
 class Order {
   String total, type, status, orderString, id;
-  Timestamp timestamp;
+  Timestamp timestamp;var date;
   List items, prices, quantities;
   Order(
       {this.prices,
@@ -27,7 +27,7 @@ class Order {
       this.total,
       this.timestamp,
       this.orderString,
-      this.id});
+      this.id,this.date});
 }
 
 class _MyOrdersState extends State<MyOrders> {
@@ -53,6 +53,7 @@ class _MyOrdersState extends State<MyOrders> {
   @override
   Widget build(BuildContext context) {
     List<Order> orders = List<Order>();
+    var date2;
 
     Widget bill(timestamp, total, id1, status, str) {
       return Card(
@@ -207,10 +208,13 @@ class _MyOrdersState extends State<MyOrders> {
                 orders.clear();
 
                 for (int i = 0; i < snap.data.documents.length; i++) {
-                  print(snap.data.documents[i]['Prices'].toString());
+                  print(snap.data.documents[i]['Price'].toString());
+                  print('------------------');
+                  print(snap.data.documents[i]['Qty'].toString());
+                  print(orders.length);
                   String str = '';
                   for (int it = 0;
-                      it < snap.data.documents[i]['Items'].length;
+                      it <= snap.data.documents[i]['Items'].length-1;
                       it++) {
                     it != snap.data.documents[i]['Items'].length - 1
                         ? str = str +
@@ -219,13 +223,15 @@ class _MyOrdersState extends State<MyOrders> {
                             '${snap.data.documents[i]['Qty'][it]} x ${snap.data.documents[i]['Items'][it]}';
                   }
                   orders.add(Order(
-                      prices: snap.data.documents[i]['Price'],
-                      items: snap.data.documents[i]['Items'],
+                     prices: snap.data.documents[i]['Price'],
+                     items: snap.data.documents[i]['Items'],
                       total: snap.data.documents[i]['GrandTotal'].toString(),
                       quantities: snap.data.documents[i]['Qty'],
                       status: snap.data.documents[i]['Status'],
                       timestamp: snap.data.documents[i]['TimeStamp'],
                       type: snap.data.documents[i]['Type'],
+                      date:snap.data.documents[i]['DeliveryDate'],
+
                       orderString: str,
                       id: snap.data.documents[i].documentID));
                 }
@@ -248,6 +254,7 @@ class _MyOrdersState extends State<MyOrders> {
                                     if (element.documentID ==
                                         orders[index].id) {
                                       status = element['Status'];
+                                      date2=element['DeliveryDate'];
                                       pushNewScreen(context,
                                           screen: OrderPlaced(
                                               bill(
@@ -257,7 +264,7 @@ class _MyOrdersState extends State<MyOrders> {
                                                   orders[index].status,
                                                   orders[index].orderString),
                                               orders[index].id,
-                                              status));
+                                              status,date2));
                                       print('Push pressed');
                                     }
                                   });

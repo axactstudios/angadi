@@ -325,7 +325,9 @@ class OrderPlaced extends StatefulWidget {
   Widget bills;
   String docID;
   String status;
-  OrderPlaced(this.bills, this.docID, this.status);
+  var date;
+
+  OrderPlaced(this.bills, this.docID, this.status,this.date);
   @override
   _OrderPlacedState createState() => _OrderPlacedState();
 }
@@ -540,7 +542,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                               border: Border.all(color: Color(0xFF6b3600))),
                           child: Center(
                             child: Text(
-                              'Expected Delivery in 40 mins.',
+                              'Expected delivery in : ${widget.date.difference(DateTime.now()).inHours} hours',
                               style: Styles.customNormalTextStyle(
                                 color: AppColors.headingText,
                                 // fontWeight: FontWeight.w400,
@@ -583,9 +585,10 @@ class _OrderPlacedState extends State<OrderPlaced> {
                                 onTap: () {
                                   launch('tel:06 746 7406');
                                 },
-                                child: Text('Call Us : 06 746 7406')),
-                            Text('Whatsapp : +971 50 7175405'),
-                            Text('Email : info@misteridli.com'),
+                                child: Text('Call Us : 06 746 7406',style:TextStyle(decoration: TextDecoration.underline,fontSize: MediaQuery.of(context).size.height*0.022))),
+                            InkWell(onTap:(){ launchWhatsApp(
+                                phone: '+971 50 7175405',message:'Check out this awesome app');},child: Text('Whatsapp : +971 50 7175405',style:TextStyle(decoration: TextDecoration.underline,fontSize: MediaQuery.of(context).size.height*0.022))),
+                            InkWell(onTap:(){launch('mailto:info@misteridli.com?subject=Complaint/Feedback&body=Type your views here');},child: Text('Email : info@misteridli.com',style:TextStyle(decoration: TextDecoration.underline,fontSize: MediaQuery.of(context).size.height*0.022))),
                             SizedBox(
                               height: 10,
                             ),

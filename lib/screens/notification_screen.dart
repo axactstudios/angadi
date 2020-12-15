@@ -21,6 +21,7 @@ class NotificationsScreen extends StatefulWidget {
 }
 
 class _NotificationsScreenState extends State<NotificationsScreen> {
+  var date;
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -230,6 +231,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                     if (element.documentID ==
                                         snap.data.documents[index]['OrderID']) {
                                       status = element['Status'];
+                                      date=element['DeliveryDate'];
                                     }
                                   });
                                 });
@@ -238,7 +240,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                     screen: OrderPlaced(
                                         bill(),
                                         snap.data.documents[index]['OrderID'],
-                                        status));
+                                        status,date));
                               },
                               title: Row(
                                 children: <Widget>[

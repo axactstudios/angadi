@@ -47,7 +47,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               Positioned(
                 top: 0.0,
                 child: Image.asset(
-                  ImagePath.boiledEggs,
+                  ImagePath.splashImage,
                   height: heightOfScreen,
                   width: widthOfScreen,
                   fit: BoxFit.cover,

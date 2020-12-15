@@ -38,7 +38,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               Positioned(
                 top: 0.0,
                 child: Image.asset(
-                  ImagePath.boiledEggs,
+                  ImagePath.splashImage,
                   fit: BoxFit.cover,
                   height: heightOfScreen,
                   width: widthOfScreen,

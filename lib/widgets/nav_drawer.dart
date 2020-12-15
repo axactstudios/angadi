@@ -616,33 +616,43 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     SizedBox(
                       width: 5,
                     ),
-                    Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            border:
-                                Border.all(color: Color(0xFF6b3600), width: 2)),
-                        alignment: Alignment.center,
-                        child: FaIcon(
-                          FontAwesomeIcons.instagram,
-                          color: Color(0xFF6b3600),
-                        )),
+                    InkWell(
+                      onTap:(){
+                        launch('https://www.instagram.com/angadi.ae/');
+                      },
+                      child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                              border:
+                                  Border.all(color: Color(0xFF6b3600), width: 2)),
+                          alignment: Alignment.center,
+                          child: FaIcon(
+                            FontAwesomeIcons.instagram,
+                            color: Color(0xFF6b3600),
+                          )),
+                    ),
                     SizedBox(
                       width: 5,
                     ),
-                    Container(
-                        height: 50,
-                        width: 50,
-                        decoration: BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(25)),
-                            border:
-                                Border.all(color: Color(0xFF6b3600), width: 2)),
-                        alignment: Alignment.center,
-                        child: FaIcon(
-                          FontAwesomeIcons.facebook,
-                          color: Color(0xFF6b3600),
-                        ))
+                    InkWell(
+                      onTap:(){
+                        launch('https://www.facebook.com/angadi.ae');
+                      },
+                      child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.all(Radius.circular(25)),
+                              border:
+                                  Border.all(color: Color(0xFF6b3600), width: 2)),
+                          alignment: Alignment.center,
+                          child: FaIcon(
+                            FontAwesomeIcons.facebook,
+                            color: Color(0xFF6b3600),
+                          )),
+                    )
                   ],
                 )),
           )

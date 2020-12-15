@@ -91,13 +91,16 @@ class _HomeScreenState extends State<HomeScreen> {
       throw 'Could not launch ${url()}';
     }
   }
-
-
+  var showGrocery;
+  void Checkgrocery(){
+    Firestore.instance.collection('AppSettings').getDocuments().then((val)=>val.documents.forEach((element) {print(element['showGrocery']);showGrocery=element['showGrocery'];}));
+  }
   @override
   void initState() {
 //    addDishParams();
     getUser();
     getBanners();
+    Checkgrocery();
     date = DateTime.now();
     _getCurrentLocation();
     super.initState();
@@ -114,13 +117,15 @@ class _HomeScreenState extends State<HomeScreen> {
 //    print(MediaQuery.of(context).size.width);
 
     _pickTime() async {
+      var today=DateTime.now();
       DateTime t = await showDatePicker(
         context: context,
-        initialDate: date,
-        lastDate: DateTime(2020, DateTime.now().month, 30),
+        initialDate: DateTime(today.year,today.month,today.day+1),
+        lastDate: DateTime(today.year, today.month, today.day+6),
         firstDate: DateTime(
-          2020,
-          DateTime.now().month,
+            today.year,
+            DateTime.now().month,
+            today.day+1
         ),
         builder: (BuildContext context, Widget child) {
           return Theme(
@@ -133,8 +138,7 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           date = t;
         });
-      return date;
-    }
+      return date;}
 
     return Scaffold(
       floatingActionButton: CustomFloatingButton(CurrentScreen(
@@ -418,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                   screen: OrderPlaced(
                                                                       bill(),
                                                                       orderID,
-                                                                      status));
+                                                                      status,selectedDate));
                                                             },
                                                             child: Text(
                                                                 'View Details',
@@ -490,97 +494,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderStyle: BorderStyle.solid,
                     ),
                     SizedBox(height: 1.0),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      color: AppColors.secondaryElement,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on, color: Colors.white),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                child: Text('Deliver to $location',
-                                    style: TextStyle(color: Colors.white))),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            InkWell(
-                                onTap: () {
-//                                  _locationDialog(context);
-                                  showPlacePicker();
 
-//
-                                },
-                                child: Icon(Icons.edit, color: Colors.white)),
-//                            InkWell(
-//                                onTap: () {
-//                                  showPlacePicker();
-//
-////                              _locationDialog(context);
-//                                },
-//                                child: Icon(Icons.map, color: Colors.white))
-                          ],
-                        ),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.secondaryElement),
-                          borderRadius: BorderRadius.all(Radius.zero)),
-                      child: Row(
-                        children: [
-                          Text('    Next Delivery: '),
-                          Icon(
-                            Icons.delivery_dining,
-                            color: AppColors.secondaryElement,
-                          ),
-                          SizedBox(width: 5),
-                          InkWell(
-                              onTap: () {
-                                _pickTime().then((value) {
-                                  setState(() {
-                                    selectedDate = value;
-                                  });
-                                });
-                              },
-                              child: selectedDate != null
-                                  ? Text(
-                                      '${selectedDate.day.toString()}/${selectedDate.month.toString()}/20 ',
-                                      style:
-                                          TextStyle(color: Color(0xFF6b3600)),
-                                    )
-                                  : Text(
-                                      '${date.day.toString()}/${date.month.toString()}/20 ',
-                                      style:
-                                          TextStyle(color: Color(0xFF6b3600)),
-                                    )),
-                          Text(' at '),
-                          Icon(
-                            Icons.timer,
-                            size: 19,
-                            color: AppColors.secondaryElement,
-                          ),
-                          SizedBox(width: 5),
-                          InkWell(
-                              onTap: () {
-                                _timeDialog(context);
-                              },
-                              child: Text(
-                                '$selectedTime ',
-                                style: TextStyle(color: Color(0xFF6b3600)),
-                              )),
-//                        InkWell(
-//                            onTap: () {
-//                              _locationDialog(context);
-//                            },
-//                            child: Icon(Icons.edit))
-                        ],
-                      ),
-                    ),
 
 //                    HeadingRow(
 //                      title: StringConst.OFFERS,
@@ -1100,16 +1014,16 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(height: 16.0),
-                    HeadingRow(
+                    (showGrocery==true)?HeadingRow(
                       title: 'Shop Grocery Items',
                       number: 'All Categories ',
                       onTapOfNumber: () => Navigator.push(context,
                           MaterialPageRoute(builder: (BuildContext context) {
                         return CategoriesScreen('Grocery');
                       })),
-                    ),
+                    ):Container(),
                     SizedBox(height: 16.0),
-                    Container(
+                    (showGrocery==true)?Container(
                       height: 100,
                       child: StreamBuilder(
                         stream: Firestore.instance
@@ -1177,7 +1091,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 CircularProgressIndicator()))));
                         },
                       ),
-                    ),
+                    ):Container(),
 
                     SizedBox(height: 16.0),
                     Container(
