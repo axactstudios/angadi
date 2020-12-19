@@ -25,12 +25,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'order_placed.dart';
 
 class Checkout extends StatefulWidget {
-  String address;
-  Checkout(this.address);
+  String address;var id;
+  Checkout(this.address,this.id);
   @override
   _CheckoutState createState() => _CheckoutState();
 }
@@ -1475,7 +1476,7 @@ class _CheckoutState extends State<Checkout> {
     orderType == 'Delivery' &&
             addresstype == 'Apartment' &&
             widget.address == ''
-        ? await databaseReference.collection('Orders').document(id).setData({
+        ? await databaseReference.collection('Orders').document(widget.id).setData({
             'Items': items,
             'Price': prices,
             'Qty': quantities,
@@ -1504,7 +1505,7 @@ class _CheckoutState extends State<Checkout> {
                 widget.address == ''
             ? await databaseReference
                 .collection('Orders')
-                .document(id)
+                .document(widget.id)
                 .setData({
                 'Items': items,
                 'Price': prices,
@@ -1535,7 +1536,7 @@ class _CheckoutState extends State<Checkout> {
                     widget.address == ''
                 ? await databaseReference
                     .collection('Orders')
-                    .document(id)
+                    .document(widget.id)
                     .setData({
                     'Items': items,
                     'Price': prices,
@@ -1564,7 +1565,7 @@ class _CheckoutState extends State<Checkout> {
                 : orderType == 'Delivery' && widget.address != ''
                     ? await databaseReference
                         .collection('Orders')
-                        .document(id)
+                        .document(widget.id)
                         .setData({
                         'Items': items,
                         'Price': prices,
@@ -1590,7 +1591,7 @@ class _CheckoutState extends State<Checkout> {
                     : orderType == 'Takeaway'
                         ? await databaseReference
                             .collection('Orders')
-                            .document(id)
+                            .document(widget.id)
                             .setData({
                             'Items': items,
                             'Price': prices,
@@ -1610,7 +1611,7 @@ class _CheckoutState extends State<Checkout> {
                           })
                         : await databaseReference
                             .collection('Orders')
-                            .document(id)
+                            .document(widget.id)
                             .setData({
                             'Items': items,
                             'Price': prices,
@@ -1637,7 +1638,7 @@ class _CheckoutState extends State<Checkout> {
                           });
     await databaseReference.collection('Notifications').add({
       'UserID': user.uid,
-      'OrderID': id,
+      'OrderID': widget.id,
       'Notification': 'Order Placed. Awaiting confirmation.',
       'DeliveryDate': selectedDate,
       'DeliveryTime': selectedTime,
@@ -1662,7 +1663,7 @@ class _CheckoutState extends State<Checkout> {
     String status;
     Firestore.instance.collection('Orders').getDocuments().then((value) {
       value.documents.forEach((element) {
-        if (element.documentID == id) {
+        if (element.documentID == widget.id) {
           status = element['Status'];
         }
       });
@@ -1672,7 +1673,7 @@ class _CheckoutState extends State<Checkout> {
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return OrderPlaced(Bill(), id, status, DateTime(selectedDate.year,
+      return OrderPlaced(Bill(), widget.id, status, DateTime(selectedDate.year,
           selectedDate.month, selectedDate.day, dd),);
     }));
   }
@@ -1961,8 +1962,9 @@ class _CheckoutState extends State<Checkout> {
   _launchURL(reply) async {
     if (await canLaunch(reply)) {
       await launch(reply);
-      setState(() {
-        removeAll();
+      setState(()async {
+        SharedPreferences prefs= await SharedPreferences.getInstance();
+        var status =prefs.setString('Status','Placed');
         j++;
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (BuildContext context) {

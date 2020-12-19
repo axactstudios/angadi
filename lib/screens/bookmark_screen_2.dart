@@ -1,6 +1,7 @@
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/cart_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
@@ -10,6 +11,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'checkout.dart';
 
@@ -70,6 +72,52 @@ class _BookmarksScreen2State extends State<BookmarksScreen2> {
   @override
   void initState() {
     getAllItems();
+    id();
+  }
+  var order,orderid;
+  void id()async{
+    if(cartItems.length==0){
+      Firestore.instance.collection('Orders').document('ordercount').snapshots().listen((event) {print(event['Numberoforders'].toString());setState(() {
+        order=event['Numberoforders'];
+      });});
+      Firestore.instance.collection('Orders').document('ordercount').updateData({
+        'Numberoforders':order+1,
+      });
+      if(order+1<9){
+        setState(() {
+          orderid='ANG0000${order+1}';
+        });
+      }
+      if(order+1>10&&order+1<99){
+        setState(() {
+          orderid='ANG000${order+1}';
+        });
+      }
+      if(order+1>99&&order+1<999){
+        setState(() {
+          orderid='ANG00${order+1}';
+        });
+      }
+      if(order+1>999&&order+1<9999){
+        setState(() {
+          orderid='ANG0${order+1}';
+        });
+      }
+      if(order+1>9999&&order+1<99999){
+        setState(() {
+          orderid='ANG${order+1}';
+        });
+      }
+      if(order+1>99999){
+        setState(() {
+          orderid='ANG${order+1}';
+        });
+      }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('Orderid', orderid);
+      prefs.setString('Status','Not placed');
+
+    }
   }
 
   @override
@@ -103,7 +151,7 @@ class _BookmarksScreen2State extends State<BookmarksScreen2> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (BuildContext context) {
-                      return Checkout('');
+                      return Checkout('',orderid);
                     }));
                   },
                   child: Container(

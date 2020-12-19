@@ -1,10 +1,12 @@
 import 'dart:io';
 
+import 'package:angadi/classes/cart.dart';
 import 'package:angadi/classes/dish.dart';
 import 'package:angadi/classes/offer.dart';
 import 'package:angadi/screens/filtered_search.dart';
 import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/screens/trending_restaurant_screen.dart';
+import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/nav_drawer.dart';
@@ -31,6 +33,7 @@ import 'package:location/location.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../routes/router.gr.dart';
 import '../values/values.dart';
@@ -63,6 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> categories = new List();
   List<Widget> categoriesGrocery = new List();
   List<Widget> categoriesTop = new List();
+  List<Cart>cartItems=[];
   var location = 'Dubai';
   var deliveryDate = '23 October';
   var deliveryTime = '6 pm';
@@ -72,8 +76,9 @@ class _HomeScreenState extends State<HomeScreen> {
   FirebaseUser user;
   getUser() async {
     user = await FirebaseAuth.instance.currentUser();
-  }
 
+  }
+  final dbHelper = DatabaseHelper.instance;
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -119,7 +124,21 @@ class _HomeScreenState extends State<HomeScreen> {
       print(event.documents[0].documentID);
     });
   }
-
+  void removeAll() async {
+    List items = [];
+    List prices = [];
+    List quantities = [];
+    for (var v in cartItems) {
+      print(v.productName);
+      items.add(v.productName);
+      prices.add(v.price);
+      quantities.add(v.qty);
+    }
+    // Assuming that the number of rows is the id for the last row.
+    for (var v in cartItems) {
+      final rowsDeleted = await dbHelper.delete(v.productName, v.qtyTag);
+    }
+  }
   @override
   void initState() {
 //    addDishParams();
@@ -161,6 +180,20 @@ class _HomeScreenState extends State<HomeScreen> {
           date = t;
         });
       return date;
+    }
+    id()async{
+      SharedPreferences prefs= await SharedPreferences.getInstance();
+      var status =prefs.getString('Status');
+      if(status==null&&status==''){
+        prefs.setString('Status','Not Placed');
+      }
+      if(status=='Placed'){
+        var idorder=prefs.getString('Orderid');
+         Firestore.instance.collection('Orders').snapshots().forEach((element) {element.documents.forEach((element) {if(idorder==element.documentID){removeAll();}});});
+
+
+
+      }
     }
 
     return Scaffold(

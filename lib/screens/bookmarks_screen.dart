@@ -14,6 +14,7 @@ import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'checkout.dart';
 
@@ -37,6 +38,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     setState(() {
 //      print(cartItems[1]);
     });
+
   }
 
   void updateItem(
@@ -105,9 +107,56 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     );
     pushNewScreen(context, screen: LoginScreen(), withNavBar: false);
   }
+  var order;var orderid;
+void id()async{
+  print('hiiiiiiiiiiiiiiiiiiiiiiiiiii');
+  print(cartItems.length);
+    if(cartItems.length==1){
+      Firestore.instance.collection('Orders').document('ordercount').snapshots().listen((event) {print('&&&&&&&&&&&&&&&&');print(event['Numberoforders'].toString());setState(() {
+        order=event['Numberoforders'];
+      });});
+      Firestore.instance.collection('Orders').document('ordercount').updateData({
+        'Numberoforders':order+1,
+      });
+      if(order+1<9){
+        setState(() {
+          orderid='ANG0000${order+1}';
+        });
+      }
+      if(order+1>10&&order+1<99){
+        setState(() {
+          orderid='ANG000${order+1}';
+        });
+      }
+      if(order+1>99&&order+1<999){
+        setState(() {
+          orderid='ANG00${order+1}';
+        });
+      }
+      if(order+1>999&&order+1<9999){
+        setState(() {
+          orderid='ANG0${order+1}';
+        });
+      }
+      if(order+1>9999&&order+1<99999){
+        setState(() {
+          orderid='ANG${order+1}';
+        });
+      }
+      if(order+1>99999){
+        setState(() {
+          orderid='ANG${order+1}';
+        });
+      }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('Orderid', orderid);
+      prefs.setString('Status','Not placed');
 
+    }
+}
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -138,7 +187,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                     user != null
                         ? Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                            return Checkout('');
+                            return Checkout('',orderid);
                           }))
                         : login();
                   },
