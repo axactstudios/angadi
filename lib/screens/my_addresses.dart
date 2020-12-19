@@ -24,7 +24,7 @@ class _MyAddressesState extends State<MyAddresses> {
   var location = 'Dubai';
 
   LocationResult result;
-var id;
+  var id;
   void showPlacePicker() async {
     print('called');
     result = await Navigator.of(context).push(MaterialPageRoute(
@@ -35,27 +35,39 @@ var id;
     });
     // Handle the result in your way
     print(location);
-    if(location!=null){
-      Navigator.of(context).push(MaterialPageRoute(builder:(context)=>ConfirmAddress(location)));
+    if (location != null) {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => ConfirmAddress(location)));
     }
-
   }
-  List<Address>alladresses=[];
 
-  void alladdresses()async{
+  List<Address> alladresses = [];
+  List<Widget> addressCards = [];
+  void alladdresses() async {
     setState(() {
       alladresses.clear();
       print(alladresses.length);
     });
 
     print('--------------');
-    await Firestore.instance.collection('Users').document(widget.id).collection('Address').snapshots().forEach((element) {element.documents.forEach((element) {setState(() {
-      Address add =Address(element['address'],element['hno'],element['landmark']);
-      alladresses.add(add);
+    await Firestore.instance
+        .collection('Users')
+        .document(widget.id)
+        .collection('Address')
+        .snapshots()
+        .forEach((element) {
+      element.documents.forEach((element) {
+        setState(() {
+          Address add =
+              Address(element['address'], element['hno'], element['landmark']);
+          alladresses.add(add);
+        });
+        print(id);
+        print(alladresses.length);
+      });
     });
-    print(id);
-    print(alladresses.length);});});
   }
+
   @override
   void initState() {
     setState(() {
@@ -63,10 +75,10 @@ var id;
       print(alladresses.length);
     });
 
-
     alladdresses();
     super.initState();
   }
+
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -85,7 +97,6 @@ var id;
       throw 'Could not launch ${url()}';
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,8 +122,9 @@ var id;
               },
               child: Container(
                   alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-          SizedBox(width:8),
+                  child: FaIcon(FontAwesomeIcons.whatsapp,
+                      color: Color(0xFF6b3600)))),
+          SizedBox(width: 8),
           InkWell(
               onTap: () {
 //                print(1);
@@ -139,42 +151,57 @@ var id;
         child: SingleChildScrollView(
           child: Column(
             children: [
-              (alladresses.length!=0)?Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: HeadingRow(
-                  title: 'Saved Addresses',
-                  number: '',
-                ),
-              ):Container(),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-
-                child: StreamBuilder(
-                    stream: Firestore.instance.collection('Users').document(widget.id).collection('Address').snapshots(),
-
-
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
-    if (snap.hasData && !snap.hasError && snap.data != null) {
-    alladresses.clear();
-    for (int i = 0; i < snap.data.documents.length; i++) {
-      print(snap.data.documents.length);
-
-                  return Card(
-                    child:Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          (snap.data.documents[i]['hno']!=null&&snap.data.documents[i]['hno']!='')?Text('Address : H.no. ${snap.data.documents[i]['hno']} , ${snap.data.documents[i]['address']}'):Text('Address :  ${snap.data.documents[i]['address']}'),
-
-                          (snap.data.documents[i]['landmark']!=null&&snap.data.documents[i]['landmark']!='')?Align(alignment:Alignment.bottomLeft,child: Text('Landmark : ${snap.data.documents[i]['landmark']}')):Text(''),
-                        ],
+              (alladresses.length != 0)
+                  ? Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: HeadingRow(
+                        title: 'Saved Addresses',
+                        number: '',
                       ),
                     )
-                  );
-                }}else{
-      Container();
-    }
+                  : Container(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: StreamBuilder(
+                    stream: Firestore.instance
+                        .collection('Users')
+                        .document(widget.id)
+                        .collection('Address')
+                        .snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snap) {
+                      if (snap.hasData && !snap.hasError && snap.data != null) {
+                        alladresses.clear();
+                        for (int i = 0; i < snap.data.documents.length; i++) {
+                          print(snap.data.documents.length);
+
+                          return Card(
+                              child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                (snap.data.documents[i]['hno'] != null &&
+                                        snap.data.documents[i]['hno'] != '')
+                                    ? Text(
+                                        'Address : H.no. ${snap.data.documents[i]['hno']} , ${snap.data.documents[i]['address']}')
+                                    : Text(
+                                        'Address :  ${snap.data.documents[i]['address']}'),
+                                (snap.data.documents[i]['landmark'] != null &&
+                                        snap.data.documents[i]['landmark'] !=
+                                            '')
+                                    ? Align(
+                                        alignment: Alignment.bottomLeft,
+                                        child: Text(
+                                            'Landmark : ${snap.data.documents[i]['landmark']}'))
+                                    : Text(''),
+                              ],
+                            ),
+                          ));
+                        }
+                      } else {
+                        return Container();
+                      }
                     }),
               ),
               Padding(

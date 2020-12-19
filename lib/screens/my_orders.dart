@@ -16,7 +16,8 @@ class MyOrders extends StatefulWidget {
 
 class Order {
   String total, type, status, orderString, id;
-  Timestamp timestamp;var date;
+  Timestamp timestamp;
+  var date;
   List items, prices, quantities;
   Order(
       {this.prices,
@@ -27,7 +28,8 @@ class Order {
       this.total,
       this.timestamp,
       this.orderString,
-      this.id,this.date});
+      this.id,
+      this.date});
 }
 
 class _MyOrdersState extends State<MyOrders> {
@@ -172,12 +174,14 @@ class _MyOrdersState extends State<MyOrders> {
             InkWell(
                 onTap: () {
                   launchWhatsApp(
-                      phone: '7060222315', message: 'Check out this awesome app');
+                      phone: '7060222315',
+                      message: 'Check out this awesome app');
                 },
                 child: Container(
                     alignment: Alignment.center,
-                    child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-            SizedBox(width:8),
+                    child: FaIcon(FontAwesomeIcons.whatsapp,
+                        color: Color(0xFF6b3600)))),
+            SizedBox(width: 8),
             InkWell(
                 onTap: () {
 //                print(1);
@@ -214,7 +218,7 @@ class _MyOrdersState extends State<MyOrders> {
                   print(orders.length);
                   String str = '';
                   for (int it = 0;
-                      it <= snap.data.documents[i]['Items'].length-1;
+                      it <= snap.data.documents[i]['Items'].length - 1;
                       it++) {
                     it != snap.data.documents[i]['Items'].length - 1
                         ? str = str +
@@ -223,15 +227,14 @@ class _MyOrdersState extends State<MyOrders> {
                             '${snap.data.documents[i]['Qty'][it]} x ${snap.data.documents[i]['Items'][it]}';
                   }
                   orders.add(Order(
-                     prices: snap.data.documents[i]['Price'],
-                     items: snap.data.documents[i]['Items'],
+                      prices: snap.data.documents[i]['Price'],
+                      items: snap.data.documents[i]['Items'],
                       total: snap.data.documents[i]['GrandTotal'].toString(),
                       quantities: snap.data.documents[i]['Qty'],
                       status: snap.data.documents[i]['Status'],
                       timestamp: snap.data.documents[i]['TimeStamp'],
                       type: snap.data.documents[i]['Type'],
-                      date:snap.data.documents[i]['DeliveryDate'],
-
+                      date: snap.data.documents[i]['DeliveryDate'],
                       orderString: str,
                       id: snap.data.documents[i].documentID));
                 }
@@ -254,7 +257,8 @@ class _MyOrdersState extends State<MyOrders> {
                                     if (element.documentID ==
                                         orders[index].id) {
                                       status = element['Status'];
-                                      date2=element['DeliveryDate'];
+                                      date2 = element['DeliveryDate'];
+                                      DateTime myDateTime = date2.toDate();
                                       pushNewScreen(context,
                                           screen: OrderPlaced(
                                               bill(
@@ -264,7 +268,8 @@ class _MyOrdersState extends State<MyOrders> {
                                                   orders[index].status,
                                                   orders[index].orderString),
                                               orders[index].id,
-                                              status,date2));
+                                              status,
+                                              myDateTime));
                                       print('Push pressed');
                                     }
                                   });

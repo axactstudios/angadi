@@ -314,6 +314,7 @@ import 'package:angadi/classes/cart.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/heading_row.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -325,9 +326,9 @@ class OrderPlaced extends StatefulWidget {
   Widget bills;
   String docID;
   String status;
-  var date;
+  DateTime date;
 
-  OrderPlaced(this.bills, this.docID, this.status,this.date);
+  OrderPlaced(this.bills, this.docID, this.status, this.date);
   @override
   _OrderPlacedState createState() => _OrderPlacedState();
 }
@@ -542,7 +543,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                               border: Border.all(color: Color(0xFF6b3600))),
                           child: Center(
                             child: Text(
-                              'Expected delivery in : ${widget.date.difference(DateTime.now()).inHours} hours',
+                              'Expected delivery in : ${widget.date.difference(DateTime.now()).inMinutes} minutes',
                               style: Styles.customNormalTextStyle(
                                 color: AppColors.headingText,
                                 // fontWeight: FontWeight.w400,
@@ -585,10 +586,35 @@ class _OrderPlacedState extends State<OrderPlaced> {
                                 onTap: () {
                                   launch('tel:06 746 7406');
                                 },
-                                child: Text('Call Us : 06 746 7406',style:TextStyle(decoration: TextDecoration.underline,fontSize: MediaQuery.of(context).size.height*0.022))),
-                            InkWell(onTap:(){ launchWhatsApp(
-                                phone: '+971 50 7175405',message:'Check out this awesome app');},child: Text('Whatsapp : +971 50 7175405',style:TextStyle(decoration: TextDecoration.underline,fontSize: MediaQuery.of(context).size.height*0.022))),
-                            InkWell(onTap:(){launch('mailto:info@misteridli.com?subject=Complaint/Feedback&body=Type your views here');},child: Text('Email : info@misteridli.com',style:TextStyle(decoration: TextDecoration.underline,fontSize: MediaQuery.of(context).size.height*0.022))),
+                                child: Text('Call Us : 06 746 7406',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.022))),
+                            InkWell(
+                                onTap: () {
+                                  launchWhatsApp(
+                                      phone: '+971 50 7175405',
+                                      message: 'Check out this awesome app');
+                                },
+                                child: Text('Whatsapp : +971 50 7175405',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.022))),
+                            InkWell(
+                                onTap: () {
+                                  launch(
+                                      'mailto:info@misteridli.com?subject=Complaint/Feedback&body=Type your views here');
+                                },
+                                child: Text('Email : info@misteridli.com',
+                                    style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                        fontSize:
+                                            MediaQuery.of(context).size.height *
+                                                0.022))),
                             SizedBox(
                               height: 10,
                             ),

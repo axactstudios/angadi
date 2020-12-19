@@ -73,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
   getUser() async {
     user = await FirebaseAuth.instance.currentUser();
   }
+
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -91,21 +92,34 @@ class _HomeScreenState extends State<HomeScreen> {
       throw 'Could not launch ${url()}';
     }
   }
+
   var showGrocery;
-  void Checkgrocery(){
-    Firestore.instance.collection('AppSettings').getDocuments().then((val)=>val.documents.forEach((element) {print(element['showGrocery']);showGrocery=element['showGrocery'];}));
+  void Checkgrocery() {
+    Firestore.instance
+        .collection('AppSettings')
+        .getDocuments()
+        .then((val) => val.documents.forEach((element) {
+              print(element['showGrocery']);
+              showGrocery = element['showGrocery'];
+            }));
   }
-  var id='';
-  void address()async{
-    FirebaseUser user=await FirebaseAuth.instance.currentUser();
-    var email=user.email;
-    Firestore.instance.collection('Users').where('mail',isEqualTo: email).snapshots().listen((event) {setState(() {
-      id=event.documents[0].documentID;
-    });print(event.documents[0].documentID);});
 
-
-
+  var id = '';
+  void address() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    var email = user.email;
+    Firestore.instance
+        .collection('Users')
+        .where('mail', isEqualTo: email)
+        .snapshots()
+        .listen((event) {
+      setState(() {
+        id = event.documents[0].documentID;
+      });
+      print(event.documents[0].documentID);
+    });
   }
+
   @override
   void initState() {
 //    addDishParams();
@@ -129,16 +143,12 @@ class _HomeScreenState extends State<HomeScreen> {
 //    print(MediaQuery.of(context).size.width);
 
     _pickTime() async {
-      var today=DateTime.now();
+      var today = DateTime.now();
       DateTime t = await showDatePicker(
         context: context,
-        initialDate: DateTime(today.year,today.month,today.day+1),
-        lastDate: DateTime(today.year, today.month, today.day+6),
-        firstDate: DateTime(
-            today.year,
-            DateTime.now().month,
-            today.day+1
-        ),
+        initialDate: DateTime(today.year, today.month, today.day + 1),
+        lastDate: DateTime(today.year, today.month, today.day + 6),
+        firstDate: DateTime(today.year, DateTime.now().month, today.day + 1),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark(),
@@ -150,7 +160,8 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           date = t;
         });
-      return date;}
+      return date;
+    }
 
     return Scaffold(
       floatingActionButton: CustomFloatingButton(CurrentScreen(
@@ -176,8 +187,9 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               child: Container(
                   alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-          SizedBox(width:8),
+                  child: FaIcon(FontAwesomeIcons.whatsapp,
+                      color: Color(0xFF6b3600)))),
+          SizedBox(width: 8),
           InkWell(
               onTap: () {
 //                print(1);
@@ -429,12 +441,19 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               });
                                                               print(status);
                                                               print(orderID);
+                                                              Timestamp
+                                                                  myTimeStamp =
+                                                                  Timestamp
+                                                                      .fromDate(
+                                                                          selectedDate);
+
                                                               pushNewScreen(
                                                                   context,
                                                                   screen: OrderPlaced(
                                                                       bill(),
                                                                       orderID,
-                                                                      status,selectedDate));
+                                                                      status,
+                                                                      selectedDate));
                                                             },
                                                             child: Text(
                                                                 'View Details',
@@ -506,7 +525,6 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderStyle: BorderStyle.solid,
                     ),
                     SizedBox(height: 1.0),
-
 
 //                    HeadingRow(
 //                      title: StringConst.OFFERS,
@@ -1026,84 +1044,91 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                     ),
                     SizedBox(height: 16.0),
-                    (showGrocery==true)?HeadingRow(
-                      title: 'Shop Grocery Items',
-                      number: 'All Categories ',
-                      onTapOfNumber: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return CategoriesScreen('Grocery');
-                      })),
-                    ):Container(),
+                    (showGrocery == true)
+                        ? HeadingRow(
+                            title: 'Shop Grocery Items',
+                            number: 'All Categories ',
+                            onTapOfNumber: () => Navigator.push(context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                              return CategoriesScreen('Grocery');
+                            })),
+                          )
+                        : Container(),
                     SizedBox(height: 16.0),
-                    (showGrocery==true)?Container(
-                      height: 100,
-                      child: StreamBuilder(
-                        stream: Firestore.instance
-                            .collection('Categories')
-                            .snapshots(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snap) {
-                          if (snap.hasData &&
-                              !snap.hasError &&
-                              snap.data != null) {
-                            categoriesGrocery.clear();
+                    (showGrocery == true)
+                        ? Container(
+                            height: 100,
+                            child: StreamBuilder(
+                              stream: Firestore.instance
+                                  .collection('Categories')
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<QuerySnapshot> snap) {
+                                if (snap.hasData &&
+                                    !snap.hasError &&
+                                    snap.data != null) {
+                                  categoriesGrocery.clear();
 
-                            for (int i = 0;
-                                i < snap.data.documents.length;
-                                i++) {
-                              if (snap.data.documents[i]['sCat'] == 'Grocery')
-                                categoriesGrocery.add(InkWell(
-                                  onTap: () {
+                                  for (int i = 0;
+                                      i < snap.data.documents.length;
+                                      i++) {
+                                    if (snap.data.documents[i]['sCat'] ==
+                                        'Grocery')
+                                      categoriesGrocery.add(InkWell(
+                                        onTap: () {
 //                                    print(
 //                                        '---------==========${snap.data.documents[i]['imageURL']}');
-                                    pushNewScreen(
-                                      context,
-                                      screen: CategoryDetailScreen(
-                                        categoryName: snap.data.documents[i]
-                                            ['catName'],
-                                        imagePath: snap.data.documents[i]
-                                            ['liveImageURL'],
-                                        selectedCategory: i,
-                                        numberOfCategories:
-                                            snap.data.documents.length,
-                                        gradient: gradients[i],
-                                        sCat: 'Grocery',
-                                      ),
-                                      withNavBar:
-                                          true, // OPTIONAL VALUE. True by default.
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    );
+                                          pushNewScreen(
+                                            context,
+                                            screen: CategoryDetailScreen(
+                                              categoryName: snap
+                                                  .data.documents[i]['catName'],
+                                              imagePath: snap.data.documents[i]
+                                                  ['liveImageURL'],
+                                              selectedCategory: i,
+                                              numberOfCategories:
+                                                  snap.data.documents.length,
+                                              gradient: gradients[i],
+                                              sCat: 'Grocery',
+                                            ),
+                                            withNavBar:
+                                                true, // OPTIONAL VALUE. True by default.
+                                            pageTransitionAnimation:
+                                                PageTransitionAnimation
+                                                    .cupertino,
+                                          );
 //
-                                  },
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8.0),
-                                    child: foodCard(
-                                      snap.data.documents[i]['imageURL'],
-                                      snap.data.documents[i]['catName'],
-                                    ),
-                                  ),
-                                ));
-                            }
-                            return categoriesGrocery.length != 0
-                                ? ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: categoriesGrocery,
-                                  )
-                                : Container();
-                          } else
-                            return Container(
-                                child: Center(
-                                    child: Container(
-                                        height: 100,
-                                        width: 100,
-                                        child: Center(
-                                            child:
-                                                CircularProgressIndicator()))));
-                        },
-                      ),
-                    ):Container(),
+                                        },
+                                        child: Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 8.0),
+                                          child: foodCard(
+                                            snap.data.documents[i]['imageURL'],
+                                            snap.data.documents[i]['catName'],
+                                          ),
+                                        ),
+                                      ));
+                                  }
+                                  return categoriesGrocery.length != 0
+                                      ? ListView(
+                                          scrollDirection: Axis.horizontal,
+                                          children: categoriesGrocery,
+                                        )
+                                      : Container();
+                                } else
+                                  return Container(
+                                      child: Center(
+                                          child: Container(
+                                              height: 100,
+                                              width: 100,
+                                              child: Center(
+                                                  child:
+                                                      CircularProgressIndicator()))));
+                              },
+                            ),
+                          )
+                        : Container(),
 
                     SizedBox(height: 16.0),
                     Container(
