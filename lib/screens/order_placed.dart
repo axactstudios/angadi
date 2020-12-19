@@ -314,7 +314,6 @@ import 'package:angadi/classes/cart.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/heading_row.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -352,18 +351,20 @@ class _OrderPlacedState extends State<OrderPlaced> {
       throw 'Could not launch ${url()}';
     }
   }
-  var days,hours,minutes,minutes2,finalminutes;
-@override
+
+  var days, hours, minutes, minutes2, finalminutes;
+  @override
   void initState() {
     print(widget.date);
-    minutes=(widget.date.difference(DateTime.now()).inHours).toInt();
+    minutes = (widget.date.difference(DateTime.now()).inHours).toInt();
     print(minutes);
-     minutes2=((widget.date.difference(DateTime.now()).inMinutes)/60);
-     print(minutes2);
-    finalminutes=((minutes2-minutes).toDouble()*60).toStringAsFixed(2);
+    minutes2 = ((widget.date.difference(DateTime.now()).inMinutes) / 60);
+    print(minutes2);
+    finalminutes = ((minutes2 - minutes).toDouble() * 60).toStringAsFixed(2);
     print(finalminutes);
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     print(widget.status);
@@ -555,7 +556,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                               border: Border.all(color: Color(0xFF6b3600))),
                           child: Center(
                             child: Text(
-                              'Expected delivery in : ${((widget.date.difference(DateTime.now()).inMinutes)/(24*60)).toInt()} days, ${((widget.date.difference(DateTime.now()).inMinutes)/(24*60*60)).toInt()} hours, ${(finalminutes)} minutes',
+                              'Expected delivery in : ${((widget.date.difference(DateTime.now()).inMinutes) / (24 * 60)).toInt()} days, ${((widget.date.difference(DateTime.now()).inMinutes) / (24 * 60 * 60)).toInt()} hours, ${(finalminutes)} minutes',
                               style: Styles.customNormalTextStyle(
                                 color: AppColors.headingText,
                                 // fontWeight: FontWeight.w400,

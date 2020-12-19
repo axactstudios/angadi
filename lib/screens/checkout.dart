@@ -30,8 +30,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'order_placed.dart';
 
 class Checkout extends StatefulWidget {
-  String address;var id;
-  Checkout(this.address,this.id);
+  String address;
+  var id;
+  Checkout(this.address, this.id);
   @override
   _CheckoutState createState() => _CheckoutState();
 }
@@ -221,12 +222,12 @@ class _CheckoutState extends State<Checkout> {
     }
   }
 
-  TimeOfDay time;var orderid;
-  void getid()async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-     orderid =prefs.getString('Orderid');
+  TimeOfDay time;
+  var orderid;
+  void getid() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    orderid = prefs.getString('Orderid');
   }
-
 
   @override
   void initState() {
@@ -1482,7 +1483,10 @@ class _CheckoutState extends State<Checkout> {
     orderType == 'Delivery' &&
             addresstype == 'Apartment' &&
             widget.address == ''
-        ? await databaseReference.collection('Orders').document(orderid).setData({
+        ? await databaseReference
+            .collection('Orders')
+            .document(orderid)
+            .setData({
             'Items': items,
             'Price': prices,
             'Qty': quantities,
@@ -1679,8 +1683,7 @@ class _CheckoutState extends State<Checkout> {
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return OrderPlaced(Bill(), orderid, status, DateTime(selectedDate.year,
-          selectedDate.month, selectedDate.day, dd),);
+      return HomeScreen();
     }));
   }
 
@@ -1935,7 +1938,7 @@ class _CheckoutState extends State<Checkout> {
       'Items': items,
       'Price': prices,
       'Qty': quantities,
-      'TimeStamp': DateTime.now(),
+      // 'TimeStamp': Timestamp.now(),
       'GrandTotal': price,
       'Status': 'Order Placed',
       'Type': type,
@@ -1968,9 +1971,9 @@ class _CheckoutState extends State<Checkout> {
   _launchURL(reply) async {
     if (await canLaunch(reply)) {
       await launch(reply);
-      setState(()async {
-        SharedPreferences prefs= await SharedPreferences.getInstance();
-        var status =prefs.setString('Status','Placed');
+      setState(() async {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        var status = prefs.setString('Status', 'Placed');
         j++;
         Navigator.pushReplacement(context,
             MaterialPageRoute(builder: (BuildContext context) {

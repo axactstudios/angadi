@@ -66,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> categories = new List();
   List<Widget> categoriesGrocery = new List();
   List<Widget> categoriesTop = new List();
-  List<Cart>cartItems=[];
+  List<Cart> cartItems = [];
   var location = 'Dubai';
   var deliveryDate = '23 October';
   var deliveryTime = '6 pm';
@@ -76,8 +76,8 @@ class _HomeScreenState extends State<HomeScreen> {
   FirebaseUser user;
   getUser() async {
     user = await FirebaseAuth.instance.currentUser();
-
   }
+
   final dbHelper = DatabaseHelper.instance;
   void launchWhatsApp({
     @required String phone,
@@ -124,6 +124,7 @@ class _HomeScreenState extends State<HomeScreen> {
       print(event.documents[0].documentID);
     });
   }
+
   void removeAll() async {
     List items = [];
     List prices = [];
@@ -139,16 +140,24 @@ class _HomeScreenState extends State<HomeScreen> {
       final rowsDeleted = await dbHelper.delete(v.productName, v.qtyTag);
     }
   }
+
   @override
   void initState() {
 //    addDishParams();
     getUser();
     getBanners();
     Checkgrocery();
+    getSharedPrefs();
     address();
     date = DateTime.now();
     _getCurrentLocation();
     super.initState();
+  }
+
+  getSharedPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    orderStatus = prefs.getString('Status');
+    idorder = prefs.getString('Orderid');
   }
 
   SliverGridDelegate gd;
@@ -157,6 +166,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Dish> dishesTop = new List<Dish>();
   List<Dish> dishesSpecial = new List<Dish>();
   List<Offer> offers = new List<Offer>();
+  SharedPreferences prefs;
+
+  var orderStatus, idorder;
   @override
   Widget build(BuildContext context) {
 //    print(MediaQuery.of(context).size.width);
@@ -181,20 +193,27 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       return date;
     }
-    id()async{
-      SharedPreferences prefs= await SharedPreferences.getInstance();
-      var status =prefs.getString('Status');
-      if(status==null&&status==''){
-        prefs.setString('Status','Not Placed');
-      }
-      if(status=='Placed'){
-        var idorder=prefs.getString('Orderid');
-         Firestore.instance.collection('Orders').snapshots().forEach((element) {element.documents.forEach((element) {if(idorder==element.documentID){removeAll();}});});
 
-
-
+    id() async {
+      print('Function run');
+      if (orderStatus != null) {
+        if (orderStatus == 'Placed') {
+          Firestore.instance
+              .collection('Orders')
+              .snapshots()
+              .forEach((element) {
+            element.documents.forEach((element) {
+              if (idorder == element.documentID) {
+                removeAll();
+                prefs.setString('Status', 'Not Placed');
+              }
+            });
+          });
+        }
       }
     }
+
+    id();
 
     return Scaffold(
       floatingActionButton: CustomFloatingButton(CurrentScreen(

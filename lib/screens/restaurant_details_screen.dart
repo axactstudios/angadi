@@ -25,6 +25,7 @@ import 'package:angadi/widgets/ratings_widget.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'bookmarks_screen.dart';
@@ -238,6 +239,51 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       DatabaseHelper.columnQuantity: qty,
       DatabaseHelper.columnQuantityTag: qtyTag
     };
+
+    if (cartItems.length == 0) {
+      await print('----------------$order');
+      if (order + 1 < 9) {
+        await setState(() {
+          orderid = 'ANG0000${order + 1}';
+        });
+      }
+      if (order + 1 > 10 && order + 1 < 99) {
+        await setState(() {
+          orderid = 'ANG000${order + 1}';
+        });
+      }
+      if (order + 1 > 99 && order + 1 < 999) {
+        await setState(() {
+          orderid = 'ANG00${order + 1}';
+        });
+      }
+      if (order + 1 > 999 && order + 1 < 9999) {
+        await setState(() {
+          orderid = 'ANG0${order + 1}';
+        });
+      }
+      if (order + 1 > 9999 && order + 1 < 99999) {
+        await setState(() {
+          orderid = 'ANG${order + 1}';
+        });
+      }
+      if (order + 1 > 99999) {
+        await setState(() {
+          orderid = 'ANG${order + 1}';
+        });
+      }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('Orderid', orderid);
+      print(orderid);
+
+      prefs.setString('Status', 'Not placed');
+      await Firestore.instance
+          .collection('Orders')
+          .document('ordercount')
+          .updateData({
+        'Numberoforders': order + 1,
+      });
+    }
     Cart item = Cart.fromMap(row);
     final id = await dbHelper.insert(item);
     final snackBar = SnackBar(
@@ -377,6 +423,15 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
   var l = 0;
   first() async {
+    await Firestore.instance
+        .collection('Orders')
+        .document('ordercount')
+        .snapshots()
+        .listen((event) {
+      print(event['Numberoforders'].toString());
+
+      order = event['Numberoforders'];
+    });
     qty = await getQuantity(widget.restaurantDetail.name, '500 ML');
     present = await checkInWishlist();
     print('-------------%%%%%$present');
@@ -387,6 +442,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
           'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FBajji%20Bonda%20Butter%2F1-2.JPG?alt=media&token=1363302b-3013-4cd4-aebf-d2f04c25a764',
       url3 =
           'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FBajji%20Bonda%20Butter%2F1-2.JPG?alt=media&token=1363302b-3013-4cd4-aebf-d2f04c25a764';
+  var order, orderid;
+
   @override
   void initState() {
     setState(() {
