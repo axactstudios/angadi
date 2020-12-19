@@ -151,59 +151,58 @@ class _MyAddressesState extends State<MyAddresses> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              (alladresses.length != 0)
-                  ? Padding(
-                      padding: const EdgeInsets.all(16.0),
-                      child: HeadingRow(
-                        title: 'Saved Addresses',
-                        number: '',
-                      ),
-                    )
-                  : Container(),
               Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: StreamBuilder(
-                    stream: Firestore.instance
-                        .collection('Users')
-                        .document(widget.id)
-                        .collection('Address')
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snap) {
-                      if (snap.hasData && !snap.hasError && snap.data != null) {
-                        alladresses.clear();
-                        for (int i = 0; i < snap.data.documents.length; i++) {
-                          print(snap.data.documents.length);
+                  padding: const EdgeInsets.all(8.0),
 
-                          return Card(
-                              child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                (snap.data.documents[i]['hno'] != null &&
-                                        snap.data.documents[i]['hno'] != '')
-                                    ? Text(
-                                        'Address : H.no. ${snap.data.documents[i]['hno']} , ${snap.data.documents[i]['address']}')
-                                    : Text(
-                                        'Address :  ${snap.data.documents[i]['address']}'),
-                                (snap.data.documents[i]['landmark'] != null &&
-                                        snap.data.documents[i]['landmark'] !=
-                                            '')
-                                    ? Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text(
-                                            'Landmark : ${snap.data.documents[i]['landmark']}'))
-                                    : Text(''),
-                              ],
-                            ),
-                          ));
+                  child: StreamBuilder(
+                      stream: Firestore.instance.collection('Users').document(widget.id).collection('Address').snapshots(),
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+                        if (snap.hasData && !snap.hasError && snap.data != null) {
+                          alladresses.clear();
+                          for (int i = 0; i < snap.data.documents.length; i++) {
+                            print(snap.data.documents.length);
+                            Address add=Address(snap.data.documents[i]['address'],snap.data.documents[i]['hno'],snap.data.documents[i]['landmark']);
+                            alladresses.add(add);}
+                          return  alladresses.length!=0
+                              ?  Column(
+                            children: [
+                              HeadingRow(
+                                title: 'Saved Addresses',
+                                number: '',
+                              ),
+                              ListView.builder(
+                                itemCount: alladresses.length,
+                                shrinkWrap:true,
+                                physics:ClampingScrollPhysics(),
+                                itemBuilder: (context,index){
+                                  var item=alladresses[index];
+                                  return Card(
+                                      child:Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.start,
+                                          children: [
+                                            (item.hno!=null&&item.hno!='')?Text('Address : H.no. ${item.hno} , ${item.address}'):Text('Address :  ${item.address}'),
+
+                                            (item.landmark!=null&&item.landmark!='')?Align(alignment:Alignment.bottomLeft,child: Text('Landmark : ${item.landmark}')):Text(''),
+                                          ],
+                                        ),
+                                      )
+                                  );
+                                },
+                              )
+                            ],
+                          ):Container();
                         }
-                      } else {
-                        return Container();
+                        else{
+                          return Container();
+                        }
                       }
-                    }),
-              ),
+
+
+
+                  )),
+
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: angadiButton(

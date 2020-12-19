@@ -1436,6 +1436,7 @@ class _CheckoutState extends State<Checkout> {
   var id;
   placeOrder(orderType) async {
     print('----------------------');
+    print(selectedDate);
     print(selectedDate.year);
     print(selectedTime.split(' ').join().toLowerCase());
     var tt = selectedTime.split(' ').join().toLowerCase();
@@ -1667,10 +1668,12 @@ class _CheckoutState extends State<Checkout> {
       });
     });
     Timestamp myTimeStamp = Timestamp.fromDate(selectedDate);
+    print(myTimeStamp.toString());
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return OrderPlaced(Bill(), id, status, selectedDate);
+      return OrderPlaced(Bill(), id, status, DateTime(selectedDate.year,
+          selectedDate.month, selectedDate.day, dd),);
     }));
   }
 

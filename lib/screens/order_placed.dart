@@ -352,10 +352,22 @@ class _OrderPlacedState extends State<OrderPlaced> {
       throw 'Could not launch ${url()}';
     }
   }
-
+  var days,hours,minutes,minutes2,finalminutes;
+@override
+  void initState() {
+    print(widget.date);
+    minutes=(widget.date.difference(DateTime.now()).inHours).toInt();
+    print(minutes);
+     minutes2=((widget.date.difference(DateTime.now()).inMinutes)/60);
+     print(minutes2);
+    finalminutes=((minutes2-minutes).toDouble()*60).toStringAsFixed(2);
+    print(finalminutes);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     print(widget.status);
+    print(widget.date);
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
@@ -543,7 +555,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                               border: Border.all(color: Color(0xFF6b3600))),
                           child: Center(
                             child: Text(
-                              'Expected delivery in : ${widget.date.difference(DateTime.now()).inMinutes} minutes',
+                              'Expected delivery in : ${((widget.date.difference(DateTime.now()).inMinutes)/(24*60)).toInt()} days, ${((widget.date.difference(DateTime.now()).inMinutes)/(60)).toInt()} hours, ${(finalminutes)} minutes',
                               style: Styles.customNormalTextStyle(
                                 color: AppColors.headingText,
                                 // fontWeight: FontWeight.w400,

@@ -131,38 +131,63 @@ class _MyAddresses2State extends State<MyAddresses2> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              (alladresses.length!=0)?Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: HeadingRow(
-                  title: 'Saved Addresses',
-                  number: '',
-                ),
-              ):Container(),
-              (alladresses.length!=0)?Padding(
-                padding: const EdgeInsets.all(8.0),
+              Padding(
+                  padding: const EdgeInsets.all(8.0),
 
-                child: ListView.builder(itemCount:alladresses.length,shrinkWrap:true,physics:ClampingScrollPhysics(),itemBuilder:(context,index){
-                  var item=alladresses[index];
-                  return InkWell(
-                    onTap: (){
-                      (item.hno!=null&&item.hno!=''&&item.landmark!=null&&item.landmark!='') ?Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Checkout(' H.no. ${item.hno} , ${item.address}, near ${item.landmark}'))): (item.hno!=null&&item.hno!='') ?Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Checkout(' H.no. ${item.hno} , ${item.address}'))):Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Checkout(' ${item.address}')));
-                   },
-                    child: Card(
-                        child:Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.start,
+                  child: StreamBuilder(
+                      stream: Firestore.instance.collection('Users').document(widget.id).collection('Address').snapshots(),
+                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+                        if (snap.hasData && !snap.hasError && snap.data != null) {
+                          alladresses.clear();
+                          for (int i = 0; i < snap.data.documents.length; i++) {
+                            print(snap.data.documents.length);
+                            Address add=Address(snap.data.documents[i]['address'],snap.data.documents[i]['hno'],snap.data.documents[i]['landmark']);
+                            alladresses.add(add);}
+                          return  alladresses.length!=0
+                              ?  Column(
                             children: [
-                              (item.hno!=null&&item.hno!='')?Text('Address : H.no. ${item.hno} , ${item.address}'):Text('Address :  ${item.address}'),
+                              HeadingRow(
+                                title: 'Saved Addresses',
+                                number: '',
+                              ),
+                              ListView.builder(
+                                itemCount: alladresses.length,
+                                shrinkWrap:true,
+                                physics:ClampingScrollPhysics(),
+                                itemBuilder: (context,index){
+                                  var item=alladresses[index];
+                                  return InkWell(
+                                    onTap:(){
+                                      (item.hno!=null&&item.hno!=''&&item.landmark!=null&&item.landmark!='')?Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('H.no. ${item.hno} , ${item.address} , near ${item.landmark}'))):(item.hno!=null&&item.hno!='')?Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('H.no. ${item.hno} , ${item.address} '))):Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('${item.address} ')));
+                                    },
+                                    child: Card(
+                                        child:Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Column(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              (item.hno!=null&&item.hno!='')?Text('Address : H.no. ${item.hno} , ${item.address}'):Text('Address :  ${item.address}'),
 
-                              (item.landmark!=null&&item.landmark!='')?Align(alignment:Alignment.bottomLeft,child: Text('Landmark : ${item.landmark}')):Text(''),
+                                              (item.landmark!=null&&item.landmark!='')?Align(alignment:Alignment.bottomLeft,child: Text('Landmark : ${item.landmark}')):Text(''),
+                                            ],
+                                          ),
+                                        )
+                                    ),
+                                  );
+                                },
+                              )
                             ],
-                          ),
-                        )
-                    ),
-                  );
-                }),
-              ):Container(),
+                          ):Container();
+                        }
+                        else{
+                          return Container();
+                        }
+                      }
+
+
+
+                  )),
+
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: angadiButton(
