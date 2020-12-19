@@ -32,9 +32,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     getUserDetails();
+    address();
     super.initState();
   }
+  var id='';
+  void address()async{
+    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+    var email=user.email;
+    Firestore.instance.collection('Users').where('mail',isEqualTo: email).snapshots().listen((event) {setState(() {
+      id=event.documents[0].documentID;
+    });print(event.documents[0].documentID);});
 
+
+
+  }
   List<Order> orders = List<Order>();
   void launchWhatsApp({
     @required String phone,
@@ -283,7 +294,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               'My Addresses',
                               onTap: () {
                                 pushNewScreen(context,
-                                    screen: MyAddresses(), withNavBar: true);
+                                    screen: MyAddresses(id), withNavBar: true);
                               },
                               buttonWidth:
                                   MediaQuery.of(context).size.width / 2,

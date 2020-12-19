@@ -95,12 +95,24 @@ class _HomeScreenState extends State<HomeScreen> {
   void Checkgrocery(){
     Firestore.instance.collection('AppSettings').getDocuments().then((val)=>val.documents.forEach((element) {print(element['showGrocery']);showGrocery=element['showGrocery'];}));
   }
+  var id='';
+  void address()async{
+    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+    var email=user.email;
+    Firestore.instance.collection('Users').where('mail',isEqualTo: email).snapshots().listen((event) {setState(() {
+      id=event.documents[0].documentID;
+    });print(event.documents[0].documentID);});
+
+
+
+  }
   @override
   void initState() {
 //    addDishParams();
     getUser();
     getBanners();
     Checkgrocery();
+    address();
     date = DateTime.now();
     _getCurrentLocation();
     super.initState();

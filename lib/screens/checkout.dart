@@ -4,6 +4,7 @@ import 'dart:math';
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/screens/home_screen.dart';
 import 'package:angadi/screens/my_addresses.dart';
+import 'package:angadi/screens/my_addresses2.dart';
 import 'package:angadi/screens/offers_screen.dart';
 import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/services/database_helper.dart';
@@ -28,6 +29,8 @@ import 'package:url_launcher/url_launcher.dart';
 import 'order_placed.dart';
 
 class Checkout extends StatefulWidget {
+  String address;
+  Checkout(this.address);
   @override
   _CheckoutState createState() => _CheckoutState();
 }
@@ -181,6 +184,17 @@ class _CheckoutState extends State<Checkout> {
     }
     return sum;
   }
+  var docid='';
+  void address()async{
+    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+    var email=user.email;
+    Firestore.instance.collection('Users').where('mail',isEqualTo: email).snapshots().listen((event) {setState(() {
+      docid=event.documents[0].documentID;
+    });print(event.documents[0].documentID);});
+
+
+
+  }
 
   void launchWhatsApp({
     @required String phone,
@@ -207,6 +221,7 @@ class _CheckoutState extends State<Checkout> {
   void initState() {
     getAllItems();
     _getCurrentLocation();
+    address();
     time = TimeOfDay.now();
     date = DateTime(DateTime.now().year,DateTime.now().month,DateTime.now().day+1);
     super.initState();
@@ -578,7 +593,7 @@ class _CheckoutState extends State<Checkout> {
                         ),
                       )
                     : Container(),
-                type != 'Takeaway'
+                type != 'Takeaway'&&widget.address==''
 //                    ? Padding(
 //                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
 //                        child: CustomTextFormField(
@@ -630,13 +645,18 @@ class _CheckoutState extends State<Checkout> {
                           padding: const EdgeInsets.all(8.0),
                           child: Column(children: [Image.asset('assets/images/office.png',height:25),Text('Office',style:TextStyle(color:Colors.black,fontWeight:FontWeight.w300))],),
                         ),disabledBorderColor: Colors.grey,color:Color(0xFF6b3600),)],),
-                    ): Container(),
-                type != 'Takeaway'
+                    ): Container(
+                  child:Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(widget.address),
+                  ),
+                ),
+                type != 'Takeaway'&&widget.address==''
                     ? SizedBox(
                         height: 10,
                       )
                     : Container(),
-                type != 'Takeaway'
+                type != 'Takeaway'&&widget.address==''
 //                    ? Padding(
 //                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
 //                        child: CustomTextFormField(
@@ -708,9 +728,9 @@ class _CheckoutState extends State<Checkout> {
                     'Saved addresses',
                     buttonWidth: MediaQuery.of(context).size.width,
                     onTap: () {
-                      Navigator.push(context,
+                      Navigator.pushReplacement(context,
                           MaterialPageRoute(builder: (BuildContext context) {
-                        return MyAddresses();
+                        return MyAddresses2(docid);
                       }));
                     },
                   ),
@@ -1133,7 +1153,7 @@ class _CheckoutState extends State<Checkout> {
       quantities.add(v.qty);
     }
     final databaseReference = Firestore.instance;
-    orderType == 'Delivery'&&addresstype=='Apartment'
+    orderType == 'Delivery'&&addresstype=='Apartment'&&widget.address==''
         ? await databaseReference.collection('Orders').document(id).setData({
             'Items': items,
             'Price': prices,
@@ -1156,7 +1176,7 @@ class _CheckoutState extends State<Checkout> {
             setState(() {
 //              docID = value;
             });
-          }):orderType == 'Delivery'&&addresstype=='House'?
+          }):orderType == 'Delivery'&&addresstype=='House'&&widget.address==''?
     await databaseReference.collection('Orders').document(id).setData({
       'Items': items,
       'Price': prices,
@@ -1179,7 +1199,7 @@ class _CheckoutState extends State<Checkout> {
       setState(() {
 //              docID = value;
       });
-    }):orderType == 'Delivery'&&addresstype=='Office'?await databaseReference.collection('Orders').document(id).setData({
+    }):orderType == 'Delivery'&&addresstype=='Office'&&widget.address==''?await databaseReference.collection('Orders').document(id).setData({
       'Items': items,
       'Price': prices,
       'Qty': quantities,
@@ -1202,7 +1222,26 @@ class _CheckoutState extends State<Checkout> {
 //              docID = value;
       });
     })
-        : orderType == 'Takeaway'
+        : orderType == 'Delivery'&&widget.address!=''?await databaseReference.collection('Orders').document(id).setData({
+      'Items': items,
+      'Price': prices,
+      'Qty': quantities,
+      'Type': orderType,
+      'UserID': user.uid,
+      'Address':widget.address,
+      'DeliveryDate':DateTime(selectedDate.year,selectedDate.month,selectedDate.day,dd),
+      'DeliveryTime':selectedTime,
+      'TimeStamp': DateTime.now(),
+      'Status': 'Awaiting Confirmation',
+      'Notes':
+      notesController.text != null ? notesController.text : 'None',
+      'GrandTotal':
+      ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
+    }).then((value) {
+      setState(() {
+//              docID = value;
+      });
+    }):orderType == 'Takeaway'
             ? await databaseReference
                 .collection('Orders')
                 .document(id)

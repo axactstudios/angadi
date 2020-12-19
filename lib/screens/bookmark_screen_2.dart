@@ -103,7 +103,7 @@ class _BookmarksScreen2State extends State<BookmarksScreen2> {
                   onTap: () {
                     Navigator.push(context,
                         MaterialPageRoute(builder: (BuildContext context) {
-                      return Checkout();
+                      return Checkout('');
                     }));
                   },
                   child: Container(

@@ -138,7 +138,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                     user != null
                         ? Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                            return Checkout();
+                            return Checkout('');
                           }))
                         : login();
                   },

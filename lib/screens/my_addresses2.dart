@@ -1,30 +1,30 @@
 import 'dart:io';
 
 import 'package:angadi/classes/address.dart';
+import 'package:angadi/screens/checkout.dart';
 import 'package:angadi/screens/confirm_address.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/heading_row.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class MyAddresses extends StatefulWidget {
+class MyAddresses2 extends StatefulWidget {
   String id;
-  MyAddresses(this.id);
+  MyAddresses2(this.id);
   @override
-  _MyAddressesState createState() => _MyAddressesState();
+  _MyAddresses2State createState() => _MyAddresses2State();
 }
 
-class _MyAddressesState extends State<MyAddresses> {
+class _MyAddresses2State extends State<MyAddresses2> {
   var location = 'Dubai';
 
   LocationResult result;
-var id;
+  var id;
   void showPlacePicker() async {
     print('called');
     result = await Navigator.of(context).push(MaterialPageRoute(
@@ -45,7 +45,6 @@ var id;
   void alladdresses()async{
     setState(() {
       alladresses.clear();
-      print(alladresses.length);
     });
 
     print('--------------');
@@ -58,12 +57,7 @@ var id;
   }
   @override
   void initState() {
-    setState(() {
-      alladresses.clear();
-      print(alladresses.length);
-    });
-
-
+    alladresses.clear();
     alladdresses();
     super.initState();
   }
@@ -85,8 +79,6 @@ var id;
       throw 'Could not launch ${url()}';
     }
   }
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,37 +138,31 @@ var id;
                   number: '',
                 ),
               ):Container(),
-              Padding(
+              (alladresses.length!=0)?Padding(
                 padding: const EdgeInsets.all(8.0),
 
-                child: StreamBuilder(
-                    stream: Firestore.instance.collection('Users').document(widget.id).collection('Address').snapshots(),
+                child: ListView.builder(itemCount:alladresses.length,shrinkWrap:true,physics:ClampingScrollPhysics(),itemBuilder:(context,index){
+                  var item=alladresses[index];
+                  return InkWell(
+                    onTap: (){
+                      (item.hno!=null&&item.hno!=''&&item.landmark!=null&&item.landmark!='') ?Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Checkout(' H.no. ${item.hno} , ${item.address}, near ${item.landmark}'))): (item.hno!=null&&item.hno!='') ?Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Checkout(' H.no. ${item.hno} , ${item.address}'))):Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>Checkout(' ${item.address}')));
+                   },
+                    child: Card(
+                        child:Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              (item.hno!=null&&item.hno!='')?Text('Address : H.no. ${item.hno} , ${item.address}'):Text('Address :  ${item.address}'),
 
-
-    builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
-    if (snap.hasData && !snap.hasError && snap.data != null) {
-    alladresses.clear();
-    for (int i = 0; i < snap.data.documents.length; i++) {
-      print(snap.data.documents.length);
-
-                  return Card(
-                    child:Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          (snap.data.documents[i]['hno']!=null&&snap.data.documents[i]['hno']!='')?Text('Address : H.no. ${snap.data.documents[i]['hno']} , ${snap.data.documents[i]['address']}'):Text('Address :  ${snap.data.documents[i]['address']}'),
-
-                          (snap.data.documents[i]['landmark']!=null&&snap.data.documents[i]['landmark']!='')?Align(alignment:Alignment.bottomLeft,child: Text('Landmark : ${snap.data.documents[i]['landmark']}')):Text(''),
-                        ],
-                      ),
-                    )
+                              (item.landmark!=null&&item.landmark!='')?Align(alignment:Alignment.bottomLeft,child: Text('Landmark : ${item.landmark}')):Text(''),
+                            ],
+                          ),
+                        )
+                    ),
                   );
-                }}else{
-      Container();
-    }
-                    }),
-              ),
+                }),
+              ):Container(),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: angadiButton(

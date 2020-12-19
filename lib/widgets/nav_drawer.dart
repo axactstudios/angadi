@@ -37,6 +37,17 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
+  var id='';
+  void address()async{
+    FirebaseUser user=await FirebaseAuth.instance.currentUser();
+    var email=user.email;
+    Firestore.instance.collection('Users').where('mail',isEqualTo: email).snapshots().listen((event) {setState(() {
+      id=event.documents[0].documentID;
+    });print(event.documents[0].documentID);});
+
+
+
+  }
   List categories = [];
   getCategories() {
     Firestore.instance.collection('Categories').getDocuments().then((value) {
@@ -222,6 +233,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
     _getCurrentLocation();
     getUserDetails();
     getCategories();
+    address();
     super.initState();
   }
 
@@ -472,7 +484,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
               ),
             ),
             onTap: () {
-              pushNewScreen(context, screen: MyAddresses());
+              pushNewScreen(context, screen: MyAddresses(id));
             },
           ),
           Container(
