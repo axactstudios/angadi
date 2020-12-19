@@ -221,12 +221,18 @@ class _CheckoutState extends State<Checkout> {
     }
   }
 
-  TimeOfDay time;
+  TimeOfDay time;var orderid;
+  void getid()async{
+    SharedPreferences prefs= await SharedPreferences.getInstance();
+     orderid =prefs.getString('Orderid');
+  }
+
 
   @override
   void initState() {
     getAllItems();
     _getCurrentLocation();
+    getid();
     address();
     time = TimeOfDay.now();
     date = DateTime(
@@ -1476,7 +1482,7 @@ class _CheckoutState extends State<Checkout> {
     orderType == 'Delivery' &&
             addresstype == 'Apartment' &&
             widget.address == ''
-        ? await databaseReference.collection('Orders').document(widget.id).setData({
+        ? await databaseReference.collection('Orders').document(orderid).setData({
             'Items': items,
             'Price': prices,
             'Qty': quantities,
@@ -1505,7 +1511,7 @@ class _CheckoutState extends State<Checkout> {
                 widget.address == ''
             ? await databaseReference
                 .collection('Orders')
-                .document(widget.id)
+                .document(orderid)
                 .setData({
                 'Items': items,
                 'Price': prices,
@@ -1536,7 +1542,7 @@ class _CheckoutState extends State<Checkout> {
                     widget.address == ''
                 ? await databaseReference
                     .collection('Orders')
-                    .document(widget.id)
+                    .document(orderid)
                     .setData({
                     'Items': items,
                     'Price': prices,
@@ -1565,7 +1571,7 @@ class _CheckoutState extends State<Checkout> {
                 : orderType == 'Delivery' && widget.address != ''
                     ? await databaseReference
                         .collection('Orders')
-                        .document(widget.id)
+                        .document(orderid)
                         .setData({
                         'Items': items,
                         'Price': prices,
@@ -1591,7 +1597,7 @@ class _CheckoutState extends State<Checkout> {
                     : orderType == 'Takeaway'
                         ? await databaseReference
                             .collection('Orders')
-                            .document(widget.id)
+                            .document(orderid)
                             .setData({
                             'Items': items,
                             'Price': prices,
@@ -1611,7 +1617,7 @@ class _CheckoutState extends State<Checkout> {
                           })
                         : await databaseReference
                             .collection('Orders')
-                            .document(widget.id)
+                            .document(orderid)
                             .setData({
                             'Items': items,
                             'Price': prices,
@@ -1638,7 +1644,7 @@ class _CheckoutState extends State<Checkout> {
                           });
     await databaseReference.collection('Notifications').add({
       'UserID': user.uid,
-      'OrderID': widget.id,
+      'OrderID': orderid,
       'Notification': 'Order Placed. Awaiting confirmation.',
       'DeliveryDate': selectedDate,
       'DeliveryTime': selectedTime,
@@ -1663,7 +1669,7 @@ class _CheckoutState extends State<Checkout> {
     String status;
     Firestore.instance.collection('Orders').getDocuments().then((value) {
       value.documents.forEach((element) {
-        if (element.documentID == widget.id) {
+        if (element.documentID == orderid) {
           status = element['Status'];
         }
       });
@@ -1673,7 +1679,7 @@ class _CheckoutState extends State<Checkout> {
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
-      return OrderPlaced(Bill(), widget.id, status, DateTime(selectedDate.year,
+      return OrderPlaced(Bill(), orderid, status, DateTime(selectedDate.year,
           selectedDate.month, selectedDate.day, dd),);
     }));
   }
