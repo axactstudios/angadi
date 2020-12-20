@@ -278,7 +278,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
       prefs.setString('Status', 'Not placed');
       await Firestore.instance
-          .collection('Orders')
+          .collection('Ordercount')
           .document('ordercount')
           .updateData({
         'Numberoforders': order + 1,

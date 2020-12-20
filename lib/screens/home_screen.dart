@@ -195,15 +195,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     id() async {
-      print('Function run');
+
       if (orderStatus != null) {
         if (orderStatus == 'Placed') {
+          print('Function run');
           Firestore.instance
               .collection('Orders')
               .snapshots()
               .forEach((element) {
             element.documents.forEach((element) {
               if (idorder == element.documentID) {
+
                 removeAll();
                 prefs.setString('Status', 'Not Placed');
               }

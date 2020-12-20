@@ -1416,7 +1416,7 @@ class _CheckoutState extends State<Checkout> {
                                           .toStringAsFixed(2)
                                       : ((totalAmount() * 0.18) + totalAmount())
                                           .toString(),
-                                  type)
+                                  type,orderid)
                               : Checksuccess();
                         },
                         buttonWidth: MediaQuery.of(context).size.width,
@@ -1492,14 +1492,11 @@ class _CheckoutState extends State<Checkout> {
             'Qty': quantities,
             'Type': orderType,
             'UserID': user.uid,
-            'Building': buildingController.text,
-            'Floor': floorcontroller.text,
-            'Apartment': flatcontroller.text,
-            'Additional Directions': additionalcontroller.text,
-            'DeliveryDate': DateTime(
-                selectedDate.year, selectedDate.month, selectedDate.day, dd),
+            'Address': 'Building :${buildingController.text} , Apartment :${flatcontroller.text} , Floor:${floorcontroller.text}, Additional Directions :${additionalcontroller.text}',
+            'DeliveryDate':DateTime(selectedDate.year, selectedDate.month,
+                selectedDate.day, dd),
             'DeliveryTime': selectedTime,
-            'TimeStamp': DateTime.now(),
+            'TimeStamp': Timestamp.now(),
             'Status': 'Awaiting Confirmation',
             'Notes':
                 notesController.text != null ? notesController.text : 'None',
@@ -1522,14 +1519,12 @@ class _CheckoutState extends State<Checkout> {
                 'Qty': quantities,
                 'Type': orderType,
                 'UserID': user.uid,
-                'Street': buildingController.text,
-                'Area': floorcontroller.text,
-                'Landmark': flatcontroller.text,
-                'Additional Directions': additionalcontroller.text,
-                'DeliveryDate': DateTime(selectedDate.year, selectedDate.month,
+                'Address': 'Street :${buildingController.text}, Area:${floorcontroller.text}, Landmark:${flatcontroller.text},Additional Directions :${additionalcontroller.text}',
+
+                'DeliveryDate':DateTime(selectedDate.year, selectedDate.month,
                     selectedDate.day, dd),
                 'DeliveryTime': selectedTime,
-                'TimeStamp': DateTime.now(),
+                'TimeStamp': Timestamp.now(),
                 'Status': 'Awaiting Confirmation',
                 'Notes': notesController.text != null
                     ? notesController.text
@@ -1553,15 +1548,13 @@ class _CheckoutState extends State<Checkout> {
                     'Qty': quantities,
                     'Type': orderType,
                     'UserID': user.uid,
-                    'Building': buildingController.text,
-                    'Floor': floorcontroller.text,
-                    'Landmark': flatcontroller.text,
-                    'Additional Directions': additionalcontroller.text,
+                     'Address':'Building:${buildingController.text},Floor:${floorcontroller.text},Landmark:${flatcontroller.text},Additional Directions:${additionalcontroller.text}',
+
                     'DeliveryDate': DateTime(selectedDate.year,
                         selectedDate.month, selectedDate.day, dd),
                     'DeliveryTime': selectedTime,
-                    'TimeStamp': DateTime.now(),
-                    'Status': 'Awaiting Confirmation',
+                    'TimeStamp': Timestamp.now(),
+                   'Status': 'Awaiting Confirmation',
                     'Notes': notesController.text != null
                         ? notesController.text
                         : 'None',
@@ -1586,8 +1579,8 @@ class _CheckoutState extends State<Checkout> {
                         'DeliveryDate': DateTime(selectedDate.year,
                             selectedDate.month, selectedDate.day, dd),
                         'DeliveryTime': selectedTime,
-                        'TimeStamp': DateTime.now(),
-                        'Status': 'Awaiting Confirmation',
+                        'TimeStamp': Timestamp.now(),
+                       'Status': 'Awaiting Confirmation',
                         'Notes': notesController.text != null
                             ? notesController.text
                             : 'None',
@@ -1609,8 +1602,8 @@ class _CheckoutState extends State<Checkout> {
                             'Type': orderType,
                             'UserID': user.uid,
                             // 'Status':'${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
-                            'TimeStamp': DateTime.now(),
-                            'Status': 'Awaiting Confirmation',
+                            'TimeStamp': Timestamp.now(),
+                           'Status': 'Awaiting Confirmation',
                             'GrandTotal':
                                 ((totalAmount() * 0.18) + totalAmount())
                                     .toStringAsFixed(2),
@@ -1632,7 +1625,7 @@ class _CheckoutState extends State<Checkout> {
                             'DeliveryTime': selectedTime,
                             'Address':
                                 '${hnoController.text},${addressController.text} ',
-                            'TimeStamp': DateTime.now(),
+                            'TimeStamp': Timestamp.now(),
                             'Status': 'Awaiting Confirmation',
 //                'DeliveryTime': selectedTime.toString(),
                             'Notes': notesController.text != null
@@ -1652,7 +1645,7 @@ class _CheckoutState extends State<Checkout> {
       'Notification': 'Order Placed. Awaiting confirmation.',
       'DeliveryDate': selectedDate,
       'DeliveryTime': selectedTime,
-      'TimeStamp': DateTime.now(),
+      'TimeStamp': Timestamp.now(),
       'Type': orderType,
       'GrandTotal': ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
     });
@@ -1918,7 +1911,7 @@ class _CheckoutState extends State<Checkout> {
 
   Map<String, dynamic> map;
   int j = 0;
-  Future<String> onlineorder(String price, String type) async {
+  Future<String> onlineorder(String price, String type,String orderid)async{
     await getUserDetails();
     List items = [];
     List prices = [];
@@ -1929,7 +1922,22 @@ class _CheckoutState extends State<Checkout> {
       items.add(v.productName);
       prices.add(v.price);
       quantities.add(v.qty);
+    } print(selectedTime.split(' ').join().toLowerCase());
+    var tt = selectedTime.split(' ').join().toLowerCase();
+    if (selectedTime.contains('AM')) {
+      setState(() {
+        dd = int.parse(selectedTime.substring(0, 1).trim());
+      });
+    } else if (selectedTime.contains('12')) {
+      setState(() {
+        dd = int.parse(selectedTime.substring(0, 1).trim());
+      });
+    } else if (selectedTime.contains('PM') && !selectedTime.contains('12')) {
+      setState(() {
+        dd = int.parse(selectedTime.substring(0, 1).trim()) + 12;
+      });
     }
+
     HttpClient httpClient = new HttpClient();
     httpClient.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);
@@ -1938,13 +1946,20 @@ class _CheckoutState extends State<Checkout> {
       'Items': items,
       'Price': prices,
       'Qty': quantities,
-      // 'TimeStamp': Timestamp.now(),
-      'GrandTotal': price,
-      'Status': 'Order Placed',
       'Type': type,
       'UserID': user.uid,
-      'Notes': notesController.text,
-      'Address': addressController.text,
+      'Address': 'Street :${buildingController.text}, Area:${floorcontroller.text}, Landmark:${flatcontroller.text},Additional Directions :${additionalcontroller.text}',
+
+      'DeliveryDate':Timestamp.now(),
+      'DeliveryTime': selectedTime,
+      'TimeStamp': Timestamp.now(),
+      'Status': 'Awaiting Confirmation',
+      'Notes': notesController.text != null
+          ? notesController.text
+          : 'None',
+      'GrandTotal':price,
+         'orderid':orderid,
+
       'Phone': user.phoneNumber
     };
     HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));

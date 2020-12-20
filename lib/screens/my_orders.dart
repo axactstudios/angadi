@@ -215,12 +215,15 @@ class _MyOrdersState extends State<MyOrders> {
                   print(snap.data.documents[i]['Price'].toString());
                   print('------------------');
                   print(snap.data.documents[i]['Qty'].toString());
+                  print('items');
+                  print(snap.data.documents[i]['Items'].toString());
+
                   print(orders.length);
                   String str = '';
                   for (int it = 0;
                       it <= snap.data.documents[i]['Items'].length - 1;
                       it++) {
-                    it != snap.data.documents[i]['Items'].length - 1
+                    it != snap.data.documents[i]['Items'].length -1
                         ? str = str +
                             '${snap.data.documents[i]['Qty'][it]} x ${snap.data.documents[i]['Items'][it]}, '
                         : str = str +
