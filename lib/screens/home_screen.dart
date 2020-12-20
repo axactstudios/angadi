@@ -577,6 +577,97 @@ class _HomeScreenState extends State<HomeScreen> {
                       borderStyle: BorderStyle.solid,
                     ),
                     SizedBox(height: 1.0),
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      color: AppColors.secondaryElement,
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
+                            Icon(Icons.location_on, color: Colors.white),
+                            SizedBox(
+                              width: 5,
+                            ),
+                            Container(
+                                width: MediaQuery.of(context).size.width * 0.6,
+                                child: Text('Deliver to $location',
+                                    style: TextStyle(color: Colors.white))),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            InkWell(
+                                onTap: () {
+//                                  _locationDialog(context);
+                                  showPlacePicker();
+
+//
+                                },
+                                child: Icon(Icons.edit, color: Colors.white)),
+//                            InkWell(
+//                                onTap: () {
+//                                  showPlacePicker();
+//
+////                              _locationDialog(context);
+//                                },
+//                                child: Icon(Icons.map, color: Colors.white))
+                          ],
+                        ),
+                      ),
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                          border: Border.all(color: AppColors.secondaryElement),
+                          borderRadius: BorderRadius.all(Radius.zero)),
+                      child: Row(
+                        children: [
+                          Text('    Next Delivery: '),
+                          Icon(
+                            Icons.delivery_dining,
+                            color: AppColors.secondaryElement,
+                          ),
+                          SizedBox(width: 5),
+                          InkWell(
+                              onTap: () {
+                                _pickTime().then((value) {
+                                  setState(() {
+                                    selectedDate = value;
+                                  });
+                                });
+                              },
+                              child: selectedDate != null
+                                  ? Text(
+                                      '${selectedDate.day.toString()}/${selectedDate.month.toString()}/20 ',
+                                      style:
+                                          TextStyle(color: Color(0xFF6b3600)),
+                                    )
+                                  : Text(
+                                      '${date.day.toString()}/${date.month.toString()}/20 ',
+                                      style:
+                                          TextStyle(color: Color(0xFF6b3600)),
+                                    )),
+                          Text(' at '),
+                          Icon(
+                            Icons.timer,
+                            size: 19,
+                            color: AppColors.secondaryElement,
+                          ),
+                          SizedBox(width: 5),
+                          InkWell(
+                              onTap: () {
+                                _timeDialog(context);
+                              },
+                              child: Text(
+                                '$selectedTime ',
+                                style: TextStyle(color: Color(0xFF6b3600)),
+                              )),
+//                        InkWell(
+//                            onTap: () {
+//                              _locationDialog(context);
+//                            },
+//                            child: Icon(Icons.edit))
+                        ],
+                      ),
+                    ),
 
 //                    HeadingRow(
 //                      title: StringConst.OFFERS,

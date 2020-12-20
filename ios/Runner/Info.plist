@@ -36,19 +36,19 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>This app requires access to the camera.</string>
+	<string>This app requires access to the camera to capture your image for profile photo.</string>
 	<key>NSLocalizedDescription</key>
-	<string>This app requires access to the local storage.</string>
+	<string>This app requires access to the local storage for picking up photograph for your profile.</string>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open and in the background.</string>
+	<string>This app needs access to location when open and in the background to fetch your location in realtime so we can show products according to your location and adjust delivery charges and time according to where you live. For example- If you live in Sharjah then we show you the products available in the nearest restaurant and while deciding your delivery slot we take in account how far away you are from the restaurant. To provide easiness to you we auto detect your address using your current location, however you can also edit it if you want. We use your address to deliver the product to you.</string>
 	<key>NSLocationAlwaysUsageDescription</key>
-	<string>This app needs access to location when in the background.</string>
+	<string>This app needs access to location when in the background to fetch your location in realtime so we can show products according to your location and adjust delivery charges and time according to where you live.  For example- If you live in Sharjah then we show you the products available in the nearest restaurant and while deciding your delivery slot we take in account how far away you are from the restaurant. To provide easiness to you we auto detect your address using your current location, however you can also edit it if you want. We use your address to deliver the product to you.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
-	<string>This app needs access to location when open.</string>
+	<string>This app needs access to location when open to fetch your location in realtime so we can show products according to your location and adjust delivery charges and time according to where you live.  For example- If you live in Sharjah then we show you the products available in the nearest restaurant and while deciding your delivery slot we take in account how far away you are from the restaurant. To provide easiness to you we auto detect your address using your current location, however you can also edit it if you want. We use your address to deliver the product to you.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>This app does not require access to the microphone.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string>This app requires access to the photo library.</string>
+	<string>This app requires access to the photo library for picking up your photograph for profile image.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
