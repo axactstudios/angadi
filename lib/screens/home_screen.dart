@@ -195,7 +195,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     id() async {
-
       if (orderStatus != null) {
         if (orderStatus == 'Placed') {
           print('Function run');
@@ -205,7 +204,6 @@ class _HomeScreenState extends State<HomeScreen> {
               .forEach((element) {
             element.documents.forEach((element) {
               if (idorder == element.documentID) {
-
                 removeAll();
                 prefs.setString('Status', 'Not Placed');
               }
@@ -472,6 +470,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                           InkWell(
                                                             onTap: () async {
                                                               String status;
+                                                              Timestamp
+                                                                  deliveryDate;
                                                               await Firestore
                                                                   .instance
                                                                   .collection(
@@ -488,6 +488,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     status =
                                                                         element[
                                                                             'Status'];
+                                                                    deliveryDate =
+                                                                        element[
+                                                                            'DeliveryDate'];
+
                                                                     print(
                                                                         status);
                                                                   }
@@ -495,11 +499,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                                               });
                                                               print(status);
                                                               print(orderID);
-                                                              Timestamp
-                                                                  myTimeStamp =
-                                                                  Timestamp
-                                                                      .fromDate(
-                                                                          selectedDate);
+                                                              DateTime
+                                                                  myDateTime =
+                                                                  await deliveryDate
+                                                                      .toDate();
+
+                                                              // Timestamp
+                                                              //     myTimeStamp =
+                                                              //     Timestamp
+                                                              //         .fromDate(
+                                                              //             selectedDate);
 
                                                               pushNewScreen(
                                                                   context,
@@ -507,7 +516,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       bill(),
                                                                       orderID,
                                                                       status,
-                                                                      selectedDate));
+                                                                      myDateTime));
                                                             },
                                                             child: Text(
                                                                 'View Details',

@@ -424,7 +424,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   var l = 0;
   first() async {
     await Firestore.instance
-        .collection('Orders')
+        .collection('Ordercount')
         .document('ordercount')
         .snapshots()
         .listen((event) {
@@ -432,6 +432,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
       order = event['Numberoforders'];
     });
+    print('Checked');
     qty = await getQuantity(widget.restaurantDetail.name, '500 ML');
     present = await checkInWishlist();
     print('-------------%%%%%$present');
