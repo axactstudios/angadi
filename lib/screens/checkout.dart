@@ -1052,7 +1052,7 @@ class _CheckoutState extends State<Checkout> {
                                 ],
                               )
                     : Container(),
-                Padding(
+      type!='Takeaway'?Padding(
                   padding: const EdgeInsets.symmetric(
                       horizontal: 14.0, vertical: 10),
                   child: angadiButton(
@@ -1065,7 +1065,7 @@ class _CheckoutState extends State<Checkout> {
                       }));
                     },
                   ),
-                ),
+                ):Container(),
                 Padding(
                   padding:
                       const EdgeInsets.only(left: 12.0, bottom: 0, top: 20),
