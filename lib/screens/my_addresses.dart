@@ -59,7 +59,7 @@ class _MyAddressesState extends State<MyAddresses> {
       element.documents.forEach((element) {
         setState(() {
           Address add =
-              Address(element['address'], element['hno'], element['landmark']);
+              Address(element['address'], element['hno'], element['landmark'],element['Emirate'],element['Area']);
           alladresses.add(add);
         });
         print(id);
@@ -161,7 +161,7 @@ class _MyAddressesState extends State<MyAddresses> {
                           alladresses.clear();
                           for (int i = 0; i < snap.data.documents.length; i++) {
                             print(snap.data.documents.length);
-                            Address add=Address(snap.data.documents[i]['address'],snap.data.documents[i]['hno'],snap.data.documents[i]['landmark']);
+                            Address add=Address(snap.data.documents[i]['address'],snap.data.documents[i]['hno'],snap.data.documents[i]['landmark'],snap.data.documents[i]['Emirate'],snap.data.documents[i]['Area']);
                             alladresses.add(add);}
                           return  alladresses.length!=0
                               ?  Column(
@@ -185,6 +185,8 @@ class _MyAddressesState extends State<MyAddresses> {
                                             (item.hno!=null&&item.hno!='')?Text('Address : H.no. ${item.hno} , ${item.address}'):Text('Address :  ${item.address}'),
 
                                             (item.landmark!=null&&item.landmark!='')?Align(alignment:Alignment.bottomLeft,child: Text('Landmark : ${item.landmark}')):Text(''),
+                                        Align(alignment:Alignment.bottomLeft,child: Text('Emirate : ${item.emirate}')),
+                                        Align(alignment:Alignment.bottomLeft,child: Text('Area : ${item.area}'))
                                           ],
                                         ),
                                       )

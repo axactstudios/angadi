@@ -2,6 +2,8 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 import 'package:angadi/classes/cart.dart';
+import 'package:angadi/classes/emirates.dart';
+import 'package:angadi/classes/emiratesarea.dart';
 import 'package:angadi/screens/home_screen.dart';
 import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/my_addresses2.dart';
@@ -40,16 +42,24 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout> {
   String type = 'Delivery';
   List<Cart> cartItems = [];
+  List<Emirates>allemirates=[];
+  List<EmiratesArea>allareas=[];
+  String area;
+  List<String>areaname=[];
   DateTime selectedDate = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
   String selectedTime = '9 AM';
   DateTime date;
-  var addresstype = 'Apartment';
-  var color1 = true;
-  var color2 = false;
+  var addresstype = 'House';
+  var color1 = false;
+  var color2 = true;
   var color3 = false;
   double total;
+  String emirate2;
+  List<String>emiratesname=[];
   final addressController = TextEditingController();
+  final nameController=TextEditingController();
+  final phncontroller=TextEditingController();
   final buildingController = TextEditingController();
   final floorcontroller = TextEditingController();
   final flatcontroller = TextEditingController();
@@ -62,7 +72,7 @@ class _CheckoutState extends State<Checkout> {
   FirebaseAuth mAuth = FirebaseAuth.instance;
   GlobalKey key = new GlobalKey();
   final scaffoldState = GlobalKey<ScaffoldState>();
-
+String emirate;
   _pickTime() async {
     var today = DateTime.now();
     DateTime t = await showDatePicker(
@@ -391,6 +401,7 @@ class _CheckoutState extends State<Checkout> {
         ));
   }
 
+
   @override
   Widget build(BuildContext context) {
     print(_result);
@@ -624,47 +635,47 @@ class _CheckoutState extends State<Checkout> {
                         padding: const EdgeInsets.all(8.0),
                         child: Row(
                           children: [
-                            Container(
-                              width: MediaQuery.of(context).size.width * 0.31,
-                              height: MediaQuery.of(context).size.height * 0.08,
-                              child: OutlineButton(
-                                highlightedBorderColor: Color(0xFF6b3600),
-                                borderSide: BorderSide(
-                                    color: (color1)
-                                        ? Color(0xFF6b3600)
-                                        : Colors.grey),
-                                onPressed: () {
-                                  setState(() {
-                                    color1 = !color1;
-                                    color2 = false;
-                                    color3 = false;
-                                    addresstype = 'Apartment';
-                                  });
-                                },
-                                child: Padding(
-                                  padding: EdgeInsets.only(top: 8.0),
-                                  child: Column(
-                                    children: [
-                                      Image.asset('assets/images/apartment.png',
-                                          height: 25),
-                                      Text('Apartment',
-                                          style: TextStyle(
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .height *
-                                                  0.016,
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.w300))
-                                    ],
-                                  ),
-                                ),
-                                disabledBorderColor: Colors.grey,
-                                color: Color(0xFF6b3600),
-                              ),
-                            ),
-                            SizedBox(
-                                width:
-                                    MediaQuery.of(context).size.width * 0.04),
+//                            Container(
+//                              width: MediaQuery.of(context).size.width * 0.31,
+//                              height: MediaQuery.of(context).size.height * 0.08,
+//                              child: OutlineButton(
+//                                highlightedBorderColor: Color(0xFF6b3600),
+//                                borderSide: BorderSide(
+//                                    color: (color1)
+//                                        ? Color(0xFF6b3600)
+//                                        : Colors.grey),
+//                                onPressed: () {
+//                                  setState(() {
+//                                    color1 = !color1;
+//                                    color2 = false;
+//                                    color3 = false;
+//                                    addresstype = 'Apartment';
+//                                  });
+//                                },
+//                                child: Padding(
+//                                  padding: EdgeInsets.only(top: 8.0),
+//                                  child: Column(
+//                                    children: [
+//                                      Image.asset('assets/images/apartment.png',
+//                                          height: 25),
+//                                      Text('Apartment',
+//                                          style: TextStyle(
+//                                              fontSize: MediaQuery.of(context)
+//                                                      .size
+//                                                      .height *
+//                                                  0.016,
+//                                              color: Colors.black,
+//                                              fontWeight: FontWeight.w300))
+//                                    ],
+//                                  ),
+//                                ),
+//                                disabledBorderColor: Colors.grey,
+//                                color: Color(0xFF6b3600),
+//                              ),
+//                            ),
+//                            SizedBox(
+//                                width:
+//                                    MediaQuery.of(context).size.width * 0.04),
                             OutlineButton(
                               highlightedBorderColor: Color(0xFF6b3600),
                               borderSide: BorderSide(
@@ -685,7 +696,7 @@ class _CheckoutState extends State<Checkout> {
                                   children: [
                                     Image.asset('assets/images/house.png',
                                         height: 25),
-                                    Text('House',
+                                    Text('House/Apartment ',
                                         style: TextStyle(
                                             color: Colors.black,
                                             fontWeight: FontWeight.w300))
@@ -698,35 +709,39 @@ class _CheckoutState extends State<Checkout> {
                             SizedBox(
                                 width:
                                     MediaQuery.of(context).size.width * 0.04),
-                            OutlineButton(
-                              highlightedBorderColor: Color(0xFF6b3600),
-                              borderSide: BorderSide(
-                                  color: (color3)
-                                      ? Color(0xFF6b3600)
-                                      : Colors.grey),
-                              onPressed: () {
-                                setState(() {
-                                  color3 = !color3;
-                                  color2 = false;
-                                  color1 = false;
-                                  addresstype = 'Office';
-                                });
-                              },
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Column(
-                                  children: [
-                                    Image.asset('assets/images/office.png',
-                                        height: 25),
-                                    Text('Office',
-                                        style: TextStyle(
-                                            color: Colors.black,
-                                            fontWeight: FontWeight.w300))
-                                  ],
+                            Container(
+                              width:MediaQuery.of(context).size.width*0.4,
+                              child: OutlineButton(
+
+                                highlightedBorderColor: Color(0xFF6b3600),
+                                borderSide: BorderSide(
+                                    color: (color3)
+                                        ? Color(0xFF6b3600)
+                                        : Colors.grey),
+                                onPressed: () {
+                                  setState(() {
+                                    color3 = !color3;
+                                    color2 = false;
+                                    color1 = false;
+                                    addresstype = 'Office';
+                                  });
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Column(
+                                    children: [
+                                      Image.asset('assets/images/office.png',
+                                          height: 25),
+                                      Text('Office',
+                                          style: TextStyle(
+                                              color: Colors.black,
+                                              fontWeight: FontWeight.w300))
+                                    ],
+                                  ),
                                 ),
+                                disabledBorderColor: Colors.grey,
+                                color: Color(0xFF6b3600),
                               ),
-                              disabledBorderColor: Colors.grey,
-                              color: Color(0xFF6b3600),
                             )
                           ],
                         ),
@@ -859,6 +874,150 @@ class _CheckoutState extends State<Checkout> {
                         : (addresstype == 'House')
                             ? Column(
                                 children: [
+                                  StreamBuilder( stream: Firestore.instance.collection('Emirates').snapshots(),
+                                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+                                        if (snap.hasData && !snap.hasError && snap.data != null) {
+                                          allemirates.clear();
+                                          emiratesname.clear();
+                                          for (int i = 0; i < snap.data.documents.length; i++) {
+                                            print(snap.data.documents.length);
+                                             emirate2=snap.data.documents[0]['name'];
+                                            emiratesname.add(snap.data.documents[i]['name']);
+                                            Emirates emi=Emirates(snap.data.documents[i]['deliveryCharge'],snap.data.documents[i]['minOrderPrice'],snap.data.documents[i]['name']);
+                                            allemirates.add(emi);}
+                                          return  allemirates.length!=0
+                                              ?  Column(
+                                            children: [
+                                            Container(
+                                              width:MediaQuery.of(context).size.width*0.9,
+                                              child: DropdownButtonHideUnderline(
+                child: new DropdownButton<String>(
+                  hint: Text('Emirates'),
+ value:emirate,
+                  items: emiratesname
+                  .map((String value) {
+                    return new DropdownMenuItem<String>(
+                      value: value,
+                      child: new Text(value),
+                    );
+                  }).toList(),
+                  onChanged: (String newValue) {
+                    setState(() {
+                      emirate=newValue;
+                      emirate2=newValue;
+                      print(emirate);
+
+//                      Navigator.pop(context);
+                    });
+                  },
+                ),
+              ),
+                                            ),
+
+                                            ],
+                                          ):Container();
+                                        }
+                                        else{
+                                          return Container();
+                                        }
+                                      }
+                                  ),
+                                  StreamBuilder( stream: Firestore.instance.collection('EmiratesArea').where('Emirate',isEqualTo:emirate2).snapshots(),
+                                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+                                        if (snap.hasData && !snap.hasError && snap.data != null) {
+                                          allareas.clear();
+                                          areaname.clear();
+                                          for (int i = 0; i < snap.data.documents.length; i++) {
+                                            print(snap.data.documents.length);
+
+                                            areaname.add(snap.data.documents[i]['name']);
+
+                                            EmiratesArea emi2=EmiratesArea(snap.data.documents[i]['Emirate'],snap.data.documents[i]['deliveryCharge'],snap.data.documents[i]['minOrderPrice'],snap.data.documents[i]['name'],snap.data.documents[i]['zone']);
+                                            allareas.add(emi2);}
+                                          areaname.add('Others');
+                                          return  areaname.length!=0
+                                              ?  Column(
+                                            children: [
+                                              Container(
+                                                width:MediaQuery.of(context).size.width*0.9,
+                                                child: DropdownButtonHideUnderline(
+                                                  child: new DropdownButton<String>(
+                                                    hint: Text('Area'),
+                                                    value:area,
+                                                    items: areaname
+                                                        .map((String value) {
+                                                      return new DropdownMenuItem<String>(
+                                                        value: value,
+                                                        child: new Text(value),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (String newValue) {
+                                                      setState(() {
+                                                        area=newValue;
+                                                        print(area);
+
+//                      Navigator.pop(context);
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+
+                                            ],
+                                          ):Container();
+                                        }
+                                        else{
+                                          return Container();
+                                        }
+                                      }
+                                  ),
+//                                  Padding(
+//                                    padding: const EdgeInsets.all(8.0),
+//                                    child: TextFormField(
+//                                      decoration: InputDecoration(
+//                                          border: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          enabledBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          focusedBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Color(0xFF6b3600))),
+//                                          hintText: 'Name*'),
+//                                      controller: nameController,
+//                                    ),
+//                                  ),
+//                                  Padding(
+//                                    padding: const EdgeInsets.all(8.0),
+//                                    child: TextFormField(
+//                                      decoration: InputDecoration(
+//                                          border: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          enabledBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          focusedBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Color(0xFF6b3600))),
+//                                          hintText: 'Phone no*'),
+//                                      controller: phncontroller,
+//                                    ),
+//                                  ),
+
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
@@ -878,7 +1037,7 @@ class _CheckoutState extends State<Checkout> {
                                                   BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Color(0xFF6b3600))),
-                                          hintText: 'Street'),
+                                          hintText: 'Building name/no.,floor,apartment or villa no.*'),
                                       controller: buildingController,
                                     ),
                                   ),
@@ -888,46 +1047,24 @@ class _CheckoutState extends State<Checkout> {
                                       decoration: InputDecoration(
                                           border: OutlineInputBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(2),
+                                              BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Colors.grey)),
                                           enabledBorder: OutlineInputBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(2),
+                                              BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Colors.grey)),
                                           focusedBorder: OutlineInputBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(2),
+                                              BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Color(0xFF6b3600))),
-                                          hintText: 'Area'),
-                                      controller: floorcontroller,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText: 'Landmark'),
+                                          hintText: 'Street name*'),
                                       controller: flatcontroller,
                                     ),
                                   ),
+
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
@@ -947,7 +1084,7 @@ class _CheckoutState extends State<Checkout> {
                                                   BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Color(0xFF6b3600))),
-                                          hintText: 'Additional Directions'),
+                                          hintText: 'Additional Directions/Nearest Landmark'),
                                       maxLines: 2,
                                       controller: additionalcontroller,
                                     ),
@@ -956,95 +1093,195 @@ class _CheckoutState extends State<Checkout> {
                               )
                             : Column(
                                 children: [
+                                  StreamBuilder( stream: Firestore.instance.collection('Emirates').snapshots(),
+                                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+                                        if (snap.hasData && !snap.hasError && snap.data != null) {
+                                          allemirates.clear();
+                                          emiratesname.clear();
+                                          for (int i = 0; i < snap.data.documents.length; i++) {
+                                            print(snap.data.documents.length);
+                                            emirate2=snap.data.documents[0]['name'];
+                                            emiratesname.add(snap.data.documents[i]['name']);
+                                            Emirates emi=Emirates(snap.data.documents[i]['deliveryCharge'],snap.data.documents[i]['minOrderPrice'],snap.data.documents[i]['name']);
+                                            allemirates.add(emi);}
+                                          return  allemirates.length!=0
+                                              ?  Column(
+                                            children: [
+                                              Container(
+                                                width:MediaQuery.of(context).size.width*0.9,
+                                                child: DropdownButtonHideUnderline(
+                                                  child: new DropdownButton<String>(
+                                                    hint: Text('Emirates'),
+                                                    value:emirate,
+                                                    items: emiratesname
+                                                        .map((String value) {
+                                                      return new DropdownMenuItem<String>(
+                                                        value: value,
+                                                        child: new Text(value),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (String newValue) {
+                                                      setState(() {
+                                                        emirate=newValue;
+                                                        emirate2=newValue;
+                                                        print(emirate);
+
+//                      Navigator.pop(context);
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+
+                                            ],
+                                          ):Container();
+                                        }
+                                        else{
+                                          return Container();
+                                        }
+                                      }
+                                  ),
+                                  StreamBuilder( stream: Firestore.instance.collection('EmiratesArea').where('Emirate',isEqualTo:emirate2).snapshots(),
+                                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+                                        if (snap.hasData && !snap.hasError && snap.data != null) {
+                                          allareas.clear();
+                                          areaname.clear();
+                                          for (int i = 0; i < snap.data.documents.length; i++) {
+                                            print(snap.data.documents.length);
+
+                                            areaname.add(snap.data.documents[i]['name']);
+
+                                            EmiratesArea emi2=EmiratesArea(snap.data.documents[i]['Emirate'],snap.data.documents[i]['deliveryCharge'],snap.data.documents[i]['minOrderPrice'],snap.data.documents[i]['name'],snap.data.documents[i]['zone']);
+                                            allareas.add(emi2);}
+                                          areaname.add('Others');
+                                          return  areaname.length!=0
+                                              ?  Column(
+                                            children: [
+                                              Container(
+                                                width:MediaQuery.of(context).size.width*0.9,
+                                                child: DropdownButtonHideUnderline(
+                                                  child: new DropdownButton<String>(
+                                                    hint: Text('Area'),
+                                                    value:area,
+                                                    items: areaname
+                                                        .map((String value) {
+                                                      return new DropdownMenuItem<String>(
+                                                        value: value,
+                                                        child: new Text(value),
+                                                      );
+                                                    }).toList(),
+                                                    onChanged: (String newValue) {
+                                                      setState(() {
+                                                        area=newValue;
+                                                        print(area);
+
+//                      Navigator.pop(context);
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ),
+
+                                            ],
+                                          ):Container();
+                                        }
+                                        else{
+                                          return Container();
+                                        }
+                                      }
+                                  ),
+//                                  Padding(
+//                                    padding: const EdgeInsets.all(8.0),
+//                                    child: TextFormField(
+//                                      decoration: InputDecoration(
+//                                          border: OutlineInputBorder(
+//                                              borderRadius:
+//                                              BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          enabledBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                              BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          focusedBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                              BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Color(0xFF6b3600))),
+//                                          hintText: 'Name*'),
+//                                      controller: nameController,
+//                                    ),
+//                                  ),
+//                                  Padding(
+//                                    padding: const EdgeInsets.all(8.0),
+//                                    child: TextFormField(
+//                                      decoration: InputDecoration(
+//                                          border: OutlineInputBorder(
+//                                              borderRadius:
+//                                              BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          enabledBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                              BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          focusedBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                              BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Color(0xFF6b3600))),
+//                                          hintText: 'Phone no*'),
+//                                      controller: phncontroller,
+//                                    ),
+//                                  ),
+
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
                                       decoration: InputDecoration(
                                           border: OutlineInputBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(2),
+                                              BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Colors.grey)),
                                           enabledBorder: OutlineInputBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(2),
+                                              BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Colors.grey)),
                                           focusedBorder: OutlineInputBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(2),
+                                              BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Color(0xFF6b3600))),
-                                          hintText: 'Building'),
+                                          hintText: 'Building name/no.,floor*'),
                                       controller: buildingController,
                                     ),
                                   ),
+
+
                                   Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: TextFormField(
                                       decoration: InputDecoration(
                                           border: OutlineInputBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(2),
+                                              BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Colors.grey)),
                                           enabledBorder: OutlineInputBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(2),
+                                              BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Colors.grey)),
                                           focusedBorder: OutlineInputBorder(
                                               borderRadius:
-                                                  BorderRadius.circular(2),
+                                              BorderRadius.circular(2),
                                               borderSide: BorderSide(
                                                   color: Color(0xFF6b3600))),
-                                          hintText: 'Floor'),
-                                      controller: floorcontroller,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText: 'Landmark'),
-                                      controller: flatcontroller,
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText: 'Additional Directions'),
+                                          hintText: 'Additional Directions/Nearest Landmark'),
                                       maxLines: 2,
                                       controller: additionalcontroller,
                                     ),
@@ -1519,7 +1756,7 @@ class _CheckoutState extends State<Checkout> {
                 'Qty': quantities,
                 'Type': orderType,
                 'UserID': user.uid,
-                'Address': 'Street :${buildingController.text}, Area:${floorcontroller.text}, Landmark:${flatcontroller.text},Additional Directions :${additionalcontroller.text}',
+                'Address': 'Emirate:${emirate},Area:${area},${buildingController.text},Additional Directions :${additionalcontroller.text}',
 
                 'DeliveryDate':DateTime(selectedDate.year, selectedDate.month,
                     selectedDate.day, dd),
@@ -1548,7 +1785,7 @@ class _CheckoutState extends State<Checkout> {
                     'Qty': quantities,
                     'Type': orderType,
                     'UserID': user.uid,
-                     'Address':'Building:${buildingController.text},Floor:${floorcontroller.text},Landmark:${flatcontroller.text},Additional Directions:${additionalcontroller.text}',
+                     'Address':'Emirate:${emirate},Area:${area},${buildingController.text},Additional Directions:${additionalcontroller.text}',
 
                     'DeliveryDate': DateTime(selectedDate.year,
                         selectedDate.month, selectedDate.day, dd),

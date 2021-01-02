@@ -1,4 +1,6 @@
 import 'package:angadi/routes/router.dart';
+import 'package:angadi/screens/new_review_screen.dart';
+import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -40,6 +42,9 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
     fontWeight: FontWeight.w600,
     fontSize: Sizes.TEXT_SIZE_18,
   );
+  void navigate(){
+    Navigator.push(context,MaterialPageRoute(builder:(context)=>NewReviewScreen()));
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,52 +68,63 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
         ),
       ),
       body: Container(
-        child: StreamBuilder(
-          stream: Firestore.instance.collection('Reviews').snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
-            if (snap.hasData && !snap.hasError && snap.data != null) {
-              reviews.clear();
+        child: Column(
+          children: [
+            Container(
+              height:MediaQuery.of(context).size.height*0.75,
+              child: StreamBuilder(
+                stream: Firestore.instance.collection('Reviews').snapshots(),
+                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+                  if (snap.hasData && !snap.hasError && snap.data != null) {
+                    reviews.clear();
 
-              for (int i = 0; i < snap.data.documents.length; i++) {
-                if (snap.data.documents[i]['dishName'] ==
-                    widget.reviewRating.name) {
-                  reviews.add(ListTile(
-                    leading: Image.network(snap.data.documents[i]['userImage']),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        Text(
-                          snap.data.documents[i]['userName'],
-                          style: subHeadingTextStyle,
-                        ),
-                        Ratings(snap.data.documents[i]['rating']),
-                      ],
-                    ),
-                    contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                    subtitle: Text(
-                      snap.data.documents[i]['details'],
-                      style: addressTextStyle,
-                    ),
-                  ));
-                }
-              }
-              return reviews.length != 0
-                  ? Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: ListView(
-                        children: reviews,
-                      ),
-                    )
-                  : Container();
-            } else
-              return Container(
-                  child: Center(
-                      child: Text(
-                "No Data",
-                style: TextStyle(color: Colors.black),
-              )));
-          },
+                    for (int i = 0; i < snap.data.documents.length; i++) {
+                      if (snap.data.documents[i]['dishName'] ==
+                          widget.reviewRating.name) {
+                        reviews.add(ListTile(
+                          leading: Image.network(snap.data.documents[i]['userImage']),
+                          title: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: <Widget>[
+                              Text(
+                                snap.data.documents[i]['userName'],
+                                style: subHeadingTextStyle,
+                              ),
+                              Ratings(snap.data.documents[i]['rating']),
+                            ],
+                          ),
+                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                          subtitle: Text(
+                            snap.data.documents[i]['details'],
+                            style: addressTextStyle,
+                          ),
+                        ));
+                      }
+                    }
+                    return reviews.length != 0
+                        ? Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: ListView(
+                              shrinkWrap: true,
+                              physics: ClampingScrollPhysics(),
+                              children: reviews,
+                            ),
+                          )
+                        : Container();
+                  } else
+                    return Container(
+                        child: Center(
+                            child: Text(
+                      "No Data",
+                      style: TextStyle(color: Colors.black),
+                    )));
+                },
+              ),
+            ),
+            Align(alignment:Alignment.bottomCenter,child: angadiButton('Add your review',onTap:navigate))
+          ],
         ),
+
       ),
     );
   }

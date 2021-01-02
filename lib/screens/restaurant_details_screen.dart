@@ -4,6 +4,7 @@ import 'package:angadi/classes/cart.dart';
 import 'package:angadi/classes/dish.dart';
 import 'package:angadi/classes/wishlist.dart';
 import 'package:angadi/routes/router.gr.dart';
+import 'package:angadi/screens/review_rating_screen.dart';
 import 'package:angadi/screens/wishlist_screen.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/services/database_helper_wishlist.dart';

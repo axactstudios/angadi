@@ -50,7 +50,7 @@ class _MyAddresses2State extends State<MyAddresses2> {
 
     print('--------------');
     await Firestore.instance.collection('Users').document(widget.id).collection('Address').snapshots().forEach((element) {element.documents.forEach((element) {setState(() {
-      Address add =Address(element['address'],element['hno'],element['landmark']);
+      Address add =Address(element['address'],element['hno'],element['landmark'],element['Emirate'],element['Area']);
       alladresses.add(add);
     });
     print(id);
@@ -142,7 +142,7 @@ class _MyAddresses2State extends State<MyAddresses2> {
                           alladresses.clear();
                           for (int i = 0; i < snap.data.documents.length; i++) {
                             print(snap.data.documents.length);
-                            Address add=Address(snap.data.documents[i]['address'],snap.data.documents[i]['hno'],snap.data.documents[i]['landmark']);
+                            Address add=Address(snap.data.documents[i]['address'],snap.data.documents[i]['hno'],snap.data.documents[i]['landmark'],snap.data.documents[i]['Emirate'],snap.data.documents[i]['Area']);
                             alladresses.add(add);}
                           return  alladresses.length!=0
                               ?  Column(
@@ -162,7 +162,7 @@ class _MyAddresses2State extends State<MyAddresses2> {
                                       SharedPreferences prefs= await SharedPreferences.getInstance();
                                       var orderid =prefs.getString('Orderid');
 
-                                      (item.hno!=null&&item.hno!=''&&item.landmark!=null&&item.landmark!='')?Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('H.no. ${item.hno} , ${item.address} , near ${item.landmark}',orderid))):(item.hno!=null&&item.hno!='')?Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('H.no. ${item.hno} , ${item.address} ',orderid))):Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('${item.address} ',orderid)));
+                                      (item.hno!=null&&item.hno!=''&&item.landmark!=null&&item.landmark!='')?Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('H.no. ${item.hno} , ${item.address} , near ${item.landmark},Emirate: ${item.emirate}, Area : ${item.area}',orderid))):(item.hno!=null&&item.hno!='')?Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('H.no. ${item.hno} , ${item.address}, Emirate: ${item.emirate}, Area:${item.area} ',orderid))):Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('${item.address} , Emirate: ${item.emirate} , Area: ${item.area}',orderid)));
                                     },
                                     child: Card(
                                         child:Padding(
@@ -173,6 +173,8 @@ class _MyAddresses2State extends State<MyAddresses2> {
                                               (item.hno!=null&&item.hno!='')?Text('Address : H.no. ${item.hno} , ${item.address}'):Text('Address :  ${item.address}'),
 
                                               (item.landmark!=null&&item.landmark!='')?Align(alignment:Alignment.bottomLeft,child: Text('Landmark : ${item.landmark}')):Text(''),
+                                          Align(alignment:Alignment.bottomLeft,child: Text('Emirate : ${item.emirate}')),
+                                          Align(alignment:Alignment.bottomLeft,child: Text('Area: ${item.area}')),
                                             ],
                                           ),
                                         )

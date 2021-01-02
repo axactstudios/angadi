@@ -166,30 +166,30 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
           ),
           child: ListView(
             children: <Widget>[
-              FoodyBiteSearchInputField(
-                Icons.search,
-                controller: controller,
-                textFormFieldStyle:
-                    Styles.customNormalTextStyle(color: AppColors.accentText),
-                hintText: StringConst.HINT_TEXT_HOME_SEARCH_BAR,
-                hintTextStyle:
-                    Styles.customNormalTextStyle(color: AppColors.accentText),
-                hasSuffixIcon: showSuffixIcon,
-                suffixIcon: suffixIcon(),
-                suffixIconImagePath: Icons.sort,
-                borderWidth: 0.0,
-                onTapOfLeadingIcon: () {},
-                onTapOfSuffixIcon: () {
-                  controller.clear();
-                  changeState(
-                    showSuffixIcon: false,
-                    isCardShowing: false,
-                    hasRestaurantBeenAdded: false,
-                  );
-                },
-                borderStyle: BorderStyle.solid,
-                onChanged: (value) => _onChange(value),
-              ),
+//              FoodyBiteSearchInputField(
+//                Icons.search,
+//                controller: controller,
+//                textFormFieldStyle:
+//                    Styles.customNormalTextStyle(color: AppColors.accentText),
+//                hintText: StringConst.HINT_TEXT_HOME_SEARCH_BAR,
+//                hintTextStyle:
+//                    Styles.customNormalTextStyle(color: AppColors.accentText),
+//                hasSuffixIcon: showSuffixIcon,
+//                suffixIcon: suffixIcon(),
+//                suffixIconImagePath: Icons.sort,
+//                borderWidth: 0.0,
+//                onTapOfLeadingIcon: () {},
+//                onTapOfSuffixIcon: () {
+//                  controller.clear();
+//                  changeState(
+//                    showSuffixIcon: false,
+//                    isCardShowing: false,
+//                    hasRestaurantBeenAdded: false,
+//                  );
+//                },
+//                borderStyle: BorderStyle.solid,
+//                onChanged: (value) => _onChange(value),
+//              ),
               isCardShowing ? SpaceH30() : Container(),
               isCardShowing
                   ? FoodyBiteSearchCard(
