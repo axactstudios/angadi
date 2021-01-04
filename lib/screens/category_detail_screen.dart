@@ -66,6 +66,25 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     }
   }
 
+  void initState() {
+    getOrderCount();
+    super.initState();
+  }
+
+  int orderCount;
+
+  void getOrderCount() async {
+    await Firestore.instance
+        .collection('Ordercount')
+        .document('ordercount')
+        .snapshots()
+        .listen((event) {
+      print(event['Numberoforders'].toString());
+      orderCount = event['Numberoforders'];
+    });
+    print('Checked');
+  }
+
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
@@ -186,8 +205,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
               },
               child: Container(
                   alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-          SizedBox(width:8),
+                  child: FaIcon(FontAwesomeIcons.whatsapp,
+                      color: Color(0xFF6b3600)))),
+          SizedBox(width: 8),
           InkWell(
               onTap: () {
 //                print(1);
@@ -318,15 +338,21 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
 
               for (int i = 0; i < snap.data.documents.length; i++) {
 //              print(snap.data.documents[i]['url']);
+
                 if (snap.data.documents[i]['category'] == widget.categoryName)
                   dishes.add(Dish(
+                      id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
                       rating: snap.data.documents[i]['rating'],
                       price: snap.data.documents[i]['price'],
                       iPrice: snap.data.documents[i]['iPrice'],
                       desc: snap.data.documents[i]['description'],
-                      url: snap.data.documents[i]['url']));
+                      url: snap.data.documents[i]['url'],
+                      boughtTogetherDiscount: snap.data.documents[i]
+                          ['boughtTogetherDiscount'],
+                      boughtTogetherID: snap.data.documents[i]
+                          ['boughtTogether']));
                 print(snap.data.documents[i]['price']);
               }
 
@@ -383,18 +409,28 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                               return Container(
                                 margin: EdgeInsets.only(right: 4.0),
                                 child: FoodyBiteCard(
-                                  onTap: () {
+                                  onTap: () async {
+                                    Dish boughtTogether;
+                                    for (int i = 0; i < dishes.length; i++) {
+                                      if (dishes[i].id ==
+                                          dishes[index].boughtTogetherID) {
+                                        boughtTogether = await dishes[i];
+                                      }
+                                    }
                                     pushNewScreen(
                                       context,
                                       screen: RestaurantDetailsScreen(
                                         RestaurantDetails(
-                                          url: dishes[index].url,
-                                          name: dishes[index].name,
-                                          desc: dishes[index].desc,
-                                          category: dishes[index].category,
-                                          rating: dishes[index].rating,
-                                          price: dishes[index].price,
-                                        ),
+                                            url: dishes[index].url,
+                                            name: dishes[index].name,
+                                            desc: dishes[index].desc,
+                                            category: dishes[index].category,
+                                            rating: dishes[index].rating,
+                                            price: dishes[index].price,
+                                            boughtTogetherDiscount:
+                                                dishes[index]
+                                                    .boughtTogetherDiscount,
+                                            boughtTogether: boughtTogether),
                                       ),
                                       withNavBar:
                                           true, // OPTIONAL VALUE. True by default.
@@ -409,6 +445,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                   price: dishes[index].price,
                                   iPrice: dishes[index].iPrice,
                                   category: dishes[index].category,
+                                  orderCount: orderCount,
 //                            distance: distance[index],
                                   address: dishes[index].desc,
                                 ),
@@ -430,23 +467,35 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                 return Container(
                                   margin: EdgeInsets.only(right: 4.0),
                                   child: FoodyBiteCard2(
-                                    onTap: () => pushNewScreen(
-                                      context,
-                                      screen: RestaurantDetailsScreen(
-                                        RestaurantDetails(
-                                          url: dishes[index].url,
-                                          name: dishes[index].name,
-                                          desc: dishes[index].desc,
-                                          category: dishes[index].category,
-                                          rating: dishes[index].rating,
-                                          price: dishes[index].price,
+                                    onTap: () async {
+                                      Dish boughtTogether;
+                                      for (int i = 0; i < dishes.length; i++) {
+                                        if (dishes[i].id ==
+                                            dishes[index].boughtTogetherID) {
+                                          boughtTogether = await dishes[i];
+                                        }
+                                      }
+                                      pushNewScreen(
+                                        context,
+                                        screen: RestaurantDetailsScreen(
+                                          RestaurantDetails(
+                                              url: dishes[index].url,
+                                              name: dishes[index].name,
+                                              desc: dishes[index].desc,
+                                              category: dishes[index].category,
+                                              rating: dishes[index].rating,
+                                              price: dishes[index].price,
+                                              boughtTogetherDiscount:
+                                                  dishes[index]
+                                                      .boughtTogetherDiscount,
+                                              boughtTogether: boughtTogether),
                                         ),
-                                      ),
-                                      withNavBar:
-                                          true, // OPTIONAL VALUE. True by default.
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    ),
+                                        withNavBar:
+                                            true, // OPTIONAL VALUE. True by default.
+                                        pageTransitionAnimation:
+                                            PageTransitionAnimation.cupertino,
+                                      );
+                                    },
                                     imagePath: dishes[index].url,
 //                            status: status[index],
                                     cardTitle: dishes[index].name,
@@ -454,6 +503,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                     price: dishes[index].price,
                                     iPrice: dishes[index].iPrice,
                                     category: dishes[index].category,
+                                    orderCount: orderCount,
 //                            distance: distance[index],
                                     address: dishes[index].desc,
                                   ),

@@ -154,7 +154,18 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
   }
 
+  int orderCount;
   getSharedPrefs() async {
+    await Firestore.instance
+        .collection('Ordercount')
+        .document('ordercount')
+        .snapshots()
+        .listen((event) {
+      print(event['Numberoforders'].toString());
+
+      orderCount = event['Numberoforders'];
+    });
+    print('Checked');
     prefs = await SharedPreferences.getInstance();
     orderStatus = prefs.getString('Status');
     idorder = prefs.getString('Orderid');
@@ -283,86 +294,129 @@ class _HomeScreenState extends State<HomeScreen> {
               dishesSpecial.clear();
               dishesTop.clear();
               for (int i = 0; i < snap.data.documents.length; i++) {
-//              print(snap.data.documents[i]['url']);
+                // print('Imp ${snap.data.documents[i]['boughtTogether']}');
                 dishes.add(Dish(
                     name: snap.data.documents[i]['name'],
+                    boughtTogetherDiscount: snap.data.documents[i]
+                        ['boughtTogetherDiscount'],
+                    id: snap.data.documents[i].documentID,
                     category: snap.data.documents[i]['category'],
                     rating: snap.data.documents[i]['rating'].toString(),
                     price: snap.data.documents[i]['price'],
                     desc: snap.data.documents[i]['description'],
-                    url: snap.data.documents[i]['url']));
+                    url: snap.data.documents[i]['url'],
+                    boughtTogetherID: snap.data.documents[i]
+                        ['boughtTogether']));
 //                print(snap.data.documents[i]['name']);
                 if (snap.data.documents[i]['special']) {
                   dishesSpecial.add(Dish(
+                      boughtTogetherDiscount: snap.data.documents[i]
+                          ['boughtTogetherDiscount'],
+                      id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
                       rating: snap.data.documents[i]['rating'].toString(),
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
-                      url: snap.data.documents[i]['url']));
+                      url: snap.data.documents[i]['url'],
+                      boughtTogetherID: snap.data.documents[i]
+                          ['boughtTogether']));
 //                  print(snap.data.documents[i]['name']);
                   special.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
-                      onTap: () => pushNewScreen(
-                        context,
-                        screen: RestaurantDetailsScreen(
-                          RestaurantDetails(
-                            url: dishes[i].url,
-                            name: dishes[i].name,
-                            desc: dishes[i].desc,
-                            category: dishes[i].category,
-                            rating: dishes[i].rating,
-                            price: dishes[i].price,
+                      onTap: () async {
+                        Dish boughtTogether;
+                        for (int ind = 0; ind < dishes.length; ind++) {
+                          if (dishes[ind].id == dishes[i].boughtTogetherID) {
+                            boughtTogether = await dishes[ind];
+                          }
+                        }
+                        pushNewScreen(
+                          context,
+                          screen: RestaurantDetailsScreen(
+                            RestaurantDetails(
+                                boughtTogetherDiscount:
+                                    dishes[i].boughtTogetherDiscount,
+                                url: dishes[i].url,
+                                name: dishes[i].name,
+                                desc: dishes[i].desc,
+                                category: dishes[i].category,
+                                rating: dishes[i].rating,
+                                price: dishes[i].price,
+                                boughtTogether: boughtTogether),
                           ),
-                        ),
-                        withNavBar: true, // OPTIONAL VALUE. True by default.
-                        pageTransitionAnimation:
-                            PageTransitionAnimation.cupertino,
-                      ),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+                      },
                       imagePath: snap.data.documents[i]['url'],
                       cardTitle: snap.data.documents[i]['name'],
                       rating: snap.data.documents[i]['rating'].toString(),
                       category: snap.data.documents[i]['category'],
                       price: snap.data.documents[i]['price'].toString(),
                       iPrice: snap.data.documents[i]['iPrice'].toString(),
+                      orderCount: orderCount,
                     ),
                   ));
                 }
                 if (snap.data.documents[i]['top']) {
                   dishesTop.add(Dish(
+                      boughtTogetherDiscount: snap.data.documents[i]
+                          ['boughtTogetherDiscount'],
+                      id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
                       rating: snap.data.documents[i]['rating'].toString(),
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
-                      url: snap.data.documents[i]['url']));
+                      url: snap.data.documents[i]['url'],
+                      boughtTogetherID: snap.data.documents[i]
+                          ['boughtTogether']));
 //                  print(snap.data.documents[i]['name']);
                   top.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
-                      onTap: () => pushNewScreen(
-                        context,
-                        screen: RestaurantDetailsScreen(
-                          RestaurantDetails(
-                            url: dishes[i].url,
-                            name: dishes[i].name,
-                            desc: dishes[i].desc,
-                            category: dishes[i].category,
-                            rating: dishes[i].rating,
-                            price: dishes[i].price,
+                      onTap: () async {
+                        Dish boughtTogether;
+                        await print(dishes.length);
+                        for (int ind = 0; ind < dishes.length; ind++) {
+                          print('Checking $ind');
+                          print(dishes[ind].id);
+                          print(dishes[i].boughtTogetherID);
+                          if (dishes[ind].id == dishes[i].boughtTogetherID) {
+                            boughtTogether = await dishes[ind];
+                            print('Got it');
+                          }
+                        }
+                        await print('---------------$boughtTogether');
+                        pushNewScreen(
+                          context,
+                          screen: RestaurantDetailsScreen(
+                            RestaurantDetails(
+                                boughtTogetherDiscount:
+                                    dishes[i].boughtTogetherDiscount,
+                                url: dishes[i].url,
+                                name: dishes[i].name,
+                                desc: dishes[i].desc,
+                                category: dishes[i].category,
+                                rating: dishes[i].rating,
+                                price: dishes[i].price,
+                                boughtTogether: boughtTogether),
                           ),
-                        ),
-                        withNavBar: true, // OPTIONAL VALUE. True by default.
-                        pageTransitionAnimation:
-                            PageTransitionAnimation.cupertino,
-                      ),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+                      },
                       imagePath: snap.data.documents[i]['url'],
                       cardTitle: snap.data.documents[i]['name'],
                       rating: snap.data.documents[i]['rating'].toString(),
                       category: snap.data.documents[i]['category'],
                       price: snap.data.documents[i]['price'].toString(),
                       iPrice: snap.data.documents[i]['iPrice'].toString(),
+                      orderCount: orderCount,
                     ),
                   ));
                 }
@@ -371,22 +425,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   trending.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
-                      onTap: () => pushNewScreen(
-                        context,
-                        screen: RestaurantDetailsScreen(
-                          RestaurantDetails(
-                            url: dishes[i].url,
-                            name: dishes[i].name,
-                            desc: dishes[i].desc,
-                            category: dishes[i].category,
-                            rating: dishes[i].rating,
-                            price: dishes[i].price,
+                      orderCount: orderCount,
+                      onTap: () async {
+                        Dish boughtTogether;
+                        for (int ind = 0; ind < dishes.length; ind++) {
+                          if (dishes[ind].id == dishes[i].boughtTogetherID) {
+                            boughtTogether = await dishes[ind];
+                          }
+                        }
+                        pushNewScreen(
+                          context,
+                          screen: RestaurantDetailsScreen(
+                            RestaurantDetails(
+                                boughtTogetherDiscount:
+                                    dishes[i].boughtTogetherDiscount,
+                                url: dishes[i].url,
+                                name: dishes[i].name,
+                                desc: dishes[i].desc,
+                                category: dishes[i].category,
+                                rating: dishes[i].rating,
+                                price: dishes[i].price,
+                                boughtTogether: boughtTogether),
                           ),
-                        ),
-                        withNavBar: true, // OPTIONAL VALUE. True by default.
-                        pageTransitionAnimation:
-                            PageTransitionAnimation.cupertino,
-                      ),
+                          withNavBar: true, // OPTIONAL VALUE. True by default.
+                          pageTransitionAnimation:
+                              PageTransitionAnimation.cupertino,
+                        );
+                      },
                     ),
                   ));
               }

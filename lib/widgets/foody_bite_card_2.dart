@@ -1,11 +1,13 @@
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/values/values.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'card_tags.dart';
 
@@ -31,29 +33,30 @@ class FoodyBiteCard2 extends StatefulWidget {
   final double cardElevation;
   final double ratingsAndStatusCardElevation;
   final List<String> followersImagePath;
+  final int orderCount;
 
-  FoodyBiteCard2({
-    this.status = "OPEN",
-    this.rating = "4.5",
-    this.imagePath,
-    this.cardTitle,
-    this.category,
-    this.distance,
-    this.address,
-    this.price,
-    this.iPrice,
-    this.width = 340.0,
-    this.cardHeight = 305.0,
-    this.imageHeight = 169.0,
-    this.tagRadius = 8.0,
-    this.onTap,
-    this.isThereStatus = true,
-    this.isThereRatings = true,
-    this.bookmark = false,
-    this.cardElevation = 4.0,
-    this.ratingsAndStatusCardElevation = 8.0,
-    this.followersImagePath,
-  });
+  FoodyBiteCard2(
+      {this.status = "OPEN",
+      this.rating = "4.5",
+      this.imagePath,
+      this.cardTitle,
+      this.category,
+      this.distance,
+      this.address,
+      this.price,
+      this.iPrice,
+      this.width = 340.0,
+      this.cardHeight = 305.0,
+      this.imageHeight = 169.0,
+      this.tagRadius = 8.0,
+      this.onTap,
+      this.isThereStatus = true,
+      this.isThereRatings = true,
+      this.bookmark = false,
+      this.cardElevation = 4.0,
+      this.ratingsAndStatusCardElevation = 8.0,
+      this.followersImagePath,
+      this.orderCount});
 
   @override
   _FoodyBiteCard2State createState() => _FoodyBiteCard2State();
@@ -109,6 +112,8 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
     });
   }
 
+  String orderid;
+
   void addToCart(
       {String name,
       String imgUrl,
@@ -122,6 +127,51 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
       DatabaseHelper.columnQuantity: qty,
       DatabaseHelper.columnQuantityTag: qtyTag
     };
+    if (cartItems.length == 0) {
+      await print('----------------$widget.orderCount');
+      if (widget.orderCount + 1 < 9) {
+        await setState(() {
+          orderid = 'ANG0000${widget.orderCount + 1}';
+        });
+      }
+      if (widget.orderCount + 1 > 10 && widget.orderCount + 1 < 99) {
+        await setState(() {
+          orderid = 'ANG000${widget.orderCount + 1}';
+        });
+      }
+      if (widget.orderCount + 1 > 99 && widget.orderCount + 1 < 999) {
+        await setState(() {
+          orderid = 'ANG00${widget.orderCount + 1}';
+        });
+      }
+      if (widget.orderCount + 1 > 999 && widget.orderCount + 1 < 9999) {
+        await setState(() {
+          orderid = 'ANG0${widget.orderCount + 1}';
+        });
+      }
+      if (widget.orderCount + 1 > 9999 && widget.orderCount + 1 < 99999) {
+        await setState(() {
+          orderid = 'ANG${widget.orderCount + 1}';
+        });
+      }
+      if (widget.orderCount + 1 > 99999) {
+        await setState(() {
+          orderid = 'ANG${widget.orderCount + 1}';
+        });
+      }
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('Orderid', orderid);
+      print(orderid);
+
+      prefs.setString('Status', 'Not placed');
+      await Firestore.instance
+          .collection('Ordercount')
+          .document('ordercount')
+          .updateData({
+        'Numberoforders': widget.orderCount + 1,
+      });
+    }
+
     Cart item = Cart.fromMap(row);
     final id = await dbHelper.insert(item);
     Fluttertoast.showToast(

@@ -100,12 +100,17 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                                 i++) {
 //              print(snap.data.documents[i]['url']);
                               dishes.add(Dish(
+                                  boughtTogetherDiscount: snap.data.documents[i]
+                                      ['boughtTogetherDiscount'],
+                                  id: snap.data.documents[i].documentID,
                                   name: snap.data.documents[i]['name'],
                                   category: snap.data.documents[i]['category'],
                                   rating: snap.data.documents[i]['rating'],
                                   price: snap.data.documents[i]['price'],
                                   desc: snap.data.documents[i]['description'],
-                                  url: snap.data.documents[i]['url']));
+                                  url: snap.data.documents[i]['url'],
+                                  boughtTogetherID: snap.data.documents[i]
+                                      ['boughtTogether']));
                               print(snap.data.documents[i]['name']);
                               if ((money != null
                                       ? int.parse(snap.data.documents[i]
@@ -125,23 +130,37 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                                 trending.add(Container(
                                   margin: EdgeInsets.only(right: 4.0),
                                   child: FoodyBiteCard(
-                                    onTap: () => pushNewScreen(
-                                      context,
-                                      screen: RestaurantDetailsScreen(
-                                        RestaurantDetails(
-                                          url: dishes[i].url,
-                                          name: dishes[i].name,
-                                          desc: dishes[i].desc,
-                                          category: dishes[i].category,
-                                          rating: dishes[i].rating,
-                                          price: dishes[i].price,
+                                    onTap: () async {
+                                      Dish boughtTogether;
+                                      for (int ind = 0;
+                                          ind < dishes.length;
+                                          ind++) {
+                                        if (dishes[ind].id ==
+                                            dishes[i].boughtTogetherID) {
+                                          boughtTogether = await dishes[ind];
+                                        }
+                                      }
+
+                                      pushNewScreen(
+                                        context,
+                                        screen: RestaurantDetailsScreen(
+                                          RestaurantDetails(
+                                              boughtTogetherDiscount: dishes[i]
+                                                  .boughtTogetherDiscount,
+                                              url: dishes[i].url,
+                                              name: dishes[i].name,
+                                              desc: dishes[i].desc,
+                                              category: dishes[i].category,
+                                              rating: dishes[i].rating,
+                                              price: dishes[i].price,
+                                              boughtTogether: boughtTogether),
                                         ),
-                                      ),
-                                      withNavBar:
-                                          true, // OPTIONAL VALUE. True by default.
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    ),
+                                        withNavBar:
+                                            true, // OPTIONAL VALUE. True by default.
+                                        pageTransitionAnimation:
+                                            PageTransitionAnimation.cupertino,
+                                      );
+                                    },
                                     imagePath: snap.data.documents[i]['url'],
                                     cardTitle: snap.data.documents[i]['name'],
                                     rating: snap.data.documents[i]['rating'],
@@ -287,34 +306,52 @@ class _TrendingRestaurantsScreen1State
                                 i++) {
 //              print(snap.data.documents[i]['url']);
                               dishes.add(Dish(
+                                  boughtTogetherDiscount: snap.data.documents[i]
+                                      ['boughtTogetherDiscount'],
+                                  id: snap.data.documents[i].documentID,
                                   name: snap.data.documents[i]['name'],
                                   category: snap.data.documents[i]['category'],
                                   rating: snap.data.documents[i]['rating'],
                                   price: snap.data.documents[i]['price'],
                                   desc: snap.data.documents[i]['description'],
-                                  url: snap.data.documents[i]['url']));
+                                  url: snap.data.documents[i]['url'],
+                                  boughtTogetherID: snap.data.documents[i]
+                                      ['boughtTogether']));
                               print(snap.data.documents[i]['name']);
                               if (snap.data.documents[i][widget.type])
                                 trending.add(Container(
                                   margin: EdgeInsets.only(right: 4.0),
                                   child: FoodyBiteCard(
-                                    onTap: () => pushNewScreen(
-                                      context,
-                                      screen: RestaurantDetailsScreen(
-                                        RestaurantDetails(
-                                          url: dishes[i].url,
-                                          name: dishes[i].name,
-                                          desc: dishes[i].desc,
-                                          category: dishes[i].category,
-                                          rating: dishes[i].rating,
-                                          price: dishes[i].price,
+                                    onTap: () async {
+                                      Dish boughtTogether;
+                                      for (int ind = 0;
+                                          ind < dishes.length;
+                                          ind++) {
+                                        if (dishes[ind].id ==
+                                            dishes[i].boughtTogetherID) {
+                                          boughtTogether = await dishes[ind];
+                                        }
+                                      }
+                                      pushNewScreen(
+                                        context,
+                                        screen: RestaurantDetailsScreen(
+                                          RestaurantDetails(
+                                              boughtTogetherDiscount: dishes[i]
+                                                  .boughtTogetherDiscount,
+                                              url: dishes[i].url,
+                                              name: dishes[i].name,
+                                              desc: dishes[i].desc,
+                                              category: dishes[i].category,
+                                              rating: dishes[i].rating,
+                                              price: dishes[i].price,
+                                              boughtTogether: boughtTogether),
                                         ),
-                                      ),
-                                      withNavBar:
-                                          true, // OPTIONAL VALUE. True by default.
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    ),
+                                        withNavBar:
+                                            true, // OPTIONAL VALUE. True by default.
+                                        pageTransitionAnimation:
+                                            PageTransitionAnimation.cupertino,
+                                      );
+                                    },
                                     imagePath: snap.data.documents[i]['url'],
                                     cardTitle: snap.data.documents[i]['name'],
                                     rating: snap.data.documents[i]['rating'],

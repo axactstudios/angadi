@@ -7,6 +7,8 @@ class Dish {
   String id;
   String price;
   String iPrice;
+  String boughtTogetherID;
+  String boughtTogetherDiscount;
 
   Dish(
       {this.name,
@@ -16,5 +18,7 @@ class Dish {
       this.id,
       this.price,
       this.iPrice,
-      this.desc});
+      this.desc,
+      this.boughtTogetherID,
+      this.boughtTogetherDiscount});
 }

@@ -25,6 +25,8 @@ import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/ratings_widget.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -33,6 +35,7 @@ import 'bookmarks_screen.dart';
 
 class RestaurantDetailsScreen extends StatefulWidget {
   RestaurantDetails restaurantDetail;
+
   RestaurantDetailsScreen(this.restaurantDetail);
 
   @override
@@ -580,16 +583,42 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 dishesBought.add(Container(
                   margin: EdgeInsets.only(right: 4.0),
                   child: FoodyBiteCard(
-                    onTap: () => R.Router.navigator
-                        .pushNamed(R.Router.restaurantDetailsScreen,
-                            arguments: RestaurantDetails(
-                              url: snap.data.documents[i]['url'],
-                              name: snap.data.documents[i]['name'],
-                              desc: snap.data.documents[i]['description'],
-                              category: snap.data.documents[i]['category'],
-                              rating: snap.data.documents[i]['rating'],
-                              price: snap.data.documents[i]['price'],
-                            )),
+                    onTap: () async {
+                      Dish boughtTogether;
+                      for (int ind = 0;
+                          ind < snap.data.documents.length;
+                          ind++) {
+                        if (snap.data.documents[ind].documentID ==
+                            snap.data.documents[i]['boughtTogether']) {
+                          boughtTogether = await Dish(
+                              boughtTogetherDiscount: snap.data.documents[ind]
+                                  ['boughtTogetherDiscount'],
+                              id: snap.data.documents[ind].documentID,
+                              name: snap.data.documents[ind]['name'],
+                              category: snap.data.documents[ind]['category'],
+                              rating:
+                                  snap.data.documents[ind]['rating'].toString(),
+                              price: snap.data.documents[ind]['price'],
+                              desc: snap.data.documents[ind]['description'],
+                              url: snap.data.documents[ind]['url'],
+                              boughtTogetherID: snap.data.documents[ind]
+                                  ['boughtTogether']);
+                        }
+                      }
+                      R.Router.navigator
+                          .pushNamed(R.Router.restaurantDetailsScreen,
+                              arguments: RestaurantDetails(
+                                boughtTogether: boughtTogether,
+                                boughtTogetherDiscount: snap.data.documents[i]
+                                    ['boughtTogetherDiscount'],
+                                url: snap.data.documents[i]['url'],
+                                name: snap.data.documents[i]['name'],
+                                desc: snap.data.documents[i]['description'],
+                                category: snap.data.documents[i]['category'],
+                                rating: snap.data.documents[i]['rating'],
+                                price: snap.data.documents[i]['price'],
+                              ));
+                    },
                     imagePath: snap.data.documents[i]['url'],
                     cardTitle: snap.data.documents[i]['name'],
                     rating: snap.data.documents[i]['rating'],
@@ -604,16 +633,42 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 dishesLike.add(Container(
                   margin: EdgeInsets.only(right: 4.0),
                   child: FoodyBiteCard(
-                    onTap: () => R.Router.navigator
-                        .pushNamed(R.Router.restaurantDetailsScreen,
-                            arguments: RestaurantDetails(
-                              url: snap.data.documents[i]['url'],
-                              name: snap.data.documents[i]['name'],
-                              desc: snap.data.documents[i]['description'],
-                              category: snap.data.documents[i]['category'],
-                              rating: snap.data.documents[i]['rating'],
-                              price: snap.data.documents[i]['price'],
-                            )),
+                    onTap: () async {
+                      Dish boughtTogether;
+                      for (int ind = 0;
+                          ind < snap.data.documents.length;
+                          ind++) {
+                        if (snap.data.documents[ind].documentID ==
+                            snap.data.documents[i]['boughtTogether']) {
+                          boughtTogether = await Dish(
+                              boughtTogetherDiscount: snap.data.documents[ind]
+                                  ['boughtTogetherDiscount'],
+                              id: snap.data.documents[ind].documentID,
+                              name: snap.data.documents[ind]['name'],
+                              category: snap.data.documents[ind]['category'],
+                              rating:
+                                  snap.data.documents[ind]['rating'].toString(),
+                              price: snap.data.documents[ind]['price'],
+                              desc: snap.data.documents[ind]['description'],
+                              url: snap.data.documents[ind]['url'],
+                              boughtTogetherID: snap.data.documents[ind]
+                                  ['boughtTogether']);
+                        }
+                      }
+                      R.Router.navigator
+                          .pushNamed(R.Router.restaurantDetailsScreen,
+                              arguments: RestaurantDetails(
+                                boughtTogetherDiscount: snap.data.documents[i]
+                                    ['boughtTogetherDiscount'],
+                                boughtTogether: boughtTogether,
+                                url: snap.data.documents[i]['url'],
+                                name: snap.data.documents[i]['name'],
+                                desc: snap.data.documents[i]['description'],
+                                category: snap.data.documents[i]['category'],
+                                rating: snap.data.documents[i]['rating'],
+                                price: snap.data.documents[i]['price'],
+                              ));
+                    },
                     imagePath: snap.data.documents[i]['url'],
                     cardTitle: snap.data.documents[i]['name'],
                     rating: snap.data.documents[i]['rating'],
@@ -1236,6 +1291,256 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           //     ],
                           //   ),
                           // )
+                          widget.restaurantDetail.boughtTogether != null
+                              ? Container(
+                                  height: 205,
+                                  width: MediaQuery.of(context).size.width,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.0),
+                                  child: ListView(
+                                    scrollDirection: Axis.horizontal,
+                                    children: [
+                                      GestureDetector(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5.0),
+                                          width: 110.0,
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Color.fromRGBO(
+                                                      0, 0, 0, 0.08),
+                                                  offset: Offset(0, 10),
+                                                  blurRadius: 10,
+                                                  spreadRadius: 0),
+                                            ],
+                                          ),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Container(
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  child:
+                                                      FadeInImage.assetNetwork(
+                                                    image: widget
+                                                        .restaurantDetail.url,
+                                                    fit: BoxFit.fill,
+                                                    height: 90,
+                                                    placeholder:
+                                                        "assets/images/placeholder.jpg",
+                                                    placeholderScale:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            2,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 10.0),
+                                              Align(
+                                                alignment: Alignment.bottomLeft,
+                                                child: Container(
+                                                  child: Text(
+                                                    widget
+                                                        .restaurantDetail.name,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: Styles
+                                                        .customNormalTextStyle(
+                                                            color: Color(
+                                                                0xFF6b3600)),
+                                                  ),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Align(
+                                                alignment: Alignment.bottomLeft,
+                                                child: Container(
+                                                  child: Text(
+                                                    'AED ${widget.restaurantDetail.price}',
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: Styles
+                                                        .customNormalTextStyle(
+                                                            color: Color(
+                                                                0xFF6b3600)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.add,
+                                        color: Color(0xFF6b3600),
+                                      ),
+                                      GestureDetector(
+                                        child: Container(
+                                          margin: EdgeInsets.all(5.0),
+                                          width: 110.0,
+                                          padding: EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white,
+                                            borderRadius: BorderRadius.all(
+                                              Radius.circular(10.0),
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                  color: Color.fromRGBO(
+                                                      0, 0, 0, 0.08),
+                                                  offset: Offset(0, 10),
+                                                  blurRadius: 10,
+                                                  spreadRadius: 0),
+                                            ],
+                                          ),
+                                          child: Column(
+                                            children: <Widget>[
+                                              Container(
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
+                                                  child:
+                                                      FadeInImage.assetNetwork(
+                                                    image: widget
+                                                        .restaurantDetail
+                                                        .boughtTogether
+                                                        .url,
+                                                    fit: BoxFit.fill,
+                                                    height: 90,
+                                                    placeholder:
+                                                        "assets/images/placeholder.jpg",
+                                                    placeholderScale:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height /
+                                                            2,
+                                                  ),
+                                                ),
+                                              ),
+                                              SizedBox(height: 10.0),
+                                              Align(
+                                                alignment: Alignment.bottomLeft,
+                                                child: Container(
+                                                  child: Text(
+                                                    widget.restaurantDetail
+                                                        .boughtTogether.name,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: Styles
+                                                        .customNormalTextStyle(
+                                                            color: Color(
+                                                                0xFF6b3600)),
+                                                  ),
+                                                ),
+                                              ),
+                                              Spacer(),
+                                              Align(
+                                                alignment: Alignment.bottomLeft,
+                                                child: Container(
+                                                  child: Text(
+                                                    'AED ${widget.restaurantDetail.boughtTogether.price}',
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: Styles
+                                                        .customNormalTextStyle(
+                                                            color: Color(
+                                                                0xFF6b3600)),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      Icon(
+                                        Icons.drag_handle,
+                                        color: Color(0xFF6b3600),
+                                      ),
+                                      Container(
+                                        margin: EdgeInsets.all(5.0),
+                                        width: 110.0,
+                                        padding: EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: Colors.white,
+                                          borderRadius: BorderRadius.all(
+                                            Radius.circular(10.0),
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                                color: Color.fromRGBO(
+                                                    0, 0, 0, 0.08),
+                                                offset: Offset(0, 10),
+                                                blurRadius: 10,
+                                                spreadRadius: 0),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          children: <Widget>[
+                                            Spacer(),
+                                            Container(
+                                              child: Text(
+                                                "AED ${double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)}",
+                                                style: GoogleFonts.poppins(
+                                                    color: Color(0xFF6b3600),
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w600,
+                                                    decoration: TextDecoration
+                                                        .lineThrough),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            Icon(
+                                              Icons.arrow_downward_rounded,
+                                              color: Color(0xFF6b3600),
+                                            ),
+                                            Container(
+                                              child: Text(
+                                                "AED ${(double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100)}",
+                                                style: GoogleFonts.poppins(
+                                                  color: Color(0xFF6b3600),
+                                                  fontSize: 15,
+                                                  fontWeight: FontWeight.w600,
+                                                ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            // GestureDetector(
+                                            //   child: Container(
+                                            //       width: 100.0,
+                                            //       height: 25.0,
+                                            //       padding: const EdgeInsets.all(4.0),
+                                            //       decoration: BoxDecoration(
+                                            //         color: Color(0xFF6b3600),
+                                            //         borderRadius:
+                                            //             BorderRadius.circular(8.0),
+                                            //       ),
+                                            //       child: FaIcon(
+                                            //         FontAwesomeIcons.cartArrowDown,
+                                            //         size: 20,
+                                            //         color: Colors.white,
+                                            //       )),
+                                            // ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : Container(),
+
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: HeadingRow(

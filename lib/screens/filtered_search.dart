@@ -51,12 +51,15 @@ class _FilteredSearchState extends State<FilteredSearch> {
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) async {
         Dish dp = Dish(
+            id: f.documentID,
+            boughtTogetherDiscount: f['boughtTogetherDiscount'],
             name: f['name'],
             category: f['category'],
             rating: f['rating'].toString(),
             price: f['price'],
             desc: f['description'],
-            url: f['url']);
+            url: f['url'],
+            boughtTogetherID: f['boughtTogether']);
         await dogList1.add(dp);
         // await dogCardsList1.add(MyDogCard(dp, width, height));
         print('Dog added');
@@ -121,18 +124,27 @@ class _FilteredSearchState extends State<FilteredSearch> {
                   itemBuilder: (BuildContext, index) {
                     var item = dogList[index];
                     return InkWell(
-                      onTap: () {
+                      onTap: () async {
+                        Dish boughtTogether;
+                        for (int i = 0; i < dogList.length; i++) {
+                          if (dogList[i].id ==
+                              dogList[index].boughtTogetherID) {
+                            boughtTogether = await dogList[i];
+                          }
+                        }
                         pushNewScreen(
                           context,
                           screen: RestaurantDetailsScreen(
                             RestaurantDetails(
-                              url: item.url,
-                              name: item.name,
-                              desc: item.desc,
-                              category: item.category,
-                              rating: item.rating,
-                              price: item.price,
-                            ),
+                                boughtTogetherDiscount:
+                                    item.boughtTogetherDiscount,
+                                url: item.url,
+                                name: item.name,
+                                desc: item.desc,
+                                category: item.category,
+                                rating: item.rating,
+                                price: item.price,
+                                boughtTogether: boughtTogether),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
@@ -246,12 +258,15 @@ class _FilteredSearchState extends State<FilteredSearch> {
           print('Match found ${f['name']}');
           docList.add(f);
           Dish dog = Dish(
+              id: f.documentID,
+              boughtTogetherDiscount: f['boughtTogetherDiscount'],
               name: f['name'],
               category: f['category'],
               rating: f['rating'].toString(),
               price: f['price'],
               desc: f['description'],
-              url: f['url']);
+              url: f['url'],
+              boughtTogetherID: f['boughtTogether']);
           dogList.add(dog);
           setState(() {
             print('Updated');
@@ -270,12 +285,15 @@ class _FilteredSearchState extends State<FilteredSearch> {
         .then((QuerySnapshot snapshot) {
       snapshot.documents.forEach((f) {
         dogList.add(Dish(
+            id: f.documentID,
+            boughtTogetherDiscount: f['boughtTogetherDiscount'],
             name: f['name'],
             category: f['category'],
             rating: f['rating'].toString(),
             price: f['price'],
             desc: f['description'],
-            url: f['url']));
+            url: f['url'],
+            boughtTogetherID: f['boughtTogether']));
         print('Dog added');
         print(f['profileImage'].toString());
       });

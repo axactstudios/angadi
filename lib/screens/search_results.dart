@@ -67,29 +67,51 @@ class SearchResultsScreen extends StatelessWidget {
                           for (int i = 0; i < snap.data.documents.length; i++) {
 //              print(snap.data.documents[i]['url']);
                             dishes.add(Dish(
+                                boughtTogetherDiscount: snap.data.documents[i]
+                                    ['boughtTogetherDiscount'],
+                                id: snap.data.documents[i].documentID,
                                 name: snap.data.documents[i]['name'],
                                 category: snap.data.documents[i]['category'],
                                 rating: snap.data.documents[i]['rating'],
                                 price: snap.data.documents[i]['price'],
                                 desc: snap.data.documents[i]['description'],
-                                url: snap.data.documents[i]['url']));
+                                url: snap.data.documents[i]['url'],
+                                boughtTogetherID: snap.data.documents[i]
+                                    ['boughtTogether']));
                             print(snap.data.documents[i]['name']);
 
                             trending.add(Container(
                               margin: EdgeInsets.only(right: 4.0),
                               child: FoodyBiteCard(
-                                onTap: () => R.Router.navigator.pushNamed(
-                                    R.Router.restaurantDetailsScreen,
-                                    arguments: RestaurantDetails(
-                                      url: snap.data.documents[i]['url'],
-                                      name: snap.data.documents[i]['name'],
-                                      desc: snap.data.documents[i]
-                                          ['description'],
-                                      category: snap.data.documents[i]
-                                          ['category'],
-                                      rating: snap.data.documents[i]['rating'],
-                                      price: snap.data.documents[i]['price'],
-                                    )),
+                                onTap: () async {
+                                  Dish boughtTogether;
+                                  for (int ind = 0;
+                                      ind < snap.data.documents.length;
+                                      ind++) {
+                                    if (snap.data.documents[ind].documentID ==
+                                        snap.data.documents[i]
+                                            ['boughtTogether']) {
+                                      boughtTogether = await dishes[ind];
+                                    }
+                                  }
+                                  R.Router.navigator.pushNamed(
+                                      R.Router.restaurantDetailsScreen,
+                                      arguments: RestaurantDetails(
+                                        boughtTogetherDiscount:
+                                            snap.data.documents[i]
+                                                ['boughtTogetherDiscount'],
+                                        boughtTogether: boughtTogether,
+                                        url: snap.data.documents[i]['url'],
+                                        name: snap.data.documents[i]['name'],
+                                        desc: snap.data.documents[i]
+                                            ['description'],
+                                        category: snap.data.documents[i]
+                                            ['category'],
+                                        rating: snap.data.documents[i]
+                                            ['rating'],
+                                        price: snap.data.documents[i]['price'],
+                                      ));
+                                },
                                 imagePath: snap.data.documents[i]['url'],
                                 cardTitle: snap.data.documents[i]['name'],
                                 rating: snap.data.documents[i]['rating'],
@@ -178,31 +200,55 @@ class SearchScreen extends StatelessWidget {
                           for (int i = 0; i < snap.data.documents.length; i++) {
 //              print(snap.data.documents[i]['url']);
                             dishes.add(Dish(
+                                boughtTogetherDiscount: snap.data.documents[i]
+                                    ['boughtTogetherDiscount'],
+                                id: snap.data.documents[i].documentID,
                                 name: snap.data.documents[i]['name'],
                                 category: snap.data.documents[i]['category'],
                                 rating: snap.data.documents[i]['rating'],
                                 price: snap.data.documents[i]['price'],
                                 desc: snap.data.documents[i]['description'],
-                                url: snap.data.documents[i]['url']));
+                                url: snap.data.documents[i]['url'],
+                                boughtTogetherID: snap.data.documents[i]
+                                    ['boughtTogether']));
                             print(snap.data.documents[i]['name']);
 
                             trending.add(Container(
                               margin: EdgeInsets.only(right: 4.0),
                               child: FoodyBiteCard(
-                                onTap: () => Navigator.push(context,
-                                    MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                  return RestaurantDetailsScreen(
-                                      RestaurantDetails(
-                                    url: snap.data.documents[i]['url'],
-                                    name: snap.data.documents[i]['name'],
-                                    desc: snap.data.documents[i]['description'],
-                                    category: snap.data.documents[i]
-                                        ['category'],
-                                    rating: snap.data.documents[i]['rating'],
-                                    price: snap.data.documents[i]['price'],
-                                  ));
-                                })),
+                                onTap: () async {
+                                  Dish boughtTogether;
+                                  for (int ind = 0;
+                                      ind < snap.data.documents.length;
+                                      ind++) {
+                                    if (snap.data.documents[ind].documentID ==
+                                        snap.data.documents[i]
+                                            ['boughtTogether']) {
+                                      boughtTogether = await dishes[ind];
+                                    }
+                                  }
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                    return RestaurantDetailsScreen(
+                                        RestaurantDetails(
+                                            boughtTogetherDiscount: snap
+                                                        .data.documents[i]
+                                                    ['boughtTogetherDiscount'] *
+                                                1.0,
+                                            url: snap.data.documents[i]['url'],
+                                            name: snap.data.documents[i]
+                                                ['name'],
+                                            desc: snap.data.documents[i]
+                                                ['description'],
+                                            category: snap.data.documents[i]
+                                                ['category'],
+                                            rating: snap.data.documents[i]
+                                                ['rating'],
+                                            price: snap.data.documents[i]
+                                                ['price'],
+                                            boughtTogether: boughtTogether));
+                                  }));
+                                },
                                 imagePath: snap.data.documents[i]['url'],
                                 cardTitle: snap.data.documents[i]['name'],
                                 rating: snap.data.documents[i]['rating'],
