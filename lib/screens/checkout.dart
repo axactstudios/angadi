@@ -21,6 +21,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:flutter_paytabs_bridge_emulator/flutter_paytabs_bridge_emulator.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
@@ -40,6 +41,8 @@ class Checkout extends StatefulWidget {
 }
 
 class _CheckoutState extends State<Checkout> {
+  final _formkey =GlobalKey<FormState>();
+  bool ischecked=false;
   String type = 'Delivery';
   List<Cart> cartItems = [];
   List<Emirates> allemirates = [];
@@ -238,7 +241,31 @@ class _CheckoutState extends State<Checkout> {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     orderid = prefs.getString('Orderid');
   }
-
+  void setaddress()async {
+    print('=====================Reached');
+    if(addresstype=='House'){
+      print('------------------');
+      print(docid);
+      (docid != null && docid != '') ? await Firestore.instance.collection(
+          'Users').document(docid).collection('Address').add({
+        'address': '${buildingController.text} , Street:${flatcontroller.text}',
+        'hno': '',
+        'landmark': additionalcontroller.text,
+        'Emirate': emirate,
+        'Area': area
+      }) : print('not');
+    }
+   if(addresstype=='Office'){
+     (docid != null && docid != '') ? await Firestore.instance.collection(
+         'Users').document(docid).collection('Address').add({
+       'address': '${buildingController.text} ',
+       'hno': '',
+       'landmark': additionalcontroller.text,
+       'Emirate': emirate,
+       'Area': area
+     }) : print('not');
+   }
+  }
   @override
   void initState() {
     getAllItems();
@@ -575,7 +602,7 @@ class _CheckoutState extends State<Checkout> {
                                   width: 10,
                                 ),
                                 Text(
-                                  'Price: Rs. ${cartItems[i].price.toString()}',
+                                  'Price: AED ${cartItems[i].price.toString()}',
                                   style: TextStyle(fontSize: 15),
                                 )
                               ],
@@ -772,258 +799,267 @@ class _CheckoutState extends State<Checkout> {
 //                        ),
 //                      )
                     ? (addresstype == 'Apartment')
-                        ? Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide:
-                                              BorderSide(color: Colors.grey)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide:
-                                              BorderSide(color: Colors.grey)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide: BorderSide(
-                                              color: Color(0xFF6b3600))),
-                                      hintText: 'Building'),
-                                  controller: buildingController,
+                        ? Form(
+                          key:_formkey,
+                          child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF6b3600))),
+                                        hintText: 'Building'),
+                                    controller: buildingController,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide:
-                                              BorderSide(color: Colors.grey)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide:
-                                              BorderSide(color: Colors.grey)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide: BorderSide(
-                                              color: Color(0xFF6b3600))),
-                                      hintText: 'Floor'),
-                                  controller: floorcontroller,
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                  
+                                     
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF6b3600))),
+                                        hintText: 'Floor'),
+                                    controller: floorcontroller,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide:
-                                              BorderSide(color: Colors.grey)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide:
-                                              BorderSide(color: Colors.grey)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide: BorderSide(
-                                              color: Color(0xFF6b3600))),
-                                      hintText: 'Apartment'),
-                                  controller: flatcontroller,
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF6b3600))),
+                                        hintText: 'Apartment'),
+                                    controller: flatcontroller,
+                                  ),
                                 ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextFormField(
-                                  decoration: InputDecoration(
-                                      border: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide:
-                                              BorderSide(color: Colors.grey)),
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide:
-                                              BorderSide(color: Colors.grey)),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(2),
-                                          borderSide: BorderSide(
-                                              color: Color(0xFF6b3600))),
-                                      hintText: 'Additional Directions'),
-                                  maxLines: 2,
-                                  controller: additionalcontroller,
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF6b3600))),
+                                        hintText: 'Additional Directions'),
+                                    maxLines: 2,
+                                    controller: additionalcontroller,
+                                  ),
                                 ),
-                              ),
-                            ],
-                          )
+                              ],
+                            ),
+                        )
                         : (addresstype == 'House')
-                            ? Column(
-                                children: [
-                                  StreamBuilder(
-                                      stream: Firestore.instance
-                                          .collection('Emirates')
-                                          .snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<QuerySnapshot> snap) {
-                                        if (snap.hasData &&
-                                            !snap.hasError &&
-                                            snap.data != null) {
-                                          allemirates.clear();
-                                          emiratesname.clear();
-                                          for (int i = 0;
-                                              i < snap.data.documents.length;
-                                              i++) {
-                                            print(snap.data.documents.length);
-                                            emirate2 =
-                                                snap.data.documents[0]['name'];
-                                            emiratesname.add(
-                                                snap.data.documents[i]['name']);
-                                            Emirates emi = Emirates(
-                                                snap.data.documents[i]
-                                                    ['deliveryCharge'],
-                                                snap.data.documents[i]
-                                                    ['minOrderPrice'],
-                                                snap.data.documents[i]['name']);
-                                            allemirates.add(emi);
-                                          }
-                                          return allemirates.length != 0
-                                              ? Column(
-                                                  children: [
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
-                                                      child:
-                                                          DropdownButtonHideUnderline(
+                            ? Form(
+                  key:_formkey,
+                              child: Column(
+                                  children: [
+                                    StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('Emirates')
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<QuerySnapshot> snap) {
+                                          if (snap.hasData &&
+                                              !snap.hasError &&
+                                              snap.data != null) {
+                                            allemirates.clear();
+                                            emiratesname.clear();
+                                            for (int i = 0;
+                                                i < snap.data.documents.length;
+                                                i++) {
+                                              print(snap.data.documents.length);
+                                              emirate2 =
+                                                  snap.data.documents[0]['name'];
+                                              emiratesname.add(
+                                                  snap.data.documents[i]['name']);
+                                              Emirates emi = Emirates(
+                                                  snap.data.documents[i]
+                                                      ['deliveryCharge'],
+                                                  snap.data.documents[i]
+                                                      ['minOrderPrice'],
+                                                  snap.data.documents[i]['name']);
+                                              allemirates.add(emi);
+                                            }
+                                            return allemirates.length != 0
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                        width:
+                                                            MediaQuery.of(context)
+                                                                    .size
+                                                                    .width *
+                                                                0.9,
                                                         child:
-                                                            new DropdownButton<
-                                                                String>(
-                                                          hint:
-                                                              Text('Emirates'),
-                                                          value: emirate,
-                                                          items: emiratesname
-                                                              .map((String
-                                                                  value) {
-                                                            return new DropdownMenuItem<
-                                                                String>(
-                                                              value: value,
-                                                              child: new Text(
-                                                                  value),
-                                                            );
-                                                          }).toList(),
-                                                          onChanged: (String
-                                                              newValue) {
-                                                            setState(() {
-                                                              emirate =
-                                                                  newValue;
-                                                              emirate2 =
-                                                                  newValue;
-                                                              print(emirate);
+                                                            DropdownButtonHideUnderline(
+                                                          child:
+                                                              new DropdownButtonFormField<
+                                                                  String>(
+                                                                validator:(value)=>value==null?'field required':null,
+                                                            hint:
+                                                                Text('Emirates'),
+                                                            value: emirate,
+                                                            items: emiratesname
+                                                                .map((String
+                                                                    value) {
+                                                              return new DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child: new Text(
+                                                                    value),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                emirate =
+                                                                    newValue;
+                                                                emirate2 =
+                                                                    newValue;
+                                                                print(emirate);
 
 //                      Navigator.pop(context);
-                                                            });
-                                                          },
+                                                              });
+                                                            },
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )
-                                              : Container();
-                                        } else {
-                                          return Container();
-                                        }
-                                      }),
-                                  StreamBuilder(
-                                      stream: Firestore.instance
-                                          .collection('EmiratesArea')
-                                          .where('Emirate', isEqualTo: emirate2)
-                                          .snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<QuerySnapshot> snap) {
-                                        if (snap.hasData &&
-                                            !snap.hasError &&
-                                            snap.data != null) {
-                                          allareas.clear();
-                                          areaname.clear();
-                                          for (int i = 0;
-                                              i < snap.data.documents.length;
-                                              i++) {
-                                            print(snap.data.documents.length);
-
-                                            areaname.add(
-                                                snap.data.documents[i]['name']);
-
-                                            EmiratesArea emi2 = EmiratesArea(
-                                                snap.data.documents[i]
-                                                    ['Emirate'],
-                                                snap.data.documents[i]
-                                                    ['deliveryCharge'],
-                                                snap.data.documents[i]
-                                                    ['minOrderPrice'],
-                                                snap.data.documents[i]['name'],
-                                                snap.data.documents[i]['zone']);
-                                            allareas.add(emi2);
+                                                    ],
+                                                  )
+                                                : Container();
+                                          } else {
+                                            return Container();
                                           }
-                                          areaname.add('Others');
-                                          return areaname.length != 0
-                                              ? Column(
-                                                  children: [
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
-                                                      child:
-                                                          DropdownButtonHideUnderline(
+                                        }),
+                                    StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('EmiratesArea')
+                                            .where('Emirate', isEqualTo: emirate2)
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<QuerySnapshot> snap) {
+                                          if (snap.hasData &&
+                                              !snap.hasError &&
+                                              snap.data != null) {
+                                            allareas.clear();
+                                            areaname.clear();
+                                            for (int i = 0;
+                                                i < snap.data.documents.length;
+                                                i++) {
+                                              print(snap.data.documents.length);
+
+                                              areaname.add(
+                                                  snap.data.documents[i]['name']);
+
+                                              EmiratesArea emi2 = EmiratesArea(
+                                                  snap.data.documents[i]
+                                                      ['Emirate'],
+                                                  snap.data.documents[i]
+                                                      ['deliveryCharge'],
+                                                  snap.data.documents[i]
+                                                      ['minOrderPrice'],
+                                                  snap.data.documents[i]['name'],
+                                                  snap.data.documents[i]['zone']);
+                                              allareas.add(emi2);
+                                            }
+                                            areaname.add('Others');
+                                            return areaname.length != 0
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                        width:
+                                                            MediaQuery.of(context)
+                                                                    .size
+                                                                    .width *
+                                                                0.9,
                                                         child:
-                                                            new DropdownButton<
-                                                                String>(
-                                                          hint: Text('Area'),
-                                                          value: area,
-                                                          items: areaname.map(
-                                                              (String value) {
-                                                            return new DropdownMenuItem<
-                                                                String>(
-                                                              value: value,
-                                                              child: new Text(
-                                                                  value),
-                                                            );
-                                                          }).toList(),
-                                                          onChanged: (String
-                                                              newValue) {
-                                                            setState(() {
-                                                              area = newValue;
-                                                              print(area);
+                                                            DropdownButtonHideUnderline(
+                                                          child:
+                                                              new DropdownButtonFormField<
+                                                                  String>(
+                                                                validator:(value)=>value==null?'field required':null,
+                                                            hint: Text('Area'),
+                                                            value: area,
+                                                            items: areaname.map(
+                                                                (String value) {
+                                                              return new DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child: new Text(
+                                                                    value),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                area = newValue;
+                                                                print(area);
 
 //                      Navigator.pop(context);
-                                                            });
-                                                          },
+                                                              });
+                                                            },
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )
-                                              : Container();
-                                        } else {
-                                          return Container();
-                                        }
-                                      }),
+                                                    ],
+                                                  )
+                                                : Container();
+                                          } else {
+                                            return Container();
+                                          }
+                                        }),
 //                                  Padding(
 //                                    padding: const EdgeInsets.all(8.0),
 //                                    child: TextFormField(
@@ -1071,235 +1107,246 @@ class _CheckoutState extends State<Checkout> {
 //                                    ),
 //                                  ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText:
-                                              'Building name/no.,floor,apartment or villa no.*'),
-                                      controller: buildingController,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText:
+                                                'Building name/no.,floor,apartment or villa no.*'),
+                                        controller: buildingController,
+                                      ),
                                     ),
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText: 'Street name*'),
-                                      controller: flatcontroller,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText: 'Street name*'),
+                                        controller: flatcontroller,
+                                      ),
                                     ),
-                                  ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText:
-                                              'Additional Directions/Nearest Landmark'),
-                                      maxLines: 2,
-                                      controller: additionalcontroller,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(  validator: (value){if(value==null||value=='')return 'Required field';return null;},
+                                        
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText:
+                                                'Additional Directions/Nearest Landmark'),
+                                        maxLines: 2,
+                                        controller: additionalcontroller,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
-                            : Column(
-                                children: [
-                                  StreamBuilder(
-                                      stream: Firestore.instance
-                                          .collection('Emirates')
-                                          .snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<QuerySnapshot> snap) {
-                                        if (snap.hasData &&
-                                            !snap.hasError &&
-                                            snap.data != null) {
-                                          allemirates.clear();
-                                          emiratesname.clear();
-                                          for (int i = 0;
-                                              i < snap.data.documents.length;
-                                              i++) {
-                                            print(snap.data.documents.length);
-                                            emirate2 =
-                                                snap.data.documents[0]['name'];
-                                            emiratesname.add(
-                                                snap.data.documents[i]['name']);
-                                            Emirates emi = Emirates(
-                                                snap.data.documents[i]
-                                                    ['deliveryCharge'],
-                                                snap.data.documents[i]
-                                                    ['minOrderPrice'],
-                                                snap.data.documents[i]['name']);
-                                            allemirates.add(emi);
-                                          }
-                                          return allemirates.length != 0
-                                              ? Column(
-                                                  children: [
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
-                                                      child:
-                                                          DropdownButtonHideUnderline(
+                                  ],
+                                ),
+                            )
+                            : Form(
+                                key:_formkey,
+                              child: Column(
+                                  children: [
+                                    StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('Emirates')
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<QuerySnapshot> snap) {
+                                          if (snap.hasData &&
+                                              !snap.hasError &&
+                                              snap.data != null) {
+                                            allemirates.clear();
+                                            emiratesname.clear();
+                                            for (int i = 0;
+                                                i < snap.data.documents.length;
+                                                i++) {
+                                              print(snap.data.documents.length);
+                                              emirate2 =
+                                                  snap.data.documents[0]['name'];
+                                              emiratesname.add(
+                                                  snap.data.documents[i]['name']);
+                                              Emirates emi = Emirates(
+                                                  snap.data.documents[i]
+                                                      ['deliveryCharge'],
+                                                  snap.data.documents[i]
+                                                      ['minOrderPrice'],
+                                                  snap.data.documents[i]['name']);
+                                              allemirates.add(emi);
+                                            }
+                                            return allemirates.length != 0
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                        width:
+                                                            MediaQuery.of(context)
+                                                                    .size
+                                                                    .width *
+                                                                0.9,
                                                         child:
-                                                            new DropdownButton<
-                                                                String>(
-                                                          hint:
-                                                              Text('Emirates'),
-                                                          value: emirate,
-                                                          items: emiratesname
-                                                              .map((String
-                                                                  value) {
-                                                            return new DropdownMenuItem<
-                                                                String>(
-                                                              value: value,
-                                                              child: new Text(
-                                                                  value),
-                                                            );
-                                                          }).toList(),
-                                                          onChanged: (String
-                                                              newValue) {
-                                                            setState(() {
-                                                              emirate =
-                                                                  newValue;
-                                                              emirate2 =
-                                                                  newValue;
-                                                              print(emirate);
+                                                            DropdownButtonHideUnderline(
+                                                          child:
+                                                              new DropdownButtonFormField<
+                                                                  String>(
+                                                                validator:(value)=>value==null?'field required':null,
+                                                            hint:
+                                                                Text('Emirates'),
+                                                            value: emirate,
+                                                            items: emiratesname
+                                                                .map((String
+                                                                    value) {
+                                                              return new DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child: new Text(
+                                                                    value),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                emirate =
+                                                                    newValue;
+                                                                emirate2 =
+                                                                    newValue;
+                                                                print(emirate);
 
 //                      Navigator.pop(context);
-                                                            });
-                                                          },
+                                                              });
+                                                            },
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )
-                                              : Container();
-                                        } else {
-                                          return Container();
-                                        }
-                                      }),
-                                  StreamBuilder(
-                                      stream: Firestore.instance
-                                          .collection('EmiratesArea')
-                                          .where('Emirate', isEqualTo: emirate2)
-                                          .snapshots(),
-                                      builder: (BuildContext context,
-                                          AsyncSnapshot<QuerySnapshot> snap) {
-                                        if (snap.hasData &&
-                                            !snap.hasError &&
-                                            snap.data != null) {
-                                          allareas.clear();
-                                          areaname.clear();
-                                          for (int i = 0;
-                                              i < snap.data.documents.length;
-                                              i++) {
-                                            print(snap.data.documents.length);
-
-                                            areaname.add(
-                                                snap.data.documents[i]['name']);
-
-                                            EmiratesArea emi2 = EmiratesArea(
-                                                snap.data.documents[i]
-                                                    ['Emirate'],
-                                                snap.data.documents[i]
-                                                    ['deliveryCharge'],
-                                                snap.data.documents[i]
-                                                    ['minOrderPrice'],
-                                                snap.data.documents[i]['name'],
-                                                snap.data.documents[i]['zone']);
-                                            allareas.add(emi2);
+                                                    ],
+                                                  )
+                                                : Container();
+                                          } else {
+                                            return Container();
                                           }
-                                          areaname.add('Others');
-                                          return areaname.length != 0
-                                              ? Column(
-                                                  children: [
-                                                    Container(
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
-                                                      child:
-                                                          DropdownButtonHideUnderline(
+                                        }),
+                                    StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('EmiratesArea')
+                                            .where('Emirate', isEqualTo: emirate2)
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<QuerySnapshot> snap) {
+                                          if (snap.hasData &&
+                                              !snap.hasError &&
+                                              snap.data != null) {
+                                            allareas.clear();
+                                            areaname.clear();
+                                            for (int i = 0;
+                                                i < snap.data.documents.length;
+                                                i++) {
+                                              print(snap.data.documents.length);
+
+                                              areaname.add(
+                                                  snap.data.documents[i]['name']);
+
+                                              EmiratesArea emi2 = EmiratesArea(
+                                                  snap.data.documents[i]
+                                                      ['Emirate'],
+                                                  snap.data.documents[i]
+                                                      ['deliveryCharge'],
+                                                  snap.data.documents[i]
+                                                      ['minOrderPrice'],
+                                                  snap.data.documents[i]['name'],
+                                                  snap.data.documents[i]['zone']);
+                                              allareas.add(emi2);
+                                            }
+                                            areaname.add('Others');
+                                            return areaname.length != 0
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                        width:
+                                                            MediaQuery.of(context)
+                                                                    .size
+                                                                    .width *
+                                                                0.9,
                                                         child:
-                                                            new DropdownButton<
-                                                                String>(
-                                                          hint: Text('Area'),
-                                                          value: area,
-                                                          items: areaname.map(
-                                                              (String value) {
-                                                            return new DropdownMenuItem<
-                                                                String>(
-                                                              value: value,
-                                                              child: new Text(
-                                                                  value),
-                                                            );
-                                                          }).toList(),
-                                                          onChanged: (String
-                                                              newValue) {
-                                                            setState(() {
-                                                              area = newValue;
-                                                              print(area);
+                                                            DropdownButtonHideUnderline(
+                                                          child:
+                                                              new DropdownButtonFormField<
+                                                                  String>(
+                                                                validator:(value)=>value==null?'field required':null,
+                                                            hint: Text('Area'),
+                                                            value: area,
+
+                                                            items: areaname.map(
+                                                                (String value) {
+                                                              return new DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+
+                                                                child: new Text(
+                                                                    value),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                area = newValue;
+                                                                print(area);
 
 //                      Navigator.pop(context);
-                                                            });
-                                                          },
+                                                              });
+
+                                                            },
+                                                          ),
                                                         ),
                                                       ),
-                                                    ),
-                                                  ],
-                                                )
-                                              : Container();
-                                        } else {
-                                          return Container();
-                                        }
-                                      }),
+                                                    ],
+                                                  )
+                                                : Container();
+                                          } else {
+                                            return Container();
+                                          }
+                                        }),
 //                                  Padding(
 //                                    padding: const EdgeInsets.all(8.0),
 //                                    child: TextFormField(
@@ -1347,58 +1394,80 @@ class _CheckoutState extends State<Checkout> {
 //                                    ),
 //                                  ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText: 'Building name/no.,floor*'),
-                                      controller: buildingController,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText: 'Building name/no.,floor*'),
+                                        controller: buildingController,
+                                      ),
                                     ),
-                                  ),
 
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText:
-                                              'Additional Directions/Nearest Landmark'),
-                                      maxLines: 2,
-                                      controller: additionalcontroller,
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText:
+                                                'Additional Directions/Nearest Landmark'),
+                                        maxLines: 2,
+                                        controller: additionalcontroller,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              )
+                                  ],
+                                ),
+                            )
                     : Container(),
+                type != 'Takeaway'? CheckboxListTile(controlAffinity:ListTileControlAffinity.leading,checkColor:Colors.white,activeColor:AppColors.secondaryElement,title: Text("Save to my addresses"),value: ischecked, onChanged: (newValue)
+                {setState(() {
+                  ischecked=!ischecked;
+                });
+                if(ischecked==true){
+                  print(ischecked);
+                  if(_formkey.currentState.validate()){
+                    setaddress();
+                  }
+                else{
+                Fluttertoast.showToast(
+                msg: 'Address required', toastLength: Toast.LENGTH_SHORT);
+
+                  }
+                }
+
+
+
+                }):Container(),
                 type != 'Takeaway'
                     ? Padding(
                         padding: const EdgeInsets.symmetric(
@@ -1737,7 +1806,13 @@ class _CheckoutState extends State<Checkout> {
                               'Cash On Delivery',
                               buttonWidth: MediaQuery.of(context).size.width,
                               onTap: () {
-                                showAlertDialog(context);
+                                if(_formkey.currentState.validate()){
+                                  showAlertDialog(context);
+                                }
+                               else{
+                                  Fluttertoast.showToast(
+                                      msg: 'Address required', toastLength: Toast.LENGTH_SHORT);
+                                }
                               },
                             ),
                           )
@@ -1754,21 +1829,27 @@ class _CheckoutState extends State<Checkout> {
                             ? 'Proceed to pay online'
                             : 'Check your status',
                         onTap: () {
-                          _result != '833' && j != 1
-                              ? onlineorder(
-                                  (discount != null)
-                                      ? ((totalAmount() * 0.18) +
-                                              totalAmount() -
-                                              (totalAmount() *
-                                                  (double.parse(
-                                                          discount.discount) /
-                                                      100)))
-                                          .toStringAsFixed(2)
-                                      : ((totalAmount() * 0.18) + totalAmount())
-                                          .toString(),
-                                  type,
-                                  orderid)
-                              : Checksuccess();
+                          if(_formkey.currentState.validate()){
+                            _result != '833' && j != 1
+                                ? onlineorder(
+                                (discount != null)
+                                    ? ((totalAmount() * 0.18) +
+                                    totalAmount() -
+                                    (totalAmount() *
+                                        (double.parse(
+                                            discount.discount) /
+                                            100)))
+                                    .toStringAsFixed(2)
+                                    : ((totalAmount() * 0.18) + totalAmount())
+                                    .toString(),
+                                type,
+                                orderid)
+                                : Checksuccess();
+                          }
+                         else{
+                            Fluttertoast.showToast(
+                                msg: 'Address required', toastLength: Toast.LENGTH_SHORT);
+                          }
                         },
                         buttonWidth: MediaQuery.of(context).size.width,
                       ),

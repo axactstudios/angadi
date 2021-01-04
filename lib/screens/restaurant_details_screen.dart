@@ -593,6 +593,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           boughtTogether = await Dish(
                               boughtTogetherDiscount: snap.data.documents[ind]
                                   ['boughtTogetherDiscount'],
+                              boughtTogetherQuantity:snap.data.documents[ind]
+                              ['boughtTogetherQuantity'], 
                               id: snap.data.documents[ind].documentID,
                               name: snap.data.documents[ind]['name'],
                               category: snap.data.documents[ind]['category'],
@@ -611,6 +613,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 boughtTogether: boughtTogether,
                                 boughtTogetherDiscount: snap.data.documents[i]
                                     ['boughtTogetherDiscount'],
+                                boughtTogetherQuantity: snap.data.documents[i]
+                                ['boughtTogetherQuantity'],
                                 url: snap.data.documents[i]['url'],
                                 name: snap.data.documents[i]['name'],
                                 desc: snap.data.documents[i]['description'],
@@ -643,6 +647,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           boughtTogether = await Dish(
                               boughtTogetherDiscount: snap.data.documents[ind]
                                   ['boughtTogetherDiscount'],
+                              boughtTogetherQuantity: snap.data.documents[ind]
+                              ['boughtTogetherQuantity'],
                               id: snap.data.documents[ind].documentID,
                               name: snap.data.documents[ind]['name'],
                               category: snap.data.documents[ind]['category'],
@@ -660,6 +666,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               arguments: RestaurantDetails(
                                 boughtTogetherDiscount: snap.data.documents[i]
                                     ['boughtTogetherDiscount'],
+                                boughtTogetherQuantity: snap.data.documents[i]
+                                ['boughtTogetherQuantity'],
                                 boughtTogether: boughtTogether,
                                 url: snap.data.documents[i]['url'],
                                 name: snap.data.documents[i]['name'],
@@ -1347,8 +1355,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 alignment: Alignment.bottomLeft,
                                                 child: Container(
                                                   child: Text(
-                                                    widget
-                                                        .restaurantDetail.name,
+                                                  " ${ widget
+                                                        .restaurantDetail.name} (${widget.restaurantDetail.boughtTogetherQuantity})}",
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -1432,8 +1440,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 alignment: Alignment.bottomLeft,
                                                 child: Container(
                                                   child: Text(
-                                                    widget.restaurantDetail
-                                                        .boughtTogether.name,
+                                                ' ${  widget.restaurantDetail.boughtTogether.name},(${widget.restaurantDetail.boughtTogetherQuantity})',
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -1516,7 +1523,24 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
+                                            
                                             Spacer(),
+                                            angadiButton('Add',buttonWidth: MediaQuery.of(context).size.width*0.2,buttonHeight: MediaQuery.of(context).size.height*0.04,onTap: (){
+                                              addToCart(context,
+                                                  name: widget.restaurantDetail.name,
+                                                  imgUrl: widget.restaurantDetail.url,
+                                                  price:'${ ((double.parse(widget.restaurantDetail.price) ) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100)
+                                                      )}',
+                                                  qty: 1,
+                                                  qtyTag:widget.restaurantDetail.boughtTogetherQuantity);
+                                              addToCart(context,
+                                                  name: widget.restaurantDetail.boughtTogether.name,
+                                                  imgUrl: widget.restaurantDetail.boughtTogether.url,
+                                                  price:'${ ((double.parse(widget.restaurantDetail.boughtTogether.price) ) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100)
+                                                  )}',
+                                                  qty: 1,
+                                                  qtyTag:widget.restaurantDetail.boughtTogether.boughtTogetherQuantity);
+                                            },)
                                             // GestureDetector(
                                             //   child: Container(
                                             //       width: 100.0,

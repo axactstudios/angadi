@@ -98,6 +98,7 @@ class RestaurantDetails {
   String category;
   String rating;
   Dish boughtTogether;
+  String boughtTogetherQuantity;
   String price;
   String boughtTogetherDiscount;
 
@@ -109,7 +110,8 @@ class RestaurantDetails {
       @required this.rating,
       @required this.price,
       @required this.boughtTogether,
-      @required this.boughtTogetherDiscount});
+      @required this.boughtTogetherDiscount,
+      @required this.boughtTogetherQuantity});
 }
 
 class CurrentScreen {

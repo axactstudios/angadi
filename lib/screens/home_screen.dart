@@ -299,6 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     name: snap.data.documents[i]['name'],
                     boughtTogetherDiscount: snap.data.documents[i]
                         ['boughtTogetherDiscount'],
+                    boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
                     id: snap.data.documents[i].documentID,
                     category: snap.data.documents[i]['category'],
                     rating: snap.data.documents[i]['rating'].toString(),
@@ -312,6 +313,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   dishesSpecial.add(Dish(
                       boughtTogetherDiscount: snap.data.documents[i]
                           ['boughtTogetherDiscount'],
+                      boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
                       id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
@@ -338,6 +340,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             RestaurantDetails(
                                 boughtTogetherDiscount:
                                     dishes[i].boughtTogetherDiscount,
+                                boughtTogetherQuantity:dishes[i].boughtTogetherQuantity,
                                 url: dishes[i].url,
                                 name: dishes[i].name,
                                 desc: dishes[i].desc,
@@ -365,6 +368,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   dishesTop.add(Dish(
                       boughtTogetherDiscount: snap.data.documents[i]
                           ['boughtTogetherDiscount'],
+                      boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
                       id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
@@ -397,6 +401,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             RestaurantDetails(
                                 boughtTogetherDiscount:
                                     dishes[i].boughtTogetherDiscount,
+                                boughtTogetherQuantity:dishes[i].boughtTogetherQuantity,
                                 url: dishes[i].url,
                                 name: dishes[i].name,
                                 desc: dishes[i].desc,
@@ -439,6 +444,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             RestaurantDetails(
                                 boughtTogetherDiscount:
                                     dishes[i].boughtTogetherDiscount,
+                                boughtTogetherQuantity:dishes[i].boughtTogetherQuantity,
                                 url: dishes[i].url,
                                 name: dishes[i].name,
                                 desc: dishes[i].desc,
