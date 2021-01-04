@@ -202,6 +202,7 @@ class SearchScreen extends StatelessWidget {
                             dishes.add(Dish(
                                 boughtTogetherDiscount: snap.data.documents[i]
                                     ['boughtTogetherDiscount'],
+                                boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
                                 id: snap.data.documents[i].documentID,
                                 name: snap.data.documents[i]['name'],
                                 category: snap.data.documents[i]['category'],
@@ -236,6 +237,7 @@ class SearchScreen extends StatelessWidget {
                                                     ['boughtTogetherDiscount'] *
                                                 1.0,
                                             url: snap.data.documents[i]['url'],
+                                            boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
                                             name: snap.data.documents[i]
                                                 ['name'],
                                             desc: snap.data.documents[i]
