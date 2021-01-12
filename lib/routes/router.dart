@@ -1,4 +1,5 @@
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/classes/quantity.dart';
 import 'package:angadi/screens/bookmark_screen_2.dart';
 import 'package:auto_route/auto_route.dart';
 import 'package:auto_route/auto_route_annotations.dart';
@@ -101,6 +102,7 @@ class RestaurantDetails {
   String boughtTogetherQuantity;
   String price;
   String boughtTogetherDiscount;
+  List<Quantity>allquantities=[];
 
   RestaurantDetails(
       {@required this.url,
@@ -111,7 +113,8 @@ class RestaurantDetails {
       @required this.price,
       @required this.boughtTogether,
       @required this.boughtTogetherDiscount,
-      @required this.boughtTogetherQuantity});
+      @required this.boughtTogetherQuantity,
+      @required this.allquantities});
 }
 
 class CurrentScreen {

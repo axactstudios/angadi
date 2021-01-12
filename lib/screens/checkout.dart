@@ -45,6 +45,9 @@ class _CheckoutState extends State<Checkout> {
   bool ischecked=false;
   String type = 'Delivery';
   List<Cart> cartItems = [];
+  double minOrderPrice=0;
+  double deliveryCharge=0;
+
   List<Emirates> allemirates = [];
   List<EmiratesArea> allareas = [];
   String area;
@@ -931,6 +934,7 @@ class _CheckoutState extends State<Checkout> {
                                                   snap.data.documents[i]
                                                       ['minOrderPrice'],
                                                   snap.data.documents[i]['name']);
+
                                               allemirates.add(emi);
                                             }
                                             return allemirates.length != 0
@@ -969,6 +973,7 @@ class _CheckoutState extends State<Checkout> {
                                                                 emirate2 =
                                                                     newValue;
                                                                 print(emirate);
+
 
 //                      Navigator.pop(context);
                                                               });
@@ -1046,7 +1051,13 @@ class _CheckoutState extends State<Checkout> {
                                                               setState(() {
                                                                 area = newValue;
                                                                 print(area);
-
+                                                                for(int i=0;i<allareas.length;i++){
+                                                                  if(area==allareas[i].name)
+                                                                    setState(() {
+                                                                      minOrderPrice=double.parse(allareas[i].minOrderPrice);
+                                                                      deliveryCharge=double.parse(allareas[i].deliveryCharge);
+                                                                    });
+                                                                }
 //                      Navigator.pop(context);
                                                               });
                                                             },
@@ -1333,6 +1344,13 @@ class _CheckoutState extends State<Checkout> {
                                                                 area = newValue;
                                                                 print(area);
 
+                                                                for(int i=0;i<allareas.length;i++){
+                                                                  if(area==allareas[i].name)
+                                                                    setState(() {
+                                                                      minOrderPrice=double.parse(allareas[i].minOrderPrice);
+                                                                      deliveryCharge=double.parse(allareas[i].deliveryCharge);
+                                                                    });
+                                                                }
 //                      Navigator.pop(context);
                                                               });
 
@@ -1807,7 +1825,17 @@ class _CheckoutState extends State<Checkout> {
                               buttonWidth: MediaQuery.of(context).size.width,
                               onTap: () {
                                 if(_formkey.currentState.validate()){
-                                  showAlertDialog(context);
+                                  var total=0.0;
+                                  discount != null
+                                      ? total=((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))+deliveryCharge)
+                                      :total= ((totalAmount() * 0.18) + totalAmount()+deliveryCharge);
+                                  if(total>minOrderPrice){
+                                    showAlertDialog(context);
+                                  }
+                                 else{
+                                    Fluttertoast.showToast(
+                                        msg: 'Your order amount is less \n than the minimum order price', toastLength: Toast.LENGTH_SHORT);
+                                  }
                                 }
                                else{
                                   Fluttertoast.showToast(
@@ -2242,6 +2270,20 @@ class _CheckoutState extends State<Checkout> {
                   Text('Rs. ${(totalAmount() * 0.18).toStringAsFixed(2)}'),
                 ],
               ),
+              (deliveryCharge!=0)?Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('Delivery Charge-'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.03,
+//                  ),
+//                  Text(':'),
+//                  SizedBox(
+//                    width: MediaQuery.of(context).size.width * 0.03,
+//                  ),
+                  Text('Rs. ${deliveryCharge.toString()}'),
+                ],
+              ):Container(),
               SizedBox(
                 height: 20,
               ),
@@ -2264,8 +2306,8 @@ class _CheckoutState extends State<Checkout> {
 //                    width: MediaQuery.of(context).size.width * 0.03,
 //                  ),
                   Text(discount != null
-                      ? 'Rs. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))).toStringAsFixed(2)}'
-                      : 'Rs. ${((totalAmount() * 0.18) + totalAmount())}'),
+                      ? 'Rs. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))+deliveryCharge).toStringAsFixed(2)}'
+                      : 'Rs. ${((totalAmount() * 0.18) + totalAmount()+deliveryCharge)}'),
                 ],
               ),
               SizedBox(
