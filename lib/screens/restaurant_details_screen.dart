@@ -452,14 +452,14 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       url3 =
           'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FBajji%20Bonda%20Butter%2F1-2.JPG?alt=media&token=1363302b-3013-4cd4-aebf-d2f04c25a764';
   var order, orderid;
-String qtyTag;
+  String qtyTag;
   @override
   void initState() {
     setState(() {
       urlUniv = widget.restaurantDetail.url;
       qtyTag = '${widget.restaurantDetail.quantities[0]} ML';
     });
-prodisprice=widget.restaurantDetail.allquantities[0].price;
+    prodisprice = widget.restaurantDetail.allquantities[0].price;
     choice = 0;
     first();
     checkInCart('${widget.restaurantDetail.quantities[0]} ML');
@@ -577,8 +577,8 @@ prodisprice=widget.restaurantDetail.allquantities[0].price;
               allquantities.clear();
               quantities.clear();
               for (int j = 0;
-              j < snap.data.documents[i]['Quantity'].length;
-              j++) {
+                  j < snap.data.documents[i]['Quantity'].length;
+                  j++) {
                 Quantity qu = Quantity(
                     snap.data.documents[i]['Quantity'][j]['iPrice'],
                     snap.data.documents[i]['Quantity'][j]['price'],
@@ -628,8 +628,8 @@ prodisprice=widget.restaurantDetail.allquantities[0].price;
                               url: snap.data.documents[ind]['url'],
                               boughtTogetherID: snap.data.documents[ind]
                                   ['boughtTogether'],
-                          allquantities: allquantities,
-                          quantities: quantities);
+                              allquantities: allquantities,
+                              quantities: quantities);
                         }
                       }
                       R.Router.navigator
@@ -682,15 +682,15 @@ prodisprice=widget.restaurantDetail.allquantities[0].price;
                               id: snap.data.documents[ind].documentID,
                               name: snap.data.documents[ind]['name'],
                               category: snap.data.documents[ind]['category'],
-                              rating: snap.data.documents[ind]['rating']
-                                  .toString(),
+                              rating:
+                                  snap.data.documents[ind]['rating'].toString(),
                               price: snap.data.documents[ind]['price'],
                               desc: snap.data.documents[ind]['description'],
                               url: snap.data.documents[ind]['url'],
                               boughtTogetherID: snap.data.documents[ind]
                                   ['boughtTogether'],
-                          allquantities: allquantities,
-                          quantities: quantities);
+                              allquantities: allquantities,
+                              quantities: quantities);
                         }
                       }
                       R.Router.navigator
@@ -722,7 +722,6 @@ prodisprice=widget.restaurantDetail.allquantities[0].price;
                   ),
                 ));
               }
-
             }
 
             return SafeArea(
@@ -1123,14 +1122,18 @@ prodisprice=widget.restaurantDetail.allquantities[0].price;
                             ),
                           ),
                           Container(
-                            height: sizes.length * 46.0,
+                            height:
+                                widget.restaurantDetail.allquantities.length *
+                                    50.0,
                             child: Padding(
                               padding: const EdgeInsets.all(8.0),
                               child: ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: widget.restaurantDetail.allquantities.length,
+                                  itemCount: widget
+                                      .restaurantDetail.allquantities.length,
                                   itemBuilder: (context, index) {
-                                    var item=widget.restaurantDetail.allquantities[index];
+                                    var item = widget
+                                        .restaurantDetail.allquantities[index];
                                     return Padding(
                                       padding: const EdgeInsets.all(2.0),
                                       child: InkWell(
@@ -1146,8 +1149,8 @@ prodisprice=widget.restaurantDetail.allquantities[0].price;
                                               item.quantity);
                                           setState(() {
                                             choice = index;
-                                            prodisprice=item.price;
-                                            tag='${item.quantity} ML';
+                                            prodisprice = item.price;
+                                            tag = '${item.quantity} ML';
                                           });
                                         },
                                         child: Container(
@@ -1167,7 +1170,7 @@ prodisprice=widget.restaurantDetail.allquantities[0].price;
                                               children: [
                                                 Text(item.quantity.toString()),
                                                 Text(
-                                                    'Rs. ${int.parse(item.price) }'),
+                                                    'Rs. ${int.parse(item.price)}'),
                                               ],
                                             ),
                                           ),
@@ -1759,7 +1762,7 @@ prodisprice=widget.restaurantDetail.allquantities[0].price;
                                   addToCart(context,
                                       name: widget.restaurantDetail.name,
                                       imgUrl: widget.restaurantDetail.url,
-                                        price:prodisprice,
+                                      price: prodisprice,
 //                                      price: (int.parse(widget
 //                                                  .restaurantDetail.price) *
 //                                              priceFactors[choice])
