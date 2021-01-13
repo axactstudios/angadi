@@ -103,6 +103,7 @@ class RestaurantDetails {
   String price;
   String boughtTogetherDiscount;
   List<Quantity>allquantities=[];
+  List<String> quantities=[];
 
   RestaurantDetails(
       {@required this.url,
@@ -114,7 +115,8 @@ class RestaurantDetails {
       @required this.boughtTogether,
       @required this.boughtTogetherDiscount,
       @required this.boughtTogetherQuantity,
-      @required this.allquantities});
+      @required this.allquantities,
+      @required this.quantities});
 }
 
 class CurrentScreen {

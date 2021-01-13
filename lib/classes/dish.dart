@@ -12,7 +12,8 @@ class Dish {
   String boughtTogetherID;
   String boughtTogetherDiscount;
   String boughtTogetherQuantity;
-  List<Quantity>allquantities=[];
+  List<dynamic>allquantities=[];
+  List<String> quantities=[];
 
   Dish(
       {this.name,
@@ -25,5 +26,5 @@ class Dish {
       this.desc,
       this.boughtTogetherID,
       this.boughtTogetherDiscount,this.boughtTogetherQuantity,
-      this.allquantities});
+      this.allquantities,this.quantities});
 }

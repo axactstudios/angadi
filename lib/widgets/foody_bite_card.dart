@@ -36,6 +36,7 @@ class FoodyBiteCard extends StatefulWidget {
   final List<String> followersImagePath;
   final int orderCount;
   List<Quantity>allquantities=[];
+  List<String>quantities=[];
 
   FoodyBiteCard(
       {this.status = "OPEN",
@@ -58,7 +59,7 @@ class FoodyBiteCard extends StatefulWidget {
       this.cardElevation = 4.0,
       this.ratingsAndStatusCardElevation = 8.0,
       this.followersImagePath,
-      this.orderCount,this.allquantities});
+      this.orderCount,this.allquantities,this.quantities});
 
   @override
   _FoodyBiteCardState createState() => _FoodyBiteCardState();
@@ -249,9 +250,11 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     qty = await getQuantity(widget.cardTitle, '500 ML');
   }
   void getquantities(){
+    listOfQuantities.clear();
     for(int i=0;i<widget.allquantities.length;i++){
       setState(() {
-        listOfQuantities.add(widget.allquantities[i].quantity);
+        print(widget.allquantities[i].quantity);
+//        listOfQuantities.add(widget.allquantities[i].quantity);
         print('-----------------');
         print(listOfQuantities.length);
       });
@@ -265,6 +268,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     first();
     checkInCart('500 ML');
     getAllItems();
+    print('@@@@@@@${widget.quantities}');
     getquantities();
     super.initState();
   }
@@ -375,7 +379,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       ),
                     ),
                     DropDown<String>(
-                      initialValue: widget.allquantities[0].quantity,
+
 //                      items: <String>[
 //
 //                        '500 ML',
@@ -384,7 +388,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                        '5 Ltr:  Rs.${(int.parse(widget.price) * 10).toString()}',
 //                        '10 Ltr:   Rs.${(int.parse(widget.price) * 20).toString()}'
 //                      ],
-                    items:listOfQuantities,
+                    items: widget.quantities,
 
                       hint: Text("Select quantity"),
                       onChanged: (value) async {

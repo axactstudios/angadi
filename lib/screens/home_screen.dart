@@ -76,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime selectedDate;
   String selectedTime = '9 AM';
   FirebaseUser user;
+  List<String>quantities=[];
   getUser() async {
     user = await FirebaseAuth.instance.currentUser();
   }
@@ -295,14 +296,22 @@ class _HomeScreenState extends State<HomeScreen> {
               special.clear();
               dishesSpecial.clear();
               dishesTop.clear();
+              quantities.clear();
+              allquantities.clear();
               for (int i = 0; i < snap.data.documents.length; i++) {
-                int length=snap.data.documents[i]['Quantity'].length;
-                for(int j =0;j<length;j++){
+
+                allquantities.clear();
+                quantities.clear();
+
+                for(int j =0;j<snap.data.documents[i]['Quantity'].length;j++){
 
                   Quantity qu=Quantity(snap.data.documents[i]['Quantity'][j]['iPrice'],snap.data.documents[i]['Quantity'][j]['price'],snap.data.documents[i]['Quantity'][j]['productId'],snap.data.documents[i]['Quantity'][j]['quantity']);
 
                  allquantities.add(qu);
+                 quantities.add('${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
                 }
+//                print('&&&&&&&&&&&&&&&&&&&&&&');Chalake dekh map hai aesa nai aayega
+//               print(quantities.length);
                 // print('Imp ${snap.data.documents[i]['boughtTogether']}');
                 dishes.add(Dish(
                     name: snap.data.documents[i]['name'],
@@ -317,8 +326,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     url: snap.data.documents[i]['url'],
                     boughtTogetherID: snap.data.documents[i]
                         ['boughtTogether'],
-                allquantities: allquantities));
-//                print(snap.data.documents[i]['name']);
+                allquantities: allquantities,
+                quantities: quantities));
+
+
                 if (snap.data.documents[i]['special']) {
                   dishesSpecial.add(Dish(
                       boughtTogetherDiscount: snap.data.documents[i]
@@ -326,14 +337,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
                       id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
-                      category: snap.data.documents[i]['category'],
+                      category: snap.data.documents[i]['category'],//Still same SS bhej whatsapp pe mere Ek kaam kr....code push krde...main ispe dekhta tu hamro dekhle ok boss
                       rating: snap.data.documents[i]['rating'].toString(),
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url'],
                       boughtTogetherID: snap.data.documents[i]
                           ['boughtTogether'],
-                      allquantities: allquantities));
+                      allquantities:  snap.data.documents[i]
+                      ['Quantity'],
+                  quantities:dishes[i].quantities));
+                  print('Checkinggggg${dishes[i].quantities}');
 //                  print(snap.data.documents[i]['name']);
                   special.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
@@ -359,7 +373,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 rating: dishes[i].rating,
                                 price: dishes[i].price,
                                 boughtTogether: boughtTogether,
-                              allquantities: dishes[i].allquantities
+                              allquantities: dishes[i].allquantities,
+                              quantities: dishes[i].quantities
                             ),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
@@ -374,9 +389,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       price: snap.data.documents[i]['price'].toString(),
                       iPrice: snap.data.documents[i]['iPrice'].toString(),
                       orderCount: orderCount,
-                      allquantities:  allquantities,
+                      allquantities:  dishes[i].allquantities,
+                      quantities: dishes[i].quantities,
                     ),
                   ));
+                  print('++++++++++++++');
+                  print(quantities);
+                  print(dishes[i].quantities);
                 }
                 if (snap.data.documents[i]['top']) {
                   dishesTop.add(Dish(
@@ -391,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url'],
                       boughtTogetherID: snap.data.documents[i]
-                          ['boughtTogether'], allquantities: allquantities));
+                          ['boughtTogether'], allquantities:dishes[i].allquantities,quantities: dishes[i].quantities));
 //                  print(snap.data.documents[i]['name']);
                   top.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
@@ -408,7 +427,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             print('Got it');
                           }
                         }
-                        await print('---------------$boughtTogether');
+                        await print('-------------$boughtTogether');
+                        print('Checkkk${dishes[i].quantities}');
                         pushNewScreen(
                           context,
                           screen: RestaurantDetailsScreen(
@@ -423,13 +443,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 rating: dishes[i].rating,
                                 price: dishes[i].price,
                                 boughtTogether: boughtTogether,
-                            allquantities: dishes[i].allquantities),
+                            allquantities: dishes[i].allquantities,quantities: dishes[i].quantities),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
                               PageTransitionAnimation.cupertino,
                         );
                       },
+
                       imagePath: snap.data.documents[i]['url'],
                       cardTitle: snap.data.documents[i]['name'],
                       rating: snap.data.documents[i]['rating'].toString(),
@@ -437,7 +458,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       price: snap.data.documents[i]['price'].toString(),
                       iPrice: snap.data.documents[i]['iPrice'].toString(),
                       orderCount: orderCount,
-                      allquantities: allquantities
+                      allquantities: dishes[i].allquantities,
+                      quantities: dishes[i].quantities,
                     ),
                   ));
                 }
@@ -468,7 +490,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 rating: dishes[i].rating,
                                 price: dishes[i].price,
                                 boughtTogether: boughtTogether,
-                            allquantities: dishes[i].allquantities),
+                            allquantities: dishes[i].allquantities,quantities:dishes[i].quantities),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
