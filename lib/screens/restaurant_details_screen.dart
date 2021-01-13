@@ -593,8 +593,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           boughtTogether = await Dish(
                               boughtTogetherDiscount: snap.data.documents[ind]
                                   ['boughtTogetherDiscount'],
-                              boughtTogetherQuantity:snap.data.documents[ind]
-                              ['boughtTogetherQuantity'], 
+                              boughtTogetherQuantity: snap.data.documents[ind]
+                                  ['boughtTogetherQuantity'],
                               id: snap.data.documents[ind].documentID,
                               name: snap.data.documents[ind]['name'],
                               category: snap.data.documents[ind]['category'],
@@ -614,7 +614,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 boughtTogetherDiscount: snap.data.documents[i]
                                     ['boughtTogetherDiscount'],
                                 boughtTogetherQuantity: snap.data.documents[i]
-                                ['boughtTogetherQuantity'],
+                                    ['boughtTogetherQuantity'],
                                 url: snap.data.documents[i]['url'],
                                 name: snap.data.documents[i]['name'],
                                 desc: snap.data.documents[i]['description'],
@@ -632,6 +632,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                   ),
                 ));
               }
+
               if (double.parse(snap.data.documents[i]['rating']) >
                   double.parse(widget.restaurantDetail.rating)) {
                 dishesLike.add(Container(
@@ -648,12 +649,12 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               boughtTogetherDiscount: snap.data.documents[ind]
                                   ['boughtTogetherDiscount'],
                               boughtTogetherQuantity: snap.data.documents[ind]
-                              ['boughtTogetherQuantity'],
+                                  ['boughtTogetherQuantity'],
                               id: snap.data.documents[ind].documentID,
                               name: snap.data.documents[ind]['name'],
                               category: snap.data.documents[ind]['category'],
-                              rating:
-                                  snap.data.documents[ind]['rating'].toString(),
+                              rating: snap.data.documents[ind]['rating']
+                                  .toString(),
                               price: snap.data.documents[ind]['price'],
                               desc: snap.data.documents[ind]['description'],
                               url: snap.data.documents[ind]['url'],
@@ -667,7 +668,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 boughtTogetherDiscount: snap.data.documents[i]
                                     ['boughtTogetherDiscount'],
                                 boughtTogetherQuantity: snap.data.documents[i]
-                                ['boughtTogetherQuantity'],
+                                    ['boughtTogetherQuantity'],
                                 boughtTogether: boughtTogether,
                                 url: snap.data.documents[i]['url'],
                                 name: snap.data.documents[i]['name'],
@@ -686,6 +687,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                   ),
                 ));
               }
+
             }
 
             return SafeArea(
@@ -1355,8 +1357,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 alignment: Alignment.bottomLeft,
                                                 child: Container(
                                                   child: Text(
-                                                  " ${ widget
-                                                        .restaurantDetail.name} (${widget.restaurantDetail.boughtTogetherQuantity})}",
+                                                    " ${widget.restaurantDetail.name} (${widget.restaurantDetail.boughtTogetherQuantity})}",
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -1440,7 +1441,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 alignment: Alignment.bottomLeft,
                                                 child: Container(
                                                   child: Text(
-                                                ' ${  widget.restaurantDetail.boughtTogether.name},(${widget.restaurantDetail.boughtTogetherQuantity})',
+                                                    ' ${widget.restaurantDetail.boughtTogether.name},(${widget.restaurantDetail.boughtTogetherQuantity})',
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -1523,24 +1524,50 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
-                                            
+
                                             Spacer(),
-                                            angadiButton('Add',buttonWidth: MediaQuery.of(context).size.width*0.2,buttonHeight: MediaQuery.of(context).size.height*0.04,onTap: (){
-                                              addToCart(context,
-                                                  name: widget.restaurantDetail.name,
-                                                  imgUrl: widget.restaurantDetail.url,
-                                                  price:'${ ((double.parse(widget.restaurantDetail.price) ) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100)
-                                                      )}',
-                                                  qty: 1,
-                                                  qtyTag:widget.restaurantDetail.boughtTogetherQuantity);
-                                              addToCart(context,
-                                                  name: widget.restaurantDetail.boughtTogether.name,
-                                                  imgUrl: widget.restaurantDetail.boughtTogether.url,
-                                                  price:'${ ((double.parse(widget.restaurantDetail.boughtTogether.price) ) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100)
-                                                  )}',
-                                                  qty: 1,
-                                                  qtyTag:widget.restaurantDetail.boughtTogether.boughtTogetherQuantity);
-                                            },)
+                                            angadiButton(
+                                              'Add',
+                                              buttonWidth:
+                                                  MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.2,
+                                              buttonHeight:
+                                                  MediaQuery.of(context)
+                                                          .size
+                                                          .height *
+                                                      0.04,
+                                              onTap: () {
+                                                addToCart(context,
+                                                    name: widget
+                                                        .restaurantDetail.name,
+                                                    imgUrl: widget
+                                                        .restaurantDetail.url,
+                                                    price:
+                                                        '${((double.parse(widget.restaurantDetail.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
+                                                    qty: 1,
+                                                    qtyTag: widget
+                                                        .restaurantDetail
+                                                        .boughtTogetherQuantity);
+                                                addToCart(context,
+                                                    name: widget
+                                                        .restaurantDetail
+                                                        .boughtTogether
+                                                        .name,
+                                                    imgUrl: widget
+                                                        .restaurantDetail
+                                                        .boughtTogether
+                                                        .url,
+                                                    price:
+                                                        '${((double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
+                                                    qty: 1,
+                                                    qtyTag: widget
+                                                        .restaurantDetail
+                                                        .boughtTogether
+                                                        .boughtTogetherQuantity);
+                                              },
+                                            )
                                             // GestureDetector(
                                             //   child: Container(
                                             //       width: 100.0,
@@ -1565,26 +1592,28 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 )
                               : Container(),
 
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: HeadingRow(
-                              title: 'You May Also Like',
-                              number: '',
-                              // onTapOfNumber: () {
-                              //   Navigator.push(context,
-                              //       MaterialPageRoute(builder: (BuildContext context) {
-                              //         return TrendingRestaurantsScreen1("top");
-                              //       }));
-                              // },
-                            ),
-                          ),
+                          dishesLike.length != 0
+                              ? Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: HeadingRow(
+                                    title: 'You May Also Like',
+                                    number: '',
+                                    // onTapOfNumber: () {
+                                    //   Navigator.push(context,
+                                    //       MaterialPageRoute(builder: (BuildContext context) {
+                                    //         return TrendingRestaurantsScreen1("top");
+                                    //       }));
+                                    // },
+                                  ),
+                                )
+                              : Container(),
 
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              height: 405,
-                              child: dishesLike.length != 0
-                                  ? GridView(
+                            child: dishesLike.length != 0
+                                ? Container(
+                                    height: 405,
+                                    child: GridView(
                                       scrollDirection: Axis.horizontal,
                                       shrinkWrap: true,
                                       gridDelegate:
@@ -1594,9 +1623,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                               mainAxisSpacing: 5.0,
                                               childAspectRatio: 0.59),
                                       children: dishesLike,
-                                    )
-                                  : Container(),
-                            ),
+                                    ),
+                                  )
+                                : Container(),
                           ),
                           // Padding(
                           //   padding: const EdgeInsets.all(8.0),

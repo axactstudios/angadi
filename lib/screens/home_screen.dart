@@ -62,7 +62,6 @@ class _HomeScreenState extends State<HomeScreen> {
   TextEditingController controller = TextEditingController();
   List<String> imageList = List();
   List<Widget> trending = new List();
-  List <Quantity>allquantities=[];
   List<Widget> special = new List();
   List<Widget> top = new List();
   List<Widget> categories = new List();
@@ -76,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime selectedDate;
   String selectedTime = '9 AM';
   FirebaseUser user;
-  List<String>quantities=[];
+  List<String> quantities = [];
   getUser() async {
     user = await FirebaseAuth.instance.currentUser();
   }
@@ -296,19 +295,25 @@ class _HomeScreenState extends State<HomeScreen> {
               special.clear();
               dishesSpecial.clear();
               dishesTop.clear();
-              quantities.clear();
-              allquantities.clear();
               for (int i = 0; i < snap.data.documents.length; i++) {
+                List<Quantity> allquantities = [];
+                List<String> quantities = [];
 
                 allquantities.clear();
                 quantities.clear();
 
-                for(int j =0;j<snap.data.documents[i]['Quantity'].length;j++){
+                for (int j = 0;
+                    j < snap.data.documents[i]['Quantity'].length;
+                    j++) {
+                  Quantity qu = Quantity(
+                      snap.data.documents[i]['Quantity'][j]['iPrice'],
+                      snap.data.documents[i]['Quantity'][j]['price'],
+                      snap.data.documents[i]['Quantity'][j]['productId'],
+                      snap.data.documents[i]['Quantity'][j]['quantity']);
 
-                  Quantity qu=Quantity(snap.data.documents[i]['Quantity'][j]['iPrice'],snap.data.documents[i]['Quantity'][j]['price'],snap.data.documents[i]['Quantity'][j]['productId'],snap.data.documents[i]['Quantity'][j]['quantity']);
-
-                 allquantities.add(qu);
-                 quantities.add('${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                  allquantities.add(qu);
+                  quantities.add(
+                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
                 }
 //                print('&&&&&&&&&&&&&&&&&&&&&&');Chalake dekh map hai aesa nai aayega
 //               print(quantities.length);
@@ -317,36 +322,36 @@ class _HomeScreenState extends State<HomeScreen> {
                     name: snap.data.documents[i]['name'],
                     boughtTogetherDiscount: snap.data.documents[i]
                         ['boughtTogetherDiscount'],
-                    boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
+                    boughtTogetherQuantity: snap.data.documents[i]
+                        ['boughtTogetherQuantity'],
                     id: snap.data.documents[i].documentID,
                     category: snap.data.documents[i]['category'],
                     rating: snap.data.documents[i]['rating'].toString(),
                     price: snap.data.documents[i]['price'],
                     desc: snap.data.documents[i]['description'],
                     url: snap.data.documents[i]['url'],
-                    boughtTogetherID: snap.data.documents[i]
-                        ['boughtTogether'],
-                allquantities: allquantities,
-                quantities: quantities));
-
+                    boughtTogetherID: snap.data.documents[i]['boughtTogether'],
+                    allquantities: allquantities,
+                    quantities: quantities));
 
                 if (snap.data.documents[i]['special']) {
                   dishesSpecial.add(Dish(
                       boughtTogetherDiscount: snap.data.documents[i]
                           ['boughtTogetherDiscount'],
-                      boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
+                      boughtTogetherQuantity: snap.data.documents[i]
+                          ['boughtTogetherQuantity'],
                       id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
-                      category: snap.data.documents[i]['category'],//Still same SS bhej whatsapp pe mere Ek kaam kr....code push krde...main ispe dekhta tu hamro dekhle ok bupppppppppppppppp done bossppppppppp bhupppppppp
+                      category: snap.data.documents[i][
+                          'category'], //Still same SS bhej whatsapp pe mere Ek kaam kr....code push krde...main ispe dekhta tu hamro dekhle ok bupppppppppppppppp done bossppppppppp bhupppppppp
                       rating: snap.data.documents[i]['rating'].toString(),
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url'],
                       boughtTogetherID: snap.data.documents[i]
                           ['boughtTogether'],
-                      allquantities:  snap.data.documents[i]
-                      ['Quantity'],
-                  quantities:dishes[i].quantities));
+                      allquantities: snap.data.documents[i]['Quantity'],
+                      quantities: dishes[i].quantities));
 //                  print('Checkinggggg${dishes[i].quantities}');
 //                  print(snap.data.documents[i]['name']);
                   special.add(Container(
@@ -365,7 +370,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             RestaurantDetails(
                                 boughtTogetherDiscount:
                                     dishes[i].boughtTogetherDiscount,
-                                boughtTogetherQuantity:dishes[i].boughtTogetherQuantity,
+                                boughtTogetherQuantity:
+                                    dishes[i].boughtTogetherQuantity,
                                 url: dishes[i].url,
                                 name: dishes[i].name,
                                 desc: dishes[i].desc,
@@ -373,9 +379,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 rating: dishes[i].rating,
                                 price: dishes[i].price,
                                 boughtTogether: boughtTogether,
-                              allquantities: dishes[i].allquantities,
-                              quantities: dishes[i].quantities
-                            ),
+                                allquantities: dishes[i].allquantities,
+                                quantities: dishes[i].quantities),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
@@ -389,7 +394,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       price: snap.data.documents[i]['price'].toString(),
                       iPrice: snap.data.documents[i]['iPrice'].toString(),
                       orderCount: orderCount,
-                      allquantities:  dishes[i].allquantities,
+                      allquantities: dishes[i].allquantities,
                       quantities: dishes[i].quantities,
                     ),
                   ));
@@ -401,7 +406,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   dishesTop.add(Dish(
                       boughtTogetherDiscount: snap.data.documents[i]
                           ['boughtTogetherDiscount'],
-                      boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
+                      boughtTogetherQuantity: snap.data.documents[i]
+                          ['boughtTogetherQuantity'],
                       id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
@@ -410,7 +416,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       desc: snap.data.documents[i]['description'],
                       url: snap.data.documents[i]['url'],
                       boughtTogetherID: snap.data.documents[i]
-                          ['boughtTogether'], allquantities:dishes[i].allquantities,quantities: dishes[i].quantities));
+                          ['boughtTogether'],
+                      allquantities: dishes[i].allquantities,
+                      quantities: dishes[i].quantities));
 //                  print(snap.data.documents[i]['name']);
                   top.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
@@ -435,7 +443,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             RestaurantDetails(
                                 boughtTogetherDiscount:
                                     dishes[i].boughtTogetherDiscount,
-                                boughtTogetherQuantity:dishes[i].boughtTogetherQuantity,
+                                boughtTogetherQuantity:
+                                    dishes[i].boughtTogetherQuantity,
                                 url: dishes[i].url,
                                 name: dishes[i].name,
                                 desc: dishes[i].desc,
@@ -443,14 +452,14 @@ class _HomeScreenState extends State<HomeScreen> {
                                 rating: dishes[i].rating,
                                 price: dishes[i].price,
                                 boughtTogether: boughtTogether,
-                            allquantities: dishes[i].allquantities,quantities: dishes[i].quantities),
+                                allquantities: dishes[i].allquantities,
+                                quantities: dishes[i].quantities),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
                               PageTransitionAnimation.cupertino,
                         );
                       },
-
                       imagePath: snap.data.documents[i]['url'],
                       cardTitle: snap.data.documents[i]['name'],
                       rating: snap.data.documents[i]['rating'].toString(),
@@ -482,7 +491,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             RestaurantDetails(
                                 boughtTogetherDiscount:
                                     dishes[i].boughtTogetherDiscount,
-                                boughtTogetherQuantity:dishes[i].boughtTogetherQuantity,
+                                boughtTogetherQuantity:
+                                    dishes[i].boughtTogetherQuantity,
                                 url: dishes[i].url,
                                 name: dishes[i].name,
                                 desc: dishes[i].desc,
@@ -490,7 +500,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 rating: dishes[i].rating,
                                 price: dishes[i].price,
                                 boughtTogether: boughtTogether,
-                            allquantities: dishes[i].allquantities,quantities:dishes[i].quantities),
+                                allquantities: dishes[i].allquantities,
+                                quantities: dishes[i].quantities),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
