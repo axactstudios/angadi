@@ -449,10 +449,31 @@ void areas()async{
           ),
         ));
   }
+  void delivery(){
+    if(widget.address!=''){
+      for(int i =0;i<savedarea.length;i++){
+        if (widget.SavedArea ==
+            savedarea[i].name) {
+          print(widget.SavedArea);
+          setState(() {
+            minOrderPrice = double.parse(
+                savedarea[i].minOrderPrice);
+            deliveryCharge = double.parse(
+                savedarea[i].deliveryCharge);
+          });
+        }
+      }
+    }
+
+
+  }
 
   @override
   Widget build(BuildContext context) {
+
     print(_result);
+    delivery();
+
 //    _pickTime() async {
 //      TimeOfDay t = await showTimePicker(context: context, initialTime: time);
 //      if (t != null)
