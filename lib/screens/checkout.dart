@@ -33,15 +33,16 @@ import 'package:url_launcher/url_launcher.dart';
 import 'order_placed.dart';
 
 class Checkout extends StatefulWidget {
-  String address;
+  String address;String   SavedArea;
   var id;
-  Checkout(this.address, this.id);
+  Checkout(this.address, this.id,this.SavedArea);
   @override
   _CheckoutState createState() => _CheckoutState();
 }
 
 class _CheckoutState extends State<Checkout> {
   final _formkey =GlobalKey<FormState>();
+  List <EmiratesArea> savedarea=[];
   bool ischecked=false;
   String type = 'Delivery';
   List<Cart> cartItems = [];
@@ -109,7 +110,24 @@ class _CheckoutState extends State<Checkout> {
       },
     );
   }
-
+void areas()async{
+    await Firestore.instance.collection('EmiratesArea').getDocuments().then((value) {
+      for(int i =0;i<value.documents.length;i++){
+        setState(() {
+          EmiratesArea emi2 = EmiratesArea(
+              value.documents[i]
+              ['Emirate'],
+              value.documents[i]
+              ['deliveryCharge'],
+              value.documents[i]
+              ['minOrderPrice'],
+              value.documents[i]['name'],
+              value.documents[i]['zone']);
+          savedarea.add(emi2);
+        });
+      }
+    });
+}
   Widget _buildTimeDialog(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
 
@@ -275,6 +293,7 @@ class _CheckoutState extends State<Checkout> {
     _getCurrentLocation();
     getid();
     address();
+    areas();
     time = TimeOfDay.now();
     date = DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
@@ -778,6 +797,7 @@ class _CheckoutState extends State<Checkout> {
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(widget.address),
+
                         ),
                       ),
                 type != 'Takeaway' && widget.address == ''
@@ -1467,7 +1487,7 @@ class _CheckoutState extends State<Checkout> {
                                 ),
                             )
                     : Container(),
-                type != 'Takeaway'? CheckboxListTile(controlAffinity:ListTileControlAffinity.leading,checkColor:Colors.white,activeColor:AppColors.secondaryElement,title: Text("Save to my addresses"),value: ischecked, onChanged: (newValue)
+                type != 'Takeaway'&&widget.address==''? CheckboxListTile(controlAffinity:ListTileControlAffinity.leading,checkColor:Colors.white,activeColor:AppColors.secondaryElement,title: Text("Save to my addresses"),value: ischecked, onChanged: (newValue)
                 {setState(() {
                   ischecked=!ischecked;
                 });
@@ -1494,6 +1514,9 @@ class _CheckoutState extends State<Checkout> {
                           'Saved addresses',
                           buttonWidth: MediaQuery.of(context).size.width,
                           onTap: () {
+                            setState(() {
+
+                            });
                             Navigator.pushReplacement(context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) {
@@ -1824,24 +1847,92 @@ class _CheckoutState extends State<Checkout> {
                               'Cash On Delivery',
                               buttonWidth: MediaQuery.of(context).size.width,
                               onTap: () {
-                                if(_formkey.currentState.validate()){
-                                  var total=0.0;
+                                print('-------------------------------------');
+
+                                if (widget.address != '') {
+
+                                  if (widget.SavedArea != '') {
+
+                                    for (int i = 0; i < savedarea.length; i++) {
+                                      if (widget.SavedArea ==
+                                          savedarea[i].name) {
+                                        print(widget.SavedArea);
+                                        setState(() {
+                                          minOrderPrice = double.parse(
+                                              savedarea[i].minOrderPrice);
+                                          deliveryCharge = double.parse(
+                                              savedarea[i].deliveryCharge);
+                                        });
+                                      }
+                                      print('kkkkkkkkkkkkkkkkkkkkkkk');
+                                      print(minOrderPrice);
+                                      print(deliveryCharge);
+                                    }
+                                  }
+                                  var total = 0.0;
                                   discount != null
-                                      ? total=((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))+deliveryCharge)
-                                      :total= ((totalAmount() * 0.18) + totalAmount()+deliveryCharge);
-                                  if(total>minOrderPrice){
+                                      ? total =
+                                  ((totalAmount() * 0.18) + totalAmount() -
+                                      (totalAmount() *
+                                          (double.parse(discount.discount) /
+                                              100)) + deliveryCharge)
+                                      : total = ((totalAmount() * 0.18) +
+                                      totalAmount() + deliveryCharge);
+                                  if (total > minOrderPrice) {
                                     showAlertDialog(context);
                                   }
-                                 else{
+                                  else {
                                     Fluttertoast.showToast(
-                                        msg: 'Your order amount is less \n than the minimum order price', toastLength: Toast.LENGTH_SHORT);
+                                        msg: 'Your order amount is less \n than the minimum order price',
+                                        toastLength: Toast.LENGTH_SHORT);
                                   }
                                 }
-                               else{
-                                  Fluttertoast.showToast(
-                                      msg: 'Address required', toastLength: Toast.LENGTH_SHORT);
+
+                                if (widget.address == '') {
+                                  if (_formkey.currentState.validate()) {
+                                    if (widget.SavedArea != '') {
+                                      for (int i = 0; i <
+                                          allareas.length; i++) {
+                                        if (widget.SavedArea ==
+                                            allareas[i].name) {
+                                          setState(() {
+                                            minOrderPrice = double.parse(
+                                                allareas[i].minOrderPrice);
+                                            deliveryCharge = double.parse(
+                                                allareas[i].deliveryCharge);
+                                          });
+                                        }
+                                        print(minOrderPrice);
+                                        print(deliveryCharge);
+                                      }
+                                    }
+                                    var total = 0.0;
+                                    discount != null
+                                        ? total =
+                                    ((totalAmount() * 0.18) + totalAmount() -
+                                        (totalAmount() *
+                                            (double.parse(discount.discount) /
+                                                100)) + deliveryCharge)
+                                        : total =
+                                    ((totalAmount() * 0.18) + totalAmount() +
+                                        deliveryCharge);
+                                    if (total > minOrderPrice) {
+                                      showAlertDialog(context);
+                                    }
+                                    else {
+                                      Fluttertoast.showToast(
+                                          msg: 'Your order amount is less \n than the minimum order price',
+                                          toastLength: Toast.LENGTH_SHORT);
+                                    }
+                                  }
+                                  else {
+                                    Fluttertoast.showToast(
+                                        msg: 'Address required',
+                                        toastLength: Toast.LENGTH_SHORT);
+                                  }
                                 }
-                              },
+
+                              }
                             ),
                           )
                         : Container(),

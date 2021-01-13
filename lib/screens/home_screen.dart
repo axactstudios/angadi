@@ -337,7 +337,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
                       id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
-                      category: snap.data.documents[i]['category'],//Still same SS bhej whatsapp pe mere Ek kaam kr....code push krde...main ispe dekhta tu hamro dekhle ok boss
+                      category: snap.data.documents[i]['category'],//Still same SS bhej whatsapp pe mere Ek kaam kr....code push krde...main ispe dekhta tu hamro dekhle ok bupppppppppppppppp done bossppppppppp bhupppppppp
                       rating: snap.data.documents[i]['rating'].toString(),
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
@@ -347,7 +347,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       allquantities:  snap.data.documents[i]
                       ['Quantity'],
                   quantities:dishes[i].quantities));
-                  print('Checkinggggg${dishes[i].quantities}');
+//                  print('Checkinggggg${dishes[i].quantities}');
 //                  print(snap.data.documents[i]['name']);
                   special.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
@@ -393,9 +393,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       quantities: dishes[i].quantities,
                     ),
                   ));
-                  print('++++++++++++++');
-                  print(quantities);
-                  print(dishes[i].quantities);
+//                  print('++++++++++++++');
+//                  print(quantities);
+//                  print(dishes[i].quantities);
                 }
                 if (snap.data.documents[i]['top']) {
                   dishesTop.add(Dish(
