@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/classes/quantity.dart';
 import 'package:angadi/classes/wishlist.dart';
 import 'package:angadi/routes/router.gr.dart';
 import 'package:angadi/screens/review_rating_screen.dart';
@@ -96,6 +97,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   var qty = 1;
   bool present = false;
   int choice = 0;
+  String tag;
+  var proprice;
+  var prodisprice;
   List<Cart> cartItems = [];
   List<Wishlist> wishlistItems = [];
   List<Widget> youMayAlsoLike = new List();
@@ -367,7 +371,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   }
 
   var factor = 1;
-  String qtyTag = '500 ML';
+
   List<String> listOfQuantities = [
     '500 ML',
     '1 Ltr',
@@ -448,16 +452,17 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       url3 =
           'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FBajji%20Bonda%20Butter%2F1-2.JPG?alt=media&token=1363302b-3013-4cd4-aebf-d2f04c25a764';
   var order, orderid;
-
+String qtyTag;
   @override
   void initState() {
     setState(() {
       urlUniv = widget.restaurantDetail.url;
+      qtyTag = '${widget.restaurantDetail.quantities[0]} ML';
     });
-
+prodisprice=widget.restaurantDetail.allquantities[0].price;
     choice = 0;
     first();
-    checkInCart('500 ML');
+    checkInCart('${widget.restaurantDetail.quantities[0]} ML');
     getAllItems();
     super.initState();
   }
@@ -566,6 +571,24 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
             similarProducts.clear();
 
             for (int i = 0; i < snap.data.documents.length; i++) {
+              List<Quantity> allquantities = [];
+              List<String> quantities = [];
+
+              allquantities.clear();
+              quantities.clear();
+              for (int j = 0;
+              j < snap.data.documents[i]['Quantity'].length;
+              j++) {
+                Quantity qu = Quantity(
+                    snap.data.documents[i]['Quantity'][j]['iPrice'],
+                    snap.data.documents[i]['Quantity'][j]['price'],
+                    snap.data.documents[i]['Quantity'][j]['productId'],
+                    snap.data.documents[i]['Quantity'][j]['quantity']);
+
+                allquantities.add(qu);
+                quantities.add(
+                    '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+              }
               if (snap.data.documents[i]['name'] ==
                   widget.restaurantDetail.name) {
                 if (snap.data.documents[i]['url2'] != null) {
@@ -604,7 +627,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               desc: snap.data.documents[ind]['description'],
                               url: snap.data.documents[ind]['url'],
                               boughtTogetherID: snap.data.documents[ind]
-                                  ['boughtTogether']);
+                                  ['boughtTogether'],
+                          allquantities: allquantities,
+                          quantities: quantities);
                         }
                       }
                       R.Router.navigator
@@ -621,6 +646,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 category: snap.data.documents[i]['category'],
                                 rating: snap.data.documents[i]['rating'],
                                 price: snap.data.documents[i]['price'],
+                                allquantities: allquantities,
+                                quantities: quantities,
                               ));
                     },
                     imagePath: snap.data.documents[i]['url'],
@@ -629,6 +656,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                     category: snap.data.documents[i]['category'],
                     price: snap.data.documents[i]['price'].toString(),
                     iPrice: snap.data.documents[i]['iPrice'].toString(),
+                    allquantities: allquantities,
+                    quantities: quantities,
                   ),
                 ));
               }
@@ -659,7 +688,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               desc: snap.data.documents[ind]['description'],
                               url: snap.data.documents[ind]['url'],
                               boughtTogetherID: snap.data.documents[ind]
-                                  ['boughtTogether']);
+                                  ['boughtTogether'],
+                          allquantities: allquantities,
+                          quantities: quantities);
                         }
                       }
                       R.Router.navigator
@@ -676,6 +707,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 category: snap.data.documents[i]['category'],
                                 rating: snap.data.documents[i]['rating'],
                                 price: snap.data.documents[i]['price'],
+                                allquantities: allquantities,
+                                quantities: quantities,
                               ));
                     },
                     imagePath: snap.data.documents[i]['url'],
@@ -684,6 +717,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                     category: snap.data.documents[i]['category'],
                     price: snap.data.documents[i]['price'].toString(),
                     iPrice: snap.data.documents[i]['iPrice'].toString(),
+                    allquantities: allquantities,
+                    quantities: quantities,
                   ),
                 ));
               }
@@ -997,7 +1032,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                'Rs. ${int.parse(widget.restaurantDetail.price) * priceFactors[choice]}',
+                                                'Rs. ${int.parse(prodisprice).toString()}',
                                                 textAlign: TextAlign.left,
                                                 style: Styles
                                                     .customMediumTextStyle(
@@ -1008,7 +1043,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 ),
                                               ),
                                               Text(
-                                                '(${sizes[choice].toString()})',
+                                                '(${qtyTag})',
                                                 textAlign: TextAlign.left,
                                                 style: Styles
                                                     .customMediumTextStyle(
@@ -1093,23 +1128,26 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               padding: const EdgeInsets.all(8.0),
                               child: ListView.builder(
                                   physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: sizes.length,
+                                  itemCount: widget.restaurantDetail.allquantities.length,
                                   itemBuilder: (context, index) {
+                                    var item=widget.restaurantDetail.allquantities[index];
                                     return Padding(
                                       padding: const EdgeInsets.all(2.0),
                                       child: InkWell(
                                         onTap: () async {
                                           await getAllItems();
                                           factor = await 1;
-                                          qtyTag = await sizes[index];
+                                          qtyTag = await item.quantity;
                                           choice = await index;
 
-                                          await checkInCart(sizes[index]);
+                                          await checkInCart(item.quantity);
                                           qty = await getQuantity(
                                               widget.restaurantDetail.name,
-                                              sizes[index]);
+                                              item.quantity);
                                           setState(() {
                                             choice = index;
+                                            prodisprice=item.price;
+                                            tag='${item.quantity} ML';
                                           });
                                         },
                                         child: Container(
@@ -1127,9 +1165,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                   MainAxisAlignment
                                                       .spaceBetween,
                                               children: [
-                                                Text(sizes[index].toString()),
+                                                Text(item.quantity.toString()),
                                                 Text(
-                                                    'Rs. ${int.parse(widget.restaurantDetail.price) * priceFactors[index]}'),
+                                                    'Rs. ${int.parse(item.price) }'),
                                               ],
                                             ),
                                           ),
@@ -1671,7 +1709,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       context,
                                       name: widget.restaurantDetail.name,
                                       imgUrl: widget.restaurantDetail.url,
-                                      price: widget.restaurantDetail.price,
+                                      price: prodisprice,
                                     );
                                   else
                                     setState(() {
@@ -1721,10 +1759,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   addToCart(context,
                                       name: widget.restaurantDetail.name,
                                       imgUrl: widget.restaurantDetail.url,
-                                      price: (int.parse(widget
-                                                  .restaurantDetail.price) *
-                                              priceFactors[choice])
-                                          .toString(),
+                                        price:prodisprice,
+//                                      price: (int.parse(widget
+//                                                  .restaurantDetail.price) *
+//                                              priceFactors[choice])
+//                                          .toString(),
                                       qty: 1,
                                       qtyTag: sizes[choice]);
                                   // else

@@ -71,6 +71,9 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
   var length;
   var qty = 1;
   int choice = 0;
+  var proprice;
+  var prodisprice;
+
   List<String>allqan=[];
   List<Cart> cartItems = [];
   static List<bool> check = [false, false, false, false, false];
@@ -108,7 +111,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     setState(() {
       for (var v in cartItems) {
         if (v.productName == widget.cardTitle &&
-            v.qtyTag == listOfQuantities[choice]) {
+           v.qtyTag == widget.quantities[choice]) {
           qty = v.qty;
         }
       }
@@ -210,7 +213,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
   }
 
   var factor = 1;
-  String qtyTag = '500 ML';
+  String qtyTag;
   List<String> listOfQuantities = [
 
   ];
@@ -247,26 +250,22 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
   }
 
   first() async {
-    qty = await getQuantity(widget.cardTitle, '500 ML');
+    qty = await getQuantity(widget.cardTitle, '${widget.quantities[0]} ML');
   }
   void getquantities(){
     listOfQuantities.clear();
     for(int i=0;i<widget.allquantities.length;i++){
-      setState(() {
-        print(widget.allquantities[i].quantity);
-//        listOfQuantities.add(widget.allquantities[i].quantity);
-        print('-----------------');
-        print(listOfQuantities.length);
-      });
-    }
-  }
 
+      }}
 
   @override
   void initState() {
     choice = 0;
+    qtyTag=widget.quantities[0];
     first();
-    checkInCart('500 ML');
+    proprice=widget.allquantities[0].iPrice;
+    prodisprice=widget.allquantities[0].price;
+    checkInCart('${widget.quantities[0]} ML');
     getAllItems();
     print('@@@@@@@${widget.quantities}');
     getquantities();
@@ -393,12 +392,22 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       hint: Text("Select quantity"),
                       onChanged: (value) async {
                         await getAllItems();
+
 //                        if (value == '500 ML') {
 //                          factor = await 1;
 //                          qtyTag = await '500 ML';
 //                          choice = await 0;
                           await checkInCart(value);
                           qty = await getQuantity(widget.cardTitle, value);
+                          for(int i =0;i<widget.allquantities.length;i++){
+                            if(value=='${widget.allquantities[i].quantity} ML'){
+                              setState(() {
+                                qtyTag='${widget.allquantities[i].quantity} ML';
+                                proprice=widget.allquantities[i].iPrice;
+                                prodisprice=widget.allquantities[i].price;
+                              });
+                            }
+                          }
 //                        }
 //                        if (value ==
 //                            '1 Ltr:  Rs.${(int.parse(widget.price) * 2).toString()}') {
@@ -445,7 +454,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       children: [
                         Container(
                           child: Text(
-                            'Rs. ${(int.parse(widget.price) * factor).toString()}  ',
+                            'Rs. ${(int.parse(prodisprice).toString())}  ',
                             textAlign: TextAlign.left,
                             style: Styles.customMediumTextStyle(
                               color: AppColors.black,
@@ -455,7 +464,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                         ),
                         Container(
                           child: Text(
-                              'Rs. ${(int.parse(widget.iPrice) * factor).toString()}',
+                              'Rs. ${(int.parse(proprice).toString())}',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 15,
@@ -475,7 +484,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                               addToCart(
                                   name: widget.cardTitle,
                                   imgUrl: widget.imagePath,
-                                  price: widget.price,
+                                  price: prodisprice,
                                   qty: 1,
                                   qtyTag: qtyTag);
                             },
