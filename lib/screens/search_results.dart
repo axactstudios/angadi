@@ -1,4 +1,5 @@
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/classes/quantity.dart';
 import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -110,6 +111,8 @@ class SearchResultsScreen extends StatelessWidget {
                                         rating: snap.data.documents[i]
                                             ['rating'],
                                         price: snap.data.documents[i]['price'],
+                                        allquantities: dishes[i].allquantities,
+                                        quantities:dishes[i].quantities
                                       ));
                                 },
                                 imagePath: snap.data.documents[i]['url'],
@@ -119,6 +122,8 @@ class SearchResultsScreen extends StatelessWidget {
                                 price: snap.data.documents[i]['price'],
                                 iPrice: snap.data.documents[i]['iPrice'],
                                 address: snap.data.documents[i]['description'],
+                                allquantities: dishes[i].allquantities,
+                                quantities:dishes[i].quantities,
                               ),
                             ));
                           }
@@ -198,6 +203,25 @@ class SearchScreen extends StatelessWidget {
                           dishes.clear();
                           trending.clear();
                           for (int i = 0; i < snap.data.documents.length; i++) {
+                            List<Quantity> allquantities = [];
+                            List<String> quantities = [];
+
+                            allquantities.clear();
+                            quantities.clear();
+
+                            for (int j = 0;
+                            j < snap.data.documents[i]['Quantity'].length;
+                            j++) {
+                              Quantity qu = Quantity(
+                                  snap.data.documents[i]['Quantity'][j]['iPrice'],
+                                  snap.data.documents[i]['Quantity'][j]['price'],
+                                  snap.data.documents[i]['Quantity'][j]['productId'],
+                                  '${ snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+
+                              allquantities.add(qu);
+                              quantities.add(
+                                  '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                            }
 //              print(snap.data.documents[i]['url']);
                             dishes.add(Dish(
                                 boughtTogetherDiscount: snap.data.documents[i]
@@ -248,7 +272,9 @@ class SearchScreen extends StatelessWidget {
                                                 ['rating'],
                                             price: snap.data.documents[i]
                                                 ['price'],
-                                            boughtTogether: boughtTogether));
+                                            boughtTogether: boughtTogether,
+                                        allquantities:allquantities,
+                                        quantities: quantities));
                                   }));
                                 },
                                 imagePath: snap.data.documents[i]['url'],
@@ -258,6 +284,8 @@ class SearchScreen extends StatelessWidget {
                                 price: snap.data.documents[i]['price'],
                                 iPrice: snap.data.documents[i]['iPrice'],
                                 address: snap.data.documents[i]['description'],
+                                allquantities: dishes[i].allquantities,
+                                quantities: dishes[i].quantities,
                               ),
                             ));
                           }

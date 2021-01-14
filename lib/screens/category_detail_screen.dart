@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/classes/quantity.dart';
 import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:angadi/widgets/foody_bite_card_2.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -338,6 +339,25 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
 
               for (int i = 0; i < snap.data.documents.length; i++) {
 //              print(snap.data.documents[i]['url']);
+                List<Quantity> allquantities = [];
+                List<String> quantities = [];
+
+                allquantities.clear();
+                quantities.clear();
+
+                for (int j = 0;
+                j < snap.data.documents[i]['Quantity'].length;
+                j++) {
+                  Quantity qu = Quantity(
+                      snap.data.documents[i]['Quantity'][j]['iPrice'],
+                      snap.data.documents[i]['Quantity'][j]['price'],
+                      snap.data.documents[i]['Quantity'][j]['productId'],
+                      '${ snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+
+                  allquantities.add(qu);
+                  quantities.add(
+                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                }
 
                 if (snap.data.documents[i]['category'] == widget.categoryName)
                   dishes.add(Dish(
@@ -352,8 +372,11 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       boughtTogetherDiscount: snap.data.documents[i]
                           ['boughtTogetherDiscount'],
                       boughtTogetherID: snap.data.documents[i]
-                          ['boughtTogether']));
-                print(snap.data.documents[i]['price']);
+                          ['boughtTogether'],
+                  allquantities: allquantities,
+                  quantities:quantities));
+                print(snap.data.documents[i]['price'],
+                );
               }
 
               return Column(
@@ -430,7 +453,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                             boughtTogetherDiscount:
                                                 dishes[index]
                                                     .boughtTogetherDiscount,
-                                            boughtTogether: boughtTogether),
+                                            boughtTogether: boughtTogether,allquantities:dishes[index].allquantities,
+                                        quantities: dishes[index].quantities),
                                       ),
                                       withNavBar:
                                           true, // OPTIONAL VALUE. True by default.
@@ -448,6 +472,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                   orderCount: orderCount,
 //                            distance: distance[index],
                                   address: dishes[index].desc,
+                                  allquantities: dishes[index].allquantities,
+                                  quantities:dishes[index].quantities
                                 ),
                               );
                             },
@@ -488,7 +514,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                               boughtTogetherDiscount:
                                                   dishes[index]
                                                       .boughtTogetherDiscount,
-                                              boughtTogether: boughtTogether),
+                                              boughtTogether: boughtTogether,
+                                          allquantities: dishes[index].allquantities,
+                                          quantities: dishes[index].quantities),
                                         ),
                                         withNavBar:
                                             true, // OPTIONAL VALUE. True by default.
@@ -506,6 +534,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                     orderCount: orderCount,
 //                            distance: distance[index],
                                     address: dishes[index].desc,
+                                    allquantities: dishes[index].allquantities,
+                                    quantities: dishes[index].quantities,
                                   ),
                                 );
                               })),

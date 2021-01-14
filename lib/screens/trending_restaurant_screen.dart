@@ -1,4 +1,5 @@
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/classes/quantity.dart';
 import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -98,6 +99,26 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                             for (int i = 0;
                                 i < snap.data.documents.length;
                                 i++) {
+                              List<Quantity> allquantities = [];
+                              List<String> quantities = [];
+
+                              allquantities.clear();
+                              quantities.clear();
+
+                              for (int j = 0;
+                              j < snap.data.documents[i]['Quantity'].length;
+                              j++) {
+                                Quantity qu = Quantity(
+                                    snap.data.documents[i]['Quantity'][j]['iPrice'],
+                                    snap.data.documents[i]['Quantity'][j]['price'],
+                                    snap.data.documents[i]['Quantity'][j]['productId'],
+                                    '${ snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+
+                                allquantities.add(qu);
+                                quantities.add(
+                                    '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                              }
+
 //              print(snap.data.documents[i]['url']);
                               dishes.add(Dish(
                                   boughtTogetherDiscount: snap.data.documents[i]
@@ -153,7 +174,11 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                                               category: dishes[i].category,
                                               rating: dishes[i].rating,
                                               price: dishes[i].price,
-                                              boughtTogether: boughtTogether),
+                                              boughtTogether: boughtTogether,
+                                            allquantities: dishes[i].allquantities,
+                                            quantities: dishes[i].quantities,
+                                            boughtTogetherQuantity: dishes[i].boughtTogetherQuantity
+                                          ),
                                         ),
                                         withNavBar:
                                             true, // OPTIONAL VALUE. True by default.
@@ -170,6 +195,8 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                                     iPrice: snap.data.documents[i]['iPrice'],
                                     address: snap.data.documents[i]
                                         ['description'],
+                                    allquantities: dishes[i].allquantities,
+                                    quantities:dishes[i].quantities,
                                   ),
                                 ));
                             }
@@ -316,8 +343,11 @@ class _TrendingRestaurantsScreen1State
                                   desc: snap.data.documents[i]['description'],
                                   url: snap.data.documents[i]['url'],
                                   boughtTogetherID: snap.data.documents[i]
-                                      ['boughtTogether']));
-                              print(snap.data.documents[i]['name']);
+                                      ['boughtTogether'],
+                              allquantities: dishes[i].allquantities,
+                              quantities: dishes[i].allquantities));
+                              print(snap.data.documents[i]['name'],
+                              );
                               if (snap.data.documents[i][widget.type])
                                 trending.add(Container(
                                   margin: EdgeInsets.only(right: 4.0),
@@ -344,7 +374,11 @@ class _TrendingRestaurantsScreen1State
                                               category: dishes[i].category,
                                               rating: dishes[i].rating,
                                               price: dishes[i].price,
-                                              boughtTogether: boughtTogether),
+                                              boughtTogether: boughtTogether,
+                                          allquantities: dishes[i].allquantities,
+                                          quantities: dishes[i].quantities,
+                                          boughtTogetherQuantity: dishes[i].boughtTogetherQuantity,
+                                          ),
                                         ),
                                         withNavBar:
                                             true, // OPTIONAL VALUE. True by default.
@@ -361,6 +395,8 @@ class _TrendingRestaurantsScreen1State
                                     iPrice: snap.data.documents[i]['iPrice'],
                                     address: snap.data.documents[i]
                                         ['description'],
+                                    allquantities: dishes[i].allquantities,
+                                    quantities: dishes[i].quantities,
                                   ),
                                 ));
                             }

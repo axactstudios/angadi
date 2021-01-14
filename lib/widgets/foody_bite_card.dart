@@ -250,7 +250,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
   }
 
   first() async {
-    qty = await getQuantity(widget.cardTitle, '${widget.quantities[0]} ML');
+    qty = await getQuantity(widget.cardTitle, '${widget.quantities[0]}');
   }
   void getquantities(){
     listOfQuantities.clear();
@@ -265,7 +265,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     first();
     proprice=widget.allquantities[0].iPrice;
     prodisprice=widget.allquantities[0].price;
-    checkInCart('${widget.quantities[0]} ML');
+    checkInCart('${widget.quantities[0]}');
     getAllItems();
     print('@@@@@@@${widget.quantities}');
     getquantities();
@@ -325,7 +325,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                                  ),
 
                                       Text(
-                                        ('${((int.parse(widget.iPrice) - int.parse(widget.price)) / int.parse(widget.iPrice) * 100).toStringAsFixed(0)} % off'),
+                                        ('${((int.parse(proprice) - int.parse(prodisprice)) / int.parse(proprice) * 100).toStringAsFixed(0)} % off'),
                                         style: Styles.customTitleTextStyle(
                                           color: Colors.deepOrangeAccent,
                                           fontWeight: FontWeight.w600,
@@ -400,9 +400,9 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                           await checkInCart(value);
                           qty = await getQuantity(widget.cardTitle, value);
                           for(int i =0;i<widget.allquantities.length;i++){
-                            if(value=='${widget.allquantities[i].quantity} ML'){
+                            if(value=='${widget.allquantities[i].quantity}'){
                               setState(() {
-                                qtyTag='${widget.allquantities[i].quantity} ML';
+                                qtyTag='${widget.allquantities[i].quantity}';
                                 proprice=widget.allquantities[i].iPrice;
                                 prodisprice=widget.allquantities[i].price;
                               });

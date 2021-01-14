@@ -1,4 +1,5 @@
 import 'package:angadi/classes/cart.dart';
+import 'package:angadi/classes/quantity.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -34,6 +35,9 @@ class FoodyBiteCard2 extends StatefulWidget {
   final double ratingsAndStatusCardElevation;
   final List<String> followersImagePath;
   final int orderCount;
+  List<Quantity> allquantities=[];
+  List<String>quantities=[];
+
 
   FoodyBiteCard2(
       {this.status = "OPEN",
@@ -56,7 +60,7 @@ class FoodyBiteCard2 extends StatefulWidget {
       this.cardElevation = 4.0,
       this.ratingsAndStatusCardElevation = 8.0,
       this.followersImagePath,
-      this.orderCount});
+      this.orderCount,this.allquantities,this.quantities});
 
   @override
   _FoodyBiteCard2State createState() => _FoodyBiteCard2State();
@@ -69,6 +73,9 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
   var qty = 1;
   int choice = 0;
   List<Cart> cartItems = [];
+  var proprice;
+  var prodisprice;
+
   static List<bool> check = [false, false, false, false, false];
   void updateItem(
       {int id,
@@ -104,7 +111,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
     setState(() {
       for (var v in cartItems) {
         if (v.productName == widget.cardTitle &&
-            v.qtyTag == listOfQuantities[choice]) {
+            v.qtyTag == qtyTag) {
           qty = v.qty;
         }
       }
@@ -206,14 +213,14 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
   }
 
   var factor = 1;
-  String qtyTag = '500 ML';
-  List<String> listOfQuantities = [
-    '500 ML',
-    '1 Ltr',
-    '2 Ltr',
-    '5 Ltr',
-    '10 Ltr'
-  ];
+  String qtyTag ;
+//  List<String> listOfQuantities = [
+//    '500 ML',
+//    '1 Ltr',
+//    '2 Ltr',
+//    '5 Ltr',
+//    '10 Ltr'
+//  ];
 
   Future<int> getQuantity(String name, String qtyTag) async {
     var temp = await _query(name, qtyTag);
@@ -247,15 +254,25 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
   }
 
   first() async {
-    qty = await getQuantity(widget.cardTitle, '500 ML');
+    qty = await getQuantity(widget.cardTitle, '${widget.quantities[0]}');
   }
 
   @override
   void initState() {
     choice = 0;
+    qtyTag=widget.quantities[0];
     first();
-    checkInCart('500 ML');
+    proprice=widget.allquantities[0].iPrice;
+    prodisprice=widget.allquantities[0].price;
+    checkInCart('${widget.quantities[0]} ML');
     getAllItems();
+    print('@@@@@@@${widget.quantities}');
+    qtyTag=widget.quantities[0];
+//    getquantities();
+//    choice = 0;
+//    first();
+//    checkInCart('500 ML');
+//    getAllItems();
     super.initState();
   }
 
@@ -326,61 +343,78 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                           Container(
                             width: widget.width - 30,
                             child: DropDown<String>(
-                              initialValue: '500 ML',
-                              items: <String>[
-                                '500 ML',
-                                '1 Ltr:  Rs.${(int.parse(widget.price) * 2).toString()}',
-                                '2 Ltr:  Rs.${(int.parse(widget.price) * 4).toString()}',
-                                '5 Ltr:  Rs.${(int.parse(widget.price) * 10).toString()}',
-                                '10 Ltr:   Rs.${(int.parse(widget.price) * 20).toString()}'
-                              ],
+                              initialValue:  widget.quantities[0],
+items:widget.quantities,
+//                              items: <String>[
+////                                '500 ML',
+////                                '1 Ltr:  Rs.${(int.parse(widget.price) * 2).toString()}',
+////                                '2 Ltr:  Rs.${(int.parse(widget.price) * 4).toString()}',
+////                                '5 Ltr:  Rs.${(int.parse(widget.price) * 10).toString()}',
+////                                '10 Ltr:   Rs.${(int.parse(widget.price) * 20).toString()}'
+//                              ],
                               hint: Text("Select quantity"),
                               onChanged: (value) async {
                                 await getAllItems();
-                                if (value == '500 ML') {
-                                  factor = await 1;
-                                  qtyTag = await '500 ML';
-                                  choice = await 0;
-                                  await checkInCart('500 ML');
-                                  qty = await getQuantity(
-                                      widget.cardTitle, '500 ML');
+                                await checkInCart(value);
+                                qty = await getQuantity(widget.cardTitle, value);
+                                for(int i =0;i<widget.allquantities.length;i++){
+                                  print('--------------------------${widget.allquantities[i].iPrice}');
+                                  print(value);
+                                  print('-----${widget.allquantities[i].quantity}');
+                                  if(value=='${widget.allquantities[i].quantity}'){
+                                    print('&&&&&&&&&&&&&&&&&&');
+                                    print('--------------------------${widget.allquantities[i].iPrice}');
+                                    setState(() {
+                                      qtyTag='${widget.allquantities[i].quantity} ';
+                                      proprice=widget.allquantities[i].iPrice;
+                                      prodisprice=widget.allquantities[i].price;
+                                    });
+                                  }
                                 }
-                                if (value ==
-                                    '1 Ltr:  Rs.${(int.parse(widget.price) * 2).toString()}') {
-                                  factor = await 2;
-                                  qtyTag = await '1 Ltr';
-                                  choice = await 1;
-                                  await checkInCart('1 Ltr');
-                                  qty = await getQuantity(
-                                      widget.cardTitle, '1 Ltr');
-                                }
-                                if (value ==
-                                    '2 Ltr:  Rs.${(int.parse(widget.price) * 4).toString()}') {
-                                  factor = await 4;
-                                  choice = await 2;
-                                  qtyTag = await '2 Ltr';
-                                  await checkInCart('2 Ltr');
-                                  qty = await getQuantity(
-                                      widget.cardTitle, '2 Ltr');
-                                }
-                                if (value ==
-                                    '5 Ltr:  Rs.${(int.parse(widget.price) * 10).toString()}') {
-                                  factor = await 10;
-                                  choice = await 3;
-                                  qtyTag = await '5 Ltr';
-                                  await checkInCart('5 Ltr');
-                                  qty = await getQuantity(
-                                      widget.cardTitle, '5 Ltr');
-                                }
-                                if (value ==
-                                    '10 Ltr:   Rs.${(int.parse(widget.price) * 20).toString()}') {
-                                  factor = await 20;
-                                  choice = await 4;
-                                  qtyTag = await '10 Ltr';
-                                  await checkInCart('10 Ltr');
-                                  qty = await getQuantity(
-                                      widget.cardTitle, '10 Ltr');
-                                }
+//                                if (value == '500 ML') {
+//                                  factor = await 1;
+//                                  qtyTag = await '500 ML';
+//                                  choice = await 0;
+//                                  await checkInCart('500 ML');
+//                                  qty = await getQuantity(
+//                                      widget.cardTitle, '500 ML');
+//                                }
+//                                if (value ==
+//                                    '1 Ltr:  Rs.${(int.parse(widget.price) * 2).toString()}') {
+//                                  factor = await 2;
+//                                  qtyTag = await '1 Ltr';
+//                                  choice = await 1;
+//                                  await checkInCart('1 Ltr');
+//                                  qty = await getQuantity(
+//                                      widget.cardTitle, '1 Ltr');
+//                                }
+//                                if (value ==
+//                                    '2 Ltr:  Rs.${(int.parse(widget.price) * 4).toString()}') {
+//                                  factor = await 4;
+//                                  choice = await 2;
+//                                  qtyTag = await '2 Ltr';
+//                                  await checkInCart('2 Ltr');
+//                                  qty = await getQuantity(
+//                                      widget.cardTitle, '2 Ltr');
+//                                }
+//                                if (value ==
+//                                    '5 Ltr:  Rs.${(int.parse(widget.price) * 10).toString()}') {
+//                                  factor = await 10;
+//                                  choice = await 3;
+//                                  qtyTag = await '5 Ltr';
+//                                  await checkInCart('5 Ltr');
+//                                  qty = await getQuantity(
+//                                      widget.cardTitle, '5 Ltr');
+//                                }
+//                                if (value ==
+//                                    '10 Ltr:   Rs.${(int.parse(widget.price) * 20).toString()}') {
+//                                  factor = await 20;
+//                                  choice = await 4;
+//                                  qtyTag = await '10 Ltr';
+//                                  await checkInCart('10 Ltr');
+//                                  qty = await getQuantity(
+//                                      widget.cardTitle, '10 Ltr');
+//                                }
                                 setState(() {
                                   print(factor);
                                   print(choice);
@@ -402,7 +436,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                   children: [
                                     Container(
                                       child: Text(
-                                        'Rs. ${(int.parse(widget.price) * factor).toString()}',
+                                        'Rs. ${(prodisprice).toString()}',
                                         textAlign: TextAlign.left,
                                         style: Styles.customMediumTextStyle(
                                           color: AppColors.black,
@@ -418,7 +452,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                     ),
                                     Container(
                                       child: Text(
-                                          'Rs. ${(int.parse(widget.iPrice) * factor).toString()}',
+                                          'Rs. ${(proprice).toString()}',
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                               fontSize: MediaQuery.of(context)
@@ -446,7 +480,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                     addToCart(
                                         name: widget.cardTitle,
                                         imgUrl: widget.imagePath,
-                                        price: widget.price,
+                                        price: prodisprice,
                                         qty: 1,
                                         qtyTag: qtyTag);
                                   },
@@ -553,7 +587,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
 //                                  ),
 
                                   Text(
-                                    ('${((int.parse(widget.iPrice) - int.parse(widget.price)) / int.parse(widget.iPrice) * 100).toStringAsFixed(0)} % off'),
+                                    ('${((int.parse(proprice) - int.parse(prodisprice)) / int.parse(proprice) * 100).toStringAsFixed(0)} % off'),
                                     style: Styles.customTitleTextStyle(
                                       color: Colors.deepOrangeAccent,
                                       fontWeight: FontWeight.w600,

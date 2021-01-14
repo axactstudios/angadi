@@ -1861,7 +1861,7 @@ void areas()async{
                     : Container(),
                 Column(
                   children: [
-                    _result != '833'
+                    _result != '833'&&type!='Takeaway'
                         ? Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 14.0),
@@ -1957,7 +1957,10 @@ void areas()async{
                               }
                             ),
                           )
-                        : Container(),
+                        : type=='Takeaway'?Padding(
+                          padding: const EdgeInsets.symmetric(horizontal:14),
+                          child: angadiButton('Pay on Pickup', buttonWidth: MediaQuery.of(context).size.width,onTap:(){placeOrder(type);}),
+                        ):Container(),
                     _result != '833'
                         ? SizedBox(
                             height: 20,
@@ -2184,7 +2187,7 @@ void areas()async{
             'Notes':
                 notesController.text != null ? notesController.text : 'None',
             'GrandTotal':
-                ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
+                ((totalAmount() * 0.18) + totalAmount()+deliveryCharge).toStringAsFixed(2),
           }).then((value) {
             setState(() {
 //              docID = value;
@@ -2213,7 +2216,7 @@ void areas()async{
                     ? notesController.text
                     : 'None',
                 'GrandTotal':
-                    ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
+                    ((totalAmount() * 0.18) + totalAmount()+deliveryCharge).toStringAsFixed(2),
               }).then((value) {
                 setState(() {
 //              docID = value;
@@ -2241,7 +2244,7 @@ void areas()async{
                     'Notes': notesController.text != null
                         ? notesController.text
                         : 'None',
-                    'GrandTotal': ((totalAmount() * 0.18) + totalAmount())
+                    'GrandTotal': ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
                         .toStringAsFixed(2),
                   }).then((value) {
                     setState(() {
@@ -2267,7 +2270,7 @@ void areas()async{
                         'Notes': notesController.text != null
                             ? notesController.text
                             : 'None',
-                        'GrandTotal': ((totalAmount() * 0.18) + totalAmount())
+                        'GrandTotal': ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
                             .toStringAsFixed(2),
                       }).then((value) {
                         setState(() {
@@ -2284,6 +2287,7 @@ void areas()async{
                             'Qty': quantities,
                             'Type': orderType,
                             'UserID': user.uid,
+      'isPaid':false,
                             // 'Status':'${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
                             'TimeStamp': Timestamp.now(),
                             'Status': 'Awaiting Confirmation',
@@ -2315,7 +2319,7 @@ void areas()async{
                                 ? notesController.text
                                 : 'None',
                             'GrandTotal':
-                                ((totalAmount() * 0.18) + totalAmount())
+                                ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
                                     .toStringAsFixed(2),
                           }).then((value) {
                             setState(() {
