@@ -368,6 +368,7 @@ class _TrendingRestaurantsScreen1State
                                           RestaurantDetails(
                                               boughtTogetherDiscount: dishes[i]
                                                   .boughtTogetherDiscount,
+
                                               url: dishes[i].url,
                                               name: dishes[i].name,
                                               desc: dishes[i].desc,
