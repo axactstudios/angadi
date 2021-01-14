@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:angadi/classes/cart.dart';
 import 'package:angadi/classes/dish.dart';
+import 'package:angadi/classes/message.dart';
 import 'package:angadi/classes/offer.dart';
 import 'package:angadi/classes/quantity.dart';
 import 'package:angadi/screens/filtered_search.dart';
@@ -15,6 +16,7 @@ import 'package:angadi/widgets/offer_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
@@ -68,6 +70,8 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> categoriesGrocery = new List();
   List<Widget> categoriesTop = new List();
   List<Cart> cartItems = [];
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  List<Message> messagesList = [];
   var location = 'Dubai';
   var deliveryDate = '23 October';
   var deliveryTime = '6 pm';
@@ -81,6 +85,40 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   final dbHelper = DatabaseHelper.instance;
+
+  _configureFirebaseListeners() {
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print('onMessage: $message');
+        _setMessage(message);
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print('onLaunch: $message');
+        _setMessage(message);
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print('onResume: $message');
+        _setMessage(message);
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+      const IosNotificationSettings(sound: true, badge: true, alert: true),
+    );
+  }
+
+  _setMessage(Map<String, dynamic> message) {
+    final notification = message['notification'];
+    final data = message['data'];
+    final String title = notification['title'];
+    final String body = notification['body'];
+    final String mMessage = data['message1'];
+    print("Title: $title, body: $body, message: $mMessage");
+    setState(() {
+      Message msg = Message(title, body, mMessage);
+      messagesList.add(msg);
+    });
+  }
+
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -146,6 +184,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
 //    addDishParams();
+    messagesList = List<Message>();
+    _configureFirebaseListeners();
     getUser();
     getBanners();
     Checkgrocery();
@@ -435,8 +475,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             print('Got it');
                           }
                         }
-                        await print('-------------$boughtTogether');
-                        print('Checkkk${dishes[i].quantities}');
+//                        await print('-------------$boughtTogether');
+//                        print('Checkkk${dishes[i].quantities}');
                         pushNewScreen(
                           context,
                           screen: RestaurantDetailsScreen(

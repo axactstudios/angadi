@@ -1,5 +1,7 @@
 import 'package:angadi/utils/my_shared_prefs.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -16,6 +18,67 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final databaseReference = Firestore.instance;
+  List<dynamic> dToken = ['test_token'];
+  List<dynamic> dTokens = ['test_token'];
+  _getTokenList() {
+    databaseReference
+        .collection('Users')
+        .where('mail', isEqualTo: mail.text)
+        .getDocuments()
+        .then((value) {
+      value.documents.forEach((element) {
+        dToken = element['dTokens'];
+      });
+    });
+  }
+
+  _updateTokenList() {
+    databaseReference
+        .collection('Users')
+        .where('mail', isEqualTo: mail.text)
+        .getDocuments()
+        .then((value) {
+      value.documents.forEach((element) async {
+        await databaseReference
+            .collection('Users')
+            .document(element.documentID)
+            .updateData({'dTokens': dToken});
+      });
+    });
+  }
+
+  _getToken() async {
+    await _getTokenList();
+    _firebaseMessaging.getToken().then((token) {
+      setState(() {
+        if (dToken != null) {
+          if (dToken.contains(token)) {
+            print('Token already saved');
+          } else {
+            dToken.add(token);
+            _updateTokenList();
+          }
+        } else {
+          dToken = ['test_token'];
+
+          dToken.add(token);
+          _updateTokenList();
+        }
+      });
+      print("Device Token: $dToken");
+    });
+  }
+
+  List<dynamic> toList() {
+    dToken.forEach((item) {
+      dTokens.add(item.toString());
+    });
+
+    return dTokens.toList();
+  }
+
   @override
   Widget build(BuildContext context) {
     var heightOfScreen = MediaQuery.of(context).size.height;
@@ -128,6 +191,7 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       children: <Widget>[
         angadiButton(StringConst.LOGIN, onTap: () {
+          _getToken();
           _signIn(mail.text, password.text);
         }),
         SizedBox(height: Sizes.HEIGHT_60),

@@ -230,7 +230,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
 
   void checkInCart(String qtyTag) async {
     var temp = await _query(widget.cardTitle, qtyTag);
-    print(temp);
+//    print(temp);
     if (temp != null) {
       if (temp.productName == widget.cardTitle && temp.qtyTag == qtyTag) {
         setState(() {

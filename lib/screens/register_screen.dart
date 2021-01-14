@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:angadi/routes/router.gr.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart' as p;
@@ -25,6 +26,12 @@ class RegisterScreen extends StatefulWidget {
 }
 
 class _RegisterScreenState extends State<RegisterScreen> {
+  @override
+  void initState() {
+    _getToken();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     final GlobalKey<ScaffoldState> _scaffoldKey =
@@ -205,6 +212,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  List<String> dToken;
+  List<String> dTokens;
+
+  _getToken() {
+    _firebaseMessaging.getToken().then((token) {
+      setState(() {
+        dToken.add(token);
+        toList();
+      });
+      print("Device Token: $dToken");
+    });
+  }
+
+  List<String> toList() {
+    dToken.forEach((item) {
+      dTokens.add(item.toString());
+    });
+
+    return dTokens.toList();
+  }
 
   _createUser(String email, String pw, context) {
     password.text == cpassword.text
@@ -223,7 +251,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               'Name': name.text,
               'id': user.uid,
               'mail': mail.text,
-              'pUrl': url
+              'pUrl': url,
+              'dTokens': dTokens,
             });
             setState(() {
               n = name.text;
