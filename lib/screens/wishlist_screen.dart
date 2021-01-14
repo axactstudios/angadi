@@ -234,7 +234,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                       vertical: Sizes.WIDTH_4,
                                     ),
                                     child: Text(
-                                      'Rs. ${wishlistItems[index].price}',
+                                      'AED. ${wishlistItems[index].price}',
                                       style: Styles.customTitleTextStyle(
                                         color: AppColors.headingText,
                                         fontWeight: FontWeight.w600,

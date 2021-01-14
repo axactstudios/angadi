@@ -190,7 +190,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                       title: 'Order ID - ${snap.data.documents[i]['OrderID']}',
                       time: snap.data.documents[i]['TimeStamp'].toString(),
                       subtitle:
-                          '${snap.data.documents[i]['Notification']}\nOrder Type - ${snap.data.documents[i]['Type']}\nAmount - Rs. ${snap.data.documents[i]['GrandTotal']}'));
+                          '${snap.data.documents[i]['Notification']}\nOrder Type - ${snap.data.documents[i]['Type']}\nAmount - AED. ${snap.data.documents[i]['GrandTotal']}'));
                 }
               }
               return Container(
@@ -353,7 +353,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                'Rs. ' + total,
+                'AED. ' + total,
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(

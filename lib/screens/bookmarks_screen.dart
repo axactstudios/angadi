@@ -187,7 +187,7 @@ void id()async{
                     user != null
                         ? Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                            return Checkout('',orderid,'');
+                            return Checkout('',orderid,'','');
                           }))
                         : login();
                   },
@@ -419,7 +419,7 @@ void id()async{
                                       vertical: Sizes.WIDTH_4,
                                     ),
                                     child: Text(
-                                      'Rs. ${cartItems[index].price}',
+                                      'AED. ${cartItems[index].price}',
                                       style: Styles.customTitleTextStyle(
                                         color: AppColors.headingText,
                                         fontWeight: FontWeight.w600,

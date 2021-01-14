@@ -454,7 +454,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       children: [
                         Container(
                           child: Text(
-                            'Rs. ${(int.parse(prodisprice).toString())}  ',
+                            'AED. ${(int.parse(prodisprice).toString())}  ',
                             textAlign: TextAlign.left,
                             style: Styles.customMediumTextStyle(
                               color: AppColors.black,
@@ -464,7 +464,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                         ),
                         Container(
                           child: Text(
-                              'Rs. ${(int.parse(proprice).toString())}',
+                              'AED. ${(int.parse(proprice).toString())}',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 15,

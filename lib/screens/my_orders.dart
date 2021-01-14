@@ -132,7 +132,7 @@ class _MyOrdersState extends State<MyOrders> {
                       fontWeight: FontWeight.bold),
                 ),
                 Text(
-                  'Rs. ' + total,
+                  'AED ' + total,
                   style: TextStyle(fontSize: 14),
                 ),
                 SizedBox(
@@ -509,7 +509,7 @@ class _MyOrdersState extends State<MyOrders> {
                                               fontWeight: FontWeight.bold),
                                         ),
                                         Text(
-                                          'Rs. ' + orders[index].total,
+                                          'AED ' + orders[index].total,
                                           style: TextStyle(fontSize: 14),
                                         ),
                                         SizedBox(

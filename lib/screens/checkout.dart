@@ -34,9 +34,9 @@ import 'package:url_launcher/url_launcher.dart';
 import 'order_placed.dart';
 
 class Checkout extends StatefulWidget {
-  String address;String   SavedArea;
+  String address;String   SavedArea; String savedEmirate;
   var id;
-  Checkout(this.address, this.id,this.SavedArea);
+  Checkout(this.address, this.id,this.SavedArea,this.savedEmirate);
   @override
   _CheckoutState createState() => _CheckoutState();
 }
@@ -49,7 +49,7 @@ class _CheckoutState extends State<Checkout> {
   List<Cart> cartItems = [];
   double minOrderPrice=0;
   double deliveryCharge=0;
-
+List<Emirates>savedemirate=[];
   List<Emirates> allemirates = [];
   List<EmiratesArea> allareas = [];
   String area;
@@ -126,6 +126,24 @@ void areas()async{
               value.documents[i]['zone']);
           savedarea.add(emi2);
         });
+      }
+    });
+    await Firestore.instance.collection('Emirates').getDocuments().then((value){
+      for (int i = 0;
+      i < value.documents.length;
+      i++) {
+        print(value.documents.length);
+
+        emiratesname.add(
+            value.documents[i]['name']);
+        Emirates emi = Emirates(
+            value.documents[i]
+            ['deliveryCharge'],
+            value.documents[i]
+            ['minOrderPrice'],
+            value.documents[i]['name']);
+
+        savedemirate.add(emi);
       }
     });
 }
@@ -462,6 +480,16 @@ void areas()async{
             deliveryCharge = double.parse(
                 savedarea[i].deliveryCharge);
           });
+        }
+        else{
+          for(int i=0;i<savedemirate.length;i++){
+            if(widget.savedEmirate==savedemirate[i].name){
+              setState(() {
+                minOrderPrice=double.parse(savedemirate[i].minorderprice);
+                deliveryCharge=double.parse(savedemirate[i].deliverycharge);
+              });
+            }
+          }
         }
       }
     }
@@ -1092,15 +1120,34 @@ void areas()async{
                                                                 newValue) {
                                                               setState(() {
                                                                 area = newValue;
+                                                                print('---------------');
                                                                 print(area);
+                                                                if(area=='Others'){
+                                                                  print('Reached');
+                                                                  for(int i =0;i<allemirates.length;i++){
+                                                                    print('yess');
+                                                                    print('===============${emirate}');
+                                                                    if(emirate==allemirates[i].name){
+                                                                      print('check');
+                                                                      print(emirate);
+                                                                      print(allemirates[i]);
+                                                                      setState(() {
+                                                                        minOrderPrice=double.parse(allemirates[i].minorderprice);
+                                                                        deliveryCharge=double.parse(allemirates[i].deliverycharge);
+                                                                      });
+                                                                    }
+                                                                  }
+                                                                }
                                                                 for(int i=0;i<allareas.length;i++){
                                                                   if(area==allareas[i].name)
                                                                     setState(() {
                                                                       minOrderPrice=double.parse(allareas[i].minOrderPrice);
                                                                       deliveryCharge=double.parse(allareas[i].deliveryCharge);
                                                                     });
+
                                                                 }
 //                      Navigator.pop(context);
+
                                                               });
                                                             },
                                                           ),
@@ -1384,7 +1431,19 @@ void areas()async{
                                                                 newValue) {
                                                               setState(() {
                                                                 area = newValue;
+                                                                print('---------------------');
                                                                 print(area);
+
+                                                                if(area=='Others'){
+                                                                  for(int i =0;i<allemirates.length;i++){
+                                                                    if(emirate2==allemirates[i].name){
+                                                                      setState(() {
+                                                                        minOrderPrice=double.parse(allemirates[i].minorderprice);
+                                                                        deliveryCharge=double.parse(allemirates[i].deliverycharge);
+                                                                      });
+                                                                    }
+                                                                  }
+                                                                }
 
                                                                 for(int i=0;i<allareas.length;i++){
                                                                   if(area==allareas[i].name)
@@ -1873,24 +1932,24 @@ void areas()async{
 
                                 if (widget.address != '') {
 
-                                  if (widget.SavedArea != '') {
-
-                                    for (int i = 0; i < savedarea.length; i++) {
-                                      if (widget.SavedArea ==
-                                          savedarea[i].name) {
-                                        print(widget.SavedArea);
-                                        setState(() {
-                                          minOrderPrice = double.parse(
-                                              savedarea[i].minOrderPrice);
-                                          deliveryCharge = double.parse(
-                                              savedarea[i].deliveryCharge);
-                                        });
-                                      }
-                                      print('kkkkkkkkkkkkkkkkkkkkkkk');
-                                      print(minOrderPrice);
-                                      print(deliveryCharge);
-                                    }
-                                  }
+//                                  if (widget.SavedArea != '') {
+//
+//                                    for (int i = 0; i < savedarea.length; i++) {
+//                                      if (widget.SavedArea ==
+//                                          savedarea[i].name) {
+//                                        print(widget.SavedArea);
+//                                        setState(() {
+//                                          minOrderPrice = double.parse(
+//                                              savedarea[i].minOrderPrice);
+//                                          deliveryCharge = double.parse(
+//                                              savedarea[i].deliveryCharge);
+//                                        });
+//                                      }
+//                                      print('kkkkkkkkkkkkkkkkkkkkkkk');
+//                                      print(minOrderPrice);
+//                                      print(deliveryCharge);
+//                                    }
+//                                  }
                                   var total = 0.0;
                                   discount != null
                                       ? total =
@@ -1912,22 +1971,22 @@ void areas()async{
 
                                 if (widget.address == '') {
                                   if (_formkey.currentState.validate()) {
-                                    if (widget.SavedArea != '') {
-                                      for (int i = 0; i <
-                                          allareas.length; i++) {
-                                        if (widget.SavedArea ==
-                                            allareas[i].name) {
-                                          setState(() {
-                                            minOrderPrice = double.parse(
-                                                allareas[i].minOrderPrice);
-                                            deliveryCharge = double.parse(
-                                                allareas[i].deliveryCharge);
-                                          });
-                                        }
-                                        print(minOrderPrice);
-                                        print(deliveryCharge);
-                                      }
-                                    }
+//                                    if (widget.SavedArea != '') {
+//                                      for (int i = 0; i <
+//                                          allareas.length; i++) {
+//                                        if (widget.SavedArea ==
+//                                            allareas[i].name) {
+//                                          setState(() {
+//                                            minOrderPrice = double.parse(
+//                                                allareas[i].minOrderPrice);
+//                                            deliveryCharge = double.parse(
+//                                                allareas[i].deliveryCharge);
+//                                          });
+//                                        }
+//                                        print(minOrderPrice);
+//                                        print(deliveryCharge);
+//                                      }
+//                                    }
                                     var total = 0.0;
                                     discount != null
                                         ? total =
@@ -1976,21 +2035,21 @@ void areas()async{
 
     if (widget.SavedArea != '') {
 
-    for (int i = 0; i < savedarea.length; i++) {
-    if (widget.SavedArea ==
-    savedarea[i].name) {
-    print(widget.SavedArea);
-    setState(() {
-    minOrderPrice = double.parse(
-    savedarea[i].minOrderPrice);
-    deliveryCharge = double.parse(
-    savedarea[i].deliveryCharge);
-    });
-    }
-    print('kkkkkkkkkkkkkkkkkkkkkkk');
-    print(minOrderPrice);
-    print(deliveryCharge);
-    }
+//    for (int i = 0; i < savedarea.length; i++) {
+//    if (widget.SavedArea ==
+//    savedarea[i].name) {
+//    print(widget.SavedArea);
+//    setState(() {
+//    minOrderPrice = double.parse(
+//    savedarea[i].minOrderPrice);
+//    deliveryCharge = double.parse(
+//    savedarea[i].deliveryCharge);
+//    });
+//    }
+//    print('kkkkkkkkkkkkkkkkkkkkkkk');
+//    print(minOrderPrice);
+//    print(deliveryCharge);
+//    }
     }
     var total = 0.0;
     discount != null
@@ -2026,22 +2085,22 @@ void areas()async{
 
                           if (widget.address == '') {
                     if (_formkey.currentState.validate()) {
-                    if (widget.SavedArea != '') {
-                    for (int i = 0; i <
-                    allareas.length; i++) {
-                    if (widget.SavedArea ==
-                    allareas[i].name) {
-                    setState(() {
-                    minOrderPrice = double.parse(
-                    allareas[i].minOrderPrice);
-                    deliveryCharge = double.parse(
-                    allareas[i].deliveryCharge);
-                    });
-                    }
-                    print(minOrderPrice);
-                    print(deliveryCharge);
-                    }
-                    }
+//                    if (widget.SavedArea != '') {
+//                    for (int i = 0; i <
+//                    allareas.length; i++) {
+//                    if (widget.SavedArea ==
+//                    allareas[i].name) {
+//                    setState(() {
+//                    minOrderPrice = double.parse(
+//                    allareas[i].minOrderPrice);
+//                    deliveryCharge = double.parse(
+//                    allareas[i].deliveryCharge);
+//                    });
+//                    }
+//                    print(minOrderPrice);
+//                    print(deliveryCharge);
+//                    }
+//                    }
                     var total = 0.0;
                     discount != null
                     ? total =
@@ -2463,7 +2522,7 @@ void areas()async{
 //                  SizedBox(
 //                    width: MediaQuery.of(context).size.width * 0.03,
 //                  ),
-                  Text('Rs. ${totalAmount().toString()}')
+                  Text('AED. ${totalAmount().toString()}')
                 ],
               ),
               Row(
@@ -2478,8 +2537,8 @@ void areas()async{
 //                    width: MediaQuery.of(context).size.width * 0.03,
 //                  ),
                   Text(discount != null
-                      ? 'Rs. ${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}'
-                      : 'Rs. 0'),
+                      ? 'AED. ${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}'
+                      : 'AED. 0'),
                 ],
               ),
               Row(
@@ -2493,7 +2552,7 @@ void areas()async{
 //                  SizedBox(
 //                    width: MediaQuery.of(context).size.width * 0.03,
 //                  ),
-                  Text('Rs. ${(totalAmount() * 0.18).toStringAsFixed(2)}'),
+                  Text('AED. ${(totalAmount() * 0.18).toStringAsFixed(2)}'),
                 ],
               ),
               (deliveryCharge!=0)?Row(
@@ -2507,7 +2566,7 @@ void areas()async{
 //                  SizedBox(
 //                    width: MediaQuery.of(context).size.width * 0.03,
 //                  ),
-                  Text('Rs. ${deliveryCharge.toString()}'),
+                  Text('AED. ${deliveryCharge.toString()}'),
                 ],
               ):Container(),
               SizedBox(
@@ -2532,8 +2591,8 @@ void areas()async{
 //                    width: MediaQuery.of(context).size.width * 0.03,
 //                  ),
                   Text(discount != null
-                      ? 'Rs. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))+deliveryCharge).toStringAsFixed(2)}'
-                      : 'Rs. ${((totalAmount() * 0.18) + totalAmount()+deliveryCharge)}'),
+                      ? 'AED. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))+deliveryCharge).toStringAsFixed(2)}'
+                      : 'AED. ${((totalAmount() * 0.18) + totalAmount()+deliveryCharge)}'),
                 ],
               ),
               SizedBox(

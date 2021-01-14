@@ -436,7 +436,7 @@ items:widget.quantities,
                                   children: [
                                     Container(
                                       child: Text(
-                                        'Rs. ${(prodisprice).toString()}',
+                                        'AED. ${(prodisprice).toString()}',
                                         textAlign: TextAlign.left,
                                         style: Styles.customMediumTextStyle(
                                           color: AppColors.black,
@@ -452,7 +452,7 @@ items:widget.quantities,
                                     ),
                                     Container(
                                       child: Text(
-                                          'Rs. ${(proprice).toString()}',
+                                          'AED. ${(proprice).toString()}',
                                           textAlign: TextAlign.left,
                                           style: TextStyle(
                                               fontSize: MediaQuery.of(context)

@@ -1894,7 +1894,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                'Rs. ' + total,
+                'AED ' + total,
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(

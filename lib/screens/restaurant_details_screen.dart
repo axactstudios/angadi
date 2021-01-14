@@ -1031,7 +1031,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                'Rs. ${int.parse(prodisprice).toString()}',
+                                                'AED. ${int.parse(prodisprice).toString()}',
                                                 textAlign: TextAlign.left,
                                                 style: Styles
                                                     .customMediumTextStyle(
@@ -1150,7 +1150,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                           setState(() {
                                             choice = index;
                                             prodisprice = item.price;
-                                            tag = '${item.quantity} ML';
+                                            tag = '${item.quantity}';
                                           });
                                         },
                                         child: Container(
@@ -1170,7 +1170,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                               children: [
                                                 Text(item.quantity.toString()),
                                                 Text(
-                                                    'Rs. ${int.parse(item.price)}'),
+                                                    'AED. ${int.parse(item.price)}'),
                                               ],
                                             ),
                                           ),
