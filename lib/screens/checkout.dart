@@ -9,6 +9,7 @@ import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/my_addresses2.dart';
 import 'package:angadi/screens/offers_screen.dart';
 import 'package:angadi/screens/settings_screen.dart';
+import 'package:angadi/screens/webview.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
@@ -1969,27 +1970,136 @@ void areas()async{
                             ? 'Proceed to pay online'
                             : 'Check your status',
                         onTap: () {
-                          if(_formkey.currentState.validate()){
-                            _result != '833' && j != 1
-                                ? onlineorder(
-                                (discount != null)
-                                    ? ((totalAmount() * 0.18) +
-                                    totalAmount() -
-                                    (totalAmount() *
-                                        (double.parse(
-                                            discount.discount) /
-                                            100)))
-                                    .toStringAsFixed(2)
-                                    : ((totalAmount() * 0.18) + totalAmount())
-                                    .toString(),
-                                type,
-                                orderid)
-                                : Checksuccess();
-                          }
-                         else{
-                            Fluttertoast.showToast(
-                                msg: 'Address required', toastLength: Toast.LENGTH_SHORT);
-                          }
+
+    if (widget.SavedArea != '') {
+
+    for (int i = 0; i < savedarea.length; i++) {
+    if (widget.SavedArea ==
+    savedarea[i].name) {
+    print(widget.SavedArea);
+    setState(() {
+    minOrderPrice = double.parse(
+    savedarea[i].minOrderPrice);
+    deliveryCharge = double.parse(
+    savedarea[i].deliveryCharge);
+    });
+    }
+    print('kkkkkkkkkkkkkkkkkkkkkkk');
+    print(minOrderPrice);
+    print(deliveryCharge);
+    }
+    }
+    var total = 0.0;
+    discount != null
+    ? total =
+    ((totalAmount() * 0.18) + totalAmount() -
+    (totalAmount() *
+    (double.parse(discount.discount) /
+    100)) + deliveryCharge)
+        : total = ((totalAmount() * 0.18) +
+    totalAmount() + deliveryCharge);
+    if (total > minOrderPrice) {
+      _result != '833' && j != 1
+          ? onlineorder(
+          (discount != null)
+              ? ((totalAmount() * 0.18) +
+              totalAmount() -
+              (totalAmount() *
+                  (double.parse(
+                      discount.discount) /
+                      100))+deliveryCharge)
+              .toStringAsFixed(2)
+              : ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
+              .toString(),
+          type,
+          orderid)
+          : Checksuccess();
+    }
+    else {
+    Fluttertoast.showToast(
+    msg: 'Your order amount is less \n than the minimum order price',
+    toastLength: Toast.LENGTH_SHORT);
+    }
+
+                          if (widget.address == '') {
+                    if (_formkey.currentState.validate()) {
+                    if (widget.SavedArea != '') {
+                    for (int i = 0; i <
+                    allareas.length; i++) {
+                    if (widget.SavedArea ==
+                    allareas[i].name) {
+                    setState(() {
+                    minOrderPrice = double.parse(
+                    allareas[i].minOrderPrice);
+                    deliveryCharge = double.parse(
+                    allareas[i].deliveryCharge);
+                    });
+                    }
+                    print(minOrderPrice);
+                    print(deliveryCharge);
+                    }
+                    }
+                    var total = 0.0;
+                    discount != null
+                    ? total =
+                    ((totalAmount() * 0.18) + totalAmount() -
+                    (totalAmount() *
+                    (double.parse(discount.discount) /
+                    100)) + deliveryCharge)
+                        : total =
+                    ((totalAmount() * 0.18) + totalAmount() +
+                    deliveryCharge);
+                    if (total > minOrderPrice) {
+                      _result != '833' && j != 1
+                          ? onlineorder(
+                          (discount != null)
+                              ? ((totalAmount() * 0.18) +
+                              totalAmount() -
+                              (totalAmount() *
+                                  (double.parse(
+                                      discount.discount) /
+                                      100))+deliveryCharge)
+                              .toStringAsFixed(2)
+                              : ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
+                              .toString(),
+                          type,
+                          orderid)
+                          : Checksuccess();
+                    }
+                    else {
+                    Fluttertoast.showToast(
+                    msg: 'Your order amount is less \n than the minimum order price',
+                    toastLength: Toast.LENGTH_SHORT);
+                    }
+                    }
+                    else {
+                    Fluttertoast.showToast(
+                    msg: 'Address required',
+                    toastLength: Toast.LENGTH_SHORT);
+                    }
+                    }
+
+//                        if(_formkey.currentState.validate()){
+//                            _result != '833' && j != 1
+//                                ? onlineorder(
+//                                (discount != null)
+//                                    ? ((totalAmount() * 0.18) +
+//                                    totalAmount() -
+//                                    (totalAmount() *
+//                                        (double.parse(
+//                                            discount.discount) /
+//                                            100)))
+//                                    .toStringAsFixed(2)
+//                                    : ((totalAmount() * 0.18) + totalAmount())
+//                                    .toString(),
+//                                type,
+//                                orderid)
+//                                : Checksuccess();
+//                          }
+//                         else{
+//                            Fluttertoast.showToast(
+//                                msg: 'Address required', toastLength: Toast.LENGTH_SHORT);
+//                          }
                         },
                         buttonWidth: MediaQuery.of(context).size.width,
                       ),
@@ -2557,8 +2667,8 @@ void areas()async{
     print(reply);
     var decode = jsonDecode(reply);
     map = decode;
-
-    _launchURL(map['payment_url']);
+         Navigator.push(context,MaterialPageRoute(builder:(context)=>WebviewScreen(map['payment_url'])));
+//   _launchURL(map['payment_url']);
   }
 
   placeOnlinePaidOrder() {

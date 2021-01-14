@@ -22,6 +22,7 @@ dependencies:
   shared_preferences: ^0.5.12
   fancy_shimmer_image: ^1.2.0
   google_fonts: ^0.3.10
+  webview_flutter: ^1.0.7
   fluttertoast: ^7.1.1
   flutter_paytabs_bridge_emulator: ^1.0.1-beta
   cached_network_image: ^2.3.3

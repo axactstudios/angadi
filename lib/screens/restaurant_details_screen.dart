@@ -167,7 +167,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       for (var v in cartItems) {
         print('######${v.productName}');
         if (v.productName == widget.restaurantDetail.name &&
-            v.qtyTag == listOfQuantities[choice]) {
+            v.qtyTag == qtyTag) {
           qty = v.qty;
         }
       }
@@ -372,13 +372,13 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
   var factor = 1;
 
-  List<String> listOfQuantities = [
-    '500 ML',
-    '1 Ltr',
-    '2 Ltr',
-    '5 Ltr',
-    '10 Ltr'
-  ];
+//  List<String> listOfQuantities = [
+//    '500 ML',
+//    '1 Ltr',
+//    '2 Ltr',
+//    '5 Ltr',
+//    '10 Ltr'
+//  ];
 
   Future<int> getQuantity(String name, String qtyTag) async {
     var temp = await _query(name, qtyTag);
@@ -457,17 +457,17 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   void initState() {
     setState(() {
       urlUniv = widget.restaurantDetail.url;
-      qtyTag = '${widget.restaurantDetail.quantities[0]} ML';
+      qtyTag = '${widget.restaurantDetail.quantities[0]} ';
     });
     prodisprice = widget.restaurantDetail.allquantities[0].price;
     choice = 0;
     first();
-    checkInCart('${widget.restaurantDetail.quantities[0]} ML');
+    checkInCart('${widget.restaurantDetail.quantities[0]} ');
     getAllItems();
     super.initState();
   }
 
-  List sizes = ['500 ML', '1 Ltr', '2 Ltr', '5 Ltr', '10 Ltr'];
+//  List sizes = ['500 ML', '1 Ltr', '2 Ltr', '5 Ltr', '10 Ltr'];
 
   @override
   Widget build(BuildContext context) {
@@ -1768,7 +1768,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                                              priceFactors[choice])
 //                                          .toString(),
                                       qty: 1,
-                                      qtyTag: sizes[choice]);
+                                      qtyTag: qtyTag);
                                   // else
                                   //   setState(() {
                                   //     print('Item already exists');
