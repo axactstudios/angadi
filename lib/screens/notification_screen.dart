@@ -378,10 +378,12 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   var str = '', timestamp, status, total, id1;
+
   fetchOrderDetail(id) {
-    Firestore.instance.collection('Orders').document(id).get().then((value) {
+    Firestore.instance.collection('Orders').document(id1).get().then((value) {
       setState(() {
         id1 = id;
+        print(id1);
         str = '';
         print('==========${value.data}');
         for (int it = 0; it < value['Items'].length; it++) {

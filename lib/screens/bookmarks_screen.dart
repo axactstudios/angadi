@@ -497,7 +497,7 @@ void id()async{
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Total Amount- '),
-                Text('Rs. ${totalAmount()}(+taxes)'),
+                Text('AED. ${totalAmount()}(+taxes)'),
               ],
             ),
           )

@@ -413,7 +413,7 @@ class _BookmarksScreen2State extends State<BookmarksScreen2> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text('Total Amount- '),
-                Text('Rs. ${totalAmount()}(+taxes)'),
+                Text('AED. ${totalAmount()}(+taxes)'),
               ],
             ),
           )

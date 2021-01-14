@@ -1024,7 +1024,7 @@ void areas()async{
                                                                 validator:(value)=>value==null?'field required':null,
                                                             hint:
                                                                 Text('Emirates'),
-                                                            value: emirate,
+                                                            value: emiratesname[0],
                                                             items: emiratesname
                                                                 .map((String
                                                                     value) {
@@ -1061,7 +1061,7 @@ void areas()async{
                                     StreamBuilder(
                                         stream: Firestore.instance
                                             .collection('EmiratesArea')
-                                            .where('Emirate', isEqualTo: emirate2)
+                                            .where('Emirate', isEqualTo: emirate)
                                             .snapshots(),
                                         builder: (BuildContext context,
                                             AsyncSnapshot<QuerySnapshot> snap) {
@@ -1106,7 +1106,7 @@ void areas()async{
                                                                   String>(
                                                                 validator:(value)=>value==null?'field required':null,
                                                             hint: Text('Area'),
-                                                            value: area,
+                                                            value: areaname[0],
                                                             items: areaname.map(
                                                                 (String value) {
                                                               return new DropdownMenuItem<
@@ -1334,7 +1334,7 @@ void areas()async{
                                                                 validator:(value)=>value==null?'field required':null,
                                                             hint:
                                                                 Text('Emirates'),
-                                                            value: emirate,
+                                                            value: emiratesname[0],
                                                             items: emiratesname
                                                                 .map((String
                                                                     value) {
@@ -1370,7 +1370,7 @@ void areas()async{
                                     StreamBuilder(
                                         stream: Firestore.instance
                                             .collection('EmiratesArea')
-                                            .where('Emirate', isEqualTo: emirate2)
+                                            .where('Emirate', isEqualTo: emirate)
                                             .snapshots(),
                                         builder: (BuildContext context,
                                             AsyncSnapshot<QuerySnapshot> snap) {
@@ -1415,7 +1415,7 @@ void areas()async{
                                                                   String>(
                                                                 validator:(value)=>value==null?'field required':null,
                                                             hint: Text('Area'),
-                                                            value: area,
+                                                            value: areaname[0],
 
                                                             items: areaname.map(
                                                                 (String value) {
