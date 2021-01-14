@@ -349,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       snap.data.documents[i]['Quantity'][j]['iPrice'],
                       snap.data.documents[i]['Quantity'][j]['price'],
                       snap.data.documents[i]['Quantity'][j]['productId'],
-                     '${ snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
 
                   allquantities.add(qu);
                   quantities.add(
