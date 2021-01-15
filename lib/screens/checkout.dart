@@ -7,6 +7,7 @@ import 'package:angadi/classes/emiratesarea.dart';
 import 'package:angadi/screens/home_screen.dart';
 import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/my_addresses2.dart';
+import 'package:angadi/screens/my_orders.dart';
 import 'package:angadi/screens/offers_screen.dart';
 import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/screens/webview.dart';
@@ -27,10 +28,12 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:location/location.dart';
+import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import 'order_placed.dart';
 
 class Checkout extends StatefulWidget {
@@ -44,6 +47,9 @@ class Checkout extends StatefulWidget {
 class _CheckoutState extends State<Checkout> {
   final _formkey =GlobalKey<FormState>();
   List <EmiratesArea> savedarea=[];
+  bool val=true;
+  GlobalKey key = new GlobalKey();
+//  final scaffoldState = GlobalKey<ScaffoldState>();
   bool ischecked=false;
   String type = 'Delivery';
   List<Cart> cartItems = [];
@@ -78,7 +84,7 @@ List<Emirates>savedemirate=[];
   final dbHelper = DatabaseHelper.instance;
 //  final dbRef = FirebaseDatabase.instance.reference();
   FirebaseAuth mAuth = FirebaseAuth.instance;
-  GlobalKey key = new GlobalKey();
+//  GlobalKey key = new GlobalKey();
   final scaffoldState = GlobalKey<ScaffoldState>();
   String emirate;
   _pickTime() async {
@@ -317,6 +323,36 @@ void areas()async{
     date = DateTime(
         DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
     super.initState();
+  }
+  Widget web(String url,BuildContext context,double height,double width){
+       return Padding(
+         padding: const EdgeInsets.all(30.0),
+         child: SingleChildScrollView(
+           child: Container(
+             height:height,
+             width:width,
+             decoration: BoxDecoration(
+               borderRadius: BorderRadius.all(Radius.circular(7)),
+               boxShadow: [
+                 BoxShadow(
+                   color: Colors.black26,
+                   blurRadius: 15.0, // soften the shadow
+                   spreadRadius: 1.0, //extend the shadow
+                   offset: Offset(
+                     0.0, // Move to right 10  horizontally
+                     0.0, // Move to bottom 10 Vertically
+                   ),
+                 )
+               ],
+               color:Colors.white,
+             ),
+             child: WebView(
+
+               initialUrl: '${url}',
+             ),
+           ),
+         ),
+       );
   }
 
   Widget dropdown(BuildContext context, double height, double width) {
@@ -1259,7 +1295,8 @@ void areas()async{
 
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: TextFormField(  validator: (value){if(value==null||value=='')return 'Required field';return null;},
+                                      child: TextFormField(
+//                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
                                         
                                         decoration: InputDecoration(
                                             border: OutlineInputBorder(
@@ -1541,7 +1578,7 @@ void areas()async{
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: TextFormField(
-                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
+//                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
                                         decoration: InputDecoration(
                                             border: OutlineInputBorder(
                                                 borderRadius:
@@ -2028,10 +2065,11 @@ void areas()async{
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14.0),
                       child: angadiButton(
-                        _result != '833' && j != 1
+                        _result != '833' && val
                             ? 'Proceed to pay online'
-                            : 'Check your status',
+                            : 'Go to my orders',
                         onTap: () {
+                          val=!val;
 
     if (widget.SavedArea != '') {
 
@@ -2730,7 +2768,19 @@ void areas()async{
     print(reply);
     var decode = jsonDecode(reply);
     map = decode;
-         Navigator.push(context,MaterialPageRoute(builder:(context)=>WebviewScreen(map['payment_url'])));
+
+    scaffoldState.currentState.showBottomSheet((context) {
+      return StatefulBuilder(builder:
+          (BuildContext context, StateSetter state) {
+        return web(
+            map['payment_url'],
+            context,
+            MediaQuery.of(context).size.height * 0.7,
+            MediaQuery.of(context).size.width*0.9);
+      });
+    });
+//    Navigator.push(context,MaterialPageRoute(builder:(context)=>HomeScreen()));
+//         Navigator.push(context,MaterialPageRoute(builder:(context)=>WebviewScreen(map['payment_url'])));
 //   _launchURL(map['payment_url']);
   }
 
@@ -2759,18 +2809,20 @@ void areas()async{
   }
 
   Future<String> Checksuccess() async {
-    HttpClient httpClient = new HttpClient();
-    httpClient.badCertificateCallback =
-        ((X509Certificate cert, String host, int port) => true);
-    final String apiUrl = 'https://paytab.herokuapp.com/success';
-    HttpClientRequest request = await httpClient.getUrl(Uri.parse(apiUrl));
-    request.headers.set('content-type', 'application/json');
-
-    HttpClientResponse response = await request.close();
-
-    response.transform(utf8.decoder).listen((contents) {
-      print(contents);
-      httpClient.close();
-    });
+    val=!val;
+    pushNewScreen(context, screen: MyOrders());
+//    HttpClient httpClient = new HttpClient();
+//    httpClient.badCertificateCallback =
+//        ((X509Certificate cert, String host, int port) => true);
+//    final String apiUrl = 'https://paytab.herokuapp.com/success';
+//    HttpClientRequest request = await httpClient.getUrl(Uri.parse(apiUrl));
+//    request.headers.set('content-type', 'application/json');
+//
+//    HttpClientResponse response = await request.close();
+//
+//    response.transform(utf8.decoder).listen((contents) {
+//      print(contents);
+//      httpClient.close();
+//    });
   }
 }

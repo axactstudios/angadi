@@ -29,6 +29,7 @@ class _WebviewScreenState extends State<WebviewScreen> {
         centerTitle: true,
       ),
       body: WebView(
+
         initialUrl: '${widget.url}',
       ),
     );
