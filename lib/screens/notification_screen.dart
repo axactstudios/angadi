@@ -223,6 +223,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 await fetchOrderDetail(
                                     snap.data.documents[index]['OrderID']);
                                 String status;
+
                                 await Firestore.instance
                                     .collection('Orders')
                                     .getDocuments()
@@ -231,16 +232,21 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                     if (element.documentID ==
                                         snap.data.documents[index]['OrderID']) {
                                       status = element['Status'];
-                                      date=element['DeliveryDate'];
+
+                                      date =
+                                          (element["DeliveryDate"] as Timestamp)
+                                              .toDate();
+
+                                      pushNewScreen(context,
+                                          screen: OrderPlaced(
+                                              bill(timestamp),
+                                              snap.data.documents[index]
+                                                  ['OrderID'],
+                                              status,
+                                              date));
                                     }
                                   });
                                 });
-
-                                pushNewScreen(context,
-                                    screen: OrderPlaced(
-                                        bill(),
-                                        snap.data.documents[index]['OrderID'],
-                                        status,date));
                               },
                               title: Row(
                                 children: <Widget>[
@@ -278,7 +284,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  Widget bill() {
+  Widget bill(Timestamp time) {
     return Card(
       elevation: 5,
       child: Padding(
@@ -386,6 +392,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
         print(id1);
         str = '';
         print('==========${value.data}');
+        print('checking');
         for (int it = 0; it < value['Items'].length; it++) {
           it != value['Items'].length - 1
               ? str = str + '${value['Qty'][it]} x ${value['Items'][it]}, '

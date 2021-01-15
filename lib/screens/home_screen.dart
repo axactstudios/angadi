@@ -12,16 +12,13 @@ import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/nav_drawer.dart';
-import 'package:angadi/widgets/offer_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:geocoder/geocoder.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
@@ -38,8 +35,6 @@ import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
-import '../routes/router.gr.dart';
-import '../values/values.dart';
 import '../values/values.dart';
 import 'categories_screen.dart';
 import 'category_detail_screen.dart';
@@ -203,9 +198,10 @@ class _HomeScreenState extends State<HomeScreen> {
         .document('ordercount')
         .snapshots()
         .listen((event) {
-      print(event['Numberoforders'].toString());
-
-      orderCount = event['Numberoforders'];
+      if (event != null) {
+        print(event['Numberoforders'].toString());
+        orderCount = event['Numberoforders'];
+      }
     });
     print('Checked');
     prefs = await SharedPreferences.getInstance();
