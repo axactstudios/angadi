@@ -5,6 +5,7 @@ import 'package:angadi/classes/dish.dart';
 import 'package:angadi/classes/message.dart';
 import 'package:angadi/classes/offer.dart';
 import 'package:angadi/classes/quantity.dart';
+import 'package:angadi/screens/confirm_address.dart';
 import 'package:angadi/screens/filtered_search.dart';
 import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/screens/trending_restaurant_screen.dart';
@@ -29,10 +30,12 @@ import 'package:angadi/widgets/heading_row.dart';
 import 'package:angadi/widgets/search_input_field.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:getflutter/components/carousel/gf_carousel.dart';
+import 'package:google_map_location_picker/google_map_location_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-import 'package:place_picker/entities/location_result.dart';
-import 'package:place_picker/widgets/place_picker.dart';
+// import 'package:place_picker/entities/location_result.dart';
+// import 'package:place_picker/widgets/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../values/values.dart';
@@ -65,9 +68,9 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> categoriesGrocery = new List();
   List<Widget> categoriesTop = new List();
   List<Cart> cartItems = [];
+  LocationResult location = LocationResult(latLng: LatLng(25.2048, 55.2708));
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   List<Message> messagesList = [];
-  var location = 'Dubai';
   var deliveryDate = '23 October';
   var deliveryTime = '6 pm';
   DateTime date;
@@ -758,16 +761,46 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Container(
                                 width: MediaQuery.of(context).size.width * 0.6,
-                                child: Text('Deliver to $location',
+                                child: Text('Deliver to ${location.address}',
                                     style: TextStyle(color: Colors.white))),
                             SizedBox(
                               width: 10,
                             ),
                             InkWell(
-                                onTap: () {
-//                                  _locationDialog(context);
-                                  showPlacePicker();
+                                onTap: () async {
+                                  LocationResult result =
+                                      await showLocationPicker(
+                                    context,
+                                    'AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw',
+                                    initialCenter:
+                                        LatLng(31.1975844, 29.9598339),
+                                    automaticallyAnimateToCurrentLocation: true,
+//                      mapStylePath: 'assets/mapStyle.json',
+                                    myLocationButtonEnabled: true,
+                                    // requiredGPS: true,
+                                    layersButtonEnabled: true,
+                                    countries: ['AE'],
 
+//                      resultCardAlignment: Alignment.bottomCenter,
+//                       desiredAccuracy: LocationAccuracy.best,
+                                  );
+                                  print("result = $result");
+                                  setState(() {
+                                    location = result;
+                                    if (location != null) {
+                                      Navigator.of(context).push(
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  ConfirmAddress(
+                                                      location.address)));
+                                    }
+                                  });
+//                                  _locationDialog(context);
+//                                   showPlacePicker();
+//                                   Navigator.push(context, MaterialPageRoute(
+//                                       builder: (BuildContext context) {
+//                                     return LocationScreen();
+//                                   }));
 //
                                 },
                                 child: Icon(Icons.edit, color: Colors.white)),
@@ -1563,7 +1596,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         currentAddress = "${place.locality}, ${place.administrativeArea}";
         print(currentAddress);
-        location = currentAddress;
+        location = LocationResult(address: currentAddress);
         pass.text = currentAddress;
       });
     } catch (e) {
@@ -1667,7 +1700,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           .copyWith(color: AppColors.secondaryElement),
                       onPressed: () {
                         setState(() {
-                          location = pass.text;
+                          location = LocationResult(address: pass.text);
                         });
                         Navigator.of(context).pop(true);
                       }),
@@ -1804,16 +1837,16 @@ class _HomeScreenState extends State<HomeScreen> {
 
   LocationResult result;
 
-  void showPlacePicker() async {
-    result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            PlacePicker("AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw")));
-    setState(() {
-      location = result.formattedAddress;
-    });
-    // Handle the result in your way
-    print(location);
-  }
+  // void showPlacePicker() async {
+  //   result = await Navigator.of(context).push(MaterialPageRoute(
+  //       builder: (context) =>
+  //           PlacePicker("AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw")));
+  //   setState(() {
+  //     location = result.formattedAddress;
+  //   });
+  //   // Handle the result in your way
+  //   print(location);
+  // }
 
   Widget bill() {
     return Card(

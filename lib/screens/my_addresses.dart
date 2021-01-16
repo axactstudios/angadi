@@ -9,8 +9,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:place_picker/entities/location_result.dart';
-import 'package:place_picker/widgets/place_picker.dart';
+import 'package:google_map_location_picker/google_map_location_picker.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyAddresses extends StatefulWidget {
@@ -21,25 +21,25 @@ class MyAddresses extends StatefulWidget {
 }
 
 class _MyAddressesState extends State<MyAddresses> {
-  var location = 'Dubai';
+  LocationResult location;
 
   LocationResult result;
   var id;
-  void showPlacePicker() async {
-    print('called');
-    result = await Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) =>
-            PlacePicker("AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw")));
-    setState(() {
-      location = result.formattedAddress;
-    });
-    // Handle the result in your way
-    print(location);
-    if (location != null) {
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => ConfirmAddress(location)));
-    }
-  }
+  // void showPlacePicker() async {
+  //   print('called');
+  //   result = await Navigator.of(context).push(MaterialPageRoute(
+  //       builder: (context) =>
+  //           PlacePicker("AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw")));
+  //   setState(() {
+  //     location = result.formattedAddress;
+  //   });
+  //   // Handle the result in your way
+  //   print(location);
+  //   if (location != null) {
+  //     Navigator.of(context).push(
+  //         MaterialPageRoute(builder: (context) => ConfirmAddress(location)));
+  //   }
+  // }
 
   List<Address> alladresses = [];
   List<Widget> addressCards = [];
@@ -197,10 +197,18 @@ class _MyAddressesState extends State<MyAddresses> {
                                             children: [
                                               (item.hno != null &&
                                                       item.hno != '')
-                                                  ? Text(
-                                                      'Address : H.no. ${item.hno} , ${item.address}')
-                                                  : Text(
-                                                      'Address :  ${item.address}'),
+                                                  ? Align(
+                                                      alignment:
+                                                          Alignment.bottomLeft,
+                                                      child: Text(
+                                                          'Address : H.no. ${item.hno} , ${item.address}'),
+                                                    )
+                                                  : Align(
+                                                      alignment:
+                                                          Alignment.bottomLeft,
+                                                      child: Text(
+                                                          'Address :  ${item.address}'),
+                                                    ),
                                               (item.landmark != null &&
                                                       item.landmark != '')
                                                   ? Align(
@@ -240,8 +248,37 @@ class _MyAddressesState extends State<MyAddresses> {
                 child: angadiButton(
                   '+ Add new address',
                   buttonWidth: double.infinity,
-                  onTap: () {
-                    showPlacePicker();
+                  onTap: () async {
+                    LocationResult result = await showLocationPicker(
+                      context,
+                      'AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw',
+                      initialCenter: LatLng(31.1975844, 29.9598339),
+                      automaticallyAnimateToCurrentLocation: true,
+//                      mapStylePath: 'assets/mapStyle.json',
+                      myLocationButtonEnabled: true,
+                      // requiredGPS: true,
+                      layersButtonEnabled: true,
+                      countries: ['AE'],
+
+//                      resultCardAlignment: Alignment.bottomCenter,
+//                       desiredAccuracy: LocationAccuracy.best,
+                    );
+                    print("result = $result");
+                    setState(() {
+                      location = result;
+                      if (location != null) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) =>
+                                ConfirmAddress(location.address)));
+                      }
+                    });
+//                                  _locationDialog(context);
+//                                   showPlacePicker();
+//                                   Navigator.push(context, MaterialPageRoute(
+//                                       builder: (BuildContext context) {
+//                                     return LocationScreen();
+//                                   }));
+//
                   },
                 ),
               )
