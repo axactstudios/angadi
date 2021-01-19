@@ -34,14 +34,11 @@ import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
-// import 'package:place_picker/entities/location_result.dart';
-// import 'package:place_picker/widgets/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../values/values.dart';
 import 'categories_screen.dart';
 import 'category_detail_screen.dart';
-import 'checkout.dart';
 import 'filter_screen.dart';
 import 'order_placed.dart';
 import 'restaurant_details_screen.dart';
@@ -89,15 +86,12 @@ class _HomeScreenState extends State<HomeScreen> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('onMessage: $message');
-        _setMessage(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('onLaunch: $message');
-        _setMessage(message);
       },
       onResume: (Map<String, dynamic> message) async {
         print('onResume: $message');
-        _setMessage(message);
       },
     );
     _firebaseMessaging.requestNotificationPermissions(
@@ -576,8 +570,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                     i++) {
                                   if (snap.data.documents[i]['UserID'] ==
                                           user?.uid &&
-                                      snap.data.documents[i]['Status'] ==
-                                          'Awaiting Confirmation') {
+                                      (snap.data.documents[i]['Status'] ==
+                                              'Order Confirmed' ||
+                                          snap.data.documents[i]['Status'] ==
+                                              'Out for Delivery')) {
                                     orderID = snap.data.documents[i].documentID;
                                     status = snap.data.documents[i]['Status'];
                                   }
@@ -763,8 +759,11 @@ class _HomeScreenState extends State<HomeScreen> {
                             ),
                             Container(
                                 width: MediaQuery.of(context).size.width * 0.6,
-                                child: Text('Deliver to ${location.address}',
-                                    style: TextStyle(color: Colors.white))),
+                                child: location.address != null
+                                    ? Text('Deliver to ${location.address}',
+                                        style: TextStyle(color: Colors.white))
+                                    : Text('Deliver to Sharjah, UAE',
+                                        style: TextStyle(color: Colors.white))),
                             SizedBox(
                               width: 10,
                             ),
@@ -781,7 +780,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     myLocationButtonEnabled: true,
                                     // requiredGPS: true,
                                     layersButtonEnabled: true,
-                                    countries: ['AE'],
+//                                    countries: ['AE'],
 
 //                      resultCardAlignment: Alignment.bottomCenter,
 //                       desiredAccuracy: LocationAccuracy.best,
@@ -810,10 +809,10 @@ class _HomeScreenState extends State<HomeScreen> {
 //
                                 },
                                 child: Icon(Icons.edit, color: Colors.white)),
-                            Container(
-                                width: MediaQuery.of(context).size.width * 0.1,
-                                child: Text('${minOrderValue}',
-                                    style: TextStyle(color: Colors.white))),
+//                            Container(
+//                                width: MediaQuery.of(context).size.width * 0.1,
+//                                child: Text('${minOrderValue}',
+//                                    style: TextStyle(color: Colors.white))),
 //                            InkWell(
 //                                onTap: () {
 //                                  showPlacePicker();
@@ -2011,13 +2010,3 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 }
-
-//url: snap.data.documents[i]['url'],
-//name: snap.data.documents[i]['name'],
-//desc: snap.data.documents[i]['description'],
-//category: snap.data.documents[i]['category'],
-//rating: snap.data.documents[i]['rating'],
-//price: snap.data.documents[i]['price'],
-
-//5. On categories page two main categories are to be displayed and inside them other 8 categories are to be displayed.
-//8. Product page needs to be made catchy and attractive in accordance to the photoshop design that will be provided.
