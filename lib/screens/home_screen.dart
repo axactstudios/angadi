@@ -377,8 +377,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ['boughtTogetherQuantity'],
                       id: snap.data.documents[i].documentID,
                       name: snap.data.documents[i]['name'],
-                      category: snap.data.documents[i][
-                          'category'], //Still same SS bhej whatsapp pe mere Ek kaam kr....code push krde...main ispe dekhta tu hamro dekhle ok bupppppppppppppppp done bossppppppppp bhupppppppp
+                      category: snap.data.documents[i]['category'],
                       rating: snap.data.documents[i]['rating'].toString(),
                       price: snap.data.documents[i]['price'],
                       desc: snap.data.documents[i]['description'],
@@ -786,10 +785,11 @@ class _HomeScreenState extends State<HomeScreen> {
 //                       desiredAccuracy: LocationAccuracy.best,
                                   );
                                   print("result = $result");
-                                  setState(() {
-                                    location = result;
-                                  });
-                                  if (location != null) {
+
+                                  if (result != null) {
+                                    setState(() {
+                                      location = result;
+                                    });
                                     minOrderValue = await Navigator.of(context)
                                         .push(MaterialPageRoute(
                                             builder: (context) =>
