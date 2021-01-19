@@ -682,8 +682,11 @@ class _OrderPlacedState extends State<OrderPlaced> {
                       width: MediaQuery.of(context).size.width,
                       child: InkWell(
                         onTap: () {
-                          launch(
-                              'https://play.google.com/store/apps/details?id=com.chimps.misteridli');
+                          if (Platform.isAndroid)
+                            launch(
+                                'https://play.google.com/store/apps/details?id=com.chimps.misteridli');
+                          if (Platform.isIOS)
+                            launch("https://apps.apple.com/app/id1544077730");
                         },
                         child: Text(
                           'Liked the service? Or annoyed by something? Write a feedback and let us now.',
