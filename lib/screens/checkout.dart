@@ -37,25 +37,27 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'order_placed.dart';
 
 class Checkout extends StatefulWidget {
-  String address;String   SavedArea; String savedEmirate;
+  String address;
+  String SavedArea;
+  String savedEmirate;
   var id;
-  Checkout(this.address, this.id,this.SavedArea,this.savedEmirate);
+  Checkout(this.address, this.id, this.SavedArea, this.savedEmirate);
   @override
   _CheckoutState createState() => _CheckoutState();
 }
 
 class _CheckoutState extends State<Checkout> {
-  final _formkey =GlobalKey<FormState>();
-  List <EmiratesArea> savedarea=[];
-  bool val=true;
+  final _formkey = GlobalKey<FormState>();
+  List<EmiratesArea> savedarea = [];
+  bool val = true;
   GlobalKey key = new GlobalKey();
 //  final scaffoldState = GlobalKey<ScaffoldState>();
-  bool ischecked=false;
+  bool ischecked = false;
   String type = 'Delivery';
   List<Cart> cartItems = [];
-  double minOrderPrice=0;
-  double deliveryCharge=0;
-List<Emirates>savedemirate=[];
+  double minOrderPrice = 0;
+  double deliveryCharge = 0;
+  List<Emirates> savedemirate = [];
   List<Emirates> allemirates = [];
   List<EmiratesArea> allareas = [];
   String area;
@@ -117,42 +119,40 @@ List<Emirates>savedemirate=[];
       },
     );
   }
-void areas()async{
-    await Firestore.instance.collection('EmiratesArea').getDocuments().then((value) {
-      for(int i =0;i<value.documents.length;i++){
+
+  void areas() async {
+    await Firestore.instance
+        .collection('EmiratesArea')
+        .getDocuments()
+        .then((value) {
+      for (int i = 0; i < value.documents.length; i++) {
         setState(() {
           EmiratesArea emi2 = EmiratesArea(
-              value.documents[i]
-              ['Emirate'],
-              value.documents[i]
-              ['deliveryCharge'],
-              value.documents[i]
-              ['minOrderPrice'],
+              value.documents[i]['Emirate'],
+              value.documents[i]['deliveryCharge'],
+              value.documents[i]['minOrderPrice'],
               value.documents[i]['name'],
               value.documents[i]['zone']);
           savedarea.add(emi2);
         });
       }
     });
-    await Firestore.instance.collection('Emirates').getDocuments().then((value){
-      for (int i = 0;
-      i < value.documents.length;
-      i++) {
+    await Firestore.instance
+        .collection('Emirates')
+        .getDocuments()
+        .then((value) {
+      for (int i = 0; i < value.documents.length; i++) {
         print(value.documents.length);
 
-        emiratesname.add(
-            value.documents[i]['name']);
-        Emirates emi = Emirates(
-            value.documents[i]
-            ['deliveryCharge'],
-            value.documents[i]
-            ['minOrderPrice'],
-            value.documents[i]['name']);
+        emiratesname.add(value.documents[i]['name']);
+        Emirates emi = Emirates(value.documents[i]['deliveryCharge'],
+            value.documents[i]['minOrderPrice'], value.documents[i]['name']);
 
         savedemirate.add(emi);
       }
     });
-}
+  }
+
   Widget _buildTimeDialog(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
 
@@ -287,31 +287,44 @@ void areas()async{
     SharedPreferences prefs = await SharedPreferences.getInstance();
     orderid = prefs.getString('Orderid');
   }
-  void setaddress()async {
+
+  void setaddress() async {
     print('=====================Reached');
-    if(addresstype=='House'){
+    if (addresstype == 'House') {
       print('------------------');
       print(docid);
-      (docid != null && docid != '') ? await Firestore.instance.collection(
-          'Users').document(docid).collection('Address').add({
-        'address': '${buildingController.text} , Street:${flatcontroller.text}',
-        'hno': '',
-        'landmark': additionalcontroller.text,
-        'Emirate': emirate,
-        'Area': area
-      }) : print('not');
+      (docid != null && docid != '')
+          ? await Firestore.instance
+              .collection('Users')
+              .document(docid)
+              .collection('Address')
+              .add({
+              'address':
+                  '${buildingController.text} , Street:${flatcontroller.text}',
+              'hno': '',
+              'landmark': additionalcontroller.text,
+              'Emirate': emirate,
+              'Area': area
+            })
+          : print('not');
     }
-   if(addresstype=='Office'){
-     (docid != null && docid != '') ? await Firestore.instance.collection(
-         'Users').document(docid).collection('Address').add({
-       'address': '${buildingController.text} ',
-       'hno': '',
-       'landmark': additionalcontroller.text,
-       'Emirate': emirate,
-       'Area': area
-     }) : print('not');
-   }
+    if (addresstype == 'Office') {
+      (docid != null && docid != '')
+          ? await Firestore.instance
+              .collection('Users')
+              .document(docid)
+              .collection('Address')
+              .add({
+              'address': '${buildingController.text} ',
+              'hno': '',
+              'landmark': additionalcontroller.text,
+              'Emirate': emirate,
+              'Area': area
+            })
+          : print('not');
+    }
   }
+
   @override
   void initState() {
     getAllItems();
@@ -324,35 +337,35 @@ void areas()async{
         DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
     super.initState();
   }
-  Widget web(String url,BuildContext context,double height,double width){
-       return Padding(
-         padding: const EdgeInsets.all(30.0),
-         child: SingleChildScrollView(
-           child: Container(
-             height:height,
-             width:width,
-             decoration: BoxDecoration(
-               borderRadius: BorderRadius.all(Radius.circular(7)),
-               boxShadow: [
-                 BoxShadow(
-                   color: Colors.black26,
-                   blurRadius: 15.0, // soften the shadow
-                   spreadRadius: 1.0, //extend the shadow
-                   offset: Offset(
-                     0.0, // Move to right 10  horizontally
-                     0.0, // Move to bottom 10 Vertically
-                   ),
-                 )
-               ],
-               color:Colors.white,
-             ),
-             child: WebView(
 
-               initialUrl: '${url}',
-             ),
-           ),
-         ),
-       );
+  Widget web(String url, BuildContext context, double height, double width) {
+    return Padding(
+      padding: const EdgeInsets.all(30.0),
+      child: SingleChildScrollView(
+        child: Container(
+          height: height,
+          width: width,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(7)),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 15.0, // soften the shadow
+                spreadRadius: 1.0, //extend the shadow
+                offset: Offset(
+                  0.0, // Move to right 10  horizontally
+                  0.0, // Move to bottom 10 Vertically
+                ),
+              )
+            ],
+            color: Colors.white,
+          ),
+          child: WebView(
+            initialUrl: '${url}',
+          ),
+        ),
+      ),
+    );
   }
 
   Widget dropdown(BuildContext context, double height, double width) {
@@ -504,38 +517,32 @@ void areas()async{
           ),
         ));
   }
-  void delivery(){
-    if(widget.address!=''){
-      for(int i =0;i<savedarea.length;i++){
-        if (widget.SavedArea ==
-            savedarea[i].name) {
+
+  void delivery() {
+    if (widget.address != '') {
+      for (int i = 0; i < savedarea.length; i++) {
+        if (widget.SavedArea == savedarea[i].name) {
           print(widget.SavedArea);
           setState(() {
-            minOrderPrice = double.parse(
-                savedarea[i].minOrderPrice);
-            deliveryCharge = double.parse(
-                savedarea[i].deliveryCharge);
+            minOrderPrice = double.parse(savedarea[i].minOrderPrice);
+            deliveryCharge = double.parse(savedarea[i].deliveryCharge);
           });
-        }
-        else{
-          for(int i=0;i<savedemirate.length;i++){
-            if(widget.savedEmirate==savedemirate[i].name){
+        } else {
+          for (int i = 0; i < savedemirate.length; i++) {
+            if (widget.savedEmirate == savedemirate[i].name) {
               setState(() {
-                minOrderPrice=double.parse(savedemirate[i].minorderprice);
-                deliveryCharge=double.parse(savedemirate[i].deliverycharge);
+                minOrderPrice = double.parse(savedemirate[i].minorderprice);
+                deliveryCharge = double.parse(savedemirate[i].deliverycharge);
               });
             }
           }
         }
       }
     }
-
-
   }
 
   @override
   Widget build(BuildContext context) {
-
     print(_result);
     delivery();
 
@@ -883,7 +890,6 @@ void areas()async{
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(widget.address),
-
                         ),
                       ),
                 type != 'Takeaway' && widget.address == ''
@@ -909,8 +915,8 @@ void areas()async{
 //                      )
                     ? (addresstype == 'Apartment')
                         ? Form(
-                          key:_formkey,
-                          child: Column(
+                            key: _formkey,
+                            child: Column(
                               children: [
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -938,8 +944,6 @@ void areas()async{
                                 Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: TextFormField(
-                                  
-                                     
                                     decoration: InputDecoration(
                                         border: OutlineInputBorder(
                                             borderRadius:
@@ -1009,11 +1013,11 @@ void areas()async{
                                 ),
                               ],
                             ),
-                        )
+                          )
                         : (addresstype == 'House')
                             ? Form(
-                  key:_formkey,
-                              child: Column(
+                                key: _formkey,
+                                child: Column(
                                   children: [
                                     StreamBuilder(
                                         stream: Firestore.instance
@@ -1030,16 +1034,17 @@ void areas()async{
                                                 i < snap.data.documents.length;
                                                 i++) {
                                               print(snap.data.documents.length);
-                                              emirate2 =
-                                                  snap.data.documents[0]['name'];
-                                              emiratesname.add(
-                                                  snap.data.documents[i]['name']);
+                                              emirate2 = snap.data.documents[0]
+                                                  ['name'];
+                                              emiratesname.add(snap
+                                                  .data.documents[i]['name']);
                                               Emirates emi = Emirates(
                                                   snap.data.documents[i]
                                                       ['deliveryCharge'],
                                                   snap.data.documents[i]
                                                       ['minOrderPrice'],
-                                                  snap.data.documents[i]['name']);
+                                                  snap.data.documents[i]
+                                                      ['name']);
 
                                               allemirates.add(emi);
                                             }
@@ -1047,20 +1052,24 @@ void areas()async{
                                                 ? Column(
                                                     children: [
                                                       Container(
-                                                        width:
-                                                            MediaQuery.of(context)
-                                                                    .size
-                                                                    .width *
-                                                                0.9,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
                                                         child:
                                                             DropdownButtonHideUnderline(
                                                           child:
                                                               new DropdownButtonFormField<
                                                                   String>(
-                                                                validator:(value)=>value==null?'field required':null,
-                                                            hint:
-                                                                Text('Emirates'),
-                                                            value: emiratesname[0],
+                                                            validator: (value) =>
+                                                                value == null
+                                                                    ? 'field required'
+                                                                    : null,
+                                                            hint: Text(
+                                                                'Emirates'),
+                                                            value:
+                                                                emiratesname[0],
                                                             items: emiratesname
                                                                 .map((String
                                                                     value) {
@@ -1080,7 +1089,6 @@ void areas()async{
                                                                     newValue;
                                                                 print(emirate);
 
-
 //                      Navigator.pop(context);
                                                               });
                                                             },
@@ -1097,7 +1105,8 @@ void areas()async{
                                     StreamBuilder(
                                         stream: Firestore.instance
                                             .collection('EmiratesArea')
-                                            .where('Emirate', isEqualTo: emirate)
+                                            .where('Emirate',
+                                                isEqualTo: emirate)
                                             .snapshots(),
                                         builder: (BuildContext context,
                                             AsyncSnapshot<QuerySnapshot> snap) {
@@ -1111,8 +1120,8 @@ void areas()async{
                                                 i++) {
                                               print(snap.data.documents.length);
 
-                                              areaname.add(
-                                                  snap.data.documents[i]['name']);
+                                              areaname.add(snap
+                                                  .data.documents[i]['name']);
 
                                               EmiratesArea emi2 = EmiratesArea(
                                                   snap.data.documents[i]
@@ -1121,8 +1130,10 @@ void areas()async{
                                                       ['deliveryCharge'],
                                                   snap.data.documents[i]
                                                       ['minOrderPrice'],
-                                                  snap.data.documents[i]['name'],
-                                                  snap.data.documents[i]['zone']);
+                                                  snap.data.documents[i]
+                                                      ['name'],
+                                                  snap.data.documents[i]
+                                                      ['zone']);
                                               allareas.add(emi2);
                                             }
                                             areaname.add('Others');
@@ -1130,17 +1141,20 @@ void areas()async{
                                                 ? Column(
                                                     children: [
                                                       Container(
-                                                        width:
-                                                            MediaQuery.of(context)
-                                                                    .size
-                                                                    .width *
-                                                                0.9,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
                                                         child:
                                                             DropdownButtonHideUnderline(
                                                           child:
                                                               new DropdownButtonFormField<
                                                                   String>(
-                                                                validator:(value)=>value==null?'field required':null,
+                                                            validator: (value) =>
+                                                                value == null
+                                                                    ? 'field required'
+                                                                    : null,
                                                             hint: Text('Area'),
                                                             value: areaname[0],
                                                             items: areaname.map(
@@ -1156,34 +1170,62 @@ void areas()async{
                                                                 newValue) {
                                                               setState(() {
                                                                 area = newValue;
-                                                                print('---------------');
+                                                                print(
+                                                                    '---------------');
                                                                 print(area);
-                                                                if(area=='Others'){
-                                                                  print('Reached');
-                                                                  for(int i =0;i<allemirates.length;i++){
-                                                                    print('yess');
-                                                                    print('===============${emirate}');
-                                                                    if(emirate==allemirates[i].name){
-                                                                      print('check');
-                                                                      print(emirate);
-                                                                      print(allemirates[i]);
-                                                                      setState(() {
-                                                                        minOrderPrice=double.parse(allemirates[i].minorderprice);
-                                                                        deliveryCharge=double.parse(allemirates[i].deliverycharge);
+                                                                if (area ==
+                                                                    'Others') {
+                                                                  print(
+                                                                      'Reached');
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          allemirates
+                                                                              .length;
+                                                                      i++) {
+                                                                    print(
+                                                                        'yess');
+                                                                    print(
+                                                                        '===============${emirate}');
+                                                                    if (emirate ==
+                                                                        allemirates[i]
+                                                                            .name) {
+                                                                      print(
+                                                                          'check');
+                                                                      print(
+                                                                          emirate);
+                                                                      print(allemirates[
+                                                                          i]);
+                                                                      setState(
+                                                                          () {
+                                                                        minOrderPrice =
+                                                                            double.parse(allemirates[i].minorderprice);
+                                                                        deliveryCharge =
+                                                                            double.parse(allemirates[i].deliverycharge);
                                                                       });
                                                                     }
                                                                   }
                                                                 }
-                                                                for(int i=0;i<allareas.length;i++){
-                                                                  if(area==allareas[i].name)
-                                                                    setState(() {
-                                                                      minOrderPrice=double.parse(allareas[i].minOrderPrice);
-                                                                      deliveryCharge=double.parse(allareas[i].deliveryCharge);
+                                                                for (int i = 0;
+                                                                    i <
+                                                                        allareas
+                                                                            .length;
+                                                                    i++) {
+                                                                  if (area ==
+                                                                      allareas[
+                                                                              i]
+                                                                          .name)
+                                                                    setState(
+                                                                        () {
+                                                                      minOrderPrice =
+                                                                          double.parse(
+                                                                              allareas[i].minOrderPrice);
+                                                                      deliveryCharge =
+                                                                          double.parse(
+                                                                              allareas[i].deliveryCharge);
                                                                     });
-
                                                                 }
 //                      Navigator.pop(context);
-
                                                               });
                                                             },
                                                           ),
@@ -1246,7 +1288,11 @@ void areas()async{
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: TextFormField(
-                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
+                                        validator: (value) {
+                                          if (value == null || value == '')
+                                            return 'Required field';
+                                          return null;
+                                        },
                                         decoration: InputDecoration(
                                             border: OutlineInputBorder(
                                                 borderRadius:
@@ -1271,7 +1317,11 @@ void areas()async{
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: TextFormField(
-                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
+                                        validator: (value) {
+                                          if (value == null || value == '')
+                                            return 'Required field';
+                                          return null;
+                                        },
                                         decoration: InputDecoration(
                                             border: OutlineInputBorder(
                                                 borderRadius:
@@ -1297,7 +1347,7 @@ void areas()async{
                                       padding: const EdgeInsets.all(8.0),
                                       child: TextFormField(
 //                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
-                                        
+
                                         decoration: InputDecoration(
                                             border: OutlineInputBorder(
                                                 borderRadius:
@@ -1322,10 +1372,10 @@ void areas()async{
                                     ),
                                   ],
                                 ),
-                            )
+                              )
                             : Form(
-                                key:_formkey,
-                              child: Column(
+                                key: _formkey,
+                                child: Column(
                                   children: [
                                     StreamBuilder(
                                         stream: Firestore.instance
@@ -1342,36 +1392,41 @@ void areas()async{
                                                 i < snap.data.documents.length;
                                                 i++) {
                                               print(snap.data.documents.length);
-                                              emirate2 =
-                                                  snap.data.documents[0]['name'];
-                                              emiratesname.add(
-                                                  snap.data.documents[i]['name']);
+                                              emirate2 = snap.data.documents[0]
+                                                  ['name'];
+                                              emiratesname.add(snap
+                                                  .data.documents[i]['name']);
                                               Emirates emi = Emirates(
                                                   snap.data.documents[i]
                                                       ['deliveryCharge'],
                                                   snap.data.documents[i]
                                                       ['minOrderPrice'],
-                                                  snap.data.documents[i]['name']);
+                                                  snap.data.documents[i]
+                                                      ['name']);
                                               allemirates.add(emi);
                                             }
                                             return allemirates.length != 0
                                                 ? Column(
                                                     children: [
                                                       Container(
-                                                        width:
-                                                            MediaQuery.of(context)
-                                                                    .size
-                                                                    .width *
-                                                                0.9,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
                                                         child:
                                                             DropdownButtonHideUnderline(
                                                           child:
                                                               new DropdownButtonFormField<
                                                                   String>(
-                                                                validator:(value)=>value==null?'field required':null,
-                                                            hint:
-                                                                Text('Emirates'),
-                                                            value: emiratesname[0],
+                                                            validator: (value) =>
+                                                                value == null
+                                                                    ? 'field required'
+                                                                    : null,
+                                                            hint: Text(
+                                                                'Emirates'),
+                                                            value:
+                                                                emiratesname[0],
                                                             items: emiratesname
                                                                 .map((String
                                                                     value) {
@@ -1407,7 +1462,8 @@ void areas()async{
                                     StreamBuilder(
                                         stream: Firestore.instance
                                             .collection('EmiratesArea')
-                                            .where('Emirate', isEqualTo: emirate)
+                                            .where('Emirate',
+                                                isEqualTo: emirate)
                                             .snapshots(),
                                         builder: (BuildContext context,
                                             AsyncSnapshot<QuerySnapshot> snap) {
@@ -1421,8 +1477,8 @@ void areas()async{
                                                 i++) {
                                               print(snap.data.documents.length);
 
-                                              areaname.add(
-                                                  snap.data.documents[i]['name']);
+                                              areaname.add(snap
+                                                  .data.documents[i]['name']);
 
                                               EmiratesArea emi2 = EmiratesArea(
                                                   snap.data.documents[i]
@@ -1431,8 +1487,10 @@ void areas()async{
                                                       ['deliveryCharge'],
                                                   snap.data.documents[i]
                                                       ['minOrderPrice'],
-                                                  snap.data.documents[i]['name'],
-                                                  snap.data.documents[i]['zone']);
+                                                  snap.data.documents[i]
+                                                      ['name'],
+                                                  snap.data.documents[i]
+                                                      ['zone']);
                                               allareas.add(emi2);
                                             }
                                             areaname.add('Others');
@@ -1440,26 +1498,27 @@ void areas()async{
                                                 ? Column(
                                                     children: [
                                                       Container(
-                                                        width:
-                                                            MediaQuery.of(context)
-                                                                    .size
-                                                                    .width *
-                                                                0.9,
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
                                                         child:
                                                             DropdownButtonHideUnderline(
                                                           child:
                                                               new DropdownButtonFormField<
                                                                   String>(
-                                                                validator:(value)=>value==null?'field required':null,
+                                                            validator: (value) =>
+                                                                value == null
+                                                                    ? 'field required'
+                                                                    : null,
                                                             hint: Text('Area'),
                                                             value: areaname[0],
-
                                                             items: areaname.map(
                                                                 (String value) {
                                                               return new DropdownMenuItem<
                                                                   String>(
                                                                 value: value,
-
                                                                 child: new Text(
                                                                     value),
                                                               );
@@ -1468,30 +1527,53 @@ void areas()async{
                                                                 newValue) {
                                                               setState(() {
                                                                 area = newValue;
-                                                                print('---------------------');
+                                                                print(
+                                                                    '---------------------');
                                                                 print(area);
 
-                                                                if(area=='Others'){
-                                                                  for(int i =0;i<allemirates.length;i++){
-                                                                    if(emirate2==allemirates[i].name){
-                                                                      setState(() {
-                                                                        minOrderPrice=double.parse(allemirates[i].minorderprice);
-                                                                        deliveryCharge=double.parse(allemirates[i].deliverycharge);
+                                                                if (area ==
+                                                                    'Others') {
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          allemirates
+                                                                              .length;
+                                                                      i++) {
+                                                                    if (emirate2 ==
+                                                                        allemirates[i]
+                                                                            .name) {
+                                                                      setState(
+                                                                          () {
+                                                                        minOrderPrice =
+                                                                            double.parse(allemirates[i].minorderprice);
+                                                                        deliveryCharge =
+                                                                            double.parse(allemirates[i].deliverycharge);
                                                                       });
                                                                     }
                                                                   }
                                                                 }
 
-                                                                for(int i=0;i<allareas.length;i++){
-                                                                  if(area==allareas[i].name)
-                                                                    setState(() {
-                                                                      minOrderPrice=double.parse(allareas[i].minOrderPrice);
-                                                                      deliveryCharge=double.parse(allareas[i].deliveryCharge);
+                                                                for (int i = 0;
+                                                                    i <
+                                                                        allareas
+                                                                            .length;
+                                                                    i++) {
+                                                                  if (area ==
+                                                                      allareas[
+                                                                              i]
+                                                                          .name)
+                                                                    setState(
+                                                                        () {
+                                                                      minOrderPrice =
+                                                                          double.parse(
+                                                                              allareas[i].minOrderPrice);
+                                                                      deliveryCharge =
+                                                                          double.parse(
+                                                                              allareas[i].deliveryCharge);
                                                                     });
                                                                 }
 //                      Navigator.pop(context);
                                                               });
-
                                                             },
                                                           ),
                                                         ),
@@ -1553,7 +1635,11 @@ void areas()async{
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: TextFormField(
-                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
+                                        validator: (value) {
+                                          if (value == null || value == '')
+                                            return 'Required field';
+                                          return null;
+                                        },
                                         decoration: InputDecoration(
                                             border: OutlineInputBorder(
                                                 borderRadius:
@@ -1570,7 +1656,8 @@ void areas()async{
                                                     BorderRadius.circular(2),
                                                 borderSide: BorderSide(
                                                     color: Color(0xFF6b3600))),
-                                            hintText: 'Building name/no.,floor*'),
+                                            hintText:
+                                                'Building name/no.,floor*'),
                                         controller: buildingController,
                                       ),
                                     ),
@@ -1603,27 +1690,31 @@ void areas()async{
                                     ),
                                   ],
                                 ),
-                            )
+                              )
                     : Container(),
-                type != 'Takeaway'&&widget.address==''? CheckboxListTile(controlAffinity:ListTileControlAffinity.leading,checkColor:Colors.white,activeColor:AppColors.secondaryElement,title: Text("Save to my addresses"),value: ischecked, onChanged: (newValue)
-                {setState(() {
-                  ischecked=!ischecked;
-                });
-                if(ischecked==true){
-                  print(ischecked);
-                  if(_formkey.currentState.validate()){
-                    setaddress();
-                  }
-                else{
-                Fluttertoast.showToast(
-                msg: 'Address required', toastLength: Toast.LENGTH_SHORT);
-
-                  }
-                }
-
-
-
-                }):Container(),
+                type != 'Takeaway' && widget.address == ''
+                    ? CheckboxListTile(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        checkColor: Colors.white,
+                        activeColor: AppColors.secondaryElement,
+                        title: Text("Save to my addresses"),
+                        value: ischecked,
+                        onChanged: (newValue) {
+                          setState(() {
+                            ischecked = !ischecked;
+                          });
+                          if (ischecked == true) {
+                            print(ischecked);
+                            if (_formkey.currentState.validate()) {
+                              setaddress();
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Address required',
+                                  toastLength: Toast.LENGTH_SHORT);
+                            }
+                          }
+                        })
+                    : Container(),
                 type != 'Takeaway'
                     ? Padding(
                         padding: const EdgeInsets.symmetric(
@@ -1632,9 +1723,7 @@ void areas()async{
                           'Saved addresses',
                           buttonWidth: MediaQuery.of(context).size.width,
                           onTap: () {
-                            setState(() {
-
-                            });
+                            setState(() {});
                             Navigator.pushReplacement(context,
                                 MaterialPageRoute(
                                     builder: (BuildContext context) {
@@ -1957,18 +2046,16 @@ void areas()async{
                     : Container(),
                 Column(
                   children: [
-                    _result != '833'&&type!='Takeaway'
+                    _result != '833' && type != 'Takeaway'
                         ? Padding(
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 14.0),
-                            child: angadiButton(
-                              'Cash On Delivery',
-                              buttonWidth: MediaQuery.of(context).size.width,
-                              onTap: () {
-                                print('-------------------------------------');
+                            child: angadiButton('Cash On Delivery',
+                                buttonWidth: MediaQuery.of(context).size.width,
+                                onTap: () {
+                              print('-------------------------------------');
 
-                                if (widget.address != '') {
-
+                              if (widget.address != '') {
 //                                  if (widget.SavedArea != '') {
 //
 //                                    for (int i = 0; i < savedarea.length; i++) {
@@ -1987,27 +2074,29 @@ void areas()async{
 //                                      print(deliveryCharge);
 //                                    }
 //                                  }
-                                  var total = 0.0;
-                                  discount != null
-                                      ? total =
-                                  ((totalAmount() * 0.18) + totalAmount() -
-                                      (totalAmount() *
-                                          (double.parse(discount.discount) /
-                                              100)) + deliveryCharge)
-                                      : total = ((totalAmount() * 0.18) +
-                                      totalAmount() + deliveryCharge);
-                                  if (total > minOrderPrice) {
-                                    showAlertDialog(context);
-                                  }
-                                  else {
-                                    Fluttertoast.showToast(
-                                        msg: 'Your order amount is less \n than the minimum order price',
-                                        toastLength: Toast.LENGTH_SHORT);
-                                  }
+                                var total = 0.0;
+                                discount != null
+                                    ? total = ((totalAmount() * 0.18) +
+                                        totalAmount() -
+                                        (totalAmount() *
+                                            (double.parse(discount.discount) /
+                                                100)) +
+                                        deliveryCharge)
+                                    : total = ((totalAmount() * 0.18) +
+                                        totalAmount() +
+                                        deliveryCharge);
+                                if (total > minOrderPrice) {
+                                  showAlertDialog(context);
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          'Your order amount is less \n than the minimum order price',
+                                      toastLength: Toast.LENGTH_SHORT);
                                 }
+                              }
 
-                                if (widget.address == '') {
-                                  if (_formkey.currentState.validate()) {
+                              if (widget.address == '') {
+                                if (_formkey.currentState.validate()) {
 //                                    if (widget.SavedArea != '') {
 //                                      for (int i = 0; i <
 //                                          allareas.length; i++) {
@@ -2024,39 +2113,45 @@ void areas()async{
 //                                        print(deliveryCharge);
 //                                      }
 //                                    }
-                                    var total = 0.0;
-                                    discount != null
-                                        ? total =
-                                    ((totalAmount() * 0.18) + totalAmount() -
-                                        (totalAmount() *
-                                            (double.parse(discount.discount) /
-                                                100)) + deliveryCharge)
-                                        : total =
-                                    ((totalAmount() * 0.18) + totalAmount() +
-                                        deliveryCharge);
-                                    if (total > minOrderPrice) {
-                                      showAlertDialog(context);
-                                    }
-                                    else {
-                                      Fluttertoast.showToast(
-                                          msg: 'Your order amount is less \n than the minimum order price',
-                                          toastLength: Toast.LENGTH_SHORT);
-                                    }
-                                  }
-                                  else {
+                                  var total = 0.0;
+                                  discount != null
+                                      ? total = ((totalAmount() * 0.18) +
+                                          totalAmount() -
+                                          (totalAmount() *
+                                              (double.parse(discount.discount) /
+                                                  100)) +
+                                          deliveryCharge)
+                                      : total = ((totalAmount() * 0.18) +
+                                          totalAmount() +
+                                          deliveryCharge);
+                                  if (total > minOrderPrice) {
+                                    showAlertDialog(context);
+                                  } else {
                                     Fluttertoast.showToast(
-                                        msg: 'Address required',
+                                        msg:
+                                            'Your order amount is less \n than the minimum order price',
                                         toastLength: Toast.LENGTH_SHORT);
                                   }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'Address required',
+                                      toastLength: Toast.LENGTH_SHORT);
                                 }
-
                               }
-                            ),
+                            }),
                           )
-                        : type=='Takeaway'?Padding(
-                          padding: const EdgeInsets.symmetric(horizontal:14),
-                          child: angadiButton('Pay on Pickup', buttonWidth: MediaQuery.of(context).size.width,onTap:(){placeOrder(type);}),
-                        ):Container(),
+                        : type == 'Takeaway'
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 14),
+                                child: angadiButton('Pay on Pickup',
+                                    buttonWidth: MediaQuery.of(context)
+                                        .size
+                                        .width, onTap: () {
+                                  placeOrder(type);
+                                }),
+                              )
+                            : Container(),
                     _result != '833'
                         ? SizedBox(
                             height: 20,
@@ -2069,10 +2164,9 @@ void areas()async{
                             ? 'Proceed to pay online'
                             : 'Go to my orders',
                         onTap: () {
-                          val=!val;
+                          val = !val;
 
-    if (widget.SavedArea != '') {
-
+                          if (widget.SavedArea != '') {
 //    for (int i = 0; i < savedarea.length; i++) {
 //    if (widget.SavedArea ==
 //    savedarea[i].name) {
@@ -2088,41 +2182,45 @@ void areas()async{
 //    print(minOrderPrice);
 //    print(deliveryCharge);
 //    }
-    }
-    var total = 0.0;
-    discount != null
-    ? total =
-    ((totalAmount() * 0.18) + totalAmount() -
-    (totalAmount() *
-    (double.parse(discount.discount) /
-    100)) + deliveryCharge)
-        : total = ((totalAmount() * 0.18) +
-    totalAmount() + deliveryCharge);
-    if (total > minOrderPrice) {
-      _result != '833' && j != 1
-          ? onlineorder(
-          (discount != null)
-              ? ((totalAmount() * 0.18) +
-              totalAmount() -
-              (totalAmount() *
-                  (double.parse(
-                      discount.discount) /
-                      100))+deliveryCharge)
-              .toStringAsFixed(2)
-              : ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
-              .toString(),
-          type,
-          orderid)
-          : Checksuccess();
-    }
-    else {
-    Fluttertoast.showToast(
-    msg: 'Your order amount is less \n than the minimum order price',
-    toastLength: Toast.LENGTH_SHORT);
-    }
+                          }
+                          var total = 0.0;
+                          discount != null
+                              ? total = ((totalAmount() * 0.18) +
+                                  totalAmount() -
+                                  (totalAmount() *
+                                      (double.parse(discount.discount) / 100)) +
+                                  deliveryCharge)
+                              : total = ((totalAmount() * 0.18) +
+                                  totalAmount() +
+                                  deliveryCharge);
+                          if (total > minOrderPrice) {
+                            _result != '833' && j != 1
+                                ? onlineorder(
+                                    (discount != null)
+                                        ? ((totalAmount() * 0.18) +
+                                                totalAmount() -
+                                                (totalAmount() *
+                                                    (double.parse(
+                                                            discount.discount) /
+                                                        100)) +
+                                                deliveryCharge)
+                                            .toStringAsFixed(2)
+                                        : ((totalAmount() * 0.18) +
+                                                totalAmount() +
+                                                deliveryCharge)
+                                            .toString(),
+                                    type,
+                                    orderid)
+                                : Checksuccess();
+                          } else {
+                            Fluttertoast.showToast(
+                                msg:
+                                    'Your order amount is less \n than the minimum order price',
+                                toastLength: Toast.LENGTH_SHORT);
+                          }
 
                           if (widget.address == '') {
-                    if (_formkey.currentState.validate()) {
+                            if (_formkey.currentState.validate()) {
 //                    if (widget.SavedArea != '') {
 //                    for (int i = 0; i <
 //                    allareas.length; i++) {
@@ -2139,45 +2237,48 @@ void areas()async{
 //                    print(deliveryCharge);
 //                    }
 //                    }
-                    var total = 0.0;
-                    discount != null
-                    ? total =
-                    ((totalAmount() * 0.18) + totalAmount() -
-                    (totalAmount() *
-                    (double.parse(discount.discount) /
-                    100)) + deliveryCharge)
-                        : total =
-                    ((totalAmount() * 0.18) + totalAmount() +
-                    deliveryCharge);
-                    if (total > minOrderPrice) {
-                      _result != '833' && j != 1
-                          ? onlineorder(
-                          (discount != null)
-                              ? ((totalAmount() * 0.18) +
-                              totalAmount() -
-                              (totalAmount() *
-                                  (double.parse(
-                                      discount.discount) /
-                                      100))+deliveryCharge)
-                              .toStringAsFixed(2)
-                              : ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
-                              .toString(),
-                          type,
-                          orderid)
-                          : Checksuccess();
-                    }
-                    else {
-                    Fluttertoast.showToast(
-                    msg: 'Your order amount is less \n than the minimum order price',
-                    toastLength: Toast.LENGTH_SHORT);
-                    }
-                    }
-                    else {
-                    Fluttertoast.showToast(
-                    msg: 'Address required',
-                    toastLength: Toast.LENGTH_SHORT);
-                    }
-                    }
+                              var total = 0.0;
+                              discount != null
+                                  ? total = ((totalAmount() * 0.18) +
+                                      totalAmount() -
+                                      (totalAmount() *
+                                          (double.parse(discount.discount) /
+                                              100)) +
+                                      deliveryCharge)
+                                  : total = ((totalAmount() * 0.18) +
+                                      totalAmount() +
+                                      deliveryCharge);
+                              if (total > minOrderPrice) {
+                                _result != '833' && j != 1
+                                    ? onlineorder(
+                                        (discount != null)
+                                            ? ((totalAmount() * 0.18) +
+                                                    totalAmount() -
+                                                    (totalAmount() *
+                                                        (double.parse(discount
+                                                                .discount) /
+                                                            100)) +
+                                                    deliveryCharge)
+                                                .toStringAsFixed(2)
+                                            : ((totalAmount() * 0.18) +
+                                                    totalAmount() +
+                                                    deliveryCharge)
+                                                .toString(),
+                                        type,
+                                        orderid)
+                                    : Checksuccess();
+                              } else {
+                                Fluttertoast.showToast(
+                                    msg:
+                                        'Your order amount is less \n than the minimum order price',
+                                    toastLength: Toast.LENGTH_SHORT);
+                              }
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Address required',
+                                  toastLength: Toast.LENGTH_SHORT);
+                            }
+                          }
 
 //                        if(_formkey.currentState.validate()){
 //                            _result != '833' && j != 1
@@ -2284,7 +2385,8 @@ void areas()async{
             'Notes':
                 notesController.text != null ? notesController.text : 'None',
             'GrandTotal':
-                ((totalAmount() * 0.18) + totalAmount()+deliveryCharge).toStringAsFixed(2),
+                ((totalAmount() * 0.18) + totalAmount() + deliveryCharge)
+                    .toStringAsFixed(2),
           }).then((value) {
             setState(() {
 //              docID = value;
@@ -2313,7 +2415,8 @@ void areas()async{
                     ? notesController.text
                     : 'None',
                 'GrandTotal':
-                    ((totalAmount() * 0.18) + totalAmount()+deliveryCharge).toStringAsFixed(2),
+                    ((totalAmount() * 0.18) + totalAmount() + deliveryCharge)
+                        .toStringAsFixed(2),
               }).then((value) {
                 setState(() {
 //              docID = value;
@@ -2341,7 +2444,9 @@ void areas()async{
                     'Notes': notesController.text != null
                         ? notesController.text
                         : 'None',
-                    'GrandTotal': ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
+                    'GrandTotal': ((totalAmount() * 0.18) +
+                            totalAmount() +
+                            deliveryCharge)
                         .toStringAsFixed(2),
                   }).then((value) {
                     setState(() {
@@ -2367,7 +2472,9 @@ void areas()async{
                         'Notes': notesController.text != null
                             ? notesController.text
                             : 'None',
-                        'GrandTotal': ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
+                        'GrandTotal': ((totalAmount() * 0.18) +
+                                totalAmount() +
+                                deliveryCharge)
                             .toStringAsFixed(2),
                       }).then((value) {
                         setState(() {
@@ -2384,7 +2491,7 @@ void areas()async{
                             'Qty': quantities,
                             'Type': orderType,
                             'UserID': user.uid,
-      'isPaid':false,
+                            'isPaid': false,
                             // 'Status':'${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
                             'TimeStamp': Timestamp.now(),
                             'Status': 'Awaiting Confirmation',
@@ -2415,9 +2522,10 @@ void areas()async{
                             'Notes': notesController.text != null
                                 ? notesController.text
                                 : 'None',
-                            'GrandTotal':
-                                ((totalAmount() * 0.18) + totalAmount()+deliveryCharge)
-                                    .toStringAsFixed(2),
+                            'GrandTotal': ((totalAmount() * 0.18) +
+                                    totalAmount() +
+                                    deliveryCharge)
+                                .toStringAsFixed(2),
                           }).then((value) {
                             setState(() {
 //                  docID = value.documentID;
@@ -2475,7 +2583,9 @@ void areas()async{
             FlatButton(
               color: Colors.red,
               child: Text("Cancel"),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
             FlatButton(
               color: AppColors.secondaryElement,
@@ -2593,10 +2703,11 @@ void areas()async{
                   Text('AED. ${(totalAmount() * 0.18).toStringAsFixed(2)}'),
                 ],
               ),
-              (deliveryCharge!=0)?Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text('Delivery Charge-'),
+              (deliveryCharge != 0)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text('Delivery Charge-'),
 //                  SizedBox(
 //                    width: MediaQuery.of(context).size.width * 0.03,
 //                  ),
@@ -2604,9 +2715,10 @@ void areas()async{
 //                  SizedBox(
 //                    width: MediaQuery.of(context).size.width * 0.03,
 //                  ),
-                  Text('AED. ${deliveryCharge.toString()}'),
-                ],
-              ):Container(),
+                        Text('AED. ${deliveryCharge.toString()}'),
+                      ],
+                    )
+                  : Container(),
               SizedBox(
                 height: 20,
               ),
@@ -2629,8 +2741,8 @@ void areas()async{
 //                    width: MediaQuery.of(context).size.width * 0.03,
 //                  ),
                   Text(discount != null
-                      ? 'AED. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100))+deliveryCharge).toStringAsFixed(2)}'
-                      : 'AED. ${((totalAmount() * 0.18) + totalAmount()+deliveryCharge)}'),
+                      ? 'AED. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100)) + deliveryCharge).toStringAsFixed(2)}'
+                      : 'AED. ${((totalAmount() * 0.18) + totalAmount() + deliveryCharge)}'),
                 ],
               ),
               SizedBox(
@@ -2770,13 +2882,13 @@ void areas()async{
     map = decode;
 
     scaffoldState.currentState.showBottomSheet((context) {
-      return StatefulBuilder(builder:
-          (BuildContext context, StateSetter state) {
+      return StatefulBuilder(
+          builder: (BuildContext context, StateSetter state) {
         return web(
             map['payment_url'],
             context,
             MediaQuery.of(context).size.height * 0.7,
-            MediaQuery.of(context).size.width*0.9);
+            MediaQuery.of(context).size.width * 0.9);
       });
     });
 //    Navigator.push(context,MaterialPageRoute(builder:(context)=>HomeScreen()));
@@ -2809,7 +2921,7 @@ void areas()async{
   }
 
   Future<String> Checksuccess() async {
-    val=!val;
+    val = !val;
     pushNewScreen(context, screen: MyOrders());
 //    HttpClient httpClient = new HttpClient();
 //    httpClient.badCertificateCallback =

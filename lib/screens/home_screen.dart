@@ -80,6 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> quantities = [];
   getUser() async {
     user = await FirebaseAuth.instance.currentUser();
+    minOrderValue = await '100';
   }
 
   final dbHelper = DatabaseHelper.instance;
@@ -219,6 +220,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Dish> dishesSpecial = new List<Dish>();
   List<Offer> offers = new List<Offer>();
   SharedPreferences prefs;
+  var minOrderValue;
 
   var orderStatus, idorder;
   @override
@@ -787,13 +789,17 @@ class _HomeScreenState extends State<HomeScreen> {
                                   print("result = $result");
                                   setState(() {
                                     location = result;
-                                    if (location != null) {
-                                      Navigator.of(context).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  ConfirmAddress(
-                                                      location.address)));
-                                    }
+                                  });
+                                  if (location != null) {
+                                    minOrderValue = await Navigator.of(context)
+                                        .push(MaterialPageRoute(
+                                            builder: (context) =>
+                                                ConfirmAddress(
+                                                    location.address)));
+                                  }
+
+                                  await setState(() {
+                                    print(minOrderValue);
                                   });
 //                                  _locationDialog(context);
 //                                   showPlacePicker();
@@ -804,6 +810,10 @@ class _HomeScreenState extends State<HomeScreen> {
 //
                                 },
                                 child: Icon(Icons.edit, color: Colors.white)),
+                            Container(
+                                width: MediaQuery.of(context).size.width * 0.1,
+                                child: Text('${minOrderValue}',
+                                    style: TextStyle(color: Colors.white))),
 //                            InkWell(
 //                                onTap: () {
 //                                  showPlacePicker();
@@ -812,6 +822,15 @@ class _HomeScreenState extends State<HomeScreen> {
 //                                },
 //                                child: Icon(Icons.map, color: Colors.white))
                           ],
+                        ),
+                      ),
+                    ),
+                    Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(2.0),
+                        child: Text(
+                          'Minimum Order Value : AED ${minOrderValue}',
+                          style: TextStyle(color: Color(0xFF8B0000)),
                         ),
                       ),
                     ),
