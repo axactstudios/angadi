@@ -2381,7 +2381,7 @@ class _CheckoutState extends State<Checkout> {
                 selectedDate.year, selectedDate.month, selectedDate.day, dd),
             'DeliveryTime': selectedTime,
             'TimeStamp': Timestamp.now(),
-            'Status': 'Awaiting Confirmation',
+            'Status': 'Order Confirmed',
             'Notes':
                 notesController.text != null ? notesController.text : 'None',
             'GrandTotal':
