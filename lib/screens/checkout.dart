@@ -2412,19 +2412,16 @@ class _CheckoutState extends State<Checkout> {
     print(selectedDate.year);
     print(selectedTime.split(' ').join().toLowerCase());
     var tt = selectedTime.split(' ').join().toLowerCase();
-    if (selectedTime.contains('AM')) {
-      setState(() {
-        dd = int.parse(selectedTime.substring(0, 1).trim());
-      });
-    } else if (selectedTime.contains('12')) {
-      setState(() {
-        dd = int.parse(selectedTime.substring(0, 1).trim());
-      });
-    } else if (selectedTime.contains('PM') && !selectedTime.contains('12')) {
-      setState(() {
-        dd = int.parse(selectedTime.substring(0, 1).trim()) + 12;
-      });
+    String s = '';
+    for (int i = 0; i < selectedTime.length; i++) {
+      if (selectedTime[i] != ' ')
+        s = s + selectedTime[i];
+      else
+        break;
     }
+
+    dd = int.parse(s);
+    if (selectedTime.contains('PM')) dd = dd + 12;
     print(
         'Hours are $dd ${DateTime(selectedDate.year, selectedDate.month, selectedDate.day, dd)}');
     var rng = new Random();
