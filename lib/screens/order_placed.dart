@@ -362,16 +362,16 @@ class _OrderPlacedState extends State<OrderPlaced> {
     print(minutes2);
     finalminutes = ((minutes2 - minutes).toDouble() * 60).toStringAsFixed(0);
     print(finalminutes);
+
+    days = ((widget.date.difference(DateTime.now()).inMinutes) / (24 * 60))
+        .toInt();
     setTimings();
+    hours = (widget.date.difference(DateTime.now()).inHours) - (days * 24);
     super.initState();
   }
 
   setTimings() async {
-    days =
-        await ((widget.date.difference(DateTime.now()).inMinutes) / (24 * 60))
-            .toInt();
-    hours =
-        await (widget.date.difference(DateTime.now()).inHours) - (days * 24);
+    print(days);
   }
 
   @override
