@@ -1950,12 +1950,12 @@ class _CheckoutState extends State<Checkout> {
                                           },
                                           child: selectedDate != null
                                               ? Text(
-                                                  '${selectedDate.day.toString()}/${selectedDate.month.toString()}/20 ',
+                                                  '${selectedDate.day.toString()}/${selectedDate.month.toString()}/${selectedDate.year.toString()} ',
                                                   style: TextStyle(
                                                       color: Color(0xFF6b3600)),
                                                 )
                                               : Text(
-                                                  '${date.day.toString()}/${date.month.toString()}/20 ',
+                                                  '${date.day.toString()}/${date.month.toString()}/${selectedDate.year.toString()} ',
                                                   style: TextStyle(
                                                       color: Color(0xFF6b3600)),
                                                 )),
