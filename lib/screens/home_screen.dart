@@ -179,7 +179,7 @@ class _HomeScreenState extends State<HomeScreen> {
       final rowsDeleted = await dbHelper.delete(v.productName, v.qtyTag);
     }
   }
-
+var date2;
   @override
   void initState() {
 //    addDishParams();
@@ -191,6 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getSharedPrefs();
     address();
     date = DateTime.now();
+    date2=DateTime(date.year,date.month,date.day+1);
     _getCurrentLocation();
     super.initState();
   }
@@ -229,10 +230,12 @@ class _HomeScreenState extends State<HomeScreen> {
 //    print(MediaQuery.of(context).size.width);
 
     _pickTime() async {
+
       var today = DateTime.now();
+      print(today.day+1);
       DateTime t = await showDatePicker(
         context: context,
-        initialDate: DateTime(today.year, today.month, today.day + 1),
+       initialDate: DateTime(today.year, today.month, today.day + 1),
         lastDate: DateTime(today.year, today.month, today.day + 6),
         firstDate: DateTime(today.year, DateTime.now().month, today.day + 1),
         builder: (BuildContext context, Widget child) {
@@ -867,7 +870,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           TextStyle(color: Color(0xFF6b3600)),
                                     )
                                   : Text(
-                                      '${date.day.toString()}/${date.month.toString()}/20 ',
+                                      '${date2.day.toString()}/${date2.month.toString()}/${date2.year.toString()} ',
                                       style:
                                           TextStyle(color: Color(0xFF6b3600)),
                                     )),
