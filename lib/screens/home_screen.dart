@@ -73,7 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
   var deliveryDate = '23 October';
   var deliveryTime = '6 pm';
   DateTime date;
-  DateTime selectedDate;
+  DateTime selectedDate=DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
   String selectedTime = 'Choose Slot';
   FirebaseUser user;
   List<String> quantities = [];
@@ -1872,6 +1873,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               timeSlots.add(
                                   snap.data.documents[0].data['Timeslots'][i]);
                             }
+                          }
+                        }
+                        if(timeSlots.length==0){
+                          selectedDate=selectedDate.add(new Duration(days:1));
+                          for (int i = 0;
+                          i < snap.data.documents[0].data['Timeslots'].length;
+                          i++){
+                            timeSlots.add(snap.data.documents[0].data['Timeslots'][i]);
                           }
                         }
 

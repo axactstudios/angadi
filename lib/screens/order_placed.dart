@@ -367,6 +367,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
         .toInt();
     setTimings();
     hours = (widget.date.difference(DateTime.now()).inHours) - (days * 24);
+    print('Hours Left${hours}');
     super.initState();
   }
 
@@ -566,13 +567,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                                     border:
                                         Border.all(color: Color(0xFF6b3600))),
                                 child: Center(
-                                  child: (((widget.date
-                                                      .difference(
-                                                          DateTime.now())
-                                                      .inMinutes) /
-                                                  (24 * 60))
-                                              .toInt() ==
-                                          0)
+                                  child: (days<=0)
                                       ? Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(
@@ -588,7 +583,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                                           ? Align(
                                               alignment: Alignment.bottomLeft,
                                               child: Text(
-                                                'Expected delivery in :\n ${(finalminutes)} minutes',
+                                                'Expected delivery in :\n ${(days)} days, ${(finalminutes)} minutes',
                                                 style: Styles
                                                     .customNormalTextStyle(
                                                   color: AppColors.headingText,
