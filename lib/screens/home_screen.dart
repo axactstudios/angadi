@@ -201,7 +201,13 @@ class _HomeScreenState extends State<HomeScreen> {
       double d = double.parse(s);
       if (st.contains('PM')) d = d + 12;
       DateTime dt = DateTime.now();
-      if (dt.hour > d) dateAddition = dateAddition + 1;
+      if (dt.hour > d) {
+        dateAddition = dateAddition + 1;
+        print('Exceeded');
+        //run
+      }
+
+
     });
   }
 
