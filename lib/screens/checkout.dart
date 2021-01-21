@@ -249,6 +249,14 @@ class _CheckoutState extends State<Checkout> {
                             }
                           }
                         }
+                        if(timeSlots.length==0){
+                          selectedDate=selectedDate.add(new Duration(days:1));
+                          for (int i = 0;
+                          i < snap.data.documents[0].data['Timeslots'].length;
+                          i++){
+                            timeSlots.add(snap.data.documents[0].data['Timeslots'][i]);
+                          }
+                        }
 
                         return timeSlots.length != 0
                             ? Column(
