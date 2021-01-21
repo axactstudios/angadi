@@ -179,7 +179,31 @@ class _HomeScreenState extends State<HomeScreen> {
       final rowsDeleted = await dbHelper.delete(v.productName, v.qtyTag);
     }
   }
-var date2;
+
+  var date2;
+  int dateAddition = 1;
+  checkLastSlot() async {
+    await Firestore.instance
+        .collection('Timeslots')
+        .snapshots()
+        .listen((event) {
+      print(event.documents[0].data['LastSlot']);
+      String st = event.documents[0].data['LastSlot'];
+      String s = '';
+      for (int i = 0; i < st.length; i++) {
+        if (st[i] != ' ')
+          s = s + st[i];
+        else
+          break;
+      }
+
+      double d = double.parse(s);
+      if (st.contains('PM')) d = d + 12;
+      DateTime dt = DateTime.now();
+      if (dt.hour > d) dateAddition = dateAddition + 1;
+    });
+  }
+
   @override
   void initState() {
 //    addDishParams();
@@ -189,9 +213,10 @@ var date2;
     getBanners();
     Checkgrocery();
     getSharedPrefs();
+    checkLastSlot();
     address();
     date = DateTime.now();
-    date2=DateTime(date.year,date.month,date.day+1);
+    date2 = DateTime(date.year, date.month, date.day + dateAddition);
     _getCurrentLocation();
     super.initState();
   }
@@ -230,14 +255,15 @@ var date2;
 //    print(MediaQuery.of(context).size.width);
 
     _pickTime() async {
-
       var today = DateTime.now();
-      print(today.day+1);
+      print(today.day + 1);
       DateTime t = await showDatePicker(
         context: context,
-       initialDate: DateTime(today.year, today.month, today.day + 1),
+        initialDate:
+            DateTime(today.year, today.month, today.day + dateAddition),
         lastDate: DateTime(today.year, today.month, today.day + 6),
-        firstDate: DateTime(today.year, DateTime.now().month, today.day + 1),
+        firstDate: DateTime(
+            today.year, DateTime.now().month, today.day + dateAddition),
         builder: (BuildContext context, Widget child) {
           return Theme(
             data: ThemeData.dark(),

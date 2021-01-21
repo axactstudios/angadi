@@ -93,9 +93,10 @@ class _CheckoutState extends State<Checkout> {
     var today = DateTime.now();
     DateTime t = await showDatePicker(
       context: context,
-      initialDate: DateTime(today.year, today.month, today.day + 1),
+      initialDate: DateTime(today.year, today.month, today.day + dateAddition),
       lastDate: DateTime(today.year, today.month, today.day + 6),
-      firstDate: DateTime(today.year, DateTime.now().month, today.day + 1),
+      firstDate:
+          DateTime(today.year, DateTime.now().month, today.day + dateAddition),
       builder: (BuildContext context, Widget child) {
         return Theme(
           data: ThemeData.dark(),
@@ -406,6 +407,29 @@ class _CheckoutState extends State<Checkout> {
     }
   }
 
+  int dateAddition = 1;
+  checkLastSlot() async {
+    await Firestore.instance
+        .collection('Timeslots')
+        .snapshots()
+        .listen((event) {
+      print(event.documents[0].data['LastSlot']);
+      String st = event.documents[0].data['LastSlot'];
+      String s = '';
+      for (int i = 0; i < st.length; i++) {
+        if (st[i] != ' ')
+          s = s + st[i];
+        else
+          break;
+      }
+
+      double d = double.parse(s);
+      if (st.contains('PM')) d = d + 12;
+      DateTime dt = DateTime.now();
+      if (dt.hour > d) dateAddition = dateAddition + 1;
+    });
+  }
+
   @override
   void initState() {
     getAllItems();
@@ -413,9 +437,10 @@ class _CheckoutState extends State<Checkout> {
     getid();
     address();
     areas();
+    checkLastSlot();
     time = TimeOfDay.now();
-    date = DateTime(
-        DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
+    date = DateTime(DateTime.now().year, DateTime.now().month,
+        DateTime.now().day + dateAddition);
     super.initState();
   }
 
