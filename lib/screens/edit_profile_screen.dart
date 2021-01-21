@@ -200,7 +200,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               SpaceH20(),
               CustomTextFormField(
                 hasPrefixIcon: true,
-                prefixIconImagePath: ImagePath.emailIcon,
+                prefixIconImagePath: 'assets/images/call_icon.png',
                 textFormFieldStyle: textFormFieldTextStyle,
                 hintText: "Phone Number",
                 hintTextStyle: hintTextStyle,

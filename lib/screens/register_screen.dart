@@ -188,7 +188,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           SpaceH16(),
           CustomTextFormField(
             hasPrefixIcon: true,
-            prefixIconImagePath: ImagePath.personIcon,
+            prefixIconImagePath: 'assets/images/call_icon.png',
             hintText: 'Phone Number',
             controller: phone,
           ),
