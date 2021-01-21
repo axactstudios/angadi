@@ -73,7 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
   var deliveryDate = '23 October';
   var deliveryTime = '6 pm';
   DateTime date;
-  DateTime selectedDate=DateTime(
+  DateTime selectedDate = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
   String selectedTime = 'Choose Slot';
   FirebaseUser user;
@@ -357,6 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
             currentFocus.unfocus();
           }
         },
+        //hjgjgjg
         child: StreamBuilder(
           stream: Firestore.instance.collection('Dishes').snapshots(),
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
@@ -1875,12 +1876,16 @@ class _HomeScreenState extends State<HomeScreen> {
                             }
                           }
                         }
-                        if(timeSlots.length==0){
-                          selectedDate=selectedDate.add(new Duration(days:1));
+                        if (timeSlots.length == 0) {
+                          selectedDate =
+                              selectedDate.add(new Duration(days: 1));
                           for (int i = 0;
-                          i < snap.data.documents[0].data['Timeslots'].length;
-                          i++){
-                            timeSlots.add(snap.data.documents[0].data['Timeslots'][i]);
+                              i <
+                                  snap.data.documents[0].data['Timeslots']
+                                      .length;
+                              i++) {
+                            timeSlots.add(
+                                snap.data.documents[0].data['Timeslots'][i]);
                           }
                         }
 
