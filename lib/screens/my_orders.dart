@@ -206,7 +206,10 @@ class _MyOrdersState extends State<MyOrders> {
         ),
         body: Container(
           child: StreamBuilder(
-            stream: Firestore.instance.collection('Orders').snapshots(),
+            stream: Firestore.instance
+                .collection('Orders')
+                .orderBy('TimeStamp', descending: true)
+                .snapshots(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
               if (snap.hasData && !snap.hasError && snap.data != null) {
                 orders.clear();
@@ -223,7 +226,7 @@ class _MyOrdersState extends State<MyOrders> {
                   for (int it = 0;
                       it <= snap.data.documents[i]['Items'].length - 1;
                       it++) {
-                    it != snap.data.documents[i]['Items'].length -1
+                    it != snap.data.documents[i]['Items'].length - 1
                         ? str = str +
                             '${snap.data.documents[i]['Qty'][it]} x ${snap.data.documents[i]['Items'][it]}, '
                         : str = str +

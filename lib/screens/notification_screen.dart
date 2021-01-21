@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:angadi/screens/home_screen.dart';
 import 'package:angadi/widgets/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -177,12 +178,16 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 //        title:
 //      ),
       body: StreamBuilder(
-          stream: Firestore.instance.collection('Notifications').snapshots(),
+          stream: Firestore.instance
+              .collection('Notifications')
+              .orderBy('TimeStamp', descending: true)
+              .snapshots(),
           // ignore: missing_return
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
             getUser();
             if (snap.hasData && !snap.hasError && snap.data != null) {
               notifications.clear();
+              print('Message List- ${messagesList}');
               for (int i = 0; i < snap.data.documents.length; i++) {
                 if (snap.data.documents[i]['UserID'] == user?.uid) {
                   notifications.add(NotificationInfo(
@@ -223,7 +228,10 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                                 await fetchOrderDetail(
                                     snap.data.documents[index]['OrderID']);
                                 String status;
-
+                                Timestamp ts =
+                                    snap.data.documents[index]['DeliveryDate'];
+                                print(
+                                    'Time Difference ${DateTime.now().difference((snap.data.documents[index]['DeliveryDate'] as Timestamp).toDate()).inMinutes}');
                                 await Firestore.instance
                                     .collection('Orders')
                                     .getDocuments()

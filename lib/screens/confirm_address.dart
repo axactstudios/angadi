@@ -196,6 +196,9 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
 
                           allemirates.add(emi);
                         }
+                        if (emirate == null) {
+                          emirate = allemirates[0].name;
+                        }
                         // minimumOrderValue = allemirates[0].minorderprice;
                         return allemirates.length != 0
                             ? Column(
@@ -272,6 +275,9 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
                           allareas.add(emi2);
                         }
                         areaname.add('Others');
+                        if (area == null) {
+                          area = allareas[0].name;
+                        }
                         return areaname.length != 0
                             ? Column(
                                 children: [

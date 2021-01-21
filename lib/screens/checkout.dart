@@ -64,7 +64,7 @@ class _CheckoutState extends State<Checkout> {
   List<String> areaname = [];
   DateTime selectedDate = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
-  String selectedTime = '9 AM';
+  String selectedTime = 'Choose Slot';
   DateTime date;
   var addresstype = 'House';
   var color1 = false;
@@ -153,6 +153,8 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
+  List<String> timeSlots = [];
+
   Widget _buildTimeDialog(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
 
@@ -196,16 +198,95 @@ class _CheckoutState extends State<Checkout> {
               Spacer(flex: 1),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: DropDown<String>(
-                  initialValue: '9 AM',
-                  items: <String>['9 AM', '12 PM', '2 PM', '5 PM', '7 PM'],
-                  hint: Text("Select quantity"),
-                  onChanged: (value) async {
-                    setState(() {
-                      selectedTime = value;
-                    });
-                  },
-                ),
+                child: StreamBuilder(
+                    stream:
+                        Firestore.instance.collection('Timeslots').snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snap) {
+                      if (snap.hasData && !snap.hasError && snap.data != null) {
+                        timeSlots.clear();
+                        print(snap.data.documents[0].data['Timeslots']);
+                        for (int i = 0;
+                            i < snap.data.documents[0].data['Timeslots'].length;
+                            i++) {
+                          DateTime dt = DateTime.now();
+
+                          if (dt.hour > 12) {
+                            String st =
+                                snap.data.documents[0].data['Timeslots'][i];
+                            String s = '';
+                            for (int i = 0; i < st.length; i++) {
+                              if (st[i] != ' ')
+                                s = s + st[i];
+                              else
+                                break;
+                            }
+
+                            double d = double.parse(s);
+                            if (d > (dt.hour - 12) &&
+                                snap.data.documents[0].data['Timeslots'][i]
+                                    .contains('PM')) {
+                              timeSlots.add(
+                                  snap.data.documents[0].data['Timeslots'][i]);
+                            }
+                          } else {
+                            String st =
+                                snap.data.documents[0].data['Timeslots'][i];
+                            String s = '';
+                            for (int i = 0; i < st.length; i++) {
+                              if (st[i] != ' ')
+                                s = s + st[i];
+                              else
+                                break;
+                            }
+
+                            double d = double.parse(s);
+                            if (d > (dt.hour) &&
+                                snap.data.documents[0].data['Timeslots'][i]
+                                    .contains('AM')) {
+                              timeSlots.add(
+                                  snap.data.documents[0].data['Timeslots'][i]);
+                            }
+                          }
+                        }
+
+                        return timeSlots.length != 0
+                            ? Column(
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    child: DropdownButtonHideUnderline(
+                                      child:
+                                          new DropdownButtonFormField<String>(
+                                        validator: (value) => value == null
+                                            ? 'field required'
+                                            : null,
+                                        hint: Text('Time Slots'),
+                                        value: timeSlots[0],
+                                        items: timeSlots.map((String value) {
+                                          return new DropdownMenuItem<String>(
+                                            value: value,
+                                            child: new Text(value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            selectedTime = newValue;
+
+//                      Navigator.pop(context);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container();
+                      } else {
+                        return Container();
+                      }
+                    }),
               ),
               Spacer(flex: 1),
               AlertDialogButton(
@@ -2344,7 +2425,8 @@ class _CheckoutState extends State<Checkout> {
         dd = int.parse(selectedTime.substring(0, 1).trim()) + 12;
       });
     }
-
+    print(
+        'Hours are $dd ${DateTime(selectedDate.year, selectedDate.month, selectedDate.day, dd)}');
     var rng = new Random();
     var code = rng.nextInt(90000) + 10000;
     print('ANG${code.toString()}');
@@ -2531,11 +2613,13 @@ class _CheckoutState extends State<Checkout> {
 //                  docID = value.documentID;
                             });
                           });
+
     await databaseReference.collection('Notifications').add({
       'UserID': user.uid,
       'OrderID': orderid,
       'Notification': 'Order Placed. Awaiting confirmation.',
-      'DeliveryDate': selectedDate,
+      'DeliveryDate':
+          DateTime(selectedDate.year, selectedDate.month, selectedDate.day, dd),
       'DeliveryTime': selectedTime,
       'TimeStamp': Timestamp.now(),
       'Type': orderType,
@@ -2835,20 +2919,16 @@ class _CheckoutState extends State<Checkout> {
     }
     print(selectedTime.split(' ').join().toLowerCase());
     var tt = selectedTime.split(' ').join().toLowerCase();
-    if (selectedTime.contains('AM')) {
-      setState(() {
-        dd = int.parse(selectedTime.substring(0, 1).trim());
-      });
-    } else if (selectedTime.contains('12')) {
-      setState(() {
-        dd = int.parse(selectedTime.substring(0, 1).trim());
-      });
-    } else if (selectedTime.contains('PM') && !selectedTime.contains('12')) {
-      setState(() {
-        dd = int.parse(selectedTime.substring(0, 1).trim()) + 12;
-      });
+    String s = '';
+    for (int i = 0; i < selectedTime.length; i++) {
+      if (selectedTime[i] != ' ')
+        s = s + selectedTime[i];
+      else
+        break;
     }
 
+    dd = int.parse(s);
+    if (selectedTime.contains('PM')) dd = dd + 12;
     HttpClient httpClient = new HttpClient();
     httpClient.badCertificateCallback =
         ((X509Certificate cert, String host, int port) => true);

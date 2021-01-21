@@ -33,7 +33,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
 
-  String name, email, url;
+  String name, email, url, phone;
   getUserDetails() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
     print('================$user');
@@ -47,7 +47,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           name = element['Name'];
           email = element['mail'];
           url = element['pUrl'];
+          phone = element['phone'];
           nameCtrl.text = name;
+          phoneCtrl.text = phone;
           emailCtrl.text = email;
         });
       });
@@ -56,7 +58,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   }
 
   TextEditingController nameCtrl = new TextEditingController(),
-      emailCtrl = new TextEditingController();
+      emailCtrl = new TextEditingController(),
+      phoneCtrl = new TextEditingController();
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -75,7 +78,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       throw 'Could not launch ${url()}';
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -111,12 +113,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             InkWell(
                 onTap: () {
                   launchWhatsApp(
-                      phone: '7060222315', message: 'Check out this awesome app');
+                      phone: '7060222315',
+                      message: 'Check out this awesome app');
                 },
                 child: Container(
                     alignment: Alignment.center,
-                    child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-            SizedBox(width:8),
+                    child: FaIcon(FontAwesomeIcons.whatsapp,
+                        color: Color(0xFF6b3600)))),
+            SizedBox(width: 8),
             InkWell(
                 onTap: () {
 //                print(1);
@@ -191,6 +195,18 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 borderStyle: BorderStyle.solid,
                 borderWidth: Sizes.WIDTH_1,
                 controller: emailCtrl,
+                prefixIconColor: AppColors.secondaryElement,
+              ),
+              SpaceH20(),
+              CustomTextFormField(
+                hasPrefixIcon: true,
+                prefixIconImagePath: ImagePath.emailIcon,
+                textFormFieldStyle: textFormFieldTextStyle,
+                hintText: "Phone Number",
+                hintTextStyle: hintTextStyle,
+                borderStyle: BorderStyle.solid,
+                borderWidth: Sizes.WIDTH_1,
+                controller: phoneCtrl,
                 prefixIconColor: AppColors.secondaryElement,
               ),
               Spacer(flex: 1),
@@ -290,6 +306,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
     await databaseReference.collection('Users').add({
       'Name': nameCtrl.text,
       'id': user.uid,
+      'phone': phoneCtrl.text,
       'mail': emailCtrl.text,
       'pUrl': url
     });

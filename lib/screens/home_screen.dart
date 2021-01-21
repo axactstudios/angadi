@@ -55,6 +55,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
+List<Message> messagesList = [];
+
 class _HomeScreenState extends State<HomeScreen> {
   TextEditingController controller = TextEditingController();
   List<String> imageList = List();
@@ -67,12 +69,12 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Cart> cartItems = [];
   LocationResult location = LocationResult(latLng: LatLng(25.2048, 55.2708));
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  List<Message> messagesList = [];
+
   var deliveryDate = '23 October';
   var deliveryTime = '6 pm';
   DateTime date;
   DateTime selectedDate;
-  String selectedTime = '9 AM';
+  String selectedTime = 'Choose Slot';
   FirebaseUser user;
   List<String> quantities = [];
   getUser() async {
@@ -86,12 +88,15 @@ class _HomeScreenState extends State<HomeScreen> {
     _firebaseMessaging.configure(
       onMessage: (Map<String, dynamic> message) async {
         print('onMessage: $message');
+        // _setMessage(message);
       },
       onLaunch: (Map<String, dynamic> message) async {
         print('onLaunch: $message');
+        _setMessage(message);
       },
       onResume: (Map<String, dynamic> message) async {
         print('onResume: $message');
+        _setMessage(message);
       },
     );
     _firebaseMessaging.requestNotificationPermissions(
@@ -109,6 +114,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       Message msg = Message(title, body, mMessage);
       messagesList.add(msg);
+      print('Message List ${messagesList}');
     });
   }
 
@@ -196,7 +202,8 @@ class _HomeScreenState extends State<HomeScreen> {
         .document('ordercount')
         .snapshots()
         .listen((event) {
-      if (event != null) {
+      if (event.data != null) {
+        // print(event);
         print(event['Numberoforders'].toString());
         orderCount = event['Numberoforders'];
       }
@@ -350,7 +357,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   quantities.add(
                       '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
                 }
-//                print('&&&&&&&&&&&&&&&&&&&&&&');Chalake dekh map hai aesa nai aayega
+//                print('&&&&&&&&&&&&&&&&&&&&&&');
 //               print(quantities.length);
                 // print('Imp ${snap.data.documents[i]['boughtTogether']}');
                 dishes.add(Dish(
@@ -570,9 +577,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   if (snap.data.documents[i]['UserID'] ==
                                           user?.uid &&
                                       (snap.data.documents[i]['Status'] ==
-                                              'Order Confirmed' ||
+                                              'Awaiting Confirmation' ||
                                           snap.data.documents[i]['Status'] ==
-                                              'Out for Delivery')) {
+                                              'Processing')) {
                                     orderID = snap.data.documents[i].documentID;
                                     status = snap.data.documents[i]['Status'];
                                   }
@@ -1741,6 +1748,9 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  List<String> timeSlots = [];
+  String timeSlot;
+
   Widget _buildTimeDialog(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
 
@@ -1784,16 +1794,95 @@ class _HomeScreenState extends State<HomeScreen> {
               Spacer(flex: 1),
               Padding(
                 padding: const EdgeInsets.all(10.0),
-                child: DropDown<String>(
-                  initialValue: '9 AM',
-                  items: <String>['9 AM', '12 PM', '2 PM', '5 PM', '7 PM'],
-                  hint: Text("Select quantity"),
-                  onChanged: (value) async {
-                    setState(() {
-                      selectedTime = value;
-                    });
-                  },
-                ),
+                child: StreamBuilder(
+                    stream:
+                        Firestore.instance.collection('Timeslots').snapshots(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<QuerySnapshot> snap) {
+                      if (snap.hasData && !snap.hasError && snap.data != null) {
+                        timeSlots.clear();
+                        print(snap.data.documents[0].data['Timeslots']);
+                        for (int i = 0;
+                            i < snap.data.documents[0].data['Timeslots'].length;
+                            i++) {
+                          DateTime dt = DateTime.now();
+
+                          if (dt.hour > 12) {
+                            String st =
+                                snap.data.documents[0].data['Timeslots'][i];
+                            String s = '';
+                            for (int i = 0; i < st.length; i++) {
+                              if (st[i] != ' ')
+                                s = s + st[i];
+                              else
+                                break;
+                            }
+
+                            double d = double.parse(s);
+                            if (d > (dt.hour - 12) &&
+                                snap.data.documents[0].data['Timeslots'][i]
+                                    .contains('PM')) {
+                              timeSlots.add(
+                                  snap.data.documents[0].data['Timeslots'][i]);
+                            }
+                          } else {
+                            String st =
+                                snap.data.documents[0].data['Timeslots'][i];
+                            String s = '';
+                            for (int i = 0; i < st.length; i++) {
+                              if (st[i] != ' ')
+                                s = s + st[i];
+                              else
+                                break;
+                            }
+
+                            double d = double.parse(s);
+                            if (d > (dt.hour) &&
+                                snap.data.documents[0].data['Timeslots'][i]
+                                    .contains('AM')) {
+                              timeSlots.add(
+                                  snap.data.documents[0].data['Timeslots'][i]);
+                            }
+                          }
+                        }
+
+                        return timeSlots.length != 0
+                            ? Column(
+                                children: [
+                                  Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.9,
+                                    child: DropdownButtonHideUnderline(
+                                      child:
+                                          new DropdownButtonFormField<String>(
+                                        validator: (value) => value == null
+                                            ? 'field required'
+                                            : null,
+                                        hint: Text('Time Slots'),
+                                        value: timeSlots[0],
+                                        items: timeSlots.map((String value) {
+                                          return new DropdownMenuItem<String>(
+                                            value: value,
+                                            child: new Text(value),
+                                          );
+                                        }).toList(),
+                                        onChanged: (String newValue) {
+                                          setState(() {
+                                            selectedTime = newValue;
+
+//                      Navigator.pop(context);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              )
+                            : Container();
+                      } else {
+                        return Container();
+                      }
+                    }),
               ),
               Spacer(flex: 1),
               AlertDialogButton(

@@ -458,11 +458,11 @@ class _OrderPlacedState extends State<OrderPlaced> {
                             ]),
                       ),
                     )
-                  : widget.status == 'Preparing Order'
+                  : widget.status == 'Processing'
                       ? Center(
                           child: RichText(
                             text: TextSpan(
-                                text: 'Preparing',
+                                text: 'Processing',
                                 style: Styles.customTitleTextStyle(
                                   color: AppColors.black,
                                   fontWeight: FontWeight.bold,
@@ -552,54 +552,60 @@ class _OrderPlacedState extends State<OrderPlaced> {
                         SizedBox(
                           height: 10,
                         ),
-                        Container(
-                          decoration: BoxDecoration(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(5)),
-                              border: Border.all(color: Color(0xFF6b3600))),
-                          child: Center(
-                            child: (((widget.date
-                                                .difference(DateTime.now())
-                                                .inMinutes) /
-                                            (24 * 60))
-                                        .toInt() ==
-                                    0)
-                                ? Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      'Expected delivery in :\n${hours} hours, ${(finalminutes)} minutes',
-                                      style: Styles.customNormalTextStyle(
-                                        color: AppColors.headingText,
-                                        // fontWeight: FontWeight.w400,
-                                        fontSize: Sizes.TEXT_SIZE_20,
-                                      ),
-                                    ),
-                                  )
-                                : (hours == 0)
-                                    ? Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text(
-                                          'Expected delivery in :\n ${(finalminutes)} minutes',
-                                          style: Styles.customNormalTextStyle(
-                                            color: AppColors.headingText,
-                                            // fontWeight: FontWeight.w400,
-                                            fontSize: Sizes.TEXT_SIZE_20,
+                        widget.status != 'Order Delivered'
+                            ? Container(
+                                decoration: BoxDecoration(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(5)),
+                                    border:
+                                        Border.all(color: Color(0xFF6b3600))),
+                                child: Center(
+                                  child: (((widget.date
+                                                      .difference(
+                                                          DateTime.now())
+                                                      .inMinutes) /
+                                                  (24 * 60))
+                                              .toInt() ==
+                                          0)
+                                      ? Align(
+                                          alignment: Alignment.centerLeft,
+                                          child: Text(
+                                            'Expected delivery in :\n${hours} hours, ${(finalminutes)} minutes',
+                                            style: Styles.customNormalTextStyle(
+                                              color: AppColors.headingText,
+                                              // fontWeight: FontWeight.w400,
+                                              fontSize: Sizes.TEXT_SIZE_20,
+                                            ),
                                           ),
-                                        ),
-                                      )
-                                    : Align(
-                                        alignment: Alignment.bottomLeft,
-                                        child: Text(
-                                          'Expected delivery in :\n ${hours} hours, ${(finalminutes)} minutes',
-                                          style: Styles.customNormalTextStyle(
-                                            color: AppColors.headingText,
-                                            // fontWeight: FontWeight.w400,
-                                            fontSize: Sizes.TEXT_SIZE_20,
-                                          ),
-                                        ),
-                                      ),
-                          ),
-                        ),
+                                        )
+                                      : (hours == 0)
+                                          ? Align(
+                                              alignment: Alignment.bottomLeft,
+                                              child: Text(
+                                                'Expected delivery in :\n ${(finalminutes)} minutes',
+                                                style: Styles
+                                                    .customNormalTextStyle(
+                                                  color: AppColors.headingText,
+                                                  // fontWeight: FontWeight.w400,
+                                                  fontSize: Sizes.TEXT_SIZE_20,
+                                                ),
+                                              ),
+                                            )
+                                          : Align(
+                                              alignment: Alignment.bottomLeft,
+                                              child: Text(
+                                                ' Expected delivery in :\n ${((widget.date.difference(DateTime.now()).inMinutes) / (24 * 60)).toInt()} days, ${hours} hours, ${(finalminutes)} minutes',
+                                                style: Styles
+                                                    .customNormalTextStyle(
+                                                  color: AppColors.headingText,
+                                                  // fontWeight: FontWeight.w400,
+                                                  fontSize: Sizes.TEXT_SIZE_20,
+                                                ),
+                                              ),
+                                            ),
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                   ),

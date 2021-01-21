@@ -168,6 +168,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   TextEditingController mail = new TextEditingController();
 
+  TextEditingController phone = new TextEditingController();
+
   TextEditingController password = new TextEditingController();
 
   TextEditingController cpassword = new TextEditingController();
@@ -182,6 +184,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
             prefixIconImagePath: ImagePath.personIcon,
             hintText: StringConst.HINT_TEXT_NAME,
             controller: name,
+          ),
+          SpaceH16(),
+          CustomTextFormField(
+            hasPrefixIcon: true,
+            prefixIconImagePath: ImagePath.personIcon,
+            hintText: 'Phone Number',
+            controller: phone,
           ),
           SpaceH16(),
           CustomTextFormField(
@@ -251,6 +260,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               'Name': name.text,
               'id': user.uid,
               'mail': mail.text,
+              'phone': phone.text,
               'pUrl': url,
               'dTokens': dTokens,
             });
@@ -261,6 +271,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
             mail.clear();
             password.clear();
             cpassword.clear();
+            phone.clear();
             R.Router.navigator.pushNamed(R.Router.setLocationScreen);
 //      FirebaseAuth.instance.signOut();
 
