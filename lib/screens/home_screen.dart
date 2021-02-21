@@ -213,7 +213,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-//    addDishParams();
+//   addDishParams();
     messagesList = List<Message>();
     _configureFirebaseListeners();
     getUser();
@@ -2105,7 +2105,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   addDishParams() {
     Firestore.instance.collection('Dishes').getDocuments().then((value) {
-      value.documents.forEach((element) {
+       value.documents.forEach((element) {
         Firestore.instance
             .collection('Dishes')
             .document(element.documentID)

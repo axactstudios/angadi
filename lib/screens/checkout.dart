@@ -2188,25 +2188,51 @@ class _CheckoutState extends State<Checkout> {
 //                                      print(deliveryCharge);
 //                                    }
 //                                  }
+                              if(selectedTime=='Choose Slot'){
+                                Fluttertoast.showToast(
+                                    msg:
+                                    'Please select time slot',
+                                    toastLength: Toast.LENGTH_SHORT);
+                              }else{
                                 var total = 0.0;
                                 discount != null
                                     ? total = ((totalAmount() * 0.18) +
-                                        totalAmount() -
-                                        (totalAmount() *
-                                            (double.parse(discount.discount) /
-                                                100)) +
-                                        deliveryCharge)
+                                    totalAmount() -
+                                    (totalAmount() *
+                                        (double.parse(discount.discount) /
+                                            100)) +
+                                    deliveryCharge)
                                     : total = ((totalAmount() * 0.18) +
-                                        totalAmount() +
-                                        deliveryCharge);
+                                    totalAmount() +
+                                    deliveryCharge);
                                 if (total > minOrderPrice) {
                                   showAlertDialog(context);
                                 } else {
                                   Fluttertoast.showToast(
                                       msg:
-                                          'Your order amount is less \n than the minimum order price',
+                                      'Your order amount is less \n than the minimum order price',
                                       toastLength: Toast.LENGTH_SHORT);
                                 }
+                              }
+//                                var total = 0.0;
+//                                discount != null
+//                                    ? total = ((totalAmount() * 0.18) +
+//                                        totalAmount() -
+//                                        (totalAmount() *
+//                                            (double.parse(discount.discount) /
+//                                                100)) +
+//                                        deliveryCharge)
+//                                    : total = ((totalAmount() * 0.18) +
+//                                        totalAmount() +
+//                                        deliveryCharge);
+//                                if (total > minOrderPrice) {
+//                                  showAlertDialog(context);
+//                                } else {
+//                                  Fluttertoast.showToast(
+//                                      msg:
+//                                          'Your order amount is less \n than the minimum order price',
+//                                      toastLength: Toast.LENGTH_SHORT);
+//                                }
                               }
 
                               if (widget.address == '') {
@@ -2227,30 +2253,40 @@ class _CheckoutState extends State<Checkout> {
 //                                        print(deliveryCharge);
 //                                      }
 //                                    }
+                                if(selectedTime=='Choose Slot'){
+                                  Fluttertoast.showToast(
+                                      msg:
+                                      'Please select time slot',
+                                      toastLength: Toast.LENGTH_SHORT);
+                                }
+                                else{
                                   var total = 0.0;
                                   discount != null
                                       ? total = ((totalAmount() * 0.18) +
-                                          totalAmount() -
-                                          (totalAmount() *
-                                              (double.parse(discount.discount) /
-                                                  100)) +
-                                          deliveryCharge)
+                                      totalAmount() -
+                                      (totalAmount() *
+                                          (double.parse(discount.discount) /
+                                              100)) +
+                                      deliveryCharge)
                                       : total = ((totalAmount() * 0.18) +
-                                          totalAmount() +
-                                          deliveryCharge);
+                                      totalAmount() +
+                                      deliveryCharge);
                                   if (total > minOrderPrice) {
                                     showAlertDialog(context);
-                                  } else {
+                                  } else  {
                                     Fluttertoast.showToast(
                                         msg:
-                                            'Your order amount is less \n than the minimum order price',
+                                        'Your order amount is less \n than the minimum order price',
                                         toastLength: Toast.LENGTH_SHORT);
                                   }
-                                } else {
+                                }
+                                }
+                                else {
                                   Fluttertoast.showToast(
                                       msg: 'Address required',
                                       toastLength: Toast.LENGTH_SHORT);
                                 }
+
                               }
                             }),
                           )
@@ -2297,41 +2333,50 @@ class _CheckoutState extends State<Checkout> {
 //    print(deliveryCharge);
 //    }
                           }
-                          var total = 0.0;
-                          discount != null
-                              ? total = ((totalAmount() * 0.18) +
-                                  totalAmount() -
-                                  (totalAmount() *
-                                      (double.parse(discount.discount) / 100)) +
-                                  deliveryCharge)
-                              : total = ((totalAmount() * 0.18) +
-                                  totalAmount() +
-                                  deliveryCharge);
-                          if (total > minOrderPrice) {
-                            _result != '833' && j != 1
-                                ? onlineorder(
-                                    (discount != null)
-                                        ? ((totalAmount() * 0.18) +
-                                                totalAmount() -
-                                                (totalAmount() *
-                                                    (double.parse(
-                                                            discount.discount) /
-                                                        100)) +
-                                                deliveryCharge)
-                                            .toStringAsFixed(2)
-                                        : ((totalAmount() * 0.18) +
-                                                totalAmount() +
-                                                deliveryCharge)
-                                            .toString(),
-                                    type,
-                                    orderid)
-                                : Checksuccess();
-                          } else {
+                          if(selectedTime=='Choose Slot'){
                             Fluttertoast.showToast(
                                 msg:
-                                    'Your order amount is less \n than the minimum order price',
+                                'Please select time slot',
                                 toastLength: Toast.LENGTH_SHORT);
                           }
+                          else{
+                            var total = 0.0;
+                            discount != null
+                                ? total = ((totalAmount() * 0.18) +
+                                totalAmount() -
+                                (totalAmount() *
+                                    (double.parse(discount.discount) / 100)) +
+                                deliveryCharge)
+                                : total = ((totalAmount() * 0.18) +
+                                totalAmount() +
+                                deliveryCharge);
+                            if (total > minOrderPrice) {
+                              _result != '833' && j != 1
+                                  ? onlineorder(
+                                  (discount != null)
+                                      ? ((totalAmount() * 0.18) +
+                                      totalAmount() -
+                                      (totalAmount() *
+                                          (double.parse(
+                                              discount.discount) /
+                                              100)) +
+                                      deliveryCharge)
+                                      .toStringAsFixed(2)
+                                      : ((totalAmount() * 0.18) +
+                                      totalAmount() +
+                                      deliveryCharge)
+                                      .toString(),
+                                  type,
+                                  orderid)
+                                  : Checksuccess();
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg:
+                                  'Your order amount is less \n than the minimum order price',
+                                  toastLength: Toast.LENGTH_SHORT);
+                            }
+                          }
+
 
                           if (widget.address == '') {
                             if (_formkey.currentState.validate()) {
@@ -2351,42 +2396,52 @@ class _CheckoutState extends State<Checkout> {
 //                    print(deliveryCharge);
 //                    }
 //                    }
+                            if(selectedTime=='Choose Slot'){
+                              Fluttertoast.showToast(
+                                  msg:
+                                  'Please select time slot',
+                                  toastLength: Toast.LENGTH_SHORT);
+                            }
+                            else{
                               var total = 0.0;
                               discount != null
                                   ? total = ((totalAmount() * 0.18) +
-                                      totalAmount() -
-                                      (totalAmount() *
-                                          (double.parse(discount.discount) /
-                                              100)) +
-                                      deliveryCharge)
+                                  totalAmount() -
+                                  (totalAmount() *
+                                      (double.parse(discount.discount) /
+                                          100)) +
+                                  deliveryCharge)
                                   : total = ((totalAmount() * 0.18) +
-                                      totalAmount() +
-                                      deliveryCharge);
+                                  totalAmount() +
+                                  deliveryCharge);
                               if (total > minOrderPrice) {
                                 _result != '833' && j != 1
                                     ? onlineorder(
-                                        (discount != null)
-                                            ? ((totalAmount() * 0.18) +
-                                                    totalAmount() -
-                                                    (totalAmount() *
-                                                        (double.parse(discount
-                                                                .discount) /
-                                                            100)) +
-                                                    deliveryCharge)
-                                                .toStringAsFixed(2)
-                                            : ((totalAmount() * 0.18) +
-                                                    totalAmount() +
-                                                    deliveryCharge)
-                                                .toString(),
-                                        type,
-                                        orderid)
+                                    (discount != null)
+                                        ? ((totalAmount() * 0.18) +
+                                        totalAmount() -
+                                        (totalAmount() *
+                                            (double.parse(discount
+                                                .discount) /
+                                                100)) +
+                                        deliveryCharge)
+                                        .toStringAsFixed(2)
+                                        : ((totalAmount() * 0.18) +
+                                        totalAmount() +
+                                        deliveryCharge)
+                                        .toString(),
+                                    type,
+                                    orderid)
                                     : Checksuccess();
                               } else {
                                 Fluttertoast.showToast(
                                     msg:
-                                        'Your order amount is less \n than the minimum order price',
+                                    'Your order amount is less \n than the minimum order price',
                                     toastLength: Toast.LENGTH_SHORT);
                               }
+                            }
+
+
                             } else {
                               Fluttertoast.showToast(
                                   msg: 'Address required',

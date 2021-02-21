@@ -1,3 +1,6 @@
+
+
+import 'package:angadi/screens/home_screen.dart';
 import 'package:angadi/utils/my_shared_prefs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,7 +14,13 @@ import 'package:angadi/widgets/dark_overlay.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:getwidget/components/loader/gf_loader.dart';
+import 'package:getwidget/getwidget.dart';
 
+import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:google_sign_in/google_sign_in.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -20,6 +29,8 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final databaseReference = Firestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final GoogleSignIn googleSignIn = GoogleSignIn();
   List<dynamic> dToken = ['test_token'];
   List<dynamic> dTokens = ['test_token'];
   _getTokenList() {
@@ -114,6 +125,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     _buildHeader(),
                     SizedBox(height: 60),
                     _buildForm(),
+
                     SpaceH36(),
                     _buildFooter()
                   ],
@@ -125,7 +137,78 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+  int j =0;
+  int length=0;
+  Future<String> signInWithGoogle() async {
 
+
+    final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
+    final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+    final ProgressDialog pr = await ProgressDialog(context);
+    pr.style(
+        message:'Logging in..',
+        backgroundColor: Colors.white,
+        progressWidget: GFLoader(
+          type: GFLoaderType.ios,
+        ),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+    await pr.show();
+    final AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleSignInAuthentication.accessToken,
+      idToken: googleSignInAuthentication.idToken,
+    );
+
+    final  authResult = await _auth.signInWithCredential(credential);
+    final FirebaseUser user = authResult.user;
+
+    if (user != null) {
+      assert(!user.isAnonymous);
+      assert(await user.getIdToken() != null);
+
+      final FirebaseUser currentUser = await _auth.currentUser();
+      assert(user.uid == currentUser.uid);
+
+      print('signInWithGoogle succeeded: $user');
+      Firestore.instance.collection('Users').snapshots().forEach((element) {
+        length=element.documents.length;
+        print(length);
+        for(int i =0;i<element.documents.length;i++){
+          if(element.documents[i]['mail']!=googleSignIn.currentUser.email){
+            print(element.documents[i]['mail']);
+            j++;
+          }
+        }
+        if(j==length){
+          Firestore.instance.collection('Users').add({
+            'Name':googleSignIn.currentUser.displayName,
+            'id':currentUser.uid,
+            'mail':googleSignIn.currentUser.email,
+            'pUrl':googleSignIn.currentUser.photoUrl,
+            'role':'user'
+          });
+        }
+      });
+
+
+      await pr.hide();
+      return '$user';
+    }
+
+    return null;
+  }
+
+  Future<void> signOutGoogle() async {
+    await googleSignIn.signOut();
+
+    print("User Signed Out");
+  }
   Widget _buildHeader() {
     return Align(
       alignment: Alignment.topCenter,
@@ -186,7 +269,52 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+  Widget _signInButton() {
+    return Container(
+      width:300,
+      child: OutlineButton(
 
+        splashColor: Colors.grey,
+        onPressed: () {
+          signInWithGoogle().then((result) {
+            if (result != null) {
+              _getToken();
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return HomeScreen();
+                  },
+                ),
+              );
+            }
+          });
+        },
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        highlightElevation: 0,
+        borderSide: BorderSide(color: Colors.grey),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(0, 10, 0, 10),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Image(image: AssetImage("assets/images/google.png"), height: 35.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 10),
+                child: Text(
+                  'Sign in with Google',
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.grey,
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
   Widget _buildFooter() {
     return Column(
       children: <Widget>[
@@ -194,6 +322,8 @@ class _LoginScreenState extends State<LoginScreen> {
           _getToken();
           _signIn(mail.text, password.text);
         }),
+        SizedBox(height: Sizes. HEIGHT_20,),
+        _signInButton(),
         SizedBox(height: Sizes.HEIGHT_60),
         InkWell(
           onTap: () => R.Router.navigator.pushNamed(R.Router.registerScreen),
@@ -224,7 +354,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+
 
   void _signIn(String email, String pw) {
     _auth

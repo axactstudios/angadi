@@ -20,6 +20,7 @@ import 'package:geolocator/geolocator.dart';
 import 'package:getflutter/components/avatar/gf_avatar.dart';
 import 'package:getflutter/components/drawer/gf_drawer.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:location/location.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -38,6 +39,7 @@ class CustomDrawer extends StatefulWidget {
 
 class _CustomDrawerState extends State<CustomDrawer> {
   var id='';
+  final GoogleSignIn googleSignIn = GoogleSignIn();
   void address()async{
     FirebaseUser user=await FirebaseAuth.instance.currentUser();
     var email=user.email;
@@ -323,6 +325,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       textStyle: textTheme.button
                           .copyWith(color: AppColors.secondaryElement),
                       onPressed: () {
+                      googleSignIn.signOut();
                         FirebaseAuth.instance.signOut();
                         R.Router.navigator.pushNamedAndRemoveUntil(
                           R.Router.loginScreen,

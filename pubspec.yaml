@@ -47,6 +47,7 @@ dependencies:
   google_maps_flutter: ^0.5.21+12
   url_launcher: ^5.7.5
   timeline_tile: ^1.0.0
+  google_sign_in: ^4.5.9
   flutter_polyline_points: ^0.2.4
   lottie: ^0.6.0
 
