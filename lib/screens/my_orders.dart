@@ -51,7 +51,12 @@ class _MyOrdersState extends State<MyOrders> {
       throw 'Could not launch ${url()}';
     }
   }
-
+  bool show;
+@override
+  void initState() {
+     show=true;
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     List<Order> orders = List<Order>();
@@ -252,7 +257,7 @@ class _MyOrdersState extends State<MyOrders> {
                       child: Column(
                         children: [
                           Container(
-                            height:MediaQuery.of(context).size.height*0.75,
+                            height:MediaQuery.of(context).size.height*0.8,
                             child: ListView.builder(
                                 itemCount: orders.sublist(0,9).length,
                                 physics: ClampingScrollPhysics(),
@@ -626,11 +631,12 @@ class _MyOrdersState extends State<MyOrders> {
                                   );
                                 }),
                           ),
+                          (show)? InkWell(onTap:(){
+                 setState(() {
+                   show=false;
+                 });
+               },child: Container(height:MediaQuery.of(context).size.height*0.06,width:MediaQuery.of(context).size.width,child: Center(child: Text('Show More',style:TextStyle(color:Colors.blue,fontWeight: FontWeight.bold,fontSize:MediaQuery.of(context).size.height*0.02))))):
 
-              ExpansionTile(
-                leading: Text('Show More'),
-//                backgroundColor: Colors.white,
-                children: [
               Container(
                 height:MediaQuery.of(context).size.height*0.8,
                 child: ListView.builder(
@@ -643,9 +649,9 @@ class _MyOrdersState extends State<MyOrders> {
                 onTap: () async {
                 String status;
                 await Firestore.instance
-                    .collection('Orders')
-                    .getDocuments()
-                    .then((value) {
+                      .collection('Orders')
+                      .getDocuments()
+                      .then((value) {
                 value.documents.forEach((element) {
                 print(orders[index].id);
                 print(element.documentID);
@@ -725,34 +731,34 @@ class _MyOrdersState extends State<MyOrders> {
                 ),
                 Text(
                 extraorders[index]
-                    .timestamp
-                    .toDate()
-                    .day
-                    .toString() +
+                      .timestamp
+                      .toDate()
+                      .day
+                      .toString() +
                 '-' +
                 extraorders[index]
-                    .timestamp
-                    .toDate()
-                    .month
-                    .toString() +
+                      .timestamp
+                      .toDate()
+                      .month
+                      .toString() +
                 '-' +
                 extraorders[index]
-                    .timestamp
-                    .toDate()
-                    .year
-                    .toString() +
+                      .timestamp
+                      .toDate()
+                      .year
+                      .toString() +
                 ' at ' +
                 extraorders[index]
-                    .timestamp
-                    .toDate()
-                    .hour
-                    .toString() +
+                      .timestamp
+                      .toDate()
+                      .hour
+                      .toString() +
                 ':' +
                 extraorders[index]
-                    .timestamp
-                    .toDate()
-                    .minute
-                    .toString(),
+                      .timestamp
+                      .toDate()
+                      .minute
+                      .toString(),
                 style: TextStyle(fontSize: 14),
                 ),
                 // Row(
@@ -927,16 +933,16 @@ class _MyOrdersState extends State<MyOrders> {
                 'Order Delivered'
                 ? Container(
                 color: Colors.black
-                    .withOpacity(0.1),
+                      .withOpacity(0.1),
                 height: 1,
                 )
-                    : Container(),
+                      : Container(),
                 extraorders[index].status ==
                 'Order Delivered'
                 ? SizedBox(
                 height: 10,
                 )
-                    : Container(),
+                      : Container(),
                 extraorders[index].status ==
                 'Order Delivered'
                 ? Center(
@@ -976,7 +982,7 @@ class _MyOrdersState extends State<MyOrders> {
                 allowHalfRating: true,
                 itemCount: 5,
                 itemPadding: EdgeInsets
-                    .symmetric(
+                      .symmetric(
                 horizontal:
                 1.0),
                 itemBuilder:
@@ -996,7 +1002,7 @@ class _MyOrdersState extends State<MyOrders> {
                 ),
                 ),
                 )
-                    : Container()
+                      : Container()
                 ],
                 ),
                 ),
@@ -1006,7 +1012,6 @@ class _MyOrdersState extends State<MyOrders> {
                 );
                 }),
               )
-              ],)
                         ],
                       ),
                     ):ListView.builder(
