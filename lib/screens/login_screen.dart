@@ -183,6 +183,7 @@ class _LoginScreenState extends State<LoginScreen> {
           if(element.documents[i]['mail']!=googleSignIn.currentUser.email){
             print(element.documents[i]['mail']);
             j++;
+            print(j.toString());
           }
         }
         if(j==length){
