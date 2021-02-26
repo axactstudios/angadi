@@ -1091,10 +1091,10 @@ class _HomeScreenState extends State<HomeScreen> {
                             width: MediaQuery.of(context).size.width * 0.02),
                         InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                              return CategoriesScreen('Food');
-                            }));
+//                            Navigator.push(context, MaterialPageRoute(
+//                                builder: (BuildContext context) {
+//                              return CategoriesScreen('Food');
+//                            }));
                           },
                           child: Stack(
                             children: [
