@@ -559,7 +559,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                         SizedBox(
                           height: 10,
                         ),
-                        widget.status != 'Order Delivered'
+                        widget.status.trim() != 'Order Delivered'
                             ? Container(
                                 decoration: BoxDecoration(
                                     borderRadius:
