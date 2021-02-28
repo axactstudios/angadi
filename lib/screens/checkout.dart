@@ -92,11 +92,12 @@ class _CheckoutState extends State<Checkout> {
 //  GlobalKey key = new GlobalKey();
   final scaffoldState = GlobalKey<ScaffoldState>();
   String id2;
-  void shared()async{
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-    id2=prefs.getString('Orderid');
+  void shared() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    id2 = prefs.getString('Orderid');
     print('####################${id2}');
   }
+
   String emirate;
   _pickTime() async {
     var today = DateTime.now();
@@ -129,19 +130,16 @@ class _CheckoutState extends State<Checkout> {
       },
     );
   }
-  List<String> timeSlots2=[];
 
-  void time2(){
+  List<String> timeSlots2 = [];
 
+  void time2() {
     Firestore.instance.collection('Timeslots').snapshots().forEach((element) {
-      for (int i = 0;
-      i < element.documents[0].data['Timeslots'].length;
-      i++) {
+      for (int i = 0; i < element.documents[0].data['Timeslots'].length; i++) {
         DateTime dt = DateTime.now();
 
         if (dt.hour > 12) {
-          String st =
-          element.documents[0].data['Timeslots'][i];
+          String st = element.documents[0].data['Timeslots'][i];
           String s = '';
           for (int i = 0; i < st.length; i++) {
             if (st[i] != ' ')
@@ -152,14 +150,11 @@ class _CheckoutState extends State<Checkout> {
 
           double d = double.parse(s);
           if (d > (dt.hour - 12) &&
-              element.documents[0].data['Timeslots'][i]
-                  .contains('PM')) {
-            timeSlots2.add(
-                element.documents[0].data['Timeslots'][i]);
+              element.documents[0].data['Timeslots'][i].contains('PM')) {
+            timeSlots2.add(element.documents[0].data['Timeslots'][i]);
           }
         } else {
-          String st =
-          element.documents[0].data['Timeslots'][i];
+          String st = element.documents[0].data['Timeslots'][i];
           String s = '';
           for (int i = 0; i < st.length; i++) {
             if (st[i] != ' ')
@@ -170,28 +165,22 @@ class _CheckoutState extends State<Checkout> {
 
           double d = double.parse(s);
           if (d > (dt.hour) &&
-              element.documents[0].data['Timeslots'][i]
-                  .contains('AM')) {
-            timeSlots2.add(
-                element.documents[0].data['Timeslots'][i]);
+              element.documents[0].data['Timeslots'][i].contains('AM')) {
+            timeSlots2.add(element.documents[0].data['Timeslots'][i]);
           }
         }
       }
       if (timeSlots2.length == 0) {
-        selectedDate =
-            selectedDate.add(new Duration(days: 1));
+        selectedDate = selectedDate.add(new Duration(days: 1));
         for (int i = 0;
-        i <
-            element.documents[0].data['Timeslots']
-                .length;
-        i++) {
-          timeSlots2.add(
-              element.documents[0].data['Timeslots'][i]);
+            i < element.documents[0].data['Timeslots'].length;
+            i++) {
+          timeSlots2.add(element.documents[0].data['Timeslots'][i]);
         }
       }
       print('-----------------');
       print(timeSlots2.length);
-      selectedTime=timeSlots2[0];
+      selectedTime = timeSlots2[0];
     });
     print('enddd');
     print(timeSlots2.length);
@@ -202,8 +191,8 @@ class _CheckoutState extends State<Checkout> {
 //    });
 //
 //  }
-
   }
+
   void areas() async {
     await Firestore.instance
         .collection('EmiratesArea')
@@ -333,12 +322,16 @@ class _CheckoutState extends State<Checkout> {
                             }
                           }
                         }
-                        if(timeSlots.length==0){
-                          selectedDate=selectedDate.add(new Duration(days:1));
+                        if (timeSlots.length == 0) {
+                          selectedDate =
+                              selectedDate.add(new Duration(days: 1));
                           for (int i = 0;
-                          i < snap.data.documents[0].data['Timeslots'].length;
-                          i++){
-                            timeSlots.add(snap.data.documents[0].data['Timeslots'][i]);
+                              i <
+                                  snap.data.documents[0].data['Timeslots']
+                                      .length;
+                              i++) {
+                            timeSlots.add(
+                                snap.data.documents[0].data['Timeslots'][i]);
                           }
                         }
 
@@ -530,13 +523,20 @@ class _CheckoutState extends State<Checkout> {
     address();
     shared();
     areas();
-val=true;
-print('---------------${orderid}');
+    val = true;
+    print('---------------${orderid}');
     checkLastSlot();
     time = TimeOfDay.now();
     date = DateTime(DateTime.now().year, DateTime.now().month,
         DateTime.now().day + dateAddition);
     super.initState();
+  }
+
+  bool myInterceptor(bool stopDefaultButtonEvent) {
+    print("BACK BUTTON!");
+    Checksuccess();
+    Navigator.pop(context);
+    return true;
   }
 
   Widget web(String url, BuildContext context, double height, double width) {
@@ -565,8 +565,8 @@ print('---------------${orderid}');
             initialUrl: '${url}',
             gestureRecognizers: {
               Factory<PlatformViewVerticalGestureRecognizer>(
-                    () => PlatformViewVerticalGestureRecognizer()
-                  ..onUpdate = (_) {},
+                () =>
+                    PlatformViewVerticalGestureRecognizer()..onUpdate = (_) {},
               ),
             },
           ),
@@ -747,12 +747,13 @@ print('---------------${orderid}');
       }
     }
   }
-Future<bool> onPressed(){
-  print('pressed');
-  Checksuccess();
-  return Future.value(false);
 
-}
+  Future<bool> onPressed() {
+    print('pressed');
+    Checksuccess();
+    return Future.value(false);
+  }
+
   @override
   Widget build(BuildContext context) {
     print(_result);
@@ -773,20 +774,18 @@ Future<bool> onPressed(){
     var textFormFieldTextStyle =
         textTheme.subtitle.copyWith(color: AppColors.accentText);
     return WillPopScope(
-      onWillPop:onPressed,
+      onWillPop: onPressed,
       child: Scaffold(
           key: scaffoldState,
-
           appBar: AppBar(
             leading: InkWell(
-              onTap:(){
-                Checksuccess();
-                Navigator.pop(context);
-              },
-                child: Icon(Icons.arrow_back,color:Colors.white)),
+                onTap: () {
+                  Checksuccess();
+                  Navigator.pop(context);
+                },
+                child: Icon(Icons.arrow_back, color: Colors.white)),
             iconTheme: IconThemeData(
               color: Colors.white,
-
             ),
             backgroundColor: AppColors.secondaryElement,
             actions: [
@@ -958,8 +957,8 @@ Future<bool> onPressed(){
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Padding(
-                                padding:
-                                    const EdgeInsets.only(left: 12.0, bottom: 12),
+                                padding: const EdgeInsets.only(
+                                    left: 12.0, bottom: 12),
                                 child: HeadingRow(
                                   title: ' Delivery Address',
                                   number: '',
@@ -1147,13 +1146,13 @@ Future<bool> onPressed(){
                                           border: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
-                                              borderSide:
-                                                  BorderSide(color: Colors.grey)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey)),
                                           enabledBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
-                                              borderSide:
-                                                  BorderSide(color: Colors.grey)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey)),
                                           focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
@@ -1170,13 +1169,13 @@ Future<bool> onPressed(){
                                           border: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
-                                              borderSide:
-                                                  BorderSide(color: Colors.grey)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey)),
                                           enabledBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
-                                              borderSide:
-                                                  BorderSide(color: Colors.grey)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey)),
                                           focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
@@ -1193,13 +1192,13 @@ Future<bool> onPressed(){
                                           border: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
-                                              borderSide:
-                                                  BorderSide(color: Colors.grey)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey)),
                                           enabledBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
-                                              borderSide:
-                                                  BorderSide(color: Colors.grey)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey)),
                                           focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
@@ -1216,13 +1215,13 @@ Future<bool> onPressed(){
                                           border: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
-                                              borderSide:
-                                                  BorderSide(color: Colors.grey)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey)),
                                           enabledBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
-                                              borderSide:
-                                                  BorderSide(color: Colors.grey)),
+                                              borderSide: BorderSide(
+                                                  color: Colors.grey)),
                                           focusedBorder: OutlineInputBorder(
                                               borderRadius:
                                                   BorderRadius.circular(2),
@@ -1246,18 +1245,22 @@ Future<bool> onPressed(){
                                               .collection('Emirates')
                                               .snapshots(),
                                           builder: (BuildContext context,
-                                              AsyncSnapshot<QuerySnapshot> snap) {
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snap) {
                                             if (snap.hasData &&
                                                 !snap.hasError &&
                                                 snap.data != null) {
                                               allemirates.clear();
                                               emiratesname.clear();
                                               for (int i = 0;
-                                                  i < snap.data.documents.length;
+                                                  i <
+                                                      snap.data.documents
+                                                          .length;
                                                   i++) {
-                                                print(snap.data.documents.length);
-                                                emirate2 = snap.data.documents[0]
-                                                    ['name'];
+                                                print(
+                                                    snap.data.documents.length);
+                                                emirate2 = snap
+                                                    .data.documents[0]['name'];
                                                 emiratesname.add(snap
                                                     .data.documents[i]['name']);
                                                 Emirates emi = Emirates(
@@ -1291,15 +1294,17 @@ Future<bool> onPressed(){
                                                               hint: Text(
                                                                   'Emirates'),
                                                               value:
-                                                                  emiratesname[0],
+                                                                  emiratesname[
+                                                                      0],
                                                               items: emiratesname
                                                                   .map((String
                                                                       value) {
                                                                 return new DropdownMenuItem<
                                                                     String>(
                                                                   value: value,
-                                                                  child: new Text(
-                                                                      value),
+                                                                  child:
+                                                                      new Text(
+                                                                          value),
                                                                 );
                                                               }).toList(),
                                                               onChanged: (String
@@ -1309,7 +1314,8 @@ Future<bool> onPressed(){
                                                                       newValue;
                                                                   emirate2 =
                                                                       newValue;
-                                                                  print(emirate);
+                                                                  print(
+                                                                      emirate);
 
 //                      Navigator.pop(context);
                                                                 });
@@ -1331,31 +1337,36 @@ Future<bool> onPressed(){
                                                   isEqualTo: emirate)
                                               .snapshots(),
                                           builder: (BuildContext context,
-                                              AsyncSnapshot<QuerySnapshot> snap) {
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snap) {
                                             if (snap.hasData &&
                                                 !snap.hasError &&
                                                 snap.data != null) {
                                               allareas.clear();
                                               areaname.clear();
                                               for (int i = 0;
-                                                  i < snap.data.documents.length;
+                                                  i <
+                                                      snap.data.documents
+                                                          .length;
                                                   i++) {
-                                                print(snap.data.documents.length);
+                                                print(
+                                                    snap.data.documents.length);
 
                                                 areaname.add(snap
                                                     .data.documents[i]['name']);
 
-                                                EmiratesArea emi2 = EmiratesArea(
-                                                    snap.data.documents[i]
-                                                        ['Emirate'],
-                                                    snap.data.documents[i]
-                                                        ['deliveryCharge'],
-                                                    snap.data.documents[i]
-                                                        ['minOrderPrice'],
-                                                    snap.data.documents[i]
-                                                        ['name'],
-                                                    snap.data.documents[i]
-                                                        ['zone']);
+                                                EmiratesArea emi2 =
+                                                    EmiratesArea(
+                                                        snap.data.documents[i]
+                                                            ['Emirate'],
+                                                        snap.data.documents[i]
+                                                            ['deliveryCharge'],
+                                                        snap.data.documents[i]
+                                                            ['minOrderPrice'],
+                                                        snap.data.documents[i]
+                                                            ['name'],
+                                                        snap.data.documents[i]
+                                                            ['zone']);
                                                 allareas.add(emi2);
                                               }
                                               areaname.add('Others');
@@ -1377,21 +1388,26 @@ Future<bool> onPressed(){
                                                                   value == null
                                                                       ? 'field required'
                                                                       : null,
-                                                              hint: Text('Area'),
-                                                              value: areaname[0],
-                                                              items: areaname.map(
-                                                                  (String value) {
+                                                              hint:
+                                                                  Text('Area'),
+                                                              value:
+                                                                  areaname[0],
+                                                              items: areaname
+                                                                  .map((String
+                                                                      value) {
                                                                 return new DropdownMenuItem<
                                                                     String>(
                                                                   value: value,
-                                                                  child: new Text(
-                                                                      value),
+                                                                  child:
+                                                                      new Text(
+                                                                          value),
                                                                 );
                                                               }).toList(),
                                                               onChanged: (String
                                                                   newValue) {
                                                                 setState(() {
-                                                                  area = newValue;
+                                                                  area =
+                                                                      newValue;
                                                                   print(
                                                                       '---------------');
                                                                   print(area);
@@ -1401,9 +1417,7 @@ Future<bool> onPressed(){
                                                                         'Reached');
                                                                     for (int i =
                                                                             0;
-                                                                        i <
-                                                                            allemirates
-                                                                                .length;
+                                                                        i < allemirates.length;
                                                                         i++) {
                                                                       print(
                                                                           'yess');
@@ -1428,23 +1442,21 @@ Future<bool> onPressed(){
                                                                       }
                                                                     }
                                                                   }
-                                                                  for (int i = 0;
+                                                                  for (int i =
+                                                                          0;
                                                                       i <
                                                                           allareas
                                                                               .length;
                                                                       i++) {
                                                                     if (area ==
-                                                                        allareas[
-                                                                                i]
+                                                                        allareas[i]
                                                                             .name)
                                                                       setState(
                                                                           () {
                                                                         minOrderPrice =
-                                                                            double.parse(
-                                                                                allareas[i].minOrderPrice);
+                                                                            double.parse(allareas[i].minOrderPrice);
                                                                         deliveryCharge =
-                                                                            double.parse(
-                                                                                allareas[i].deliveryCharge);
+                                                                            double.parse(allareas[i].deliveryCharge);
                                                                       });
                                                                   }
 //                      Navigator.pop(context);
@@ -1530,7 +1542,8 @@ Future<bool> onPressed(){
                                                   borderRadius:
                                                       BorderRadius.circular(2),
                                                   borderSide: BorderSide(
-                                                      color: Color(0xFF6b3600))),
+                                                      color:
+                                                          Color(0xFF6b3600))),
                                               hintText:
                                                   'Building name/no.,floor,apartment or villa no.*'),
                                           controller: buildingController,
@@ -1559,7 +1572,8 @@ Future<bool> onPressed(){
                                                   borderRadius:
                                                       BorderRadius.circular(2),
                                                   borderSide: BorderSide(
-                                                      color: Color(0xFF6b3600))),
+                                                      color:
+                                                          Color(0xFF6b3600))),
                                               hintText: 'Street name*'),
                                           controller: flatcontroller,
                                         ),
@@ -1585,7 +1599,8 @@ Future<bool> onPressed(){
                                                   borderRadius:
                                                       BorderRadius.circular(2),
                                                   borderSide: BorderSide(
-                                                      color: Color(0xFF6b3600))),
+                                                      color:
+                                                          Color(0xFF6b3600))),
                                               hintText:
                                                   'Additional Directions/Nearest Landmark'),
                                           maxLines: 2,
@@ -1604,18 +1619,22 @@ Future<bool> onPressed(){
                                               .collection('Emirates')
                                               .snapshots(),
                                           builder: (BuildContext context,
-                                              AsyncSnapshot<QuerySnapshot> snap) {
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snap) {
                                             if (snap.hasData &&
                                                 !snap.hasError &&
                                                 snap.data != null) {
                                               allemirates.clear();
                                               emiratesname.clear();
                                               for (int i = 0;
-                                                  i < snap.data.documents.length;
+                                                  i <
+                                                      snap.data.documents
+                                                          .length;
                                                   i++) {
-                                                print(snap.data.documents.length);
-                                                emirate2 = snap.data.documents[0]
-                                                    ['name'];
+                                                print(
+                                                    snap.data.documents.length);
+                                                emirate2 = snap
+                                                    .data.documents[0]['name'];
                                                 emiratesname.add(snap
                                                     .data.documents[i]['name']);
                                                 Emirates emi = Emirates(
@@ -1648,15 +1667,17 @@ Future<bool> onPressed(){
                                                               hint: Text(
                                                                   'Emirates'),
                                                               value:
-                                                                  emiratesname[0],
+                                                                  emiratesname[
+                                                                      0],
                                                               items: emiratesname
                                                                   .map((String
                                                                       value) {
                                                                 return new DropdownMenuItem<
                                                                     String>(
                                                                   value: value,
-                                                                  child: new Text(
-                                                                      value),
+                                                                  child:
+                                                                      new Text(
+                                                                          value),
                                                                 );
                                                               }).toList(),
                                                               onChanged: (String
@@ -1666,7 +1687,8 @@ Future<bool> onPressed(){
                                                                       newValue;
                                                                   emirate2 =
                                                                       newValue;
-                                                                  print(emirate);
+                                                                  print(
+                                                                      emirate);
 
 //                      Navigator.pop(context);
                                                                 });
@@ -1688,31 +1710,36 @@ Future<bool> onPressed(){
                                                   isEqualTo: emirate)
                                               .snapshots(),
                                           builder: (BuildContext context,
-                                              AsyncSnapshot<QuerySnapshot> snap) {
+                                              AsyncSnapshot<QuerySnapshot>
+                                                  snap) {
                                             if (snap.hasData &&
                                                 !snap.hasError &&
                                                 snap.data != null) {
                                               allareas.clear();
                                               areaname.clear();
                                               for (int i = 0;
-                                                  i < snap.data.documents.length;
+                                                  i <
+                                                      snap.data.documents
+                                                          .length;
                                                   i++) {
-                                                print(snap.data.documents.length);
+                                                print(
+                                                    snap.data.documents.length);
 
                                                 areaname.add(snap
                                                     .data.documents[i]['name']);
 
-                                                EmiratesArea emi2 = EmiratesArea(
-                                                    snap.data.documents[i]
-                                                        ['Emirate'],
-                                                    snap.data.documents[i]
-                                                        ['deliveryCharge'],
-                                                    snap.data.documents[i]
-                                                        ['minOrderPrice'],
-                                                    snap.data.documents[i]
-                                                        ['name'],
-                                                    snap.data.documents[i]
-                                                        ['zone']);
+                                                EmiratesArea emi2 =
+                                                    EmiratesArea(
+                                                        snap.data.documents[i]
+                                                            ['Emirate'],
+                                                        snap.data.documents[i]
+                                                            ['deliveryCharge'],
+                                                        snap.data.documents[i]
+                                                            ['minOrderPrice'],
+                                                        snap.data.documents[i]
+                                                            ['name'],
+                                                        snap.data.documents[i]
+                                                            ['zone']);
                                                 allareas.add(emi2);
                                               }
                                               areaname.add('Others');
@@ -1734,21 +1761,26 @@ Future<bool> onPressed(){
                                                                   value == null
                                                                       ? 'field required'
                                                                       : null,
-                                                              hint: Text('Area'),
-                                                              value: areaname[0],
-                                                              items: areaname.map(
-                                                                  (String value) {
+                                                              hint:
+                                                                  Text('Area'),
+                                                              value:
+                                                                  areaname[0],
+                                                              items: areaname
+                                                                  .map((String
+                                                                      value) {
                                                                 return new DropdownMenuItem<
                                                                     String>(
                                                                   value: value,
-                                                                  child: new Text(
-                                                                      value),
+                                                                  child:
+                                                                      new Text(
+                                                                          value),
                                                                 );
                                                               }).toList(),
                                                               onChanged: (String
                                                                   newValue) {
                                                                 setState(() {
-                                                                  area = newValue;
+                                                                  area =
+                                                                      newValue;
                                                                   print(
                                                                       '---------------------');
                                                                   print(area);
@@ -1757,9 +1789,7 @@ Future<bool> onPressed(){
                                                                       'Others') {
                                                                     for (int i =
                                                                             0;
-                                                                        i <
-                                                                            allemirates
-                                                                                .length;
+                                                                        i < allemirates.length;
                                                                         i++) {
                                                                       if (emirate2 ==
                                                                           allemirates[i]
@@ -1775,23 +1805,21 @@ Future<bool> onPressed(){
                                                                     }
                                                                   }
 
-                                                                  for (int i = 0;
+                                                                  for (int i =
+                                                                          0;
                                                                       i <
                                                                           allareas
                                                                               .length;
                                                                       i++) {
                                                                     if (area ==
-                                                                        allareas[
-                                                                                i]
+                                                                        allareas[i]
                                                                             .name)
                                                                       setState(
                                                                           () {
                                                                         minOrderPrice =
-                                                                            double.parse(
-                                                                                allareas[i].minOrderPrice);
+                                                                            double.parse(allareas[i].minOrderPrice);
                                                                         deliveryCharge =
-                                                                            double.parse(
-                                                                                allareas[i].deliveryCharge);
+                                                                            double.parse(allareas[i].deliveryCharge);
                                                                       });
                                                                   }
 //                      Navigator.pop(context);
@@ -1877,7 +1905,8 @@ Future<bool> onPressed(){
                                                   borderRadius:
                                                       BorderRadius.circular(2),
                                                   borderSide: BorderSide(
-                                                      color: Color(0xFF6b3600))),
+                                                      color:
+                                                          Color(0xFF6b3600))),
                                               hintText:
                                                   'Building name/no.,floor*'),
                                           controller: buildingController,
@@ -1903,7 +1932,8 @@ Future<bool> onPressed(){
                                                   borderRadius:
                                                       BorderRadius.circular(2),
                                                   borderSide: BorderSide(
-                                                      color: Color(0xFF6b3600))),
+                                                      color:
+                                                          Color(0xFF6b3600))),
                                               hintText:
                                                   'Additional Directions/Nearest Landmark'),
                                           maxLines: 2,
@@ -1986,7 +2016,8 @@ Future<bool> onPressed(){
                       : Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text('${discount.discount}% off promo code applied!'),
+                            Text(
+                                '${discount.discount}% off promo code applied!'),
                             InkWell(
                               onTap: () {
                                 Navigator.push(context, MaterialPageRoute(
@@ -2066,8 +2097,8 @@ Future<bool> onPressed(){
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
-                                    height:
-                                        MediaQuery.of(context).size.height * 0.05,
+                                    height: MediaQuery.of(context).size.height *
+                                        0.05,
                                     decoration: BoxDecoration(
                                         border: Border.all(
                                             color: AppColors.secondaryElement),
@@ -2093,12 +2124,14 @@ Future<bool> onPressed(){
                                                 ? Text(
                                                     '${selectedDate.day.toString()}/${selectedDate.month.toString()}/${selectedDate.year.toString()} ',
                                                     style: TextStyle(
-                                                        color: Color(0xFF6b3600)),
+                                                        color:
+                                                            Color(0xFF6b3600)),
                                                   )
                                                 : Text(
                                                     '${date.day.toString()}/${date.month.toString()}/${selectedDate.year.toString()} ',
                                                     style: TextStyle(
-                                                        color: Color(0xFF6b3600)),
+                                                        color:
+                                                            Color(0xFF6b3600)),
                                                   )),
                                         Text(' at '),
                                         Icon(
@@ -2273,8 +2306,9 @@ Future<bool> onPressed(){
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 14.0),
                               child: angadiButton('Cash On Delivery',
-                                  buttonWidth: MediaQuery.of(context).size.width,
-                                  onTap: () {
+                                  buttonWidth: MediaQuery.of(context)
+                                      .size
+                                      .width, onTap: () {
                                 print('-------------------------------------');
 
                                 if (widget.address != '') {
@@ -2296,32 +2330,32 @@ Future<bool> onPressed(){
 //                                      print(deliveryCharge);
 //                                    }
 //                                  }
-                                if(selectedTime=='Choose Slot'){
-                                  Fluttertoast.showToast(
-                                      msg:
-                                      'Please select time slot',
-                                      toastLength: Toast.LENGTH_SHORT);
-                                }else{
-                                  var total = 0.0;
-                                  discount != null
-                                      ? total = ((totalAmount() * 0.18) +
-                                      totalAmount() -
-                                      (totalAmount() *
-                                          (double.parse(discount.discount) /
-                                              100)) +
-                                      deliveryCharge)
-                                      : total = ((totalAmount() * 0.18) +
-                                      totalAmount() +
-                                      deliveryCharge);
-                                  if (total > minOrderPrice) {
-                                    showAlertDialog(context);
-                                  } else {
+                                  if (selectedTime == 'Choose Slot') {
                                     Fluttertoast.showToast(
-                                        msg:
-                                        'Your order amount is less \n than the minimum order price',
+                                        msg: 'Please select time slot',
                                         toastLength: Toast.LENGTH_SHORT);
+                                  } else {
+                                    var total = 0.0;
+                                    discount != null
+                                        ? total = ((totalAmount() * 0.18) +
+                                            totalAmount() -
+                                            (totalAmount() *
+                                                (double.parse(
+                                                        discount.discount) /
+                                                    100)) +
+                                            deliveryCharge)
+                                        : total = ((totalAmount() * 0.18) +
+                                            totalAmount() +
+                                            deliveryCharge);
+                                    if (total > minOrderPrice) {
+                                      showAlertDialog(context);
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg:
+                                              'Your order amount is less \n than the minimum order price',
+                                          toastLength: Toast.LENGTH_SHORT);
+                                    }
                                   }
-                                }
 //                                var total = 0.0;
 //                                discount != null
 //                                    ? total = ((totalAmount() * 0.18) +
@@ -2361,47 +2395,44 @@ Future<bool> onPressed(){
 //                                        print(deliveryCharge);
 //                                      }
 //                                    }
-                                  if(selectedTime=='Choose Slot'){
-                                    Fluttertoast.showToast(
-                                        msg:
-                                        'Please select time slot',
-                                        toastLength: Toast.LENGTH_SHORT);
-                                  }
-                                  else{
-                                    var total = 0.0;
-                                    discount != null
-                                        ? total = ((totalAmount() * 0.18) +
-                                        totalAmount() -
-                                        (totalAmount() *
-                                            (double.parse(discount.discount) /
-                                                100)) +
-                                        deliveryCharge)
-                                        : total = ((totalAmount() * 0.18) +
-                                        totalAmount() +
-                                        deliveryCharge);
-                                    if (total > minOrderPrice) {
-                                      showAlertDialog(context);
-                                    } else  {
+                                    if (selectedTime == 'Choose Slot') {
                                       Fluttertoast.showToast(
-                                          msg:
-                                          'Your order amount is less \n than the minimum order price',
+                                          msg: 'Please select time slot',
                                           toastLength: Toast.LENGTH_SHORT);
+                                    } else {
+                                      var total = 0.0;
+                                      discount != null
+                                          ? total = ((totalAmount() * 0.18) +
+                                              totalAmount() -
+                                              (totalAmount() *
+                                                  (double.parse(
+                                                          discount.discount) /
+                                                      100)) +
+                                              deliveryCharge)
+                                          : total = ((totalAmount() * 0.18) +
+                                              totalAmount() +
+                                              deliveryCharge);
+                                      if (total > minOrderPrice) {
+                                        showAlertDialog(context);
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                                'Your order amount is less \n than the minimum order price',
+                                            toastLength: Toast.LENGTH_SHORT);
+                                      }
                                     }
-                                  }
-                                  }
-                                  else {
+                                  } else {
                                     Fluttertoast.showToast(
                                         msg: 'Address required',
                                         toastLength: Toast.LENGTH_SHORT);
                                   }
-
                                 }
                               }),
                             )
                           : type == 'Takeaway'
                               ? Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 14),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 14),
                                   child: angadiButton('Pay on Pickup',
                                       buttonWidth: MediaQuery.of(context)
                                           .size
@@ -2422,8 +2453,6 @@ Future<bool> onPressed(){
                               ? 'Proceed to pay online'
                               : 'Go to my orders',
                           onTap: () {
-
-
                             if (widget.SavedArea != '') {
 //    for (int i = 0; i < savedarea.length; i++) {
 //    if (widget.SavedArea ==
@@ -2441,50 +2470,48 @@ Future<bool> onPressed(){
 //    print(deliveryCharge);
 //    }
                             }
-                            if(selectedTime=='Choose Slot'){
+                            if (selectedTime == 'Choose Slot') {
                               Fluttertoast.showToast(
-                                  msg:
-                                  'Please select time slot',
+                                  msg: 'Please select time slot',
                                   toastLength: Toast.LENGTH_SHORT);
-                            }
-                            else{
+                            } else {
                               var total = 0.0;
                               discount != null
                                   ? total = ((totalAmount() * 0.18) +
-                                  totalAmount() -
-                                  (totalAmount() *
-                                      (double.parse(discount.discount) / 100)) +
-                                  deliveryCharge)
+                                      totalAmount() -
+                                      (totalAmount() *
+                                          (double.parse(discount.discount) /
+                                              100)) +
+                                      deliveryCharge)
                                   : total = ((totalAmount() * 0.18) +
-                                  totalAmount() +
-                                  deliveryCharge);
+                                      totalAmount() +
+                                      deliveryCharge);
                               if (total > minOrderPrice) {
-                                _result != '833' && j != 1&&val
+                                _result != '833' && j != 1 && val
                                     ? onlineorder(
-                                    (discount != null)
-                                        ? ((totalAmount() * 0.18) +
-                                        totalAmount() -
-                                        (totalAmount() *
-                                            (double.parse(
-                                                discount.discount) /
-                                                100)) +
-                                        deliveryCharge)
-                                        .toStringAsFixed(2)
-                                        : ((totalAmount() * 0.18) +
-                                        totalAmount() +
-                                        deliveryCharge)
-                                        .toString(),
-                                    type,
-                                    orderid)
+                                        (discount != null)
+                                            ? ((totalAmount() * 0.18) +
+                                                    totalAmount() -
+                                                    (totalAmount() *
+                                                        (double.parse(discount
+                                                                .discount) /
+                                                            100)) +
+                                                    deliveryCharge)
+                                                .toStringAsFixed(2)
+                                            : ((totalAmount() * 0.18) +
+                                                    totalAmount() +
+                                                    deliveryCharge)
+                                                .toString(),
+                                        type,
+                                        orderid)
                                     : Checksuccess();
                               } else {
                                 Fluttertoast.showToast(
                                     msg:
-                                    'Your order amount is less \n than the minimum order price',
+                                        'Your order amount is less \n than the minimum order price',
                                     toastLength: Toast.LENGTH_SHORT);
                               }
                             }
-
 
                             if (widget.address == '') {
                               if (_formkey.currentState.validate()) {
@@ -2504,52 +2531,48 @@ Future<bool> onPressed(){
 //                    print(deliveryCharge);
 //                    }
 //                    }
-                              if(selectedTime=='Choose Slot'){
-                                Fluttertoast.showToast(
-                                    msg:
-                                    'Please select time slot',
-                                    toastLength: Toast.LENGTH_SHORT);
-                              }
-                              else{
-                                var total = 0.0;
-                                discount != null
-                                    ? total = ((totalAmount() * 0.18) +
-                                    totalAmount() -
-                                    (totalAmount() *
-                                        (double.parse(discount.discount) /
-                                            100)) +
-                                    deliveryCharge)
-                                    : total = ((totalAmount() * 0.18) +
-                                    totalAmount() +
-                                    deliveryCharge);
-                                if (total > minOrderPrice) {
-                                  _result != '833' && j != 1&&val
-                                      ? onlineorder(
-                                      (discount != null)
-                                          ? ((totalAmount() * 0.18) +
+                                if (selectedTime == 'Choose Slot') {
+                                  Fluttertoast.showToast(
+                                      msg: 'Please select time slot',
+                                      toastLength: Toast.LENGTH_SHORT);
+                                } else {
+                                  var total = 0.0;
+                                  discount != null
+                                      ? total = ((totalAmount() * 0.18) +
                                           totalAmount() -
                                           (totalAmount() *
-                                              (double.parse(discount
-                                                  .discount) /
+                                              (double.parse(discount.discount) /
                                                   100)) +
                                           deliveryCharge)
-                                          .toStringAsFixed(2)
-                                          : ((totalAmount() * 0.18) +
+                                      : total = ((totalAmount() * 0.18) +
                                           totalAmount() +
-                                          deliveryCharge)
-                                          .toString(),
-                                      type,
-                                      orderid)
-                                      : Checksuccess();
-                                } else {
-                                  Fluttertoast.showToast(
-                                      msg:
-                                      'Your order amount is less \n than the minimum order price',
-                                      toastLength: Toast.LENGTH_SHORT);
+                                          deliveryCharge);
+                                  if (total > minOrderPrice) {
+                                    _result != '833' && j != 1 && val
+                                        ? onlineorder(
+                                            (discount != null)
+                                                ? ((totalAmount() * 0.18) +
+                                                        totalAmount() -
+                                                        (totalAmount() *
+                                                            (double.parse(discount
+                                                                    .discount) /
+                                                                100)) +
+                                                        deliveryCharge)
+                                                    .toStringAsFixed(2)
+                                                : ((totalAmount() * 0.18) +
+                                                        totalAmount() +
+                                                        deliveryCharge)
+                                                    .toString(),
+                                            type,
+                                            orderid)
+                                        : Checksuccess();
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            'Your order amount is less \n than the minimum order price',
+                                        toastLength: Toast.LENGTH_SHORT);
+                                  }
                                 }
-                              }
-
-
                               } else {
                                 Fluttertoast.showToast(
                                     msg: 'Address required',
@@ -3100,7 +3123,6 @@ Future<bool> onPressed(){
   Map<String, dynamic> map;
   int j = 0;
   Future<String> onlineorder(String price, String type, String orderid) async {
-
     await getUserDetails();
     List items = [];
     List prices = [];
@@ -3199,10 +3221,12 @@ Future<bool> onPressed(){
       throw 'Could not launch $reply';
     }
   }
-int k=0;int length=0;
+
+  int k = 0;
+  int length = 0;
   Future<String> Checksuccess() async {
-    SharedPreferences prefs= await SharedPreferences.getInstance();
-    String onlineid=prefs.getString('Orderid');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String onlineid = prefs.getString('Orderid');
     print('----------------------');
     print(selectedDate);
     print(selectedDate.year);
@@ -3231,89 +3255,91 @@ int k=0;int length=0;
       prices.add(v.price);
       quantities.add(v.qty);
     }
-    Firestore.instance.collection('OnlineOrders').snapshots().forEach((element) {
+    Firestore.instance
+        .collection('OnlineOrders')
+        .snapshots()
+        .forEach((element) {
       for (int i = 0; i < element.documents.length; i++) {
         if (onlineid == element.documents[i].documentID) {
-          Firestore.instance.collection('Orders').snapshots().forEach((element) {
-            length=element.documents.length;
-            for(int j=0;j<element.documents.length;j++){
-
-              if(element.documents[j].documentID!=onlineid){
+          Firestore.instance
+              .collection('Orders')
+              .snapshots()
+              .forEach((element) {
+            length = element.documents.length;
+            for (int j = 0; j < element.documents.length; j++) {
+              if (element.documents[j].documentID != onlineid) {
                 k++;
               }
-
             }
-
           });
-          if(length==k){
+          if (length == k) {
             widget.address == ''
                 ? Firestore.instance
-                .collection('Orders')
-                .document(orderid)
-                .setData({
-              'Items': items,
-              'Price': prices,
-              'Qty': quantities,
-              'Type': 'Online order',
-              'UserID': user.uid,
-              'Address':
-              'Emirate:${emirate},Area:${area},${buildingController
-                  .text},Additional Directions :${additionalcontroller.text}',
-              'DeliveryDate': DateTime(selectedDate.year, selectedDate.month,
-                  selectedDate.day, dd),
-              'DeliveryTime': selectedTime,
-              'TimeStamp': Timestamp.now(),
-              'Status': 'Awaiting Confirmation',
-              'Notes': notesController.text != null
-                  ? notesController.text
-                  : 'None',
-              'GrandTotal':
-              ((totalAmount() * 0.18) + totalAmount() + deliveryCharge)
-                  .toStringAsFixed(2),
-            }).then((value) {
-              setState(() {
+                    .collection('Orders')
+                    .document(orderid)
+                    .setData({
+                    'Items': items,
+                    'Price': prices,
+                    'Qty': quantities,
+                    'Type': 'Online order',
+                    'UserID': user.uid,
+                    'Address':
+                        'Emirate:${emirate},Area:${area},${buildingController.text},Additional Directions :${additionalcontroller.text}',
+                    'DeliveryDate': DateTime(selectedDate.year,
+                        selectedDate.month, selectedDate.day, dd),
+                    'DeliveryTime': selectedTime,
+                    'TimeStamp': Timestamp.now(),
+                    'Status': 'Awaiting Confirmation',
+                    'Notes': notesController.text != null
+                        ? notesController.text
+                        : 'None',
+                    'GrandTotal': ((totalAmount() * 0.18) +
+                            totalAmount() +
+                            deliveryCharge)
+                        .toStringAsFixed(2),
+                  }).then((value) {
+                    setState(() {
 //              docID = value;
-              });
-            })
+                    });
+                  })
                 : Firestore.instance
-                .collection('Orders')
-                .document(orderid)
-                .setData({
-              'Items': items,
-              'Price': prices,
-              'Qty': quantities,
-              'Type': 'Online order',
-              'UserID': user.uid,
-              'Address': widget.address,
-              'DeliveryDate': DateTime(selectedDate.year,
-                  selectedDate.month, selectedDate.day, dd),
-              'DeliveryTime': selectedTime,
-              'TimeStamp': Timestamp.now(),
-              'Status': 'Awaiting Confirmation',
-              'Notes': notesController.text != null
-                  ? notesController.text
-                  : 'None',
-              'GrandTotal': ((totalAmount() * 0.18) +
-                  totalAmount() +
-                  deliveryCharge)
-                  .toStringAsFixed(2),
-            }).then((value) {
-              setState(() {
+                    .collection('Orders')
+                    .document(orderid)
+                    .setData({
+                    'Items': items,
+                    'Price': prices,
+                    'Qty': quantities,
+                    'Type': 'Online order',
+                    'UserID': user.uid,
+                    'Address': widget.address,
+                    'DeliveryDate': DateTime(selectedDate.year,
+                        selectedDate.month, selectedDate.day, dd),
+                    'DeliveryTime': selectedTime,
+                    'TimeStamp': Timestamp.now(),
+                    'Status': 'Awaiting Confirmation',
+                    'Notes': notesController.text != null
+                        ? notesController.text
+                        : 'None',
+                    'GrandTotal': ((totalAmount() * 0.18) +
+                            totalAmount() +
+                            deliveryCharge)
+                        .toStringAsFixed(2),
+                  }).then((value) {
+                    setState(() {
 //              docID = value;
-              });
-            });
+                    });
+                  });
             Firestore.instance.collection('Notifications').add({
               'UserID': user.uid,
               'OrderID': orderid,
               'Notification': 'Order Placed. Awaiting confirmation.',
-              'DeliveryDate':
-              DateTime(
+              'DeliveryDate': DateTime(
                   selectedDate.year, selectedDate.month, selectedDate.day, dd),
               'DeliveryTime': selectedTime,
               'TimeStamp': Timestamp.now(),
               'Type': 'Online order',
-              'GrandTotal': ((totalAmount() * 0.18) + totalAmount())
-                  .toStringAsFixed(2),
+              'GrandTotal':
+                  ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
             });
             // for (int i = 0; i < cartItems.length; i++) {
             //   await databaseReference
@@ -3330,7 +3356,10 @@ int k=0;int length=0;
 
             removeAll();
             String status;
-            Firestore.instance.collection('Orders').getDocuments().then((value) {
+            Firestore.instance
+                .collection('Orders')
+                .getDocuments()
+                .then((value) {
               value.documents.forEach((element) {
                 if (element.documentID == orderid) {
                   status = element['Status'];
@@ -3341,9 +3370,6 @@ int k=0;int length=0;
             print(myTimeStamp.toString());
             pushNewScreen(context, screen: MyOrders());
           }
-
-
-
 
 //    HttpClient httpClient = new HttpClient();
 //    httpClient.badCertificateCallback =
@@ -3359,9 +3385,11 @@ int k=0;int length=0;
 //      httpClient.close();
 //    });
 
-        }}});}
+        }
+      }
+    });
+  }
 }
-
 
 class PlatformViewVerticalGestureRecognizer
     extends VerticalDragGestureRecognizer {

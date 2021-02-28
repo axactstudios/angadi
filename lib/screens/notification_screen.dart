@@ -9,6 +9,7 @@ import 'package:angadi/values/values.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 
 import 'order_placed.dart';
 
@@ -122,6 +123,11 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   }
 
   List<NotificationInfo> notifications = List();
+  @override
+  void initState() {
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

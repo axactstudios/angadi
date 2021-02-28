@@ -31,7 +31,9 @@ class Order {
       this.id,
       this.date});
 }
-List<Order>extraorders=[];
+
+List<Order> extraorders = [];
+
 class _MyOrdersState extends State<MyOrders> {
   void launchWhatsApp({
     @required String phone,
@@ -51,12 +53,14 @@ class _MyOrdersState extends State<MyOrders> {
       throw 'Could not launch ${url()}';
     }
   }
+
   bool show;
-@override
+  @override
   void initState() {
-     show=true;
+    show = true;
     super.initState();
   }
+
   @override
   Widget build(BuildContext context) {
     List<Order> orders = List<Order>();
@@ -249,393 +253,473 @@ class _MyOrdersState extends State<MyOrders> {
                       orderString: str,
                       id: snap.data.documents[i].documentID));
                 }
-                if(orders.length>10){
-                  extraorders=orders.sublist(10,orders.length);
+                if (orders.length > 10) {
+                  extraorders = orders.sublist(10, orders.length);
                 }
                 return orders.length != 0
-                    ?  (orders.length>10)?  (show)? SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Container(
-                            height:MediaQuery.of(context).size.height*0.8,
-                            child: ListView.builder(
-                                itemCount: orders.sublist(0,9).length,
-                                physics: ClampingScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: EdgeInsets.fromLTRB(15.0, 8, 8, 8),
-                                    child: InkWell(
-                                      onTap: () async {
-                                        String status;
-                                        await Firestore.instance
-                                            .collection('Orders')
-                                            .getDocuments()
-                                            .then((value) {
-                                          value.documents.forEach((element) {
-                                            print(orders[index].id);
-                                            print(element.documentID);
-                                            if (element.documentID ==
-                                                orders[index].id) {
-                                              status = element['Status'];
-                                              date2 = element['DeliveryDate'];
-                                              DateTime myDateTime = date2.toDate();
-                                              pushNewScreen(context,
-                                                  screen: OrderPlaced(
-                                                      bill(
-                                                          orders[index].timestamp,
-                                                          orders[index].total,
-                                                          orders[index].id,
-                                                          orders[index].status,
-                                                          orders[index].orderString),
-                                                      orders[index].id,
-                                                      status,
-                                                      myDateTime));
-                                              print('Push pressed');
-                                            }
-                                          });
-                                        });
-                                      },
-                                      child: Card(
-                                        elevation: 5,
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Container(
-                                            decoration: BoxDecoration(
-                                                borderRadius: BorderRadius.all(
-                                                    Radius.circular(10))),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  'Order Id-${orders[index].id}',
-                                                  style: TextStyle(
-                                                      fontSize: 15,
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                                SizedBox(
-                                                  height: 3,
-                                                ),
-                                                Container(
-                                                  color: Colors.black.withOpacity(0.1),
-                                                  height: 1,
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  'Items',
-                                                  style: TextStyle(
-                                                      fontSize: 13,
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  orders[index].orderString,
-                                                  style: TextStyle(fontSize: 14),
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  'Ordered On',
-                                                  style: TextStyle(
-                                                      fontSize: 13,
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  orders[index]
-                                                          .timestamp
-                                                          .toDate()
-                                                          .day
-                                                          .toString() +
-                                                      '-' +
-                                                      orders[index]
-                                                          .timestamp
-                                                          .toDate()
-                                                          .month
-                                                          .toString() +
-                                                      '-' +
-                                                      orders[index]
-                                                          .timestamp
-                                                          .toDate()
-                                                          .year
-                                                          .toString() +
-                                                      ' at ' +
-                                                      orders[index]
-                                                          .timestamp
-                                                          .toDate()
-                                                          .hour
-                                                          .toString() +
-                                                      ':' +
-                                                      orders[index]
-                                                          .timestamp
-                                                          .toDate()
-                                                          .minute
-                                                          .toString(),
-                                                  style: TextStyle(fontSize: 14),
-                                                ),
-                                                // Row(
-                                                //   mainAxisAlignment:
-                                                //       MainAxisAlignment.spaceEvenly,
-                                                //   children: [
-                                                //     Container(
-                                                //         width: MediaQuery.of(context)
-                                                //                 .size
-                                                //                 .width *
-                                                //             0.3,
-                                                //         child: Center(
-                                                //             child: Text('Name'))),
-                                                //     Container(
-                                                //         width: MediaQuery.of(context)
-                                                //                 .size
-                                                //                 .width *
-                                                //             0.3,
-                                                //         child: Center(
-                                                //             child: Text('Quantity'))),
-                                                //     Container(
-                                                //         width: MediaQuery.of(context)
-                                                //                 .size
-                                                //                 .width *
-                                                //             0.3,
-                                                //         child: Center(
-                                                //             child: Text('Price'))),
-                                                //   ],
-                                                // ),
-                                                // Container(
-                                                //   height:
-                                                //       40.0 * orders[index].items.length,
-                                                //   child: ListView.builder(
-                                                //       itemCount:
-                                                //           orders[index].items.length,
-                                                //       itemBuilder: (context, i) {
-                                                //         return Row(
-                                                //           // mainAxisAlignment:
-                                                //           //     MainAxisAlignment
-                                                //           //         .spaceEvenly,
-                                                //           children: [
-                                                //             Container(
-                                                //               width:
-                                                //                   MediaQuery.of(context)
-                                                //                           .size
-                                                //                           .width *
-                                                //                       0.3,
-                                                //               child: Center(
-                                                //                 child: Text(
-                                                //                   orders[index]
-                                                //                       .items[i]
-                                                //                       .toString(),
-                                                //                   textAlign:
-                                                //                       TextAlign.center,
-                                                //                 ),
-                                                //               ),
-                                                //             ),
-                                                //             Container(
-                                                //               width:
-                                                //                   MediaQuery.of(context)
-                                                //                           .size
-                                                //                           .width *
-                                                //                       0.3,
-                                                //               child: Center(
-                                                //                 child: Text(
-                                                //                     orders[index]
-                                                //                         .quantities[i]
-                                                //                         .toString()),
-                                                //               ),
-                                                //             ),
-                                                //             Container(
-                                                //               width:
-                                                //                   MediaQuery.of(context)
-                                                //                           .size
-                                                //                           .width *
-                                                //                       0.3,
-                                                //               child: Center(
-                                                //                 child: Text(
-                                                //                     orders[index]
-                                                //                         .prices[i]
-                                                //                         .toString()),
-                                                //               ),
-                                                //             ),
-                                                //           ],
-                                                //         );
-                                                //       }),
-                                                // ),
-                                                // Row(
-                                                //   mainAxisAlignment:
-                                                //       MainAxisAlignment.spaceAround,
-                                                //   children: [
-                                                //     Container(
-                                                //         width: MediaQuery.of(context)
-                                                //                 .size
-                                                //                 .width *
-                                                //             0.45,
-                                                //         child: Center(
-                                                //             child: Text('Amount-'))),
-                                                //     Container(
-                                                //         width: MediaQuery.of(context)
-                                                //                 .size
-                                                //                 .width *
-                                                //             0.45,
-                                                //         child: Center(
-                                                //           child:
-                                                //               Text(orders[index].total),
-                                                //         )),
-                                                //   ],
-                                                // ),
-                                                // Row(
-                                                //   mainAxisAlignment:
-                                                //       MainAxisAlignment.spaceAround,
-                                                //   children: [
-                                                //     Container(
-                                                //         width: MediaQuery.of(context)
-                                                //                 .size
-                                                //                 .width *
-                                                //             0.45,
-                                                //         child: Center(
-                                                //             child: Text('Status-'))),
-                                                //     Container(
-                                                //       width: MediaQuery.of(context)
-                                                //               .size
-                                                //               .width *
-                                                //           0.45,
-                                                //       child: Center(
-                                                //         child: Text(orders[index]
-                                                //             .status
-                                                //             .toString()),
-                                                //       ),
-                                                //     ),
-                                                //   ],
-                                                // ),
-                                                // SizedBox(
-                                                //   height: 10,
-
-                                                // ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  'Total',
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      color: Colors.black,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  'AED ' + orders[index].total,
-                                                  style: TextStyle(fontSize: 14),
-                                                ),
-                                                SizedBox(
-                                                  height: 3,
-                                                ),
-                                                Container(
-                                                  color: Colors.black.withOpacity(0.1),
-                                                  height: 1,
-                                                ),
-                                                SizedBox(
-                                                  height: 10,
-                                                ),
-                                                Text(
-                                                  orders[index].status,
-                                                  style: TextStyle(
-                                                      fontSize: 14,
-                                                      fontWeight: FontWeight.bold),
-                                                ),
-                                                SizedBox(
-                                                  height: 3,
-                                                ),
-                                                orders[index].status ==
-                                                        'Order Delivered'
-                                                    ? Container(
-                                                        color: Colors.black
-                                                            .withOpacity(0.1),
-                                                        height: 1,
-                                                      )
-                                                    : Container(),
-                                                orders[index].status ==
-                                                        'Order Delivered'
-                                                    ? SizedBox(
-                                                        height: 10,
-                                                      )
-                                                    : Container(),
-                                                orders[index].status ==
-                                                        'Order Delivered'
-                                                    ? Center(
-                                                        child: Container(
-                                                          decoration: BoxDecoration(
-                                                              border: Border.all(
-                                                                  color: Colors.grey,
-                                                                  width: 2),
-                                                              borderRadius:
-                                                                  BorderRadius.all(
-                                                                      Radius.circular(
-                                                                          5))),
-                                                          //hjh
-                                                          height: 40,
-                                                          width: 320,
-                                                          child: Row(
-                                                            children: [
-                                                              Container(
-                                                                height: 30,
-                                                                width: 200,
-                                                                alignment:
-                                                                    Alignment.center,
-                                                                child: Text(
-                                                                    'Rate this product now'),
-                                                              ),
-                                                              Container(
-                                                                height: 30,
-                                                                width: 116,
-                                                                alignment:
-                                                                    Alignment.center,
-                                                                child: RatingBar(
-                                                                  initialRating: 3,
-                                                                  minRating: 1,
-                                                                  itemSize: 20,
-                                                                  direction:
-                                                                      Axis.horizontal,
-                                                                  allowHalfRating: true,
-                                                                  itemCount: 5,
-                                                                  itemPadding: EdgeInsets
-                                                                      .symmetric(
-                                                                          horizontal:
-                                                                              1.0),
-                                                                  itemBuilder:
-                                                                      (context, _) =>
-                                                                          Icon(
-                                                                    Icons.star,
-                                                                    color: Colors.amber,
-                                                                    size: 20,
-                                                                  ),
-                                                                  onRatingUpdate:
-                                                                      (rating) {
-                                                                    print(rating);
-                                                                  },
-                                                                ),
-                                                              ),
-                                                            ],
+                    ? (orders.length > 10)
+                        ? (show)
+                            ? SingleChildScrollView(
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height:
+                                          MediaQuery.of(context).size.height *
+                                              0.8,
+                                      child: ListView.builder(
+                                          itemCount:
+                                              orders.sublist(0, 9).length,
+                                          physics: ClampingScrollPhysics(),
+                                          itemBuilder: (context, index) {
+                                            return Padding(
+                                              padding: EdgeInsets.fromLTRB(
+                                                  15.0, 8, 8, 8),
+                                              child: InkWell(
+                                                onTap: () async {
+                                                  String status;
+                                                  await Firestore.instance
+                                                      .collection('Orders')
+                                                      .getDocuments()
+                                                      .then((value) {
+                                                    value.documents
+                                                        .forEach((element) {
+                                                      print(orders[index].id);
+                                                      print(element.documentID);
+                                                      if (element.documentID ==
+                                                          orders[index].id) {
+                                                        status =
+                                                            element['Status'];
+                                                        date2 = element[
+                                                            'DeliveryDate'];
+                                                        DateTime myDateTime =
+                                                            date2.toDate();
+                                                        pushNewScreen(context,
+                                                            screen: OrderPlaced(
+                                                                bill(
+                                                                    orders[index]
+                                                                        .timestamp,
+                                                                    orders[index]
+                                                                        .total,
+                                                                    orders[index]
+                                                                        .id,
+                                                                    orders[index]
+                                                                        .status,
+                                                                    orders[index]
+                                                                        .orderString),
+                                                                orders[index]
+                                                                    .id,
+                                                                status,
+                                                                myDateTime));
+                                                        print('Push pressed');
+                                                      }
+                                                    });
+                                                  });
+                                                },
+                                                child: Card(
+                                                  elevation: 5,
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            8.0),
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          10))),
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          SizedBox(
+                                                            height: 10,
                                                           ),
-                                                        ),
-                                                      )
-                                                    : Container()
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
+                                                          Text(
+                                                            'Order Id-${orders[index].id}',
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 3,
+                                                          ),
+                                                          Container(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.1),
+                                                            height: 1,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Text(
+                                                            'Items',
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Text(
+                                                            orders[index]
+                                                                .orderString,
+                                                            style: TextStyle(
+                                                                fontSize: 14),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Text(
+                                                            'Ordered On',
+                                                            style: TextStyle(
+                                                                fontSize: 13,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Text(
+                                                            orders[index]
+                                                                    .timestamp
+                                                                    .toDate()
+                                                                    .day
+                                                                    .toString() +
+                                                                '-' +
+                                                                orders[index]
+                                                                    .timestamp
+                                                                    .toDate()
+                                                                    .month
+                                                                    .toString() +
+                                                                '-' +
+                                                                orders[index]
+                                                                    .timestamp
+                                                                    .toDate()
+                                                                    .year
+                                                                    .toString() +
+                                                                ' at ' +
+                                                                orders[index]
+                                                                    .timestamp
+                                                                    .toDate()
+                                                                    .hour
+                                                                    .toString() +
+                                                                ':' +
+                                                                orders[index]
+                                                                    .timestamp
+                                                                    .toDate()
+                                                                    .minute
+                                                                    .toString(),
+                                                            style: TextStyle(
+                                                                fontSize: 14),
+                                                          ),
+                                                          // Row(
+                                                          //   mainAxisAlignment:
+                                                          //       MainAxisAlignment.spaceEvenly,
+                                                          //   children: [
+                                                          //     Container(
+                                                          //         width: MediaQuery.of(context)
+                                                          //                 .size
+                                                          //                 .width *
+                                                          //             0.3,
+                                                          //         child: Center(
+                                                          //             child: Text('Name'))),
+                                                          //     Container(
+                                                          //         width: MediaQuery.of(context)
+                                                          //                 .size
+                                                          //                 .width *
+                                                          //             0.3,
+                                                          //         child: Center(
+                                                          //             child: Text('Quantity'))),
+                                                          //     Container(
+                                                          //         width: MediaQuery.of(context)
+                                                          //                 .size
+                                                          //                 .width *
+                                                          //             0.3,
+                                                          //         child: Center(
+                                                          //             child: Text('Price'))),
+                                                          //   ],
+                                                          // ),
+                                                          // Container(
+                                                          //   height:
+                                                          //       40.0 * orders[index].items.length,
+                                                          //   child: ListView.builder(
+                                                          //       itemCount:
+                                                          //           orders[index].items.length,
+                                                          //       itemBuilder: (context, i) {
+                                                          //         return Row(
+                                                          //           // mainAxisAlignment:
+                                                          //           //     MainAxisAlignment
+                                                          //           //         .spaceEvenly,
+                                                          //           children: [
+                                                          //             Container(
+                                                          //               width:
+                                                          //                   MediaQuery.of(context)
+                                                          //                           .size
+                                                          //                           .width *
+                                                          //                       0.3,
+                                                          //               child: Center(
+                                                          //                 child: Text(
+                                                          //                   orders[index]
+                                                          //                       .items[i]
+                                                          //                       .toString(),
+                                                          //                   textAlign:
+                                                          //                       TextAlign.center,
+                                                          //                 ),
+                                                          //               ),
+                                                          //             ),
+                                                          //             Container(
+                                                          //               width:
+                                                          //                   MediaQuery.of(context)
+                                                          //                           .size
+                                                          //                           .width *
+                                                          //                       0.3,
+                                                          //               child: Center(
+                                                          //                 child: Text(
+                                                          //                     orders[index]
+                                                          //                         .quantities[i]
+                                                          //                         .toString()),
+                                                          //               ),
+                                                          //             ),
+                                                          //             Container(
+                                                          //               width:
+                                                          //                   MediaQuery.of(context)
+                                                          //                           .size
+                                                          //                           .width *
+                                                          //                       0.3,
+                                                          //               child: Center(
+                                                          //                 child: Text(
+                                                          //                     orders[index]
+                                                          //                         .prices[i]
+                                                          //                         .toString()),
+                                                          //               ),
+                                                          //             ),
+                                                          //           ],
+                                                          //         );
+                                                          //       }),
+                                                          // ),
+                                                          // Row(
+                                                          //   mainAxisAlignment:
+                                                          //       MainAxisAlignment.spaceAround,
+                                                          //   children: [
+                                                          //     Container(
+                                                          //         width: MediaQuery.of(context)
+                                                          //                 .size
+                                                          //                 .width *
+                                                          //             0.45,
+                                                          //         child: Center(
+                                                          //             child: Text('Amount-'))),
+                                                          //     Container(
+                                                          //         width: MediaQuery.of(context)
+                                                          //                 .size
+                                                          //                 .width *
+                                                          //             0.45,
+                                                          //         child: Center(
+                                                          //           child:
+                                                          //               Text(orders[index].total),
+                                                          //         )),
+                                                          //   ],
+                                                          // ),
+                                                          // Row(
+                                                          //   mainAxisAlignment:
+                                                          //       MainAxisAlignment.spaceAround,
+                                                          //   children: [
+                                                          //     Container(
+                                                          //         width: MediaQuery.of(context)
+                                                          //                 .size
+                                                          //                 .width *
+                                                          //             0.45,
+                                                          //         child: Center(
+                                                          //             child: Text('Status-'))),
+                                                          //     Container(
+                                                          //       width: MediaQuery.of(context)
+                                                          //               .size
+                                                          //               .width *
+                                                          //           0.45,
+                                                          //       child: Center(
+                                                          //         child: Text(orders[index]
+                                                          //             .status
+                                                          //             .toString()),
+                                                          //       ),
+                                                          //     ),
+                                                          //   ],
+                                                          // ),
+                                                          // SizedBox(
+                                                          //   height: 10,
+
+                                                          // ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Text(
+                                                            'Total',
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                color: Colors
+                                                                    .black,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          Text(
+                                                            'AED ' +
+                                                                orders[index]
+                                                                    .total,
+                                                            style: TextStyle(
+                                                                fontSize: 14),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 3,
+                                                          ),
+                                                          Container(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.1),
+                                                            height: 1,
+                                                          ),
+                                                          SizedBox(
+                                                            height: 10,
+                                                          ),
+                                                          Text(
+                                                            orders[index]
+                                                                .status,
+                                                            style: TextStyle(
+                                                                fontSize: 14,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold),
+                                                          ),
+                                                          SizedBox(
+                                                            height: 3,
+                                                          ),
+                                                          orders[index]
+                                                                      .status ==
+                                                                  'Order Delivered'
+                                                              ? Container(
+                                                                  color: Colors
+                                                                      .black
+                                                                      .withOpacity(
+                                                                          0.1),
+                                                                  height: 1,
+                                                                )
+                                                              : Container(),
+                                                          orders[index]
+                                                                      .status ==
+                                                                  'Order Delivered'
+                                                              ? SizedBox(
+                                                                  height: 10,
+                                                                )
+                                                              : Container(),
+                                                          orders[index]
+                                                                      .status ==
+                                                                  'Order Delivered'
+                                                              ? Center(
+                                                                  child:
+                                                                      Container(
+                                                                    decoration: BoxDecoration(
+                                                                        border: Border.all(
+                                                                            color: Colors
+                                                                                .grey,
+                                                                            width:
+                                                                                2),
+                                                                        borderRadius:
+                                                                            BorderRadius.all(Radius.circular(5))),
+                                                                    //hjh
+                                                                    height: 40,
+                                                                    width: 320,
+                                                                    child: Row(
+                                                                      children: [
+                                                                        Container(
+                                                                          height:
+                                                                              30,
+                                                                          width:
+                                                                              200,
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          child:
+                                                                              Text('Rate this product now'),
+                                                                        ),
+                                                                        Container(
+                                                                          height:
+                                                                              30,
+                                                                          width:
+                                                                              116,
+                                                                          alignment:
+                                                                              Alignment.center,
+                                                                          child:
+                                                                              RatingBar(
+                                                                            initialRating:
+                                                                                3,
+                                                                            minRating:
+                                                                                1,
+                                                                            itemSize:
+                                                                                20,
+                                                                            direction:
+                                                                                Axis.horizontal,
+                                                                            allowHalfRating:
+                                                                                true,
+                                                                            itemCount:
+                                                                                5,
+                                                                            itemPadding:
+                                                                                EdgeInsets.symmetric(horizontal: 1.0),
+                                                                            itemBuilder: (context, _) =>
+                                                                                Icon(
+                                                                              Icons.star,
+                                                                              color: Colors.amber,
+                                                                              size: 20,
+                                                                            ),
+                                                                            onRatingUpdate:
+                                                                                (rating) {
+                                                                              print(rating);
+                                                                            },
+                                                                          ),
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                )
+                                                              : Container()
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            );
+                                          }),
                                     ),
-                                  );
-                                }),
-                          ),
-                        InkWell(onTap:(){
-                 setState(() {
-                   show=false;
-                 });
-               },child: Container(height:MediaQuery.of(context).size.height*0.06,width:MediaQuery.of(context).size.width,child: Center(child: Text('Show More',style:TextStyle(color:Colors.blue,fontWeight: FontWeight.bold,fontSize:MediaQuery.of(context).size.height*0.02)))))
+                                    InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            show = false;
+                                          });
+                                        },
+                                        child: Container(
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.06,
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width,
+                                            child: Center(
+                                                child: Text('Show More',
+                                                    style: TextStyle(
+                                                        color: Colors.blue,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .height *
+                                                            0.02)))))
 //                            :
 //
 //              Container(
@@ -1013,749 +1097,781 @@ class _MyOrdersState extends State<MyOrders> {
 //                );
 //                }),
 //              )
-                        ],
-                      ),
-                    ):ListView.builder(
-                    itemCount: orders.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.fromLTRB(15.0, 8, 8, 8),
-                        child: InkWell(
-                          onTap: () async {
-                            String status;
-                            await Firestore.instance
-                                .collection('Orders')
-                                .getDocuments()
-                                .then((value) {
-                              value.documents.forEach((element) {
-                                print(orders[index].id);
-                                print(element.documentID);
-                                if (element.documentID ==
-                                    orders[index].id) {
-                                  status = element['Status'];
-                                  date2 = element['DeliveryDate'];
-                                  DateTime myDateTime = date2.toDate();
-                                  pushNewScreen(context,
-                                      screen: OrderPlaced(
-                                          bill(
-                                              orders[index].timestamp,
-                                              orders[index].total,
-                                              orders[index].id,
-                                              orders[index].status,
-                                              orders[index].orderString),
-                                          orders[index].id,
-                                          status,
-                                          myDateTime));
-                                  print('Push pressed');
-                                }
-                              });
-                            });
-                          },
-                          child: Card(
-                            elevation: 5,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10))),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Order Id-${orders[index].id}',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Container(
-                                      color: Colors.black.withOpacity(0.1),
-                                      height: 1,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Items',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      orders[index].orderString,
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Ordered On',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      orders[index]
-                                          .timestamp
-                                          .toDate()
-                                          .day
-                                          .toString() +
-                                          '-' +
-                                          orders[index]
-                                              .timestamp
-                                              .toDate()
-                                              .month
-                                              .toString() +
-                                          '-' +
-                                          orders[index]
-                                              .timestamp
-                                              .toDate()
-                                              .year
-                                              .toString() +
-                                          ' at ' +
-                                          orders[index]
-                                              .timestamp
-                                              .toDate()
-                                              .hour
-                                              .toString() +
-                                          ':' +
-                                          orders[index]
-                                              .timestamp
-                                              .toDate()
-                                              .minute
-                                              .toString(),
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceEvenly,
-                                    //   children: [
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.3,
-                                    //         child: Center(
-                                    //             child: Text('Name'))),
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.3,
-                                    //         child: Center(
-                                    //             child: Text('Quantity'))),
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.3,
-                                    //         child: Center(
-                                    //             child: Text('Price'))),
-                                    //   ],
-                                    // ),
-                                    // Container(
-                                    //   height:
-                                    //       40.0 * orders[index].items.length,
-                                    //   child: ListView.builder(
-                                    //       itemCount:
-                                    //           orders[index].items.length,
-                                    //       itemBuilder: (context, i) {
-                                    //         return Row(
-                                    //           // mainAxisAlignment:
-                                    //           //     MainAxisAlignment
-                                    //           //         .spaceEvenly,
-                                    //           children: [
-                                    //             Container(
-                                    //               width:
-                                    //                   MediaQuery.of(context)
-                                    //                           .size
-                                    //                           .width *
-                                    //                       0.3,
-                                    //               child: Center(
-                                    //                 child: Text(
-                                    //                   orders[index]
-                                    //                       .items[i]
-                                    //                       .toString(),
-                                    //                   textAlign:
-                                    //                       TextAlign.center,
-                                    //                 ),
-                                    //               ),
-                                    //             ),
-                                    //             Container(
-                                    //               width:
-                                    //                   MediaQuery.of(context)
-                                    //                           .size
-                                    //                           .width *
-                                    //                       0.3,
-                                    //               child: Center(
-                                    //                 child: Text(
-                                    //                     orders[index]
-                                    //                         .quantities[i]
-                                    //                         .toString()),
-                                    //               ),
-                                    //             ),
-                                    //             Container(
-                                    //               width:
-                                    //                   MediaQuery.of(context)
-                                    //                           .size
-                                    //                           .width *
-                                    //                       0.3,
-                                    //               child: Center(
-                                    //                 child: Text(
-                                    //                     orders[index]
-                                    //                         .prices[i]
-                                    //                         .toString()),
-                                    //               ),
-                                    //             ),
-                                    //           ],
-                                    //         );
-                                    //       }),
-                                    // ),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceAround,
-                                    //   children: [
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.45,
-                                    //         child: Center(
-                                    //             child: Text('Amount-'))),
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.45,
-                                    //         child: Center(
-                                    //           child:
-                                    //               Text(orders[index].total),
-                                    //         )),
-                                    //   ],
-                                    // ),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceAround,
-                                    //   children: [
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.45,
-                                    //         child: Center(
-                                    //             child: Text('Status-'))),
-                                    //     Container(
-                                    //       width: MediaQuery.of(context)
-                                    //               .size
-                                    //               .width *
-                                    //           0.45,
-                                    //       child: Center(
-                                    //         child: Text(orders[index]
-                                    //             .status
-                                    //             .toString()),
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 10,
+                                  ],
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: orders.length,
+                                itemBuilder: (context, index) {
+                                  return Padding(
+                                    padding: EdgeInsets.fromLTRB(15.0, 8, 8, 8),
+                                    child: InkWell(
+                                      onTap: () async {
+                                        String status;
+                                        await Firestore.instance
+                                            .collection('Orders')
+                                            .getDocuments()
+                                            .then((value) {
+                                          value.documents.forEach((element) {
+                                            print(orders[index].id);
+                                            print(element.documentID);
+                                            if (element.documentID ==
+                                                orders[index].id) {
+                                              status = element['Status'];
+                                              date2 = element['DeliveryDate'];
+                                              DateTime myDateTime =
+                                                  date2.toDate();
+                                              pushNewScreen(context,
+                                                  screen: OrderPlaced(
+                                                      bill(
+                                                          orders[index]
+                                                              .timestamp,
+                                                          orders[index].total,
+                                                          orders[index].id,
+                                                          orders[index].status,
+                                                          orders[index]
+                                                              .orderString),
+                                                      orders[index].id,
+                                                      status,
+                                                      myDateTime));
+                                              print('Push pressed');
+                                            }
+                                          });
+                                        });
+                                      },
+                                      child: Card(
+                                        elevation: 5,
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Container(
+                                            decoration: BoxDecoration(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(10))),
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  'Order Id-${orders[index].id}',
+                                                  style: TextStyle(
+                                                      fontSize: 15,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  height: 3,
+                                                ),
+                                                Container(
+                                                  color: Colors.black
+                                                      .withOpacity(0.1),
+                                                  height: 1,
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  'Items',
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  orders[index].orderString,
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  'Ordered On',
+                                                  style: TextStyle(
+                                                      fontSize: 13,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  orders[index]
+                                                          .timestamp
+                                                          .toDate()
+                                                          .day
+                                                          .toString() +
+                                                      '-' +
+                                                      orders[index]
+                                                          .timestamp
+                                                          .toDate()
+                                                          .month
+                                                          .toString() +
+                                                      '-' +
+                                                      orders[index]
+                                                          .timestamp
+                                                          .toDate()
+                                                          .year
+                                                          .toString() +
+                                                      ' at ' +
+                                                      orders[index]
+                                                          .timestamp
+                                                          .toDate()
+                                                          .hour
+                                                          .toString() +
+                                                      ':' +
+                                                      orders[index]
+                                                          .timestamp
+                                                          .toDate()
+                                                          .minute
+                                                          .toString(),
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                ),
+                                                // Row(
+                                                //   mainAxisAlignment:
+                                                //       MainAxisAlignment.spaceEvenly,
+                                                //   children: [
+                                                //     Container(
+                                                //         width: MediaQuery.of(context)
+                                                //                 .size
+                                                //                 .width *
+                                                //             0.3,
+                                                //         child: Center(
+                                                //             child: Text('Name'))),
+                                                //     Container(
+                                                //         width: MediaQuery.of(context)
+                                                //                 .size
+                                                //                 .width *
+                                                //             0.3,
+                                                //         child: Center(
+                                                //             child: Text('Quantity'))),
+                                                //     Container(
+                                                //         width: MediaQuery.of(context)
+                                                //                 .size
+                                                //                 .width *
+                                                //             0.3,
+                                                //         child: Center(
+                                                //             child: Text('Price'))),
+                                                //   ],
+                                                // ),
+                                                // Container(
+                                                //   height:
+                                                //       40.0 * orders[index].items.length,
+                                                //   child: ListView.builder(
+                                                //       itemCount:
+                                                //           orders[index].items.length,
+                                                //       itemBuilder: (context, i) {
+                                                //         return Row(
+                                                //           // mainAxisAlignment:
+                                                //           //     MainAxisAlignment
+                                                //           //         .spaceEvenly,
+                                                //           children: [
+                                                //             Container(
+                                                //               width:
+                                                //                   MediaQuery.of(context)
+                                                //                           .size
+                                                //                           .width *
+                                                //                       0.3,
+                                                //               child: Center(
+                                                //                 child: Text(
+                                                //                   orders[index]
+                                                //                       .items[i]
+                                                //                       .toString(),
+                                                //                   textAlign:
+                                                //                       TextAlign.center,
+                                                //                 ),
+                                                //               ),
+                                                //             ),
+                                                //             Container(
+                                                //               width:
+                                                //                   MediaQuery.of(context)
+                                                //                           .size
+                                                //                           .width *
+                                                //                       0.3,
+                                                //               child: Center(
+                                                //                 child: Text(
+                                                //                     orders[index]
+                                                //                         .quantities[i]
+                                                //                         .toString()),
+                                                //               ),
+                                                //             ),
+                                                //             Container(
+                                                //               width:
+                                                //                   MediaQuery.of(context)
+                                                //                           .size
+                                                //                           .width *
+                                                //                       0.3,
+                                                //               child: Center(
+                                                //                 child: Text(
+                                                //                     orders[index]
+                                                //                         .prices[i]
+                                                //                         .toString()),
+                                                //               ),
+                                                //             ),
+                                                //           ],
+                                                //         );
+                                                //       }),
+                                                // ),
+                                                // Row(
+                                                //   mainAxisAlignment:
+                                                //       MainAxisAlignment.spaceAround,
+                                                //   children: [
+                                                //     Container(
+                                                //         width: MediaQuery.of(context)
+                                                //                 .size
+                                                //                 .width *
+                                                //             0.45,
+                                                //         child: Center(
+                                                //             child: Text('Amount-'))),
+                                                //     Container(
+                                                //         width: MediaQuery.of(context)
+                                                //                 .size
+                                                //                 .width *
+                                                //             0.45,
+                                                //         child: Center(
+                                                //           child:
+                                                //               Text(orders[index].total),
+                                                //         )),
+                                                //   ],
+                                                // ),
+                                                // Row(
+                                                //   mainAxisAlignment:
+                                                //       MainAxisAlignment.spaceAround,
+                                                //   children: [
+                                                //     Container(
+                                                //         width: MediaQuery.of(context)
+                                                //                 .size
+                                                //                 .width *
+                                                //             0.45,
+                                                //         child: Center(
+                                                //             child: Text('Status-'))),
+                                                //     Container(
+                                                //       width: MediaQuery.of(context)
+                                                //               .size
+                                                //               .width *
+                                                //           0.45,
+                                                //       child: Center(
+                                                //         child: Text(orders[index]
+                                                //             .status
+                                                //             .toString()),
+                                                //       ),
+                                                //     ),
+                                                //   ],
+                                                // ),
+                                                // SizedBox(
+                                                //   height: 10,
 
-                                    // ),
-                                    SizedBox(
-                                      height: 10,
+                                                // ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  'Total',
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      color: Colors.black,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                Text(
+                                                  'AED ' + orders[index].total,
+                                                  style:
+                                                      TextStyle(fontSize: 14),
+                                                ),
+                                                SizedBox(
+                                                  height: 3,
+                                                ),
+                                                Container(
+                                                  color: Colors.black
+                                                      .withOpacity(0.1),
+                                                  height: 1,
+                                                ),
+                                                SizedBox(
+                                                  height: 10,
+                                                ),
+                                                Text(
+                                                  orders[index].status,
+                                                  style: TextStyle(
+                                                      fontSize: 14,
+                                                      fontWeight:
+                                                          FontWeight.bold),
+                                                ),
+                                                SizedBox(
+                                                  height: 3,
+                                                ),
+                                                orders[index].status ==
+                                                        'Order Delivered'
+                                                    ? Container(
+                                                        color: Colors.black
+                                                            .withOpacity(0.1),
+                                                        height: 1,
+                                                      )
+                                                    : Container(),
+                                                orders[index].status ==
+                                                        'Order Delivered'
+                                                    ? SizedBox(
+                                                        height: 10,
+                                                      )
+                                                    : Container(),
+                                                orders[index].status ==
+                                                        'Order Delivered'
+                                                    ? Center(
+                                                        child: Container(
+                                                          decoration: BoxDecoration(
+                                                              border: Border.all(
+                                                                  color: Colors
+                                                                      .grey,
+                                                                  width: 2),
+                                                              borderRadius: BorderRadius
+                                                                  .all(Radius
+                                                                      .circular(
+                                                                          5))),
+                                                          //hjh
+                                                          height: 40,
+                                                          width: 320,
+                                                          child: Row(
+                                                            children: [
+                                                              Container(
+                                                                height: 30,
+                                                                width: 200,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child: Text(
+                                                                    'Rate this product now'),
+                                                              ),
+                                                              Container(
+                                                                height: 30,
+                                                                width: 116,
+                                                                alignment:
+                                                                    Alignment
+                                                                        .center,
+                                                                child:
+                                                                    RatingBar(
+                                                                  initialRating:
+                                                                      3,
+                                                                  minRating: 1,
+                                                                  itemSize: 20,
+                                                                  direction: Axis
+                                                                      .horizontal,
+                                                                  allowHalfRating:
+                                                                      true,
+                                                                  itemCount: 5,
+                                                                  itemPadding: EdgeInsets
+                                                                      .symmetric(
+                                                                          horizontal:
+                                                                              1.0),
+                                                                  itemBuilder:
+                                                                      (context,
+                                                                              _) =>
+                                                                          Icon(
+                                                                    Icons.star,
+                                                                    color: Colors
+                                                                        .amber,
+                                                                    size: 20,
+                                                                  ),
+                                                                  onRatingUpdate:
+                                                                      (rating) {
+                                                                    print(
+                                                                        rating);
+                                                                  },
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : Container()
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                      ),
                                     ),
-                                    Text(
-                                      'Total',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      'AED ' + orders[index].total,
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Container(
-                                      color: Colors.black.withOpacity(0.1),
-                                      height: 1,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      orders[index].status,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    orders[index].status ==
-                                        'Order Delivered'
-                                        ? Container(
-                                      color: Colors.black
-                                          .withOpacity(0.1),
-                                      height: 1,
-                                    )
-                                        : Container(),
-                                    orders[index].status ==
-                                        'Order Delivered'
-                                        ? SizedBox(
-                                      height: 10,
-                                    )
-                                        : Container(),
-                                    orders[index].status ==
-                                        'Order Delivered'
-                                        ? Center(
+                                  );
+                                })
+                        : ListView.builder(
+                            itemCount: orders.length,
+                            itemBuilder: (context, index) {
+                              return Padding(
+                                padding: EdgeInsets.fromLTRB(15.0, 8, 8, 8),
+                                child: InkWell(
+                                  onTap: () async {
+                                    String status;
+                                    await Firestore.instance
+                                        .collection('Orders')
+                                        .getDocuments()
+                                        .then((value) {
+                                      value.documents.forEach((element) {
+                                        print(orders[index].id);
+                                        print(element.documentID);
+                                        if (element.documentID ==
+                                            orders[index].id) {
+                                          status = element['Status'];
+                                          date2 = element['DeliveryDate'];
+                                          DateTime myDateTime = date2.toDate();
+                                          pushNewScreen(context,
+                                              screen: OrderPlaced(
+                                                  bill(
+                                                      orders[index].timestamp,
+                                                      orders[index].total,
+                                                      orders[index].id,
+                                                      orders[index].status,
+                                                      orders[index]
+                                                          .orderString),
+                                                  orders[index].id,
+                                                  status,
+                                                  myDateTime));
+                                          print('Push pressed');
+                                        }
+                                      });
+                                    });
+                                  },
+                                  child: Card(
+                                    elevation: 5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
                                       child: Container(
                                         decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.grey,
-                                                width: 2),
-                                            borderRadius:
-                                            BorderRadius.all(
-                                                Radius.circular(
-                                                    5))),
-                                        //hjh
-                                        height: 40,
-                                        width: 320,
-                                        child: Row(
+                                            borderRadius: BorderRadius.all(
+                                                Radius.circular(10))),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Container(
-                                              height: 30,
-                                              width: 200,
-                                              alignment:
-                                              Alignment.center,
-                                              child: Text(
-                                                  'Rate this product now'),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'Order Id-${orders[index].id}',
+                                              style: TextStyle(
+                                                  fontSize: 15,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
                                             ),
                                             Container(
-                                              height: 30,
-                                              width: 116,
-                                              alignment:
-                                              Alignment.center,
-                                              child: RatingBar(
-                                                initialRating: 3,
-                                                minRating: 1,
-                                                itemSize: 20,
-                                                direction:
-                                                Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemCount: 5,
-                                                itemPadding: EdgeInsets
-                                                    .symmetric(
-                                                    horizontal:
-                                                    1.0),
-                                                itemBuilder:
-                                                    (context, _) =>
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                      size: 20,
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              height: 1,
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'Items',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              orders[index].orderString,
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'Ordered On',
+                                              style: TextStyle(
+                                                  fontSize: 13,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .day
+                                                      .toString() +
+                                                  '-' +
+                                                  orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .month
+                                                      .toString() +
+                                                  '-' +
+                                                  orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .year
+                                                      .toString() +
+                                                  ' at ' +
+                                                  orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .hour
+                                                      .toString() +
+                                                  ':' +
+                                                  orders[index]
+                                                      .timestamp
+                                                      .toDate()
+                                                      .minute
+                                                      .toString(),
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            // Row(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment.spaceEvenly,
+                                            //   children: [
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.3,
+                                            //         child: Center(
+                                            //             child: Text('Name'))),
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.3,
+                                            //         child: Center(
+                                            //             child: Text('Quantity'))),
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.3,
+                                            //         child: Center(
+                                            //             child: Text('Price'))),
+                                            //   ],
+                                            // ),
+                                            // Container(
+                                            //   height:
+                                            //       40.0 * orders[index].items.length,
+                                            //   child: ListView.builder(
+                                            //       itemCount:
+                                            //           orders[index].items.length,
+                                            //       itemBuilder: (context, i) {
+                                            //         return Row(
+                                            //           // mainAxisAlignment:
+                                            //           //     MainAxisAlignment
+                                            //           //         .spaceEvenly,
+                                            //           children: [
+                                            //             Container(
+                                            //               width:
+                                            //                   MediaQuery.of(context)
+                                            //                           .size
+                                            //                           .width *
+                                            //                       0.3,
+                                            //               child: Center(
+                                            //                 child: Text(
+                                            //                   orders[index]
+                                            //                       .items[i]
+                                            //                       .toString(),
+                                            //                   textAlign:
+                                            //                       TextAlign.center,
+                                            //                 ),
+                                            //               ),
+                                            //             ),
+                                            //             Container(
+                                            //               width:
+                                            //                   MediaQuery.of(context)
+                                            //                           .size
+                                            //                           .width *
+                                            //                       0.3,
+                                            //               child: Center(
+                                            //                 child: Text(
+                                            //                     orders[index]
+                                            //                         .quantities[i]
+                                            //                         .toString()),
+                                            //               ),
+                                            //             ),
+                                            //             Container(
+                                            //               width:
+                                            //                   MediaQuery.of(context)
+                                            //                           .size
+                                            //                           .width *
+                                            //                       0.3,
+                                            //               child: Center(
+                                            //                 child: Text(
+                                            //                     orders[index]
+                                            //                         .prices[i]
+                                            //                         .toString()),
+                                            //               ),
+                                            //             ),
+                                            //           ],
+                                            //         );
+                                            //       }),
+                                            // ),
+                                            // Row(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment.spaceAround,
+                                            //   children: [
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.45,
+                                            //         child: Center(
+                                            //             child: Text('Amount-'))),
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.45,
+                                            //         child: Center(
+                                            //           child:
+                                            //               Text(orders[index].total),
+                                            //         )),
+                                            //   ],
+                                            // ),
+                                            // Row(
+                                            //   mainAxisAlignment:
+                                            //       MainAxisAlignment.spaceAround,
+                                            //   children: [
+                                            //     Container(
+                                            //         width: MediaQuery.of(context)
+                                            //                 .size
+                                            //                 .width *
+                                            //             0.45,
+                                            //         child: Center(
+                                            //             child: Text('Status-'))),
+                                            //     Container(
+                                            //       width: MediaQuery.of(context)
+                                            //               .size
+                                            //               .width *
+                                            //           0.45,
+                                            //       child: Center(
+                                            //         child: Text(orders[index]
+                                            //             .status
+                                            //             .toString()),
+                                            //       ),
+                                            //     ),
+                                            //   ],
+                                            // ),
+                                            // SizedBox(
+                                            //   height: 10,
+
+                                            // ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              'Total',
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: Colors.black,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            Text(
+                                              'AED ' + orders[index].total,
+                                              style: TextStyle(fontSize: 14),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            Container(
+                                              color:
+                                                  Colors.black.withOpacity(0.1),
+                                              height: 1,
+                                            ),
+                                            SizedBox(
+                                              height: 10,
+                                            ),
+                                            Text(
+                                              orders[index].status,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            SizedBox(
+                                              height: 3,
+                                            ),
+                                            orders[index].status ==
+                                                    'Order Delivered'
+                                                ? Container(
+                                                    color: Colors.black
+                                                        .withOpacity(0.1),
+                                                    height: 1,
+                                                  )
+                                                : Container(),
+                                            orders[index].status ==
+                                                    'Order Delivered'
+                                                ? SizedBox(
+                                                    height: 10,
+                                                  )
+                                                : Container(),
+                                            orders[index].status ==
+                                                    'Order Delivered'
+                                                ? Center(
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                          border: Border.all(
+                                                              color:
+                                                                  Colors.grey,
+                                                              width: 2),
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          5))),
+                                                      //hjh
+                                                      height: 40,
+                                                      width: 320,
+                                                      child: Row(
+                                                        children: [
+                                                          Container(
+                                                            height: 30,
+                                                            width: 200,
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child: Text(
+                                                                'Rate this product now'),
+                                                          ),
+                                                          Container(
+                                                            height: 30,
+                                                            width: 116,
+                                                            alignment: Alignment
+                                                                .center,
+                                                            child: RatingBar(
+                                                              initialRating: 3,
+                                                              minRating: 1,
+                                                              itemSize: 20,
+                                                              direction: Axis
+                                                                  .horizontal,
+                                                              allowHalfRating:
+                                                                  true,
+                                                              itemCount: 5,
+                                                              itemPadding: EdgeInsets
+                                                                  .symmetric(
+                                                                      horizontal:
+                                                                          1.0),
+                                                              itemBuilder:
+                                                                  (context,
+                                                                          _) =>
+                                                                      Icon(
+                                                                Icons.star,
+                                                                color: Colors
+                                                                    .amber,
+                                                                size: 20,
+                                                              ),
+                                                              onRatingUpdate:
+                                                                  (rating) {
+                                                                print(rating);
+                                                              },
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                onRatingUpdate:
-                                                    (rating) {
-                                                  print(rating);
-                                                },
-                                              ),
-                                            ),
+                                                  )
+                                                : Container()
                                           ],
                                         ),
                                       ),
-                                    )
-                                        : Container()
-                                  ],
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }):ListView.builder(
-                    itemCount: orders.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: EdgeInsets.fromLTRB(15.0, 8, 8, 8),
-                        child: InkWell(
-                          onTap: () async {
-                            String status;
-                            await Firestore.instance
-                                .collection('Orders')
-                                .getDocuments()
-                                .then((value) {
-                              value.documents.forEach((element) {
-                                print(orders[index].id);
-                                print(element.documentID);
-                                if (element.documentID ==
-                                    orders[index].id) {
-                                  status = element['Status'];
-                                  date2 = element['DeliveryDate'];
-                                  DateTime myDateTime = date2.toDate();
-                                  pushNewScreen(context,
-                                      screen: OrderPlaced(
-                                          bill(
-                                              orders[index].timestamp,
-                                              orders[index].total,
-                                              orders[index].id,
-                                              orders[index].status,
-                                              orders[index].orderString),
-                                          orders[index].id,
-                                          status,
-                                          myDateTime));
-                                  print('Push pressed');
-                                }
-                              });
-                            });
-                          },
-                          child: Card(
-                            elevation: 5,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.all(
-                                        Radius.circular(10))),
-                                child: Column(
-                                  crossAxisAlignment:
-                                  CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Order Id-${orders[index].id}',
-                                      style: TextStyle(
-                                          fontSize: 15,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Container(
-                                      color: Colors.black.withOpacity(0.1),
-                                      height: 1,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Items',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      orders[index].orderString,
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Ordered On',
-                                      style: TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      orders[index]
-                                          .timestamp
-                                          .toDate()
-                                          .day
-                                          .toString() +
-                                          '-' +
-                                          orders[index]
-                                              .timestamp
-                                              .toDate()
-                                              .month
-                                              .toString() +
-                                          '-' +
-                                          orders[index]
-                                              .timestamp
-                                              .toDate()
-                                              .year
-                                              .toString() +
-                                          ' at ' +
-                                          orders[index]
-                                              .timestamp
-                                              .toDate()
-                                              .hour
-                                              .toString() +
-                                          ':' +
-                                          orders[index]
-                                              .timestamp
-                                              .toDate()
-                                              .minute
-                                              .toString(),
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceEvenly,
-                                    //   children: [
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.3,
-                                    //         child: Center(
-                                    //             child: Text('Name'))),
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.3,
-                                    //         child: Center(
-                                    //             child: Text('Quantity'))),
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.3,
-                                    //         child: Center(
-                                    //             child: Text('Price'))),
-                                    //   ],
-                                    // ),
-                                    // Container(
-                                    //   height:
-                                    //       40.0 * orders[index].items.length,
-                                    //   child: ListView.builder(
-                                    //       itemCount:
-                                    //           orders[index].items.length,
-                                    //       itemBuilder: (context, i) {
-                                    //         return Row(
-                                    //           // mainAxisAlignment:
-                                    //           //     MainAxisAlignment
-                                    //           //         .spaceEvenly,
-                                    //           children: [
-                                    //             Container(
-                                    //               width:
-                                    //                   MediaQuery.of(context)
-                                    //                           .size
-                                    //                           .width *
-                                    //                       0.3,
-                                    //               child: Center(
-                                    //                 child: Text(
-                                    //                   orders[index]
-                                    //                       .items[i]
-                                    //                       .toString(),
-                                    //                   textAlign:
-                                    //                       TextAlign.center,
-                                    //                 ),
-                                    //               ),
-                                    //             ),
-                                    //             Container(
-                                    //               width:
-                                    //                   MediaQuery.of(context)
-                                    //                           .size
-                                    //                           .width *
-                                    //                       0.3,
-                                    //               child: Center(
-                                    //                 child: Text(
-                                    //                     orders[index]
-                                    //                         .quantities[i]
-                                    //                         .toString()),
-                                    //               ),
-                                    //             ),
-                                    //             Container(
-                                    //               width:
-                                    //                   MediaQuery.of(context)
-                                    //                           .size
-                                    //                           .width *
-                                    //                       0.3,
-                                    //               child: Center(
-                                    //                 child: Text(
-                                    //                     orders[index]
-                                    //                         .prices[i]
-                                    //                         .toString()),
-                                    //               ),
-                                    //             ),
-                                    //           ],
-                                    //         );
-                                    //       }),
-                                    // ),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceAround,
-                                    //   children: [
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.45,
-                                    //         child: Center(
-                                    //             child: Text('Amount-'))),
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.45,
-                                    //         child: Center(
-                                    //           child:
-                                    //               Text(orders[index].total),
-                                    //         )),
-                                    //   ],
-                                    // ),
-                                    // Row(
-                                    //   mainAxisAlignment:
-                                    //       MainAxisAlignment.spaceAround,
-                                    //   children: [
-                                    //     Container(
-                                    //         width: MediaQuery.of(context)
-                                    //                 .size
-                                    //                 .width *
-                                    //             0.45,
-                                    //         child: Center(
-                                    //             child: Text('Status-'))),
-                                    //     Container(
-                                    //       width: MediaQuery.of(context)
-                                    //               .size
-                                    //               .width *
-                                    //           0.45,
-                                    //       child: Center(
-                                    //         child: Text(orders[index]
-                                    //             .status
-                                    //             .toString()),
-                                    //       ),
-                                    //     ),
-                                    //   ],
-                                    // ),
-                                    // SizedBox(
-                                    //   height: 10,
-
-                                    // ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      'Total',
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          color: Colors.black,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    Text(
-                                      'AED ' + orders[index].total,
-                                      style: TextStyle(fontSize: 14),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    Container(
-                                      color: Colors.black.withOpacity(0.1),
-                                      height: 1,
-                                    ),
-                                    SizedBox(
-                                      height: 10,
-                                    ),
-                                    Text(
-                                      orders[index].status,
-                                      style: TextStyle(
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.bold),
-                                    ),
-                                    SizedBox(
-                                      height: 3,
-                                    ),
-                                    orders[index].status ==
-                                        'Order Delivered'
-                                        ? Container(
-                                      color: Colors.black
-                                          .withOpacity(0.1),
-                                      height: 1,
-                                    )
-                                        : Container(),
-                                    orders[index].status ==
-                                        'Order Delivered'
-                                        ? SizedBox(
-                                      height: 10,
-                                    )
-                                        : Container(),
-                                    orders[index].status ==
-                                        'Order Delivered'
-                                        ? Center(
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: Colors.grey,
-                                                width: 2),
-                                            borderRadius:
-                                            BorderRadius.all(
-                                                Radius.circular(
-                                                    5))),
-                                        //hjh
-                                        height: 40,
-                                        width: 320,
-                                        child: Row(
-                                          children: [
-                                            Container(
-                                              height: 30,
-                                              width: 200,
-                                              alignment:
-                                              Alignment.center,
-                                              child: Text(
-                                                  'Rate this product now'),
-                                            ),
-                                            Container(
-                                              height: 30,
-                                              width: 116,
-                                              alignment:
-                                              Alignment.center,
-                                              child: RatingBar(
-                                                initialRating: 3,
-                                                minRating: 1,
-                                                itemSize: 20,
-                                                direction:
-                                                Axis.horizontal,
-                                                allowHalfRating: true,
-                                                itemCount: 5,
-                                                itemPadding: EdgeInsets
-                                                    .symmetric(
-                                                    horizontal:
-                                                    1.0),
-                                                itemBuilder:
-                                                    (context, _) =>
-                                                    Icon(
-                                                      Icons.star,
-                                                      color: Colors.amber,
-                                                      size: 20,
-                                                    ),
-                                                onRatingUpdate:
-                                                    (rating) {
-                                                  print(rating);
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                        : Container()
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    })
+                              );
+                            })
                     : Container();
               } else
                 return Container(

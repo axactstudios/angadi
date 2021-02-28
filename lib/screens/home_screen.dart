@@ -164,72 +164,60 @@ class _HomeScreenState extends State<HomeScreen> {
       print(event.documents[0].documentID);
     });
   }
-  List<String> timeSlots2=[];
 
-void time(){
+  List<String> timeSlots2 = [];
 
-  Firestore.instance.collection('Timeslots').snapshots().forEach((element) {
-    for (int i = 0;
-    i < element.documents[0].data['Timeslots'].length;
-    i++) {
-      DateTime dt = DateTime.now();
+  void time() {
+    Firestore.instance.collection('Timeslots').snapshots().forEach((element) {
+      for (int i = 0; i < element.documents[0].data['Timeslots'].length; i++) {
+        DateTime dt = DateTime.now();
 
-      if (dt.hour > 12) {
-        String st =
-        element.documents[0].data['Timeslots'][i];
-        String s = '';
-        for (int i = 0; i < st.length; i++) {
-          if (st[i] != ' ')
-            s = s + st[i];
-          else
-            break;
-        }
+        if (dt.hour > 12) {
+          String st = element.documents[0].data['Timeslots'][i];
+          String s = '';
+          for (int i = 0; i < st.length; i++) {
+            if (st[i] != ' ')
+              s = s + st[i];
+            else
+              break;
+          }
 
-        double d = double.parse(s);
-        if (d > (dt.hour - 12) &&
-            element.documents[0].data['Timeslots'][i]
-                .contains('PM')) {
-          timeSlots2.add(
-              element.documents[0].data['Timeslots'][i]);
-        }
-      } else {
-        String st =
-        element.documents[0].data['Timeslots'][i];
-        String s = '';
-        for (int i = 0; i < st.length; i++) {
-          if (st[i] != ' ')
-            s = s + st[i];
-          else
-            break;
-        }
+          double d = double.parse(s);
+          if (d > (dt.hour - 12) &&
+              element.documents[0].data['Timeslots'][i].contains('PM')) {
+            timeSlots2.add(element.documents[0].data['Timeslots'][i]);
+          }
+        } else {
+          String st = element.documents[0].data['Timeslots'][i];
+          String s = '';
+          for (int i = 0; i < st.length; i++) {
+            if (st[i] != ' ')
+              s = s + st[i];
+            else
+              break;
+          }
 
-        double d = double.parse(s);
-        if (d > (dt.hour) &&
-            element.documents[0].data['Timeslots'][i]
-                .contains('AM')) {
-          timeSlots2.add(
-              element.documents[0].data['Timeslots'][i]);
+          double d = double.parse(s);
+          if (d > (dt.hour) &&
+              element.documents[0].data['Timeslots'][i].contains('AM')) {
+            timeSlots2.add(element.documents[0].data['Timeslots'][i]);
+          }
         }
       }
-    }
-    if (timeSlots2.length == 0) {
-      selectedDate =
-          selectedDate.add(new Duration(days: 1));
-      for (int i = 0;
-      i <
-          element.documents[0].data['Timeslots']
-              .length;
-      i++) {
-        timeSlots2.add(
-            element.documents[0].data['Timeslots'][i]);
+      if (timeSlots2.length == 0) {
+        selectedDate = selectedDate.add(new Duration(days: 1));
+        for (int i = 0;
+            i < element.documents[0].data['Timeslots'].length;
+            i++) {
+          timeSlots2.add(element.documents[0].data['Timeslots'][i]);
+        }
       }
-    }
-    print('-----------------');
-print(timeSlots2.length);
-    selectedTime=timeSlots2[0];
-  });
-  print('enddd');
-  print(timeSlots2.length);
+      print('-----------------');
+      print(timeSlots2.length);
+      selectedTime = timeSlots2[0];
+    });
+    print('enddd');
+    print(timeSlots2.length);
 //  if(timeSlots2.length>0){
 //    print('Heya');
 //    setState(() {
@@ -237,17 +225,18 @@ print(timeSlots2.length);
 //    });
 //
 //  }
-  select();
-}
-void select(){
-  if(timeSlots2.length>0){
-    print('Heya');
-    setState(() {
-      selectedTime=timeSlots2[0];
-    });
-
+    select();
   }
-}
+
+  void select() {
+    if (timeSlots2.length > 0) {
+      print('Heya');
+      setState(() {
+        selectedTime = timeSlots2[0];
+      });
+    }
+  }
+
   void removeAll() async {
     List items = [];
     List prices = [];
@@ -289,8 +278,6 @@ void select(){
         print('Exceeded');
         //run
       }
-
-
     });
   }
 
@@ -390,121 +377,106 @@ void select(){
 
     id();
 
-    return Scaffold(
-      floatingActionButton: CustomFloatingButton(CurrentScreen(
-          currentScreen: HomeScreen(), tab_no: HomeScreen.TAB_NO)),
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: Colors.white,
-        ),
-        backgroundColor: AppColors.secondaryElement,
-        actions: [
-          InkWell(
-              onTap: () {
-                launch('tel:+919027553376');
-              },
-              child: Icon(Icons.phone, color: Color(0xFF6b3600))),
-          SizedBox(
-            width: 8,
+    return WillPopScope(
+      child: Scaffold(
+        floatingActionButton: CustomFloatingButton(CurrentScreen(
+            currentScreen: HomeScreen(), tab_no: HomeScreen.TAB_NO)),
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: Colors.white,
           ),
-          InkWell(
-              onTap: () {
-                launchWhatsApp(
-                    phone: '7060222315', message: 'Check out this awesome app');
-              },
-              child: Container(
-                  alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.whatsapp,
-                      color: Color(0xFF6b3600)))),
-          SizedBox(width: 8),
-          InkWell(
-              onTap: () {
+          backgroundColor: AppColors.secondaryElement,
+          actions: [
+            InkWell(
+                onTap: () {
+                  launch('tel:+919027553376');
+                },
+                child: Icon(Icons.phone, color: Color(0xFF6b3600))),
+            SizedBox(
+              width: 8,
+            ),
+            InkWell(
+                onTap: () {
+                  launchWhatsApp(
+                      phone: '7060222315',
+                      message: 'Check out this awesome app');
+                },
+                child: Container(
+                    alignment: Alignment.center,
+                    child: FaIcon(FontAwesomeIcons.whatsapp,
+                        color: Color(0xFF6b3600)))),
+            SizedBox(width: 8),
+            InkWell(
+                onTap: () {
 //                print(1);
-                launch(
-                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
-              },
-              child: Icon(Icons.mail, color: Color(0xFF6b3600))),
-          SizedBox(
-            width: 10,
-          )
-        ],
-        elevation: 0.0,
-        centerTitle: true,
-        title: Text(
-          'Angadi.ae',
-          style: Styles.customTitleTextStyle(
-            color: Color(0xFF6b3600),
-            fontWeight: FontWeight.w600,
-            fontSize: Sizes.TEXT_SIZE_22,
+                  launch(
+                      'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+                },
+                child: Icon(Icons.mail, color: Color(0xFF6b3600))),
+            SizedBox(
+              width: 10,
+            )
+          ],
+          elevation: 0.0,
+          centerTitle: true,
+          title: Text(
+            'Angadi.ae',
+            style: Styles.customTitleTextStyle(
+              color: Color(0xFF6b3600),
+              fontWeight: FontWeight.w600,
+              fontSize: Sizes.TEXT_SIZE_22,
+            ),
           ),
         ),
-      ),
-      drawer: CustomDrawer(),
-      body: GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        //hjgjgjg
-        child: StreamBuilder(
-          stream: Firestore.instance.collection('Dishes').snapshots(),
-          builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
-            if (snap.hasData && !snap.hasError && snap.data != null) {
-              dishes.clear();
-              trending.clear();
-              top.clear();
-              special.clear();
-              dishesSpecial.clear();
-              dishesTop.clear();
-              for (int i = 0; i < snap.data.documents.length; i++) {
-                List<Quantity> allquantities = [];
-                List<String> quantities = [];
+        drawer: CustomDrawer(),
+        body: GestureDetector(
+          onTap: () {
+            FocusScopeNode currentFocus = FocusScope.of(context);
+            if (!currentFocus.hasPrimaryFocus) {
+              currentFocus.unfocus();
+            }
+          },
+          //hjgjgjg
+          child: StreamBuilder(
+            stream: Firestore.instance.collection('Dishes').snapshots(),
+            builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+              if (snap.hasData && !snap.hasError && snap.data != null) {
+                dishes.clear();
+                trending.clear();
+                top.clear();
+                special.clear();
+                dishesSpecial.clear();
+                dishesTop.clear();
+                for (int i = 0; i < snap.data.documents.length; i++) {
+                  List<Quantity> allquantities = [];
+                  List<String> quantities = [];
 
-                allquantities.clear();
-                quantities.clear();
+                  allquantities.clear();
+                  quantities.clear();
 
-                for (int j = 0;
-                    j < snap.data.documents[i]['Quantity'].length;
-                    j++) {
-                  Quantity qu = Quantity(
-                      snap.data.documents[i]['Quantity'][j]['iPrice'],
-                      snap.data.documents[i]['Quantity'][j]['price'],
-                      snap.data.documents[i]['Quantity'][j]['productId'],
-                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                  for (int j = 0;
+                      j < snap.data.documents[i]['Quantity'].length;
+                      j++) {
+                    Quantity qu = Quantity(
+                        snap.data.documents[i]['Quantity'][j]['iPrice'],
+                        snap.data.documents[i]['Quantity'][j]['price'],
+                        snap.data.documents[i]['Quantity'][j]['productId'],
+                        '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
 
-                  allquantities.add(qu);
-                  quantities.add(
-                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
-                }
+                    allquantities.add(qu);
+                    quantities.add(
+                        '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                  }
 //                print('&&&&&&&&&&&&&&&&&&&&&&');
 //               print(quantities.length);
-                // print('Imp ${snap.data.documents[i]['boughtTogether']}');
-                dishes.add(Dish(
-                    name: snap.data.documents[i]['name'],
-                    boughtTogetherDiscount: snap.data.documents[i]
-                        ['boughtTogetherDiscount'],
-                    boughtTogetherQuantity: snap.data.documents[i]
-                        ['boughtTogetherQuantity'],
-                    id: snap.data.documents[i].documentID,
-                    category: snap.data.documents[i]['category'],
-                    rating: snap.data.documents[i]['rating'].toString(),
-                    price: snap.data.documents[i]['price'],
-                    desc: snap.data.documents[i]['description'],
-                    url: snap.data.documents[i]['url'],
-                    boughtTogetherID: snap.data.documents[i]['boughtTogether'],
-                    allquantities: allquantities,
-                    quantities: quantities));
-
-                if (snap.data.documents[i]['special']) {
-                  dishesSpecial.add(Dish(
+                  // print('Imp ${snap.data.documents[i]['boughtTogether']}');
+                  dishes.add(Dish(
+                      name: snap.data.documents[i]['name'],
                       boughtTogetherDiscount: snap.data.documents[i]
                           ['boughtTogetherDiscount'],
                       boughtTogetherQuantity: snap.data.documents[i]
                           ['boughtTogetherQuantity'],
                       id: snap.data.documents[i].documentID,
-                      name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
                       rating: snap.data.documents[i]['rating'].toString(),
                       price: snap.data.documents[i]['price'],
@@ -512,422 +484,453 @@ void select(){
                       url: snap.data.documents[i]['url'],
                       boughtTogetherID: snap.data.documents[i]
                           ['boughtTogether'],
-                      allquantities: snap.data.documents[i]['Quantity'],
-                      quantities: dishes[i].quantities));
+                      allquantities: allquantities,
+                      quantities: quantities));
+
+                  if (snap.data.documents[i]['special']) {
+                    dishesSpecial.add(Dish(
+                        boughtTogetherDiscount: snap.data.documents[i]
+                            ['boughtTogetherDiscount'],
+                        boughtTogetherQuantity: snap.data.documents[i]
+                            ['boughtTogetherQuantity'],
+                        id: snap.data.documents[i].documentID,
+                        name: snap.data.documents[i]['name'],
+                        category: snap.data.documents[i]['category'],
+                        rating: snap.data.documents[i]['rating'].toString(),
+                        price: snap.data.documents[i]['price'],
+                        desc: snap.data.documents[i]['description'],
+                        url: snap.data.documents[i]['url'],
+                        boughtTogetherID: snap.data.documents[i]
+                            ['boughtTogether'],
+                        allquantities: snap.data.documents[i]['Quantity'],
+                        quantities: dishes[i].quantities));
 //                  print('Checkinggggg${dishes[i].quantities}');
 //                  print(snap.data.documents[i]['name']);
-                  special.add(Container(
-                    margin: EdgeInsets.only(right: 4.0),
-                    child: FoodyBiteCard(
-                      onTap: () async {
-                        Dish boughtTogether;
-                        for (int ind = 0; ind < dishes.length; ind++) {
-                          if (dishes[ind].id == dishes[i].boughtTogetherID) {
-                            boughtTogether = await dishes[ind];
+                    special.add(Container(
+                      margin: EdgeInsets.only(right: 4.0),
+                      child: FoodyBiteCard(
+                        onTap: () async {
+                          Dish boughtTogether;
+                          for (int ind = 0; ind < dishes.length; ind++) {
+                            if (dishes[ind].id == dishes[i].boughtTogetherID) {
+                              boughtTogether = await dishes[ind];
+                            }
                           }
-                        }
-                        pushNewScreen(
-                          context,
-                          screen: RestaurantDetailsScreen(
-                            RestaurantDetails(
-                                boughtTogetherDiscount:
-                                    dishes[i].boughtTogetherDiscount,
-                                boughtTogetherQuantity:
-                                    dishes[i].boughtTogetherQuantity,
-                                url: dishes[i].url,
-                                name: dishes[i].name,
-                                desc: dishes[i].desc,
-                                category: dishes[i].category,
-                                rating: dishes[i].rating,
-                                price: dishes[i].price,
-                                boughtTogether: boughtTogether,
-                                allquantities: dishes[i].allquantities,
-                                quantities: dishes[i].quantities),
-                          ),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.cupertino,
-                        );
-                      },
-                      imagePath: snap.data.documents[i]['url'],
-                      cardTitle: snap.data.documents[i]['name'],
-                      rating: snap.data.documents[i]['rating'].toString(),
-                      category: snap.data.documents[i]['category'],
-                      price: snap.data.documents[i]['price'].toString(),
-                      iPrice: snap.data.documents[i]['iPrice'].toString(),
-                      orderCount: orderCount,
-                      allquantities: dishes[i].allquantities,
-                      quantities: dishes[i].quantities,
-                    ),
-                  ));
+                          pushNewScreen(
+                            context,
+                            screen: RestaurantDetailsScreen(
+                              RestaurantDetails(
+                                  boughtTogetherDiscount:
+                                      dishes[i].boughtTogetherDiscount,
+                                  boughtTogetherQuantity:
+                                      dishes[i].boughtTogetherQuantity,
+                                  url: dishes[i].url,
+                                  name: dishes[i].name,
+                                  desc: dishes[i].desc,
+                                  category: dishes[i].category,
+                                  rating: dishes[i].rating,
+                                  price: dishes[i].price,
+                                  boughtTogether: boughtTogether,
+                                  allquantities: dishes[i].allquantities,
+                                  quantities: dishes[i].quantities),
+                            ),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                        imagePath: snap.data.documents[i]['url'],
+                        cardTitle: snap.data.documents[i]['name'],
+                        rating: snap.data.documents[i]['rating'].toString(),
+                        category: snap.data.documents[i]['category'],
+                        price: snap.data.documents[i]['price'].toString(),
+                        iPrice: snap.data.documents[i]['iPrice'].toString(),
+                        orderCount: orderCount,
+                        allquantities: dishes[i].allquantities,
+                        quantities: dishes[i].quantities,
+                      ),
+                    ));
 //                  print('++++++++++++++');
 //                  print(quantities);
 //                  print(dishes[i].quantities);
-                }
-                if (snap.data.documents[i]['top']) {
-                  dishesTop.add(Dish(
-                      boughtTogetherDiscount: snap.data.documents[i]
-                          ['boughtTogetherDiscount'],
-                      boughtTogetherQuantity: snap.data.documents[i]
-                          ['boughtTogetherQuantity'],
-                      id: snap.data.documents[i].documentID,
-                      name: snap.data.documents[i]['name'],
-                      category: snap.data.documents[i]['category'],
-                      rating: snap.data.documents[i]['rating'].toString(),
-                      price: snap.data.documents[i]['price'],
-                      desc: snap.data.documents[i]['description'],
-                      url: snap.data.documents[i]['url'],
-                      boughtTogetherID: snap.data.documents[i]
-                          ['boughtTogether'],
-                      allquantities: dishes[i].allquantities,
-                      quantities: dishes[i].quantities));
+                  }
+                  if (snap.data.documents[i]['top']) {
+                    dishesTop.add(Dish(
+                        boughtTogetherDiscount: snap.data.documents[i]
+                            ['boughtTogetherDiscount'],
+                        boughtTogetherQuantity: snap.data.documents[i]
+                            ['boughtTogetherQuantity'],
+                        id: snap.data.documents[i].documentID,
+                        name: snap.data.documents[i]['name'],
+                        category: snap.data.documents[i]['category'],
+                        rating: snap.data.documents[i]['rating'].toString(),
+                        price: snap.data.documents[i]['price'],
+                        desc: snap.data.documents[i]['description'],
+                        url: snap.data.documents[i]['url'],
+                        boughtTogetherID: snap.data.documents[i]
+                            ['boughtTogether'],
+                        allquantities: dishes[i].allquantities,
+                        quantities: dishes[i].quantities));
 //                  print(snap.data.documents[i]['name']);
-                  top.add(Container(
-                    margin: EdgeInsets.only(right: 4.0),
-                    child: FoodyBiteCard(
-                      onTap: () async {
-                        Dish boughtTogether;
-                        await print(dishes.length);
-                        for (int ind = 0; ind < dishes.length; ind++) {
-                          print('Checking $ind');
-                          print(dishes[ind].id);
-                          print(dishes[i].boughtTogetherID);
-                          if (dishes[ind].id == dishes[i].boughtTogetherID) {
-                            boughtTogether = await dishes[ind];
-                            print('Got it');
+                    top.add(Container(
+                      margin: EdgeInsets.only(right: 4.0),
+                      child: FoodyBiteCard(
+                        onTap: () async {
+                          Dish boughtTogether;
+                          await print(dishes.length);
+                          for (int ind = 0; ind < dishes.length; ind++) {
+                            print('Checking $ind');
+                            print(dishes[ind].id);
+                            print(dishes[i].boughtTogetherID);
+                            if (dishes[ind].id == dishes[i].boughtTogetherID) {
+                              boughtTogether = await dishes[ind];
+                              print('Got it');
+                            }
                           }
-                        }
 //                        await print('-------------$boughtTogether');
 //                        print('Checkkk${dishes[i].quantities}');
-                        pushNewScreen(
-                          context,
-                          screen: RestaurantDetailsScreen(
-                            RestaurantDetails(
-                                boughtTogetherDiscount:
-                                    dishes[i].boughtTogetherDiscount,
-                                boughtTogetherQuantity:
-                                    dishes[i].boughtTogetherQuantity,
-                                url: dishes[i].url,
-                                name: dishes[i].name,
-                                desc: dishes[i].desc,
-                                category: dishes[i].category,
-                                rating: dishes[i].rating,
-                                price: dishes[i].price,
-                                boughtTogether: boughtTogether,
-                                allquantities: dishes[i].allquantities,
-                                quantities: dishes[i].quantities),
-                          ),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.cupertino,
-                        );
-                      },
-                      imagePath: snap.data.documents[i]['url'],
-                      cardTitle: snap.data.documents[i]['name'],
-                      rating: snap.data.documents[i]['rating'].toString(),
-                      category: snap.data.documents[i]['category'],
-                      price: snap.data.documents[i]['price'].toString(),
-                      iPrice: snap.data.documents[i]['iPrice'].toString(),
-                      orderCount: orderCount,
-                      allquantities: dishes[i].allquantities,
-                      quantities: dishes[i].quantities,
-                    ),
-                  ));
+                          pushNewScreen(
+                            context,
+                            screen: RestaurantDetailsScreen(
+                              RestaurantDetails(
+                                  boughtTogetherDiscount:
+                                      dishes[i].boughtTogetherDiscount,
+                                  boughtTogetherQuantity:
+                                      dishes[i].boughtTogetherQuantity,
+                                  url: dishes[i].url,
+                                  name: dishes[i].name,
+                                  desc: dishes[i].desc,
+                                  category: dishes[i].category,
+                                  rating: dishes[i].rating,
+                                  price: dishes[i].price,
+                                  boughtTogether: boughtTogether,
+                                  allquantities: dishes[i].allquantities,
+                                  quantities: dishes[i].quantities),
+                            ),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                        imagePath: snap.data.documents[i]['url'],
+                        cardTitle: snap.data.documents[i]['name'],
+                        rating: snap.data.documents[i]['rating'].toString(),
+                        category: snap.data.documents[i]['category'],
+                        price: snap.data.documents[i]['price'].toString(),
+                        iPrice: snap.data.documents[i]['iPrice'].toString(),
+                        orderCount: orderCount,
+                        allquantities: dishes[i].allquantities,
+                        quantities: dishes[i].quantities,
+                      ),
+                    ));
+                  }
+
+                  if (i < 5)
+                    trending.add(Container(
+                      margin: EdgeInsets.only(right: 4.0),
+                      child: FoodyBiteCard(
+                        orderCount: orderCount,
+                        onTap: () async {
+                          Dish boughtTogether;
+                          for (int ind = 0; ind < dishes.length; ind++) {
+                            if (dishes[ind].id == dishes[i].boughtTogetherID) {
+                              boughtTogether = await dishes[ind];
+                            }
+                          }
+                          pushNewScreen(
+                            context,
+                            screen: RestaurantDetailsScreen(
+                              RestaurantDetails(
+                                  boughtTogetherDiscount:
+                                      dishes[i].boughtTogetherDiscount,
+                                  boughtTogetherQuantity:
+                                      dishes[i].boughtTogetherQuantity,
+                                  url: dishes[i].url,
+                                  name: dishes[i].name,
+                                  desc: dishes[i].desc,
+                                  category: dishes[i].category,
+                                  rating: dishes[i].rating,
+                                  price: dishes[i].price,
+                                  boughtTogether: boughtTogether,
+                                  allquantities: dishes[i].allquantities,
+                                  quantities: dishes[i].quantities),
+                            ),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                      ),
+                    ));
                 }
 
-                if (i < 5)
-                  trending.add(Container(
-                    margin: EdgeInsets.only(right: 4.0),
-                    child: FoodyBiteCard(
-                      orderCount: orderCount,
-                      onTap: () async {
-                        Dish boughtTogether;
-                        for (int ind = 0; ind < dishes.length; ind++) {
-                          if (dishes[ind].id == dishes[i].boughtTogetherID) {
-                            boughtTogether = await dishes[ind];
-                          }
-                        }
-                        pushNewScreen(
-                          context,
-                          screen: RestaurantDetailsScreen(
-                            RestaurantDetails(
-                                boughtTogetherDiscount:
-                                    dishes[i].boughtTogetherDiscount,
-                                boughtTogetherQuantity:
-                                    dishes[i].boughtTogetherQuantity,
-                                url: dishes[i].url,
-                                name: dishes[i].name,
-                                desc: dishes[i].desc,
-                                category: dishes[i].category,
-                                rating: dishes[i].rating,
-                                price: dishes[i].price,
-                                boughtTogether: boughtTogether,
-                                allquantities: dishes[i].allquantities,
-                                quantities: dishes[i].quantities),
-                          ),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.cupertino,
-                        );
-                      },
-                    ),
-                  ));
-              }
-
-              return Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: MediaQuery.of(context).size.width * 0.04,
-                  vertical: Sizes.MARGIN_8,
-                ),
-                child: ListView(
-                  children: <Widget>[
-                    user != null
-                        ? StreamBuilder(
-                            stream: Firestore.instance
-                                .collection('Orders')
-                                .snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<QuerySnapshot> snap) {
-                              var orderID, status;
-                              if (snap.hasData &&
-                                  !snap.hasError &&
-                                  snap.data != null) {
-                                for (int i = 0;
-                                    i < snap.data.documents.length;
-                                    i++) {
-                                  if (snap.data.documents[i]['UserID'] ==
-                                          user?.uid &&
-                                      (snap.data.documents[i]['Status'] ==
-                                              'Awaiting Confirmation' ||
-                                          snap.data.documents[i]['Status'] ==
-                                              'Processing')) {
-                                    orderID = snap.data.documents[i].documentID;
-                                    status = snap.data.documents[i]['Status'];
+                return Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width * 0.04,
+                    vertical: Sizes.MARGIN_8,
+                  ),
+                  child: ListView(
+                    children: <Widget>[
+                      user != null
+                          ? StreamBuilder(
+                              stream: Firestore.instance
+                                  .collection('Orders')
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<QuerySnapshot> snap) {
+                                var orderID, status;
+                                if (snap.hasData &&
+                                    !snap.hasError &&
+                                    snap.data != null) {
+                                  for (int i = 0;
+                                      i < snap.data.documents.length;
+                                      i++) {
+                                    if (snap.data.documents[i]['UserID'] ==
+                                            user?.uid &&
+                                        (snap.data.documents[i]['Status'] ==
+                                                'Awaiting Confirmation' ||
+                                            snap.data.documents[i]['Status'] ==
+                                                'Processing')) {
+                                      orderID =
+                                          snap.data.documents[i].documentID;
+                                      status = snap.data.documents[i]['Status'];
+                                    }
                                   }
+                                  fetchOrderDetail(orderID);
                                 }
-                                fetchOrderDetail(orderID);
-                              }
-                              return status != null
-                                  ? showStatus
-                                      ? Container(
-                                          decoration: BoxDecoration(
-                                              color: AppColors.secondaryElement,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(5))),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Container(
-                                              height: 70,
-                                              child: Row(
+                                return status != null
+                                    ? showStatus
+                                        ? Container(
+                                            decoration: BoxDecoration(
+                                                color:
+                                                    AppColors.secondaryElement,
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(5))),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Container(
+                                                height: 70,
+                                                child: Row(
 //                                                crossAxisAlignment:
 //                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Column(
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .start,
-                                                    children: [
-                                                      Spacer(),
-                                                      Text('$status!',
-                                                          style: TextStyle(
-                                                              fontSize: 18,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                              color: Colors
-                                                                  .white)),
-                                                      SizedBox(
-                                                        width: 20,
-                                                      ),
-                                                      Row(
-                                                        children: [
-                                                          Text('ID: $orderID',
-                                                              style: TextStyle(
-                                                                  fontSize: 13,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                  color: Colors
-                                                                      .white)),
-                                                          SizedBox(
-                                                            width: 10,
-                                                          ),
-                                                          InkWell(
-                                                            onTap: () async {
-                                                              String status;
-                                                              Timestamp
-                                                                  deliveryDate;
-                                                              await Firestore
-                                                                  .instance
-                                                                  .collection(
-                                                                      'Orders')
-                                                                  .getDocuments()
-                                                                  .then(
-                                                                      (value) {
-                                                                value.documents
-                                                                    .forEach(
-                                                                        (element) {
-                                                                  if (element
-                                                                          .documentID ==
-                                                                      orderID) {
-                                                                    status =
-                                                                        element[
-                                                                            'Status'];
-                                                                    deliveryDate =
-                                                                        element[
-                                                                            'DeliveryDate'];
-
-                                                                    print(
-                                                                        status);
-                                                                  }
-                                                                });
-                                                              });
-                                                              print(status);
-                                                              print(orderID);
-                                                              DateTime
-                                                                  myDateTime =
-                                                                  await deliveryDate
-                                                                      .toDate();
-
-                                                              // Timestamp
-                                                              //     myTimeStamp =
-                                                              //     Timestamp
-                                                              //         .fromDate(
-                                                              //             selectedDate);
-
-                                                              pushNewScreen(
-                                                                  context,
-                                                                  screen: OrderPlaced(
-                                                                      bill(),
-                                                                      orderID,
-                                                                      status,
-                                                                      myDateTime));
-                                                            },
-                                                            child: Text(
-                                                                'View Details',
-                                                                textAlign:
-                                                                    TextAlign
-                                                                        .center,
+                                                  children: [
+                                                    Column(
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .start,
+                                                      children: [
+                                                        Spacer(),
+                                                        Text('$status!',
+                                                            style: TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold,
+                                                                color: Colors
+                                                                    .white)),
+                                                        SizedBox(
+                                                          width: 20,
+                                                        ),
+                                                        Row(
+                                                          children: [
+                                                            Text('ID: $orderID',
                                                                 style: TextStyle(
-                                                                    decoration:
-                                                                        TextDecoration
-                                                                            .underline,
+                                                                    fontSize:
+                                                                        13,
                                                                     fontWeight:
                                                                         FontWeight
                                                                             .bold,
-                                                                    color: Color(
-                                                                        0xFF6b3600))),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                      Spacer(),
-                                                    ],
-                                                  ),
-                                                  Spacer(),
-                                                  InkWell(
-                                                    onTap: () {
-                                                      showStatus = false;
-                                                    },
-                                                    child: Icon(
-                                                      Icons.cancel,
-                                                      color: Color(0xFF6b3600),
-                                                      size: 30,
+                                                                    color: Colors
+                                                                        .white)),
+                                                            SizedBox(
+                                                              width: 10,
+                                                            ),
+                                                            InkWell(
+                                                              onTap: () async {
+                                                                String status;
+                                                                Timestamp
+                                                                    deliveryDate;
+                                                                await Firestore
+                                                                    .instance
+                                                                    .collection(
+                                                                        'Orders')
+                                                                    .getDocuments()
+                                                                    .then(
+                                                                        (value) {
+                                                                  value
+                                                                      .documents
+                                                                      .forEach(
+                                                                          (element) {
+                                                                    if (element
+                                                                            .documentID ==
+                                                                        orderID) {
+                                                                      status =
+                                                                          element[
+                                                                              'Status'];
+                                                                      deliveryDate =
+                                                                          element[
+                                                                              'DeliveryDate'];
+
+                                                                      print(
+                                                                          status);
+                                                                    }
+                                                                  });
+                                                                });
+                                                                print(status);
+                                                                print(orderID);
+                                                                DateTime
+                                                                    myDateTime =
+                                                                    await deliveryDate
+                                                                        .toDate();
+
+                                                                // Timestamp
+                                                                //     myTimeStamp =
+                                                                //     Timestamp
+                                                                //         .fromDate(
+                                                                //             selectedDate);
+
+                                                                pushNewScreen(
+                                                                    context,
+                                                                    screen: OrderPlaced(
+                                                                        bill(),
+                                                                        orderID,
+                                                                        status,
+                                                                        myDateTime));
+                                                              },
+                                                              child: Text(
+                                                                  'View Details',
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  style: TextStyle(
+                                                                      decoration:
+                                                                          TextDecoration
+                                                                              .underline,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .bold,
+                                                                      color: Color(
+                                                                          0xFF6b3600))),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                        Spacer(),
+                                                      ],
                                                     ),
-                                                  ),
-                                                  Spacer(),
-                                                ],
+                                                    Spacer(),
+                                                    InkWell(
+                                                      onTap: () {
+                                                        showStatus = false;
+                                                      },
+                                                      child: Icon(
+                                                        Icons.cancel,
+                                                        color:
+                                                            Color(0xFF6b3600),
+                                                        size: 30,
+                                                      ),
+                                                    ),
+                                                    Spacer(),
+                                                  ],
+                                                ),
                                               ),
-                                            ),
-                                          ))
-                                      : Container()
-                                  : Container();
-                            })
-                        : Container(),
-                    SizedBox(
-                      height: 2,
-                    ),
-                    FoodyBiteSearchInputField(
-                      Icons.search,
-                      controller: controller,
-                      textFormFieldStyle: Styles.customNormalTextStyle(
-                          color: AppColors.accentText),
-                      hintText: StringConst.HINT_TEXT_HOME_SEARCH_BAR,
-                      hintTextStyle: Styles.customNormalTextStyle(
-                          color: AppColors.accentText),
-                      suffixIconImagePath: Icons.sort,
-                      borderWidth: 0.0,
-                      onTapOfLeadingIcon: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return FilteredSearch();
-                      })),
-                      // onTapOfLeadingIcon: () => R.Router.navigator.pushNamed(
-                      //   R.Router.searchResultsScreen,
-                      //   arguments: SearchValue(
-                      //     controller.text,
-                      //   ),
-                      // ),
-                      onTapOfSuffixIcon: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return FilterScreen();
-                      })),
-                      borderStyle: BorderStyle.solid,
-                    ),
-                    SizedBox(height: 1.0),
-                    Container(
-                      width: MediaQuery.of(context).size.width,
-                      color: AppColors.secondaryElement,
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          children: [
-                            Icon(Icons.location_on, color: Colors.white),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Container(
-                                width: MediaQuery.of(context).size.width * 0.6,
-                                child: location.address != null
-                                    ? Text('Deliver to ${location.address}',
-                                        style: TextStyle(color: Colors.white))
-                                    : Text('Deliver to Sharjah, UAE',
-                                        style: TextStyle(color: Colors.white))),
-                            SizedBox(
-                              width: 10,
-                            ),
-                            InkWell(
-                                onTap: () async {
-                                  LocationResult result =
-                                      await showLocationPicker(
-                                    context,
-                                    'AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw',
-                                    initialCenter:
-                                        LatLng(31.1975844, 29.9598339),
-                                    automaticallyAnimateToCurrentLocation: true,
+                                            ))
+                                        : Container()
+                                    : Container();
+                              })
+                          : Container(),
+                      SizedBox(
+                        height: 2,
+                      ),
+                      FoodyBiteSearchInputField(
+                        Icons.search,
+                        controller: controller,
+                        textFormFieldStyle: Styles.customNormalTextStyle(
+                            color: AppColors.accentText),
+                        hintText: StringConst.HINT_TEXT_HOME_SEARCH_BAR,
+                        hintTextStyle: Styles.customNormalTextStyle(
+                            color: AppColors.accentText),
+                        suffixIconImagePath: Icons.sort,
+                        borderWidth: 0.0,
+                        onTapOfLeadingIcon: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return FilteredSearch();
+                        })),
+                        // onTapOfLeadingIcon: () => R.Router.navigator.pushNamed(
+                        //   R.Router.searchResultsScreen,
+                        //   arguments: SearchValue(
+                        //     controller.text,
+                        //   ),
+                        // ),
+                        onTapOfSuffixIcon: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return FilterScreen();
+                        })),
+                        borderStyle: BorderStyle.solid,
+                      ),
+                      SizedBox(height: 1.0),
+                      Container(
+                        width: MediaQuery.of(context).size.width,
+                        color: AppColors.secondaryElement,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              Icon(Icons.location_on, color: Colors.white),
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.6,
+                                  child: location.address != null
+                                      ? Text('Deliver to ${location.address}',
+                                          style: TextStyle(color: Colors.white))
+                                      : Text('Deliver to Sharjah, UAE',
+                                          style:
+                                              TextStyle(color: Colors.white))),
+                              SizedBox(
+                                width: 10,
+                              ),
+                              InkWell(
+                                  onTap: () async {
+                                    LocationResult result =
+                                        await showLocationPicker(
+                                      context,
+                                      'AIzaSyAXFXYI7PBgP9KRqFHp19_eSg-vVQU-CRw',
+                                      initialCenter:
+                                          LatLng(31.1975844, 29.9598339),
+                                      automaticallyAnimateToCurrentLocation:
+                                          true,
 //                      mapStylePath: 'assets/mapStyle.json',
-                                    myLocationButtonEnabled: true,
-                                    // requiredGPS: true,
-                                    layersButtonEnabled: true,
+                                      myLocationButtonEnabled: true,
+                                      // requiredGPS: true,
+                                      layersButtonEnabled: true,
 //                                    countries: ['AE'],
 
 //                      resultCardAlignment: Alignment.bottomCenter,
 //                       desiredAccuracy: LocationAccuracy.best,
-                                  );
-                                  print("result = $result");
+                                    );
+                                    print("result = $result");
 
-                                  if (result != null) {
-                                    setState(() {
-                                      location = result;
+                                    if (result != null) {
+                                      setState(() {
+                                        location = result;
+                                      });
+                                      minOrderValue =
+                                          await Navigator.of(context).push(
+                                              MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      ConfirmAddress(
+                                                          location.address)));
+                                    }
+
+                                    await setState(() {
+                                      print(minOrderValue);
                                     });
-                                    minOrderValue = await Navigator.of(context)
-                                        .push(MaterialPageRoute(
-                                            builder: (context) =>
-                                                ConfirmAddress(
-                                                    location.address)));
-                                  }
-
-                                  await setState(() {
-                                    print(minOrderValue);
-                                  });
 //                                  _locationDialog(context);
 //                                   showPlacePicker();
 //                                   Navigator.push(context, MaterialPageRoute(
@@ -935,8 +938,8 @@ void select(){
 //                                     return LocationScreen();
 //                                   }));
 //
-                                },
-                                child: Icon(Icons.edit, color: Colors.white)),
+                                  },
+                                  child: Icon(Icons.edit, color: Colors.white)),
 //                            Container(
 //                                width: MediaQuery.of(context).size.width * 0.1,
 //                                child: Text('${minOrderValue}',
@@ -948,73 +951,74 @@ void select(){
 ////                              _locationDialog(context);
 //                                },
 //                                child: Icon(Icons.map, color: Colors.white))
-                          ],
-                        ),
-                      ),
-                    ),
-                    Center(
-                      child: Padding(
-                        padding: const EdgeInsets.all(2.0),
-                        child: Text(
-                          'Minimum Order Value : AED ${minOrderValue}',
-                          style: TextStyle(color: Color(0xFF8B0000)),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      decoration: BoxDecoration(
-                          border: Border.all(color: AppColors.secondaryElement),
-                          borderRadius: BorderRadius.all(Radius.zero)),
-                      child: Row(
-                        children: [
-                          Text('    Next Delivery: '),
-                          Icon(
-                            Icons.delivery_dining,
-                            color: AppColors.secondaryElement,
+                            ],
                           ),
-                          SizedBox(width: 5),
-                          InkWell(
-                              onTap: () {
-                                _pickTime().then((value) {
-                                  setState(() {
-                                    selectedDate = value;
+                        ),
+                      ),
+                      Center(
+                        child: Padding(
+                          padding: const EdgeInsets.all(2.0),
+                          child: Text(
+                            'Minimum Order Value : AED ${minOrderValue}',
+                            style: TextStyle(color: Color(0xFF8B0000)),
+                          ),
+                        ),
+                      ),
+                      Container(
+                        decoration: BoxDecoration(
+                            border:
+                                Border.all(color: AppColors.secondaryElement),
+                            borderRadius: BorderRadius.all(Radius.zero)),
+                        child: Row(
+                          children: [
+                            Text('    Next Delivery: '),
+                            Icon(
+                              Icons.delivery_dining,
+                              color: AppColors.secondaryElement,
+                            ),
+                            SizedBox(width: 5),
+                            InkWell(
+                                onTap: () {
+                                  _pickTime().then((value) {
+                                    setState(() {
+                                      selectedDate = value;
+                                    });
                                   });
-                                });
-                              },
-                              child: selectedDate != null
-                                  ? Text(
-                                      '${selectedDate.day.toString()}/${selectedDate.month.toString()}/20 ',
-                                      style:
-                                          TextStyle(color: Color(0xFF6b3600)),
-                                    )
-                                  : Text(
-                                      '${date2.day.toString()}/${date2.month.toString()}/${date2.year.toString()} ',
-                                      style:
-                                          TextStyle(color: Color(0xFF6b3600)),
-                                    )),
-                          Text(' at '),
-                          Icon(
-                            Icons.timer,
-                            size: 19,
-                            color: AppColors.secondaryElement,
-                          ),
-                          SizedBox(width: 5),
-                          InkWell(
-                              onTap: () {
-                                _timeDialog(context);
-                              },
-                              child: Text(
-                                '$selectedTime ',
-                                style: TextStyle(color: Color(0xFF6b3600)),
-                              )),
+                                },
+                                child: selectedDate != null
+                                    ? Text(
+                                        '${selectedDate.day.toString()}/${selectedDate.month.toString()}/20 ',
+                                        style:
+                                            TextStyle(color: Color(0xFF6b3600)),
+                                      )
+                                    : Text(
+                                        '${date2.day.toString()}/${date2.month.toString()}/${date2.year.toString()} ',
+                                        style:
+                                            TextStyle(color: Color(0xFF6b3600)),
+                                      )),
+                            Text(' at '),
+                            Icon(
+                              Icons.timer,
+                              size: 19,
+                              color: AppColors.secondaryElement,
+                            ),
+                            SizedBox(width: 5),
+                            InkWell(
+                                onTap: () {
+                                  _timeDialog(context);
+                                },
+                                child: Text(
+                                  '$selectedTime ',
+                                  style: TextStyle(color: Color(0xFF6b3600)),
+                                )),
 //                        InkWell(
 //                            onTap: () {
 //                              _locationDialog(context);
 //                            },
 //                            child: Icon(Icons.edit))
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
 
 //                    HeadingRow(
 //                      title: StringConst.OFFERS,
@@ -1022,64 +1026,67 @@ void select(){
 //                      onTapOfNumber: () => R.Router.navigator
 //                          .pushNamed(R.Router.trendingRestaurantsScreen),
 //                    ),
-                    SizedBox(height: 15),
-                    StreamBuilder(
-                        stream:
-                            Firestore.instance.collection('Offers').snapshots(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snap) {
-                          if (snap.hasData &&
-                              !snap.hasError &&
-                              snap.data != null) {
-                            offers.clear();
-                            imageList.clear();
-                            for (int i = 0;
-                                i < snap.data.documents.length;
-                                i++) {
-                              imageList.add(snap.data.documents[i]['ImageURL']);
-                              offers.add(Offer(
-                                  snap.data.documents[i]['Title'],
-                                  snap.data.documents[i]['Subtitle'],
-                                  snap.data.documents[i]['ImageURL'],
-                                  snap.data.documents[i]
-                                      ['discountPercentage']));
-                            }
+                      SizedBox(height: 15),
+                      StreamBuilder(
+                          stream: Firestore.instance
+                              .collection('Offers')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snap) {
+                            if (snap.hasData &&
+                                !snap.hasError &&
+                                snap.data != null) {
+                              offers.clear();
+                              imageList.clear();
+                              for (int i = 0;
+                                  i < snap.data.documents.length;
+                                  i++) {
+                                imageList
+                                    .add(snap.data.documents[i]['ImageURL']);
+                                offers.add(Offer(
+                                    snap.data.documents[i]['Title'],
+                                    snap.data.documents[i]['Subtitle'],
+                                    snap.data.documents[i]['ImageURL'],
+                                    snap.data.documents[i]
+                                        ['discountPercentage']));
+                              }
 
-                            return Container(
-                              height: 170,
-                              width: MediaQuery.of(context).size.width,
-                              child: GFCarousel(
-                                items: imageList.map(
-                                  (url) {
-                                    return Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(1.0),
-                                        child: FancyShimmerImage(
-                                          shimmerDuration: Duration(seconds: 2),
-                                          imageUrl: '$url',
-                                          width: 10000.0,
+                              return Container(
+                                height: 170,
+                                width: MediaQuery.of(context).size.width,
+                                child: GFCarousel(
+                                  items: imageList.map(
+                                    (url) {
+                                      return Container(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(1.0),
+                                          child: FancyShimmerImage(
+                                            shimmerDuration:
+                                                Duration(seconds: 2),
+                                            imageUrl: '$url',
+                                            width: 10000.0,
+                                          ),
                                         ),
-                                      ),
-                                    );
-                                  },
-                                ).toList(),
-                                onPageChanged: (index) {
-                                  setState(() {
+                                      );
+                                    },
+                                  ).toList(),
+                                  onPageChanged: (index) {
+                                    setState(() {
 //                                    print('change');
-                                  });
-                                },
-                                viewportFraction: 1.0,
-                                aspectRatio:
-                                    (MediaQuery.of(context).size.width / 18) /
-                                        (MediaQuery.of(context).size.width /
-                                            40),
-                                autoPlay: true,
-                                pagination: true,
-                                passiveIndicator: Colors.black,
-                                activeIndicator: Colors.grey,
-                                pauseAutoPlayOnTouch: Duration(seconds: 8),
-                                pagerSize: 8,
-                              ),
+                                    });
+                                  },
+                                  viewportFraction: 1.0,
+                                  aspectRatio:
+                                      (MediaQuery.of(context).size.width / 18) /
+                                          (MediaQuery.of(context).size.width /
+                                              40),
+                                  autoPlay: true,
+                                  pagination: true,
+                                  passiveIndicator: Colors.black,
+                                  activeIndicator: Colors.grey,
+                                  pauseAutoPlayOnTouch: Duration(seconds: 8),
+                                  pagerSize: 8,
+                                ),
 //                              ListView.builder(
 //                                  scrollDirection: Axis.horizontal,
 //                                  itemCount: offers.length,
@@ -1104,339 +1111,342 @@ void select(){
 //                                      ),
 //                                    );
 //                                  }),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }),
-                    SizedBox(height: 0.0),
-                    HeadingRow(
-                      title: StringConst.CATEGORY,
-                      number: '',
-                      onTapOfNumber: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return CategoriesScreen('Both');
-                      })),
-                    ),
-                    SizedBox(height: 16.0),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                      children: [
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                              return CategoriesScreen('Food');
-                            }));
-                          },
-                          child: Stack(
-                            children: [
-                              Container(
-                                  height: 130,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.45,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: FancyShimmerImage(
-                                      shimmerDuration: Duration(seconds: 2),
-                                      imageUrl:
-                                          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
+                              );
+                            } else {
+                              return Container();
+                            }
+                          }),
+                      SizedBox(height: 0.0),
+                      HeadingRow(
+                        title: StringConst.CATEGORY,
+                        number: '',
+                        onTapOfNumber: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return CategoriesScreen('Both');
+                        })),
+                      ),
+                      SizedBox(height: 16.0),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return CategoriesScreen('Food');
+                              }));
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                    height: 130,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
                                     ),
-                                  )),
-                              Positioned(
-                                bottom: 0,
-                                child: Container(
-                                  height: 25,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.45,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.secondaryElement,
-                                      borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(8),
-                                          bottomLeft: Radius.circular(8))),
-                                  child: Text(
-                                    'Food Items',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Color(0xFF6b3600),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: FancyShimmerImage(
+                                        shimmerDuration: Duration(seconds: 2),
+                                        imageUrl:
+                                            'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FUlundu%20Vada%20Mix%2F1-4.JPG?alt=media&token=f3955753-5fd0-43a6-914c-d7a6a560834e',
+                                      ),
+                                    )),
+                                Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                    height: 25,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    decoration: BoxDecoration(
+                                        color: AppColors.secondaryElement,
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(8),
+                                            bottomLeft: Radius.circular(8))),
+                                    child: Text(
+                                      'Food Items',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Color(0xFF6b3600),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
                                   ),
-                                ),
-                              )
-                            ],
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(
-                            width: MediaQuery.of(context).size.width * 0.02),
-                        InkWell(
-                          onTap: () {
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.02),
+                          InkWell(
+                            onTap: () {
 //                            Navigator.push(context, MaterialPageRoute(
 //                                builder: (BuildContext context) {
 //                              return CategoriesScreen('Food');
 //                            }));
-                          },
-                          child: Stack(
-                            children: [
-                              Container(
-                                  height: 130,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.45,
-                                  decoration: BoxDecoration(
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(8)),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8.0),
-                                    child: FancyShimmerImage(
-                                      shimmerDuration: Duration(seconds: 2),
-                                      imageUrl:
-                                          'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
+                            },
+                            child: Stack(
+                              children: [
+                                Container(
+                                    height: 130,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    decoration: BoxDecoration(
+                                      borderRadius:
+                                          BorderRadius.all(Radius.circular(8)),
                                     ),
-                                  )),
-                              Positioned(
-                                bottom: 0,
-                                child: Container(
-                                  height: 25,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.45,
-                                  decoration: BoxDecoration(
-                                      color: AppColors.secondaryElement,
-                                      borderRadius: BorderRadius.only(
-                                          bottomRight: Radius.circular(8),
-                                          bottomLeft: Radius.circular(8))),
-                                  child: Text(
-                                    'Grocery Items',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                        color: Color(0xFF6b3600),
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 15),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(8.0),
+                                      child: FancyShimmerImage(
+                                        shimmerDuration: Duration(seconds: 2),
+                                        imageUrl:
+                                            'https://firebasestorage.googleapis.com/v0/b/angadi-9c0e9.appspot.com/o/Dishes%2FPuliyodarai%20Paste%2F1-2.JPG?alt=media&token=7cd79faf-090f-4537-99fd-74fbcb86458b',
+                                      ),
+                                    )),
+                                Positioned(
+                                  bottom: 0,
+                                  child: Container(
+                                    height: 25,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
+                                    decoration: BoxDecoration(
+                                        color: AppColors.secondaryElement,
+                                        borderRadius: BorderRadius.only(
+                                            bottomRight: Radius.circular(8),
+                                            bottomLeft: Radius.circular(8))),
+                                    child: Text(
+                                      'Grocery Items',
+                                      textAlign: TextAlign.center,
+                                      style: TextStyle(
+                                          color: Color(0xFF6b3600),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 15),
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Positioned(
-                                right: 2,
-                                // right: 16.0,
-                                top: 2,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Card(
-                                      // elevation: widget.ratingsAndStatusCardElevation,
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 4,
-                                          vertical: 2,
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: <Widget>[
+                                Positioned(
+                                  right: 2,
+                                  // right: 16.0,
+                                  top: 2,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: <Widget>[
+                                      Card(
+                                        // elevation: widget.ratingsAndStatusCardElevation,
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 4,
+                                            vertical: 2,
+                                          ),
+                                          child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.end,
+                                            children: <Widget>[
 //                                  Image.asset(
 //                                    ImagePath.starIcon,
 //                                    height: Sizes.WIDTH_14,
 //                                    width: Sizes.WIDTH_14,
 //                                  ),
 
-                                            Text(
-                                              ('Coming Soon'),
-                                              style:
-                                                  Styles.customTitleTextStyle(
-                                                color: Colors.deepOrangeAccent,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 14,
+                                              Text(
+                                                ('Coming Soon'),
+                                                style:
+                                                    Styles.customTitleTextStyle(
+                                                  color:
+                                                      Colors.deepOrangeAccent,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14,
+                                                ),
                                               ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 16.0),
-                    HeadingRow(
-                      title: 'Shop Food Items',
-                      number: 'All Categories ',
-                      onTapOfNumber: () => Navigator.push(context,
-                          MaterialPageRoute(builder: (BuildContext context) {
-                        return CategoriesScreen('Food');
-                      })),
-                    ),
-                    SizedBox(height: 16.0),
-                    Container(
-                      height: 100,
-                      child: StreamBuilder(
-                        stream: Firestore.instance
-                            .collection('Categories')
-                            .snapshots(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snap) {
-                          if (snap.hasData &&
-                              !snap.hasError &&
-                              snap.data != null) {
-                            categories.clear();
-
-                            for (int i = 0;
-                                i < snap.data.documents.length;
-                                i++) {
-                              if (snap.data.documents[i]['sCat'] == 'Food')
-                                categories.add(InkWell(
-                                  onTap: () {
-//                                    print(
-//                                        '---------==========${snap.data.documents[i]['imageURL']}');
-                                    pushNewScreen(
-                                      context,
-                                      screen: CategoryDetailScreen(
-                                        categoryName: snap.data.documents[i]
-                                            ['catName'],
-                                        imagePath: snap.data.documents[i]
-                                            ['liveImageURL'],
-                                        selectedCategory: i,
-                                        numberOfCategories:
-                                            snap.data.documents.length,
-                                        gradient: gradients[i],
-                                        sCat: 'Food',
-                                      ),
-                                      withNavBar:
-                                          true, // OPTIONAL VALUE. True by default.
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    );
-//
-                                  },
-                                  child: Padding(
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 8.0),
-                                    child: foodCard(
-                                      snap.data.documents[i]['imageURL'],
-                                      snap.data.documents[i]['catName'],
-                                    ),
-                                  ),
-                                ));
-                            }
-                            return categories.length != 0
-                                ? ListView(
-                                    scrollDirection: Axis.horizontal,
-                                    children: categories,
-                                  )
-                                : Container();
-                          } else
-                            return Container(
-                                height: 100,
-                                width: 100,
-                                child:
-                                    Center(child: CircularProgressIndicator()));
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 16.0),
-                    HeadingRow(
-                      title: 'Top Categories',
-                      number: '',
-                      onTapOfNumber: () => R.Router.navigator
-                          .pushNamed(R.Router.categoriesScreen),
-                    ),
-                    SizedBox(height: 16.0),
-                    Container(
-                      height: 300,
-                      child: StreamBuilder(
-                        stream: Firestore.instance
-                            .collection('Categories')
-                            .snapshots(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snap) {
-                          if (snap.hasData &&
-                              !snap.hasError &&
-                              snap.data != null) {
-                            categoriesTop.clear();
-
-                            for (int i = 0;
-                                i < snap.data.documents.length;
-                                i++) {
-                              if (snap.data.documents[i]['top']) {
-                                // categoriesTop.add(Padding(
-                                //   padding: const EdgeInsets.all(8.0),
-                                //   child: Container(
-                                //     height: 200,
-                                //     width: 200,
-                                //     color: Colors.red,
-                                //   ),
-                                // ));
-
-                                categoriesTop.add(InkWell(
-                                  onTap: () {
-                                    Navigator.push(context, MaterialPageRoute(
-                                        builder: (BuildContext context) {
-                                      return CategoryDetailScreen(
-                                        categoryName: snap.data.documents[i]
-                                            ['catName'],
-                                        imagePath: snap.data.documents[i]
-                                            ['imageURL'],
-                                        selectedCategory: i,
-                                        numberOfCategories:
-                                            categoriesTop.length,
-                                        gradient: gradients[i],
-                                        sCat: snap.data.documents[i]['sCat'],
-                                      );
-                                    }));
-                                  },
-                                  child: Stack(
-                                    children: [
-                                      Container(
-                                          height: 140,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.45,
-                                          child: ClipRRect(
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(8)),
-                                              child: FancyShimmerImage(
-                                                shimmerDuration:
-                                                    Duration(seconds: 2),
-                                                imageUrl: snap.data.documents[i]
-                                                    ['liveImageURL'],
-                                                boxFit: BoxFit.fill,
-                                              ))),
-                                      Positioned(
-                                        bottom: 0,
-                                        child: Container(
-                                          height: 25,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.45,
-                                          decoration: BoxDecoration(
-                                              color: AppColors.secondaryElement,
-                                              borderRadius: BorderRadius.only(
-                                                  bottomRight:
-                                                      Radius.circular(8),
-                                                  bottomLeft:
-                                                      Radius.circular(8))),
-                                          child: Text(
-                                            snap.data.documents[i]['catName'],
-                                            textAlign: TextAlign.center,
-                                            style: TextStyle(
-                                                color: Color(0xFF6b3600),
-                                                fontWeight: FontWeight.bold,
-                                                fontSize: 15),
+                                            ],
                                           ),
                                         ),
                                       )
                                     ],
                                   ),
-                                ));
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 16.0),
+                      HeadingRow(
+                        title: 'Shop Food Items',
+                        number: 'All Categories ',
+                        onTapOfNumber: () => Navigator.push(context,
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return CategoriesScreen('Food');
+                        })),
+                      ),
+                      SizedBox(height: 16.0),
+                      Container(
+                        height: 100,
+                        child: StreamBuilder(
+                          stream: Firestore.instance
+                              .collection('Categories')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snap) {
+                            if (snap.hasData &&
+                                !snap.hasError &&
+                                snap.data != null) {
+                              categories.clear();
+
+                              for (int i = 0;
+                                  i < snap.data.documents.length;
+                                  i++) {
+                                if (snap.data.documents[i]['sCat'] == 'Food')
+                                  categories.add(InkWell(
+                                    onTap: () {
+//                                    print(
+//                                        '---------==========${snap.data.documents[i]['imageURL']}');
+                                      pushNewScreen(
+                                        context,
+                                        screen: CategoryDetailScreen(
+                                          categoryName: snap.data.documents[i]
+                                              ['catName'],
+                                          imagePath: snap.data.documents[i]
+                                              ['liveImageURL'],
+                                          selectedCategory: i,
+                                          numberOfCategories:
+                                              snap.data.documents.length,
+                                          gradient: gradients[i],
+                                          sCat: 'Food',
+                                        ),
+                                        withNavBar:
+                                            true, // OPTIONAL VALUE. True by default.
+                                        pageTransitionAnimation:
+                                            PageTransitionAnimation.cupertino,
+                                      );
+//
+                                    },
+                                    child: Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 8.0),
+                                      child: foodCard(
+                                        snap.data.documents[i]['imageURL'],
+                                        snap.data.documents[i]['catName'],
+                                      ),
+                                    ),
+                                  ));
+                              }
+                              return categories.length != 0
+                                  ? ListView(
+                                      scrollDirection: Axis.horizontal,
+                                      children: categories,
+                                    )
+                                  : Container();
+                            } else
+                              return Container(
+                                  height: 100,
+                                  width: 100,
+                                  child: Center(
+                                      child: CircularProgressIndicator()));
+                          },
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+                      HeadingRow(
+                        title: 'Top Categories',
+                        number: '',
+                        onTapOfNumber: () => R.Router.navigator
+                            .pushNamed(R.Router.categoriesScreen),
+                      ),
+                      SizedBox(height: 16.0),
+                      Container(
+                        height: 300,
+                        child: StreamBuilder(
+                          stream: Firestore.instance
+                              .collection('Categories')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snap) {
+                            if (snap.hasData &&
+                                !snap.hasError &&
+                                snap.data != null) {
+                              categoriesTop.clear();
+
+                              for (int i = 0;
+                                  i < snap.data.documents.length;
+                                  i++) {
+                                if (snap.data.documents[i]['top']) {
+                                  // categoriesTop.add(Padding(
+                                  //   padding: const EdgeInsets.all(8.0),
+                                  //   child: Container(
+                                  //     height: 200,
+                                  //     width: 200,
+                                  //     color: Colors.red,
+                                  //   ),
+                                  // ));
+
+                                  categoriesTop.add(InkWell(
+                                    onTap: () {
+                                      Navigator.push(context, MaterialPageRoute(
+                                          builder: (BuildContext context) {
+                                        return CategoryDetailScreen(
+                                          categoryName: snap.data.documents[i]
+                                              ['catName'],
+                                          imagePath: snap.data.documents[i]
+                                              ['imageURL'],
+                                          selectedCategory: i,
+                                          numberOfCategories:
+                                              categoriesTop.length,
+                                          gradient: gradients[i],
+                                          sCat: snap.data.documents[i]['sCat'],
+                                        );
+                                      }));
+                                    },
+                                    child: Stack(
+                                      children: [
+                                        Container(
+                                            height: 140,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.45,
+                                            child: ClipRRect(
+                                                borderRadius: BorderRadius.all(
+                                                    Radius.circular(8)),
+                                                child: FancyShimmerImage(
+                                                  shimmerDuration:
+                                                      Duration(seconds: 2),
+                                                  imageUrl:
+                                                      snap.data.documents[i]
+                                                          ['liveImageURL'],
+                                                  boxFit: BoxFit.fill,
+                                                ))),
+                                        Positioned(
+                                          bottom: 0,
+                                          child: Container(
+                                            height: 25,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.45,
+                                            decoration: BoxDecoration(
+                                                color:
+                                                    AppColors.secondaryElement,
+                                                borderRadius: BorderRadius.only(
+                                                    bottomRight:
+                                                        Radius.circular(8),
+                                                    bottomLeft:
+                                                        Radius.circular(8))),
+                                            child: Text(
+                                              snap.data.documents[i]['catName'],
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                  color: Color(0xFF6b3600),
+                                                  fontWeight: FontWeight.bold,
+                                                  fontSize: 15),
+                                            ),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  ));
 
 //                                 categoriesTop.add(FoodyBiteCategoryCard(
 //                                   width:
@@ -1482,229 +1492,233 @@ void select(){
 // //                                    );
 //                                   },
 //                                 ));
+                                }
                               }
-                            }
-                            return categoriesTop.length != 0
-                                ? Column(
-                                    children: [
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          categoriesTop[0],
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.02,
-                                          ),
-                                          categoriesTop[1]
-                                        ],
-                                      ),
-                                      SizedBox(
-                                        height: 20,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          categoriesTop[2],
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.02,
-                                          ),
-                                          categoriesTop[3]
-                                        ],
-                                      )
-                                    ],
-                                  )
-                                : Container();
-                          } else
-                            return Container(
-                                child: Center(
-                                    child: Container(
-                                        height: 100,
-                                        width: 100,
-                                        child: Center(
-                                            child:
-                                                CircularProgressIndicator()))));
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 16.0),
-                    (showGrocery == true)
-                        ? HeadingRow(
-                            title: 'Shop Grocery Items',
-                            number: 'All Categories ',
-                            onTapOfNumber: () => Navigator.push(context,
-                                MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                              return CategoriesScreen('Grocery');
-                            })),
-                          )
-                        : Container(),
-                    SizedBox(height: 16.0),
-                    (showGrocery == true)
-                        ? Container(
-                            height: 100,
-                            child: StreamBuilder(
-                              stream: Firestore.instance
-                                  .collection('Categories')
-                                  .snapshots(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<QuerySnapshot> snap) {
-                                if (snap.hasData &&
-                                    !snap.hasError &&
-                                    snap.data != null) {
-                                  categoriesGrocery.clear();
-
-                                  for (int i = 0;
-                                      i < snap.data.documents.length;
-                                      i++) {
-                                    if (snap.data.documents[i]['sCat'] ==
-                                        'Grocery')
-                                      categoriesGrocery.add(InkWell(
-                                        onTap: () {
-//                                    print(
-//                                        '---------==========${snap.data.documents[i]['imageURL']}');
-                                          pushNewScreen(
-                                            context,
-                                            screen: CategoryDetailScreen(
-                                              categoryName: snap
-                                                  .data.documents[i]['catName'],
-                                              imagePath: snap.data.documents[i]
-                                                  ['liveImageURL'],
-                                              selectedCategory: i,
-                                              numberOfCategories:
-                                                  snap.data.documents.length,
-                                              gradient: gradients[i],
-                                              sCat: 'Grocery',
+                              return categoriesTop.length != 0
+                                  ? Column(
+                                      children: [
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            categoriesTop[0],
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.02,
                                             ),
-                                            withNavBar:
-                                                true, // OPTIONAL VALUE. True by default.
-                                            pageTransitionAnimation:
-                                                PageTransitionAnimation
-                                                    .cupertino,
-                                          );
-//
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 8.0),
-                                          child: foodCard(
-                                            snap.data.documents[i]['imageURL'],
-                                            snap.data.documents[i]['catName'],
-                                          ),
+                                            categoriesTop[1]
+                                          ],
                                         ),
-                                      ));
-                                  }
-                                  return categoriesGrocery.length != 0
-                                      ? ListView(
-                                          scrollDirection: Axis.horizontal,
-                                          children: categoriesGrocery,
+                                        SizedBox(
+                                          height: 20,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          children: [
+                                            categoriesTop[2],
+                                            SizedBox(
+                                              width: MediaQuery.of(context)
+                                                      .size
+                                                      .width *
+                                                  0.02,
+                                            ),
+                                            categoriesTop[3]
+                                          ],
                                         )
-                                      : Container();
-                                } else
-                                  return Container(
-                                      child: Center(
-                                          child: Container(
-                                              height: 100,
-                                              width: 100,
-                                              child: Center(
-                                                  child:
-                                                      CircularProgressIndicator()))));
-                              },
-                            ),
-                          )
-                        : Container(),
-
-                    SizedBox(height: 16.0),
-                    Container(
-                      height: 110,
-                      child: FancyShimmerImage(
-                        shimmerDuration: Duration(seconds: 2),
-                        imageUrl: banner1Url,
-                        boxFit: BoxFit.fitWidth,
+                                      ],
+                                    )
+                                  : Container();
+                            } else
+                              return Container(
+                                  child: Center(
+                                      child: Container(
+                                          height: 100,
+                                          width: 100,
+                                          child: Center(
+                                              child:
+                                                  CircularProgressIndicator()))));
+                          },
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 16.0),
-                    HeadingRow(
-                      title: 'Top Deals',
-                      number: 'View All',
-                      onTapOfNumber: () {
-                        Navigator.push(context,
-                            MaterialPageRoute(builder: (BuildContext context) {
-                          return TrendingRestaurantsScreen1("top");
-                        }));
-                      },
-                    ),
-                    SizedBox(height: 16.0),
-                    Container(
-                      height: 405,
-                      child: top.length != 0
-                          ? GridView(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 5.0,
-                                      mainAxisSpacing: 5.0,
-                                      childAspectRatio: 0.59),
-                              children: top,
+                      SizedBox(height: 16.0),
+                      (showGrocery == true)
+                          ? HeadingRow(
+                              title: 'Shop Grocery Items',
+                              number: 'All Categories ',
+                              onTapOfNumber: () => Navigator.push(context,
+                                  MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                return CategoriesScreen('Grocery');
+                              })),
                             )
                           : Container(),
-                    ),
-                    SizedBox(height: 16.0),
-                    Container(
-                      height: 110,
-                      child: FancyShimmerImage(
-                        shimmerDuration: Duration(seconds: 2),
-                        imageUrl: banner2Url,
-                        boxFit: BoxFit.fitWidth,
+                      SizedBox(height: 16.0),
+                      (showGrocery == true)
+                          ? Container(
+                              height: 100,
+                              child: StreamBuilder(
+                                stream: Firestore.instance
+                                    .collection('Categories')
+                                    .snapshots(),
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<QuerySnapshot> snap) {
+                                  if (snap.hasData &&
+                                      !snap.hasError &&
+                                      snap.data != null) {
+                                    categoriesGrocery.clear();
+
+                                    for (int i = 0;
+                                        i < snap.data.documents.length;
+                                        i++) {
+                                      if (snap.data.documents[i]['sCat'] ==
+                                          'Grocery')
+                                        categoriesGrocery.add(InkWell(
+                                          onTap: () {
+//                                    print(
+//                                        '---------==========${snap.data.documents[i]['imageURL']}');
+                                            pushNewScreen(
+                                              context,
+                                              screen: CategoryDetailScreen(
+                                                categoryName: snap.data
+                                                    .documents[i]['catName'],
+                                                imagePath:
+                                                    snap.data.documents[i]
+                                                        ['liveImageURL'],
+                                                selectedCategory: i,
+                                                numberOfCategories:
+                                                    snap.data.documents.length,
+                                                gradient: gradients[i],
+                                                sCat: 'Grocery',
+                                              ),
+                                              withNavBar:
+                                                  true, // OPTIONAL VALUE. True by default.
+                                              pageTransitionAnimation:
+                                                  PageTransitionAnimation
+                                                      .cupertino,
+                                            );
+//
+                                          },
+                                          child: Padding(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 8.0),
+                                            child: foodCard(
+                                              snap.data.documents[i]
+                                                  ['imageURL'],
+                                              snap.data.documents[i]['catName'],
+                                            ),
+                                          ),
+                                        ));
+                                    }
+                                    return categoriesGrocery.length != 0
+                                        ? ListView(
+                                            scrollDirection: Axis.horizontal,
+                                            children: categoriesGrocery,
+                                          )
+                                        : Container();
+                                  } else
+                                    return Container(
+                                        child: Center(
+                                            child: Container(
+                                                height: 100,
+                                                width: 100,
+                                                child: Center(
+                                                    child:
+                                                        CircularProgressIndicator()))));
+                                },
+                              ),
+                            )
+                          : Container(),
+
+                      SizedBox(height: 16.0),
+                      Container(
+                        height: 110,
+                        child: FancyShimmerImage(
+                          shimmerDuration: Duration(seconds: 2),
+                          imageUrl: banner1Url,
+                          boxFit: BoxFit.fitWidth,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 16.0),
-                    HeadingRow(
-                        title: 'Special on Angadi',
+                      SizedBox(height: 16.0),
+                      HeadingRow(
+                        title: 'Top Deals',
                         number: 'View All',
                         onTapOfNumber: () {
                           Navigator.push(context, MaterialPageRoute(
                               builder: (BuildContext context) {
-                            return TrendingRestaurantsScreen1("special");
+                            return TrendingRestaurantsScreen1("top");
                           }));
-                        }),
-                    SizedBox(height: 16.0),
-                    Container(
-                      height: 405,
-                      child: special.length != 0
-                          ? GridView(
-                              scrollDirection: Axis.horizontal,
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      crossAxisSpacing: 5.0,
-                                      mainAxisSpacing: 5.0,
-                                      childAspectRatio: 0.65),
-                              children: special,
-                            )
-                          : Container(),
-                    ),
-                    SizedBox(height: 20.0),
-                  ],
-                ),
-              );
-            } else
-              return Container(
-                  child: Center(
-                      child: Container(
-                          height: 100,
-                          width: 100,
-                          child: Center(child: CircularProgressIndicator()))));
-          },
+                        },
+                      ),
+                      SizedBox(height: 16.0),
+                      Container(
+                        height: 405,
+                        child: top.length != 0
+                            ? GridView(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 5.0,
+                                        mainAxisSpacing: 5.0,
+                                        childAspectRatio: 0.59),
+                                children: top,
+                              )
+                            : Container(),
+                      ),
+                      SizedBox(height: 16.0),
+                      Container(
+                        height: 110,
+                        child: FancyShimmerImage(
+                          shimmerDuration: Duration(seconds: 2),
+                          imageUrl: banner2Url,
+                          boxFit: BoxFit.fitWidth,
+                        ),
+                      ),
+                      SizedBox(height: 16.0),
+                      HeadingRow(
+                          title: 'Special on Angadi',
+                          number: 'View All',
+                          onTapOfNumber: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return TrendingRestaurantsScreen1("special");
+                            }));
+                          }),
+                      SizedBox(height: 16.0),
+                      Container(
+                        height: 405,
+                        child: special.length != 0
+                            ? GridView(
+                                scrollDirection: Axis.horizontal,
+                                shrinkWrap: true,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 2,
+                                        crossAxisSpacing: 5.0,
+                                        mainAxisSpacing: 5.0,
+                                        childAspectRatio: 0.65),
+                                children: special,
+                              )
+                            : Container(),
+                      ),
+                      SizedBox(height: 20.0),
+                    ],
+                  ),
+                );
+              } else
+                return Container(
+                    child: Center(
+                        child: Container(
+                            height: 100,
+                            width: 100,
+                            child:
+                                Center(child: CircularProgressIndicator()))));
+            },
+          ),
         ),
       ),
     );
@@ -2189,7 +2203,7 @@ void select(){
 
   addDishParams() {
     Firestore.instance.collection('Dishes').getDocuments().then((value) {
-       value.documents.forEach((element) {
+      value.documents.forEach((element) {
         Firestore.instance
             .collection('Dishes')
             .document(element.documentID)
