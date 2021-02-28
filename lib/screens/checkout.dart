@@ -773,104 +773,102 @@ class _CheckoutState extends State<Checkout> {
         textTheme.subtitle.copyWith(color: AppColors.accentText);
     var textFormFieldTextStyle =
         textTheme.subtitle.copyWith(color: AppColors.accentText);
-    return WillPopScope(
-      onWillPop: onPressed,
-      child: Scaffold(
-          key: scaffoldState,
-          appBar: AppBar(
-            leading: InkWell(
+    return Scaffold(
+        key: scaffoldState,
+        appBar: AppBar(
+          leading: InkWell(
+              onTap: () {
+                Checksuccess();
+                Navigator.pop(context);
+              },
+              child: Icon(Icons.arrow_back, color: Colors.white)),
+          iconTheme: IconThemeData(
+            color: Colors.white,
+          ),
+          backgroundColor: AppColors.secondaryElement,
+          actions: [
+            InkWell(
                 onTap: () {
-                  Checksuccess();
-                  Navigator.pop(context);
+                  launch('tel:+919027553376');
                 },
-                child: Icon(Icons.arrow_back, color: Colors.white)),
-            iconTheme: IconThemeData(
-              color: Colors.white,
+                child: Icon(Icons.phone, color: Color(0xFF6b3600))),
+            SizedBox(
+              width: 6,
             ),
-            backgroundColor: AppColors.secondaryElement,
-            actions: [
-              InkWell(
-                  onTap: () {
-                    launch('tel:+919027553376');
-                  },
-                  child: Icon(Icons.phone, color: Color(0xFF6b3600))),
-              SizedBox(
-                width: 6,
-              ),
-              InkWell(
-                  onTap: () {
-                    launchWhatsApp(
-                        phone: '7060222315',
-                        message: 'Check out this awesome app');
-                  },
-                  child: Container(
-                      alignment: Alignment.center,
-                      child: FaIcon(FontAwesomeIcons.whatsapp,
-                          color: Color(0xFF6b3600)))),
-              SizedBox(
-                width: 6,
-              ),
-              InkWell(
-                  onTap: () {
+            InkWell(
+                onTap: () {
+                  launchWhatsApp(
+                      phone: '7060222315',
+                      message: 'Check out this awesome app');
+                },
+                child: Container(
+                    alignment: Alignment.center,
+                    child: FaIcon(FontAwesomeIcons.whatsapp,
+                        color: Color(0xFF6b3600)))),
+            SizedBox(
+              width: 6,
+            ),
+            InkWell(
+                onTap: () {
 //                print(1);
-                    launch(
-                        'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
-                  },
-                  child: Icon(Icons.mail, color: Color(0xFF6b3600))),
-              SizedBox(width: 7)
-            ],
-            elevation: 0.0,
-            centerTitle: true,
-            title: Text(
-              'Angadi.ae',
-              style: Styles.customTitleTextStyle(
-                color: Color(0xFF6b3600),
-                fontWeight: FontWeight.w600,
-                fontSize: Sizes.TEXT_SIZE_18,
-              ),
+                  launch(
+                      'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+                },
+                child: Icon(Icons.mail, color: Color(0xFF6b3600))),
+            SizedBox(width: 7)
+          ],
+          elevation: 0.0,
+          centerTitle: true,
+          title: Text(
+            'Angadi.ae',
+            style: Styles.customTitleTextStyle(
+              color: Color(0xFF6b3600),
+              fontWeight: FontWeight.w600,
+              fontSize: Sizes.TEXT_SIZE_18,
             ),
           ),
-          body: SafeArea(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        child: Radio(
-                            activeColor: AppColors.secondaryElement,
-                            value: 'Delivery',
-                            groupValue: type,
-                            onChanged: (value) {
-                              setState(() {
-                                type = value;
-                              });
-                            }),
-                      ),
-                      Text(
-                        'Delivery',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      Container(
-                        height: 6,
-                        child: Radio(
-                            activeColor: AppColors.secondaryElement,
-                            value: 'Takeaway',
-                            groupValue: type,
-                            onChanged: (value) {
-                              setState(() {
-                                type = value;
-                              });
-                            }),
-                      ),
-                      Text(
-                        'Takeaway',
-                        style: TextStyle(fontSize: 15),
-                      ),
-                      SizedBox(
-                        width: 1,
-                      ),
+        ),
+        body: SafeArea(
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Container(
+                      child: Radio(
+                          activeColor: AppColors.secondaryElement,
+                          value: 'Delivery',
+                          groupValue: type,
+                          onChanged: (value) {
+                            setState(() {
+                              type = value;
+                            });
+                          }),
+                    ),
+                    Text(
+                      'Delivery',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    Container(
+                      height: 6,
+                      child: Radio(
+                          activeColor: AppColors.secondaryElement,
+                          value: 'Takeaway',
+                          groupValue: type,
+                          onChanged: (value) {
+                            setState(() {
+                              type = value;
+                            });
+                          }),
+                    ),
+                    Text(
+                      'Takeaway',
+                      style: TextStyle(fontSize: 15),
+                    ),
+                    SizedBox(
+                      width: 1,
+                    ),
 //                    Radio(
 //                        activeColor: AppColors.secondaryElement,
 //                        value: 'Schedule Delivery',
@@ -886,84 +884,84 @@ class _CheckoutState extends State<Checkout> {
 //                          'Schedule Delivery',
 //                          style: TextStyle(fontSize: 15),
 //                        )),
-                    ],
+                  ],
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 12.0),
+                  child: HeadingRow(
+                    title: 'Items',
+                    number: '',
                   ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(left: 12.0),
-                    child: HeadingRow(
-                      title: 'Items',
-                      number: '',
-                    ),
-                  ),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.29,
-                    child: ListView.builder(
-                        itemCount: cartItems.length,
-                        itemBuilder: (BuildContext ctxt, int i) {
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Card(
-                              child: Row(
-                                children: [
-                                  Container(
-                                    child: FancyShimmerImage(
-                                      imageUrl: cartItems[i].imgUrl,
-                                      shimmerDuration: Duration(seconds: 2),
-                                    ),
-                                    height: 80,
-                                    width: 80,
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.29,
+                  child: ListView.builder(
+                      itemCount: cartItems.length,
+                      itemBuilder: (BuildContext ctxt, int i) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            child: Row(
+                              children: [
+                                Container(
+                                  child: FancyShimmerImage(
+                                    imageUrl: cartItems[i].imgUrl,
+                                    shimmerDuration: Duration(seconds: 2),
                                   ),
-                                  SizedBox(
-                                    width: 15,
-                                  ),
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.2,
-                                    child: Text(
-                                      cartItems[i].productName,
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'Qty: ${cartItems[i].qty.toString()}',
+                                  height: 80,
+                                  width: 80,
+                                ),
+                                SizedBox(
+                                  width: 15,
+                                ),
+                                Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.2,
+                                  child: Text(
+                                    cartItems[i].productName,
                                     style: TextStyle(fontSize: 15),
                                   ),
-                                  SizedBox(
-                                    width: 10,
-                                  ),
-                                  Text(
-                                    'Price: AED ${cartItems[i].price.toString()}',
-                                    style: TextStyle(fontSize: 15),
-                                  )
-                                ],
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Qty: ${cartItems[i].qty.toString()}',
+                                  style: TextStyle(fontSize: 15),
+                                ),
+                                SizedBox(
+                                  width: 10,
+                                ),
+                                Text(
+                                  'Price: AED ${cartItems[i].price.toString()}',
+                                  style: TextStyle(fontSize: 15),
+                                )
+                              ],
+                            ),
+                          ),
+                        );
+                      }),
+                ),
+                SizedBox(
+                  height: 10,
+                ),
+                type != 'Takeaway'
+                    ? Padding(
+                        padding: const EdgeInsets.only(right: 18.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding:
+                                  const EdgeInsets.only(left: 12.0, bottom: 12),
+                              child: HeadingRow(
+                                title: ' Delivery Address',
+                                number: '',
                               ),
                             ),
-                          );
-                        }),
-                  ),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  type != 'Takeaway'
-                      ? Padding(
-                          padding: const EdgeInsets.only(right: 18.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 12.0, bottom: 12),
-                                child: HeadingRow(
-                                  title: ' Delivery Address',
-                                  number: '',
-                                ),
-                              ),
 //                             InkWell(
 //                                 onTap: () {
 //                                   showPlacePicker();
@@ -974,11 +972,11 @@ class _CheckoutState extends State<Checkout> {
 //                                   Icons.map,
 //                                   size: 30,
 //                                 )),
-                            ],
-                          ),
-                        )
-                      : Container(),
-                  type != 'Takeaway' && widget.address == ''
+                          ],
+                        ),
+                      )
+                    : Container(),
+                type != 'Takeaway' && widget.address == ''
 //                    ? Padding(
 //                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
 //                        child: CustomTextFormField(
@@ -993,10 +991,10 @@ class _CheckoutState extends State<Checkout> {
 //                          prefixIconImagePath: ImagePath.homeIcon,
 //                        ),
 //                      )
-                      ? Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Row(
-                            children: [
+                    ? Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          children: [
 //                            Container(
 //                              width: MediaQuery.of(context).size.width * 0.31,
 //                              height: MediaQuery.of(context).size.height * 0.08,
@@ -1038,27 +1036,62 @@ class _CheckoutState extends State<Checkout> {
 //                            SizedBox(
 //                                width:
 //                                    MediaQuery.of(context).size.width * 0.04),
-                              OutlineButton(
+                            OutlineButton(
+                              highlightedBorderColor: Color(0xFF6b3600),
+                              borderSide: BorderSide(
+                                  color: (color2)
+                                      ? Color(0xFF6b3600)
+                                      : Colors.grey),
+                              onPressed: () {
+                                setState(() {
+                                  color2 = !color2;
+                                  color1 = false;
+                                  color3 = false;
+                                  addresstype = 'House';
+                                });
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Column(
+                                  children: [
+                                    Image.asset('assets/images/house.png',
+                                        height: 25),
+                                    Text('House/Apartment ',
+                                        style: TextStyle(
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w300))
+                                  ],
+                                ),
+                              ),
+                              disabledBorderColor: Colors.grey,
+                              color: Color(0xFF6b3600),
+                            ),
+                            SizedBox(
+                                width:
+                                    MediaQuery.of(context).size.width * 0.04),
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              child: OutlineButton(
                                 highlightedBorderColor: Color(0xFF6b3600),
                                 borderSide: BorderSide(
-                                    color: (color2)
+                                    color: (color3)
                                         ? Color(0xFF6b3600)
                                         : Colors.grey),
                                 onPressed: () {
                                   setState(() {
-                                    color2 = !color2;
+                                    color3 = !color3;
+                                    color2 = false;
                                     color1 = false;
-                                    color3 = false;
-                                    addresstype = 'House';
+                                    addresstype = 'Office';
                                   });
                                 },
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Column(
                                     children: [
-                                      Image.asset('assets/images/house.png',
+                                      Image.asset('assets/images/office.png',
                                           height: 25),
-                                      Text('House/Apartment ',
+                                      Text('Office',
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.w300))
@@ -1068,57 +1101,22 @@ class _CheckoutState extends State<Checkout> {
                                 disabledBorderColor: Colors.grey,
                                 color: Color(0xFF6b3600),
                               ),
-                              SizedBox(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.04),
-                              Container(
-                                width: MediaQuery.of(context).size.width * 0.4,
-                                child: OutlineButton(
-                                  highlightedBorderColor: Color(0xFF6b3600),
-                                  borderSide: BorderSide(
-                                      color: (color3)
-                                          ? Color(0xFF6b3600)
-                                          : Colors.grey),
-                                  onPressed: () {
-                                    setState(() {
-                                      color3 = !color3;
-                                      color2 = false;
-                                      color1 = false;
-                                      addresstype = 'Office';
-                                    });
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: Column(
-                                      children: [
-                                        Image.asset('assets/images/office.png',
-                                            height: 25),
-                                        Text('Office',
-                                            style: TextStyle(
-                                                color: Colors.black,
-                                                fontWeight: FontWeight.w300))
-                                      ],
-                                    ),
-                                  ),
-                                  disabledBorderColor: Colors.grey,
-                                  color: Color(0xFF6b3600),
-                                ),
-                              )
-                            ],
-                          ),
-                        )
-                      : Container(
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(widget.address),
-                          ),
+                            )
+                          ],
                         ),
-                  type != 'Takeaway' && widget.address == ''
-                      ? SizedBox(
-                          height: 10,
-                        )
-                      : Container(),
-                  type != 'Takeaway' && widget.address == ''
+                      )
+                    : Container(
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(widget.address),
+                        ),
+                      ),
+                type != 'Takeaway' && widget.address == ''
+                    ? SizedBox(
+                        height: 10,
+                      )
+                    : Container(),
+                type != 'Takeaway' && widget.address == ''
 //                    ? Padding(
 //                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
 //                        child: CustomTextFormField(
@@ -1134,707 +1132,678 @@ class _CheckoutState extends State<Checkout> {
 //                          prefixIconImagePath: ImagePath.homeIcon,
 //                        ),
 //                      )
-                      ? (addresstype == 'Apartment')
-                          ? Form(
-                              key: _formkey,
-                              child: Column(
-                                children: [
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText: 'Building'),
-                                      controller: buildingController,
-                                    ),
+                    ? (addresstype == 'Apartment')
+                        ? Form(
+                            key: _formkey,
+                            child: Column(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF6b3600))),
+                                        hintText: 'Building'),
+                                    controller: buildingController,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText: 'Floor'),
-                                      controller: floorcontroller,
-                                    ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF6b3600))),
+                                        hintText: 'Floor'),
+                                    controller: floorcontroller,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText: 'Apartment'),
-                                      controller: flatcontroller,
-                                    ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF6b3600))),
+                                        hintText: 'Apartment'),
+                                    controller: flatcontroller,
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: TextFormField(
-                                      decoration: InputDecoration(
-                                          border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          enabledBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Colors.grey)),
-                                          focusedBorder: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(2),
-                                              borderSide: BorderSide(
-                                                  color: Color(0xFF6b3600))),
-                                          hintText: 'Additional Directions'),
-                                      maxLines: 2,
-                                      controller: additionalcontroller,
-                                    ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: TextFormField(
+                                    decoration: InputDecoration(
+                                        border: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide:
+                                                BorderSide(color: Colors.grey)),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderRadius:
+                                                BorderRadius.circular(2),
+                                            borderSide: BorderSide(
+                                                color: Color(0xFF6b3600))),
+                                        hintText: 'Additional Directions'),
+                                    maxLines: 2,
+                                    controller: additionalcontroller,
                                   ),
-                                ],
-                              ),
-                            )
-                          : (addresstype == 'House')
-                              ? Form(
-                                  key: _formkey,
-                                  child: Column(
-                                    children: [
-                                      StreamBuilder(
-                                          stream: Firestore.instance
-                                              .collection('Emirates')
-                                              .snapshots(),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<QuerySnapshot>
-                                                  snap) {
-                                            if (snap.hasData &&
-                                                !snap.hasError &&
-                                                snap.data != null) {
-                                              allemirates.clear();
-                                              emiratesname.clear();
-                                              for (int i = 0;
-                                                  i <
-                                                      snap.data.documents
-                                                          .length;
-                                                  i++) {
-                                                print(
-                                                    snap.data.documents.length);
-                                                emirate2 = snap
-                                                    .data.documents[0]['name'];
-                                                emiratesname.add(snap
-                                                    .data.documents[i]['name']);
-                                                Emirates emi = Emirates(
-                                                    snap.data.documents[i]
-                                                        ['deliveryCharge'],
-                                                    snap.data.documents[i]
-                                                        ['minOrderPrice'],
-                                                    snap.data.documents[i]
-                                                        ['name']);
+                                ),
+                              ],
+                            ),
+                          )
+                        : (addresstype == 'House')
+                            ? Form(
+                                key: _formkey,
+                                child: Column(
+                                  children: [
+                                    StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('Emirates')
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<QuerySnapshot> snap) {
+                                          if (snap.hasData &&
+                                              !snap.hasError &&
+                                              snap.data != null) {
+                                            allemirates.clear();
+                                            emiratesname.clear();
+                                            for (int i = 0;
+                                                i < snap.data.documents.length;
+                                                i++) {
+                                              print(snap.data.documents.length);
+                                              emirate2 = snap.data.documents[0]
+                                                  ['name'];
+                                              emiratesname.add(snap
+                                                  .data.documents[i]['name']);
+                                              Emirates emi = Emirates(
+                                                  snap.data.documents[i]
+                                                      ['deliveryCharge'],
+                                                  snap.data.documents[i]
+                                                      ['minOrderPrice'],
+                                                  snap.data.documents[i]
+                                                      ['name']);
 
-                                                allemirates.add(emi);
-                                              }
-                                              return allemirates.length != 0
-                                                  ? Column(
-                                                      children: [
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
+                                              allemirates.add(emi);
+                                            }
+                                            return allemirates.length != 0
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
+                                                        child:
+                                                            DropdownButtonHideUnderline(
                                                           child:
-                                                              DropdownButtonHideUnderline(
-                                                            child:
-                                                                new DropdownButtonFormField<
-                                                                    String>(
-                                                              validator: (value) =>
-                                                                  value == null
-                                                                      ? 'field required'
-                                                                      : null,
-                                                              hint: Text(
-                                                                  'Emirates'),
-                                                              value:
-                                                                  emiratesname[
-                                                                      0],
-                                                              items: emiratesname
-                                                                  .map((String
-                                                                      value) {
-                                                                return new DropdownMenuItem<
-                                                                    String>(
-                                                                  value: value,
-                                                                  child:
-                                                                      new Text(
-                                                                          value),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (String
-                                                                  newValue) {
-                                                                setState(() {
-                                                                  emirate =
-                                                                      newValue;
-                                                                  emirate2 =
-                                                                      newValue;
-                                                                  print(
-                                                                      emirate);
+                                                              new DropdownButtonFormField<
+                                                                  String>(
+                                                            validator: (value) =>
+                                                                value == null
+                                                                    ? 'field required'
+                                                                    : null,
+                                                            hint: Text(
+                                                                'Emirates'),
+                                                            value:
+                                                                emiratesname[0],
+                                                            items: emiratesname
+                                                                .map((String
+                                                                    value) {
+                                                              return new DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child: new Text(
+                                                                    value),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                emirate =
+                                                                    newValue;
+                                                                emirate2 =
+                                                                    newValue;
+                                                                print(emirate);
 
 //                      Navigator.pop(context);
-                                                                });
-                                                              },
-                                                            ),
+                                                              });
+                                                            },
                                                           ),
                                                         ),
-                                                      ],
-                                                    )
-                                                  : Container();
-                                            } else {
-                                              return Container();
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Container();
+                                          } else {
+                                            return Container();
+                                          }
+                                        }),
+                                    StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('EmiratesArea')
+                                            .where('Emirate',
+                                                isEqualTo: emirate)
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<QuerySnapshot> snap) {
+                                          if (snap.hasData &&
+                                              !snap.hasError &&
+                                              snap.data != null) {
+                                            allareas.clear();
+                                            areaname.clear();
+                                            for (int i = 0;
+                                                i < snap.data.documents.length;
+                                                i++) {
+                                              print(snap.data.documents.length);
+
+                                              areaname.add(snap
+                                                  .data.documents[i]['name']);
+
+                                              EmiratesArea emi2 = EmiratesArea(
+                                                  snap.data.documents[i]
+                                                      ['Emirate'],
+                                                  snap.data.documents[i]
+                                                      ['deliveryCharge'],
+                                                  snap.data.documents[i]
+                                                      ['minOrderPrice'],
+                                                  snap.data.documents[i]
+                                                      ['name'],
+                                                  snap.data.documents[i]
+                                                      ['zone']);
+                                              allareas.add(emi2);
                                             }
-                                          }),
-                                      StreamBuilder(
-                                          stream: Firestore.instance
-                                              .collection('EmiratesArea')
-                                              .where('Emirate',
-                                                  isEqualTo: emirate)
-                                              .snapshots(),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<QuerySnapshot>
-                                                  snap) {
-                                            if (snap.hasData &&
-                                                !snap.hasError &&
-                                                snap.data != null) {
-                                              allareas.clear();
-                                              areaname.clear();
-                                              for (int i = 0;
-                                                  i <
-                                                      snap.data.documents
-                                                          .length;
-                                                  i++) {
-                                                print(
-                                                    snap.data.documents.length);
-
-                                                areaname.add(snap
-                                                    .data.documents[i]['name']);
-
-                                                EmiratesArea emi2 =
-                                                    EmiratesArea(
-                                                        snap.data.documents[i]
-                                                            ['Emirate'],
-                                                        snap.data.documents[i]
-                                                            ['deliveryCharge'],
-                                                        snap.data.documents[i]
-                                                            ['minOrderPrice'],
-                                                        snap.data.documents[i]
-                                                            ['name'],
-                                                        snap.data.documents[i]
-                                                            ['zone']);
-                                                allareas.add(emi2);
-                                              }
-                                              areaname.add('Others');
-                                              return areaname.length != 0
-                                                  ? Column(
-                                                      children: [
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
+                                            areaname.add('Others');
+                                            return areaname.length != 0
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
+                                                        child:
+                                                            DropdownButtonHideUnderline(
                                                           child:
-                                                              DropdownButtonHideUnderline(
-                                                            child:
-                                                                new DropdownButtonFormField<
-                                                                    String>(
-                                                              validator: (value) =>
-                                                                  value == null
-                                                                      ? 'field required'
-                                                                      : null,
-                                                              hint:
-                                                                  Text('Area'),
-                                                              value:
-                                                                  areaname[0],
-                                                              items: areaname
-                                                                  .map((String
-                                                                      value) {
-                                                                return new DropdownMenuItem<
-                                                                    String>(
-                                                                  value: value,
-                                                                  child:
-                                                                      new Text(
-                                                                          value),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (String
-                                                                  newValue) {
-                                                                setState(() {
-                                                                  area =
-                                                                      newValue;
+                                                              new DropdownButtonFormField<
+                                                                  String>(
+                                                            validator: (value) =>
+                                                                value == null
+                                                                    ? 'field required'
+                                                                    : null,
+                                                            hint: Text('Area'),
+                                                            value: areaname[0],
+                                                            items: areaname.map(
+                                                                (String value) {
+                                                              return new DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child: new Text(
+                                                                    value),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                area = newValue;
+                                                                print(
+                                                                    '---------------');
+                                                                print(area);
+                                                                if (area ==
+                                                                    'Others') {
                                                                   print(
-                                                                      '---------------');
-                                                                  print(area);
-                                                                  if (area ==
-                                                                      'Others') {
+                                                                      'Reached');
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          allemirates
+                                                                              .length;
+                                                                      i++) {
                                                                     print(
-                                                                        'Reached');
-                                                                    for (int i =
-                                                                            0;
-                                                                        i < allemirates.length;
-                                                                        i++) {
+                                                                        'yess');
+                                                                    print(
+                                                                        '===============${emirate}');
+                                                                    if (emirate ==
+                                                                        allemirates[i]
+                                                                            .name) {
                                                                       print(
-                                                                          'yess');
+                                                                          'check');
                                                                       print(
-                                                                          '===============${emirate}');
-                                                                      if (emirate ==
-                                                                          allemirates[i]
-                                                                              .name) {
-                                                                        print(
-                                                                            'check');
-                                                                        print(
-                                                                            emirate);
-                                                                        print(allemirates[
-                                                                            i]);
-                                                                        setState(
-                                                                            () {
-                                                                          minOrderPrice =
-                                                                              double.parse(allemirates[i].minorderprice);
-                                                                          deliveryCharge =
-                                                                              double.parse(allemirates[i].deliverycharge);
-                                                                        });
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                  for (int i =
-                                                                          0;
-                                                                      i <
-                                                                          allareas
-                                                                              .length;
-                                                                      i++) {
-                                                                    if (area ==
-                                                                        allareas[i]
-                                                                            .name)
+                                                                          emirate);
+                                                                      print(allemirates[
+                                                                          i]);
                                                                       setState(
                                                                           () {
                                                                         minOrderPrice =
-                                                                            double.parse(allareas[i].minOrderPrice);
+                                                                            double.parse(allemirates[i].minorderprice);
                                                                         deliveryCharge =
-                                                                            double.parse(allareas[i].deliveryCharge);
+                                                                            double.parse(allemirates[i].deliverycharge);
                                                                       });
+                                                                    }
                                                                   }
-//                      Navigator.pop(context);
-                                                                });
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : Container();
-                                            } else {
-                                              return Container();
-                                            }
-                                          }),
-//                                  Padding(
-//                                    padding: const EdgeInsets.all(8.0),
-//                                    child: TextFormField(
-//                                      decoration: InputDecoration(
-//                                          border: OutlineInputBorder(
-//                                              borderRadius:
-//                                                  BorderRadius.circular(2),
-//                                              borderSide: BorderSide(
-//                                                  color: Colors.grey)),
-//                                          enabledBorder: OutlineInputBorder(
-//                                              borderRadius:
-//                                                  BorderRadius.circular(2),
-//                                              borderSide: BorderSide(
-//                                                  color: Colors.grey)),
-//                                          focusedBorder: OutlineInputBorder(
-//                                              borderRadius:
-//                                                  BorderRadius.circular(2),
-//                                              borderSide: BorderSide(
-//                                                  color: Color(0xFF6b3600))),
-//                                          hintText: 'Name*'),
-//                                      controller: nameController,
-//                                    ),
-//                                  ),
-//                                  Padding(
-//                                    padding: const EdgeInsets.all(8.0),
-//                                    child: TextFormField(
-//                                      decoration: InputDecoration(
-//                                          border: OutlineInputBorder(
-//                                              borderRadius:
-//                                                  BorderRadius.circular(2),
-//                                              borderSide: BorderSide(
-//                                                  color: Colors.grey)),
-//                                          enabledBorder: OutlineInputBorder(
-//                                              borderRadius:
-//                                                  BorderRadius.circular(2),
-//                                              borderSide: BorderSide(
-//                                                  color: Colors.grey)),
-//                                          focusedBorder: OutlineInputBorder(
-//                                              borderRadius:
-//                                                  BorderRadius.circular(2),
-//                                              borderSide: BorderSide(
-//                                                  color: Color(0xFF6b3600))),
-//                                          hintText: 'Phone no*'),
-//                                      controller: phncontroller,
-//                                    ),
-//                                  ),
-
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TextFormField(
-                                          validator: (value) {
-                                            if (value == null || value == '')
-                                              return 'Required field';
-                                            return null;
-                                          },
-                                          decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Color(0xFF6b3600))),
-                                              hintText:
-                                                  'Building name/no.,floor,apartment or villa no.*'),
-                                          controller: buildingController,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TextFormField(
-                                          validator: (value) {
-                                            if (value == null || value == '')
-                                              return 'Required field';
-                                            return null;
-                                          },
-                                          decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Color(0xFF6b3600))),
-                                              hintText: 'Street name*'),
-                                          controller: flatcontroller,
-                                        ),
-                                      ),
-
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TextFormField(
-//                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
-
-                                          decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Color(0xFF6b3600))),
-                                              hintText:
-                                                  'Additional Directions/Nearest Landmark'),
-                                          maxLines: 2,
-                                          controller: additionalcontroller,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : Form(
-                                  key: _formkey,
-                                  child: Column(
-                                    children: [
-                                      StreamBuilder(
-                                          stream: Firestore.instance
-                                              .collection('Emirates')
-                                              .snapshots(),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<QuerySnapshot>
-                                                  snap) {
-                                            if (snap.hasData &&
-                                                !snap.hasError &&
-                                                snap.data != null) {
-                                              allemirates.clear();
-                                              emiratesname.clear();
-                                              for (int i = 0;
-                                                  i <
-                                                      snap.data.documents
-                                                          .length;
-                                                  i++) {
-                                                print(
-                                                    snap.data.documents.length);
-                                                emirate2 = snap
-                                                    .data.documents[0]['name'];
-                                                emiratesname.add(snap
-                                                    .data.documents[i]['name']);
-                                                Emirates emi = Emirates(
-                                                    snap.data.documents[i]
-                                                        ['deliveryCharge'],
-                                                    snap.data.documents[i]
-                                                        ['minOrderPrice'],
-                                                    snap.data.documents[i]
-                                                        ['name']);
-                                                allemirates.add(emi);
-                                              }
-                                              return allemirates.length != 0
-                                                  ? Column(
-                                                      children: [
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
-                                                          child:
-                                                              DropdownButtonHideUnderline(
-                                                            child:
-                                                                new DropdownButtonFormField<
-                                                                    String>(
-                                                              validator: (value) =>
-                                                                  value == null
-                                                                      ? 'field required'
-                                                                      : null,
-                                                              hint: Text(
-                                                                  'Emirates'),
-                                                              value:
-                                                                  emiratesname[
-                                                                      0],
-                                                              items: emiratesname
-                                                                  .map((String
-                                                                      value) {
-                                                                return new DropdownMenuItem<
-                                                                    String>(
-                                                                  value: value,
-                                                                  child:
-                                                                      new Text(
-                                                                          value),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (String
-                                                                  newValue) {
-                                                                setState(() {
-                                                                  emirate =
-                                                                      newValue;
-                                                                  emirate2 =
-                                                                      newValue;
-                                                                  print(
-                                                                      emirate);
-
-//                      Navigator.pop(context);
-                                                                });
-                                                              },
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    )
-                                                  : Container();
-                                            } else {
-                                              return Container();
-                                            }
-                                          }),
-                                      StreamBuilder(
-                                          stream: Firestore.instance
-                                              .collection('EmiratesArea')
-                                              .where('Emirate',
-                                                  isEqualTo: emirate)
-                                              .snapshots(),
-                                          builder: (BuildContext context,
-                                              AsyncSnapshot<QuerySnapshot>
-                                                  snap) {
-                                            if (snap.hasData &&
-                                                !snap.hasError &&
-                                                snap.data != null) {
-                                              allareas.clear();
-                                              areaname.clear();
-                                              for (int i = 0;
-                                                  i <
-                                                      snap.data.documents
-                                                          .length;
-                                                  i++) {
-                                                print(
-                                                    snap.data.documents.length);
-
-                                                areaname.add(snap
-                                                    .data.documents[i]['name']);
-
-                                                EmiratesArea emi2 =
-                                                    EmiratesArea(
-                                                        snap.data.documents[i]
-                                                            ['Emirate'],
-                                                        snap.data.documents[i]
-                                                            ['deliveryCharge'],
-                                                        snap.data.documents[i]
-                                                            ['minOrderPrice'],
-                                                        snap.data.documents[i]
-                                                            ['name'],
-                                                        snap.data.documents[i]
-                                                            ['zone']);
-                                                allareas.add(emi2);
-                                              }
-                                              areaname.add('Others');
-                                              return areaname.length != 0
-                                                  ? Column(
-                                                      children: [
-                                                        Container(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.9,
-                                                          child:
-                                                              DropdownButtonHideUnderline(
-                                                            child:
-                                                                new DropdownButtonFormField<
-                                                                    String>(
-                                                              validator: (value) =>
-                                                                  value == null
-                                                                      ? 'field required'
-                                                                      : null,
-                                                              hint:
-                                                                  Text('Area'),
-                                                              value:
-                                                                  areaname[0],
-                                                              items: areaname
-                                                                  .map((String
-                                                                      value) {
-                                                                return new DropdownMenuItem<
-                                                                    String>(
-                                                                  value: value,
-                                                                  child:
-                                                                      new Text(
-                                                                          value),
-                                                                );
-                                                              }).toList(),
-                                                              onChanged: (String
-                                                                  newValue) {
-                                                                setState(() {
-                                                                  area =
-                                                                      newValue;
-                                                                  print(
-                                                                      '---------------------');
-                                                                  print(area);
-
+                                                                }
+                                                                for (int i = 0;
+                                                                    i <
+                                                                        allareas
+                                                                            .length;
+                                                                    i++) {
                                                                   if (area ==
-                                                                      'Others') {
-                                                                    for (int i =
-                                                                            0;
-                                                                        i < allemirates.length;
-                                                                        i++) {
-                                                                      if (emirate2 ==
-                                                                          allemirates[i]
-                                                                              .name) {
-                                                                        setState(
-                                                                            () {
-                                                                          minOrderPrice =
-                                                                              double.parse(allemirates[i].minorderprice);
-                                                                          deliveryCharge =
-                                                                              double.parse(allemirates[i].deliverycharge);
-                                                                        });
-                                                                      }
-                                                                    }
-                                                                  }
+                                                                      allareas[
+                                                                              i]
+                                                                          .name)
+                                                                    setState(
+                                                                        () {
+                                                                      minOrderPrice =
+                                                                          double.parse(
+                                                                              allareas[i].minOrderPrice);
+                                                                      deliveryCharge =
+                                                                          double.parse(
+                                                                              allareas[i].deliveryCharge);
+                                                                    });
+                                                                }
+//                      Navigator.pop(context);
+                                                              });
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Container();
+                                          } else {
+                                            return Container();
+                                          }
+                                        }),
+//                                  Padding(
+//                                    padding: const EdgeInsets.all(8.0),
+//                                    child: TextFormField(
+//                                      decoration: InputDecoration(
+//                                          border: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          enabledBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          focusedBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Color(0xFF6b3600))),
+//                                          hintText: 'Name*'),
+//                                      controller: nameController,
+//                                    ),
+//                                  ),
+//                                  Padding(
+//                                    padding: const EdgeInsets.all(8.0),
+//                                    child: TextFormField(
+//                                      decoration: InputDecoration(
+//                                          border: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          enabledBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Colors.grey)),
+//                                          focusedBorder: OutlineInputBorder(
+//                                              borderRadius:
+//                                                  BorderRadius.circular(2),
+//                                              borderSide: BorderSide(
+//                                                  color: Color(0xFF6b3600))),
+//                                          hintText: 'Phone no*'),
+//                                      controller: phncontroller,
+//                                    ),
+//                                  ),
 
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        validator: (value) {
+                                          if (value == null || value == '')
+                                            return 'Required field';
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText:
+                                                'Building name/no.,floor,apartment or villa no.*'),
+                                        controller: buildingController,
+                                      ),
+                                    ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        validator: (value) {
+                                          if (value == null || value == '')
+                                            return 'Required field';
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText: 'Street name*'),
+                                        controller: flatcontroller,
+                                      ),
+                                    ),
+
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+//                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
+
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText:
+                                                'Additional Directions/Nearest Landmark'),
+                                        maxLines: 2,
+                                        controller: additionalcontroller,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : Form(
+                                key: _formkey,
+                                child: Column(
+                                  children: [
+                                    StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('Emirates')
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<QuerySnapshot> snap) {
+                                          if (snap.hasData &&
+                                              !snap.hasError &&
+                                              snap.data != null) {
+                                            allemirates.clear();
+                                            emiratesname.clear();
+                                            for (int i = 0;
+                                                i < snap.data.documents.length;
+                                                i++) {
+                                              print(snap.data.documents.length);
+                                              emirate2 = snap.data.documents[0]
+                                                  ['name'];
+                                              emiratesname.add(snap
+                                                  .data.documents[i]['name']);
+                                              Emirates emi = Emirates(
+                                                  snap.data.documents[i]
+                                                      ['deliveryCharge'],
+                                                  snap.data.documents[i]
+                                                      ['minOrderPrice'],
+                                                  snap.data.documents[i]
+                                                      ['name']);
+                                              allemirates.add(emi);
+                                            }
+                                            return allemirates.length != 0
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
+                                                        child:
+                                                            DropdownButtonHideUnderline(
+                                                          child:
+                                                              new DropdownButtonFormField<
+                                                                  String>(
+                                                            validator: (value) =>
+                                                                value == null
+                                                                    ? 'field required'
+                                                                    : null,
+                                                            hint: Text(
+                                                                'Emirates'),
+                                                            value:
+                                                                emiratesname[0],
+                                                            items: emiratesname
+                                                                .map((String
+                                                                    value) {
+                                                              return new DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child: new Text(
+                                                                    value),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                emirate =
+                                                                    newValue;
+                                                                emirate2 =
+                                                                    newValue;
+                                                                print(emirate);
+
+//                      Navigator.pop(context);
+                                                              });
+                                                            },
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Container();
+                                          } else {
+                                            return Container();
+                                          }
+                                        }),
+                                    StreamBuilder(
+                                        stream: Firestore.instance
+                                            .collection('EmiratesArea')
+                                            .where('Emirate',
+                                                isEqualTo: emirate)
+                                            .snapshots(),
+                                        builder: (BuildContext context,
+                                            AsyncSnapshot<QuerySnapshot> snap) {
+                                          if (snap.hasData &&
+                                              !snap.hasError &&
+                                              snap.data != null) {
+                                            allareas.clear();
+                                            areaname.clear();
+                                            for (int i = 0;
+                                                i < snap.data.documents.length;
+                                                i++) {
+                                              print(snap.data.documents.length);
+
+                                              areaname.add(snap
+                                                  .data.documents[i]['name']);
+
+                                              EmiratesArea emi2 = EmiratesArea(
+                                                  snap.data.documents[i]
+                                                      ['Emirate'],
+                                                  snap.data.documents[i]
+                                                      ['deliveryCharge'],
+                                                  snap.data.documents[i]
+                                                      ['minOrderPrice'],
+                                                  snap.data.documents[i]
+                                                      ['name'],
+                                                  snap.data.documents[i]
+                                                      ['zone']);
+                                              allareas.add(emi2);
+                                            }
+                                            areaname.add('Others');
+                                            return areaname.length != 0
+                                                ? Column(
+                                                    children: [
+                                                      Container(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.9,
+                                                        child:
+                                                            DropdownButtonHideUnderline(
+                                                          child:
+                                                              new DropdownButtonFormField<
+                                                                  String>(
+                                                            validator: (value) =>
+                                                                value == null
+                                                                    ? 'field required'
+                                                                    : null,
+                                                            hint: Text('Area'),
+                                                            value: areaname[0],
+                                                            items: areaname.map(
+                                                                (String value) {
+                                                              return new DropdownMenuItem<
+                                                                  String>(
+                                                                value: value,
+                                                                child: new Text(
+                                                                    value),
+                                                              );
+                                                            }).toList(),
+                                                            onChanged: (String
+                                                                newValue) {
+                                                              setState(() {
+                                                                area = newValue;
+                                                                print(
+                                                                    '---------------------');
+                                                                print(area);
+
+                                                                if (area ==
+                                                                    'Others') {
                                                                   for (int i =
                                                                           0;
                                                                       i <
-                                                                          allareas
+                                                                          allemirates
                                                                               .length;
                                                                       i++) {
-                                                                    if (area ==
-                                                                        allareas[i]
-                                                                            .name)
+                                                                    if (emirate2 ==
+                                                                        allemirates[i]
+                                                                            .name) {
                                                                       setState(
                                                                           () {
                                                                         minOrderPrice =
-                                                                            double.parse(allareas[i].minOrderPrice);
+                                                                            double.parse(allemirates[i].minorderprice);
                                                                         deliveryCharge =
-                                                                            double.parse(allareas[i].deliveryCharge);
+                                                                            double.parse(allemirates[i].deliverycharge);
                                                                       });
+                                                                    }
                                                                   }
+                                                                }
+
+                                                                for (int i = 0;
+                                                                    i <
+                                                                        allareas
+                                                                            .length;
+                                                                    i++) {
+                                                                  if (area ==
+                                                                      allareas[
+                                                                              i]
+                                                                          .name)
+                                                                    setState(
+                                                                        () {
+                                                                      minOrderPrice =
+                                                                          double.parse(
+                                                                              allareas[i].minOrderPrice);
+                                                                      deliveryCharge =
+                                                                          double.parse(
+                                                                              allareas[i].deliveryCharge);
+                                                                    });
+                                                                }
 //                      Navigator.pop(context);
-                                                                });
-                                                              },
-                                                            ),
+                                                              });
+                                                            },
                                                           ),
                                                         ),
-                                                      ],
-                                                    )
-                                                  : Container();
-                                            } else {
-                                              return Container();
-                                            }
-                                          }),
+                                                      ),
+                                                    ],
+                                                  )
+                                                : Container();
+                                          } else {
+                                            return Container();
+                                          }
+                                        }),
 //                                  Padding(
 //                                    padding: const EdgeInsets.all(8.0),
 //                                    child: TextFormField(
@@ -1882,199 +1851,196 @@ class _CheckoutState extends State<Checkout> {
 //                                    ),
 //                                  ),
 
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TextFormField(
-                                          validator: (value) {
-                                            if (value == null || value == '')
-                                              return 'Required field';
-                                            return null;
-                                          },
-                                          decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Color(0xFF6b3600))),
-                                              hintText:
-                                                  'Building name/no.,floor*'),
-                                          controller: buildingController,
-                                        ),
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
+                                        validator: (value) {
+                                          if (value == null || value == '')
+                                            return 'Required field';
+                                          return null;
+                                        },
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText:
+                                                'Building name/no.,floor*'),
+                                        controller: buildingController,
                                       ),
+                                    ),
 
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: TextFormField(
+                                    Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: TextFormField(
 //                                        validator: (value){if(value==null||value=='')return 'Required field';return null;},
-                                          decoration: InputDecoration(
-                                              border: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              enabledBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color: Colors.grey)),
-                                              focusedBorder: OutlineInputBorder(
-                                                  borderRadius:
-                                                      BorderRadius.circular(2),
-                                                  borderSide: BorderSide(
-                                                      color:
-                                                          Color(0xFF6b3600))),
-                                              hintText:
-                                                  'Additional Directions/Nearest Landmark'),
-                                          maxLines: 2,
-                                          controller: additionalcontroller,
-                                        ),
+                                        decoration: InputDecoration(
+                                            border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            enabledBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Colors.grey)),
+                                            focusedBorder: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(2),
+                                                borderSide: BorderSide(
+                                                    color: Color(0xFF6b3600))),
+                                            hintText:
+                                                'Additional Directions/Nearest Landmark'),
+                                        maxLines: 2,
+                                        controller: additionalcontroller,
                                       ),
-                                    ],
-                                  ),
-                                )
-                      : Container(),
-                  type != 'Takeaway' && widget.address == ''
-                      ? CheckboxListTile(
-                          controlAffinity: ListTileControlAffinity.leading,
-                          checkColor: Colors.white,
-                          activeColor: AppColors.secondaryElement,
-                          title: Text("Save to my addresses"),
-                          value: ischecked,
-                          onChanged: (newValue) {
-                            setState(() {
-                              ischecked = !ischecked;
-                            });
-                            if (ischecked == true) {
-                              print(ischecked);
-                              if (_formkey.currentState.validate()) {
-                                setaddress();
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg: 'Address required',
-                                    toastLength: Toast.LENGTH_SHORT);
-                              }
+                                    ),
+                                  ],
+                                ),
+                              )
+                    : Container(),
+                type != 'Takeaway' && widget.address == ''
+                    ? CheckboxListTile(
+                        controlAffinity: ListTileControlAffinity.leading,
+                        checkColor: Colors.white,
+                        activeColor: AppColors.secondaryElement,
+                        title: Text("Save to my addresses"),
+                        value: ischecked,
+                        onChanged: (newValue) {
+                          setState(() {
+                            ischecked = !ischecked;
+                          });
+                          if (ischecked == true) {
+                            print(ischecked);
+                            if (_formkey.currentState.validate()) {
+                              setaddress();
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Address required',
+                                  toastLength: Toast.LENGTH_SHORT);
                             }
-                          })
-                      : Container(),
-                  type != 'Takeaway'
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14.0, vertical: 10),
-                          child: angadiButton(
-                            'Saved addresses',
-                            buttonWidth: MediaQuery.of(context).size.width,
+                          }
+                        })
+                    : Container(),
+                type != 'Takeaway'
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14.0, vertical: 10),
+                        child: angadiButton(
+                          'Saved addresses',
+                          buttonWidth: MediaQuery.of(context).size.width,
+                          onTap: () {
+                            setState(() {});
+                            Navigator.pushReplacement(context,
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) {
+                              return MyAddresses2(docid);
+                            }));
+                          },
+                        ),
+                      )
+                    : Container(),
+                Padding(
+                  padding:
+                      const EdgeInsets.only(left: 12.0, bottom: 0, top: 20),
+                  child: HeadingRow(
+                    title: 'Bill',
+                    number: '',
+                  ),
+                ),
+                Bill(),
+                discount == null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('No promo code applied!'),
+                          InkWell(
                             onTap: () {
-                              setState(() {});
-                              Navigator.pushReplacement(context,
-                                  MaterialPageRoute(
-                                      builder: (BuildContext context) {
-                                return MyAddresses2(docid);
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return ApplyOffers(this, context);
                               }));
                             },
+                            child: Text(
+                              ' Apply Promo Code',
+                              style: TextStyle(color: Colors.blue),
+                            ),
                           ),
-                        )
-                      : Container(),
-                  Padding(
-                    padding:
-                        const EdgeInsets.only(left: 12.0, bottom: 0, top: 20),
-                    child: HeadingRow(
-                      title: 'Bill',
-                      number: '',
-                    ),
-                  ),
-                  Bill(),
-                  discount == null
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text('No promo code applied!'),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                                  return ApplyOffers(this, context);
-                                }));
-                              },
-                              child: Text(
-                                ' Apply Promo Code',
-                                style: TextStyle(color: Colors.blue),
-                              ),
+                        ],
+                      )
+                    : Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text('${discount.discount}% off promo code applied!'),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                  builder: (BuildContext context) {
+                                return ApplyOffers(this, context);
+                              }));
+                            },
+                            child: Text(
+                              ' Change',
+                              style: TextStyle(color: Colors.blue),
                             ),
-                          ],
-                        )
-                      : Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                                '${discount.discount}% off promo code applied!'),
-                            InkWell(
-                              onTap: () {
-                                Navigator.push(context, MaterialPageRoute(
-                                    builder: (BuildContext context) {
-                                  return ApplyOffers(this, context);
-                                }));
-                              },
-                              child: Text(
-                                ' Change',
-                                style: TextStyle(color: Colors.blue),
-                              ),
-                            ),
-                          ],
+                          ),
+                        ],
+                      ),
+                type != 'Takeaway'
+                    ? Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12.0, bottom: 12, top: 12),
+                        child: HeadingRow(
+                          title: 'Notes',
+                          number: '',
                         ),
-                  type != 'Takeaway'
-                      ? Padding(
-                          padding: const EdgeInsets.only(
-                              left: 12.0, bottom: 12, top: 12),
-                          child: HeadingRow(
-                            title: 'Notes',
-                            number: '',
-                          ),
-                        )
-                      : Container(),
-                  type != 'Takeaway'
-                      ? Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                          child: CustomTextFormField(
-                            controller: notesController,
-                            textFormFieldStyle: textFormFieldTextStyle,
-                            prefixIconColor: AppColors.secondaryElement,
-                            hintTextStyle: hintTextStyle,
-                            borderStyle: BorderStyle.solid,
-                            borderWidth: Sizes.WIDTH_1,
-                            hintText: 'Add delivery note (Optional)',
-                            maxLines: 2,
-                            hasPrefixIcon: true,
-                            prefixIconImagePath: ImagePath.activeBookmarksIcon,
-                          ),
-                        )
-                      : Container(),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  type == 'Delivery'
-                      ? Padding(
-                          padding: const EdgeInsets.only(
-                              left: 12.0, bottom: 0, top: 10),
-                          child: HeadingRow(
-                            title: 'Delivery Time',
-                            number: '',
-                          ),
-                        )
-                      : Container(),
-                  type == 'Delivery'
-                      ? InkWell(
-                          onTap: () {
+                      )
+                    : Container(),
+                type != 'Takeaway'
+                    ? Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: CustomTextFormField(
+                          controller: notesController,
+                          textFormFieldStyle: textFormFieldTextStyle,
+                          prefixIconColor: AppColors.secondaryElement,
+                          hintTextStyle: hintTextStyle,
+                          borderStyle: BorderStyle.solid,
+                          borderWidth: Sizes.WIDTH_1,
+                          hintText: 'Add delivery note (Optional)',
+                          maxLines: 2,
+                          hasPrefixIcon: true,
+                          prefixIconImagePath: ImagePath.activeBookmarksIcon,
+                        ),
+                      )
+                    : Container(),
+                SizedBox(
+                  height: 20,
+                ),
+                type == 'Delivery'
+                    ? Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12.0, bottom: 0, top: 10),
+                        child: HeadingRow(
+                          title: 'Delivery Time',
+                          number: '',
+                        ),
+                      )
+                    : Container(),
+                type == 'Delivery'
+                    ? InkWell(
+                        onTap: () {
 //                          scaffoldState.currentState.showBottomSheet((context) {
 //                            return StatefulBuilder(builder:
 //                                (BuildContext context, StateSetter state) {
@@ -2089,80 +2055,78 @@ class _CheckoutState extends State<Checkout> {
 //                              selectedTime = value;
 //                            });
 //                          });
-                          },
-                          child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Card(
-                                elevation: 5,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Container(
-                                    height: MediaQuery.of(context).size.height *
-                                        0.05,
-                                    decoration: BoxDecoration(
-                                        border: Border.all(
-                                            color: AppColors.secondaryElement),
-                                        borderRadius:
-                                            BorderRadius.all(Radius.zero)),
-                                    child: Row(
-                                      children: [
-                                        Text('    Next Delivery: '),
-                                        Icon(
-                                          Icons.delivery_dining,
-                                          color: AppColors.secondaryElement,
-                                        ),
-                                        SizedBox(width: 5),
-                                        InkWell(
-                                            onTap: () {
-                                              _pickTime().then((value) {
-                                                setState(() {
-                                                  selectedDate = value;
-                                                });
+                        },
+                        child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Card(
+                              elevation: 5,
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Container(
+                                  height:
+                                      MediaQuery.of(context).size.height * 0.05,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: AppColors.secondaryElement),
+                                      borderRadius:
+                                          BorderRadius.all(Radius.zero)),
+                                  child: Row(
+                                    children: [
+                                      Text('    Next Delivery: '),
+                                      Icon(
+                                        Icons.delivery_dining,
+                                        color: AppColors.secondaryElement,
+                                      ),
+                                      SizedBox(width: 5),
+                                      InkWell(
+                                          onTap: () {
+                                            _pickTime().then((value) {
+                                              setState(() {
+                                                selectedDate = value;
                                               });
-                                            },
-                                            child: selectedDate != null
-                                                ? Text(
-                                                    '${selectedDate.day.toString()}/${selectedDate.month.toString()}/${selectedDate.year.toString()} ',
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF6b3600)),
-                                                  )
-                                                : Text(
-                                                    '${date.day.toString()}/${date.month.toString()}/${selectedDate.year.toString()} ',
-                                                    style: TextStyle(
-                                                        color:
-                                                            Color(0xFF6b3600)),
-                                                  )),
-                                        Text(' at '),
-                                        Icon(
-                                          Icons.timer,
-                                          size: 19,
-                                          color: AppColors.secondaryElement,
-                                        ),
-                                        SizedBox(width: 5),
-                                        InkWell(
-                                            onTap: () {
-                                              _timeDialog(context);
-                                            },
-                                            child: Text(
-                                              '$selectedTime ',
-                                              style: TextStyle(
-                                                  color: Color(0xFF6b3600)),
-                                            )),
+                                            });
+                                          },
+                                          child: selectedDate != null
+                                              ? Text(
+                                                  '${selectedDate.day.toString()}/${selectedDate.month.toString()}/${selectedDate.year.toString()} ',
+                                                  style: TextStyle(
+                                                      color: Color(0xFF6b3600)),
+                                                )
+                                              : Text(
+                                                  '${date.day.toString()}/${date.month.toString()}/${selectedDate.year.toString()} ',
+                                                  style: TextStyle(
+                                                      color: Color(0xFF6b3600)),
+                                                )),
+                                      Text(' at '),
+                                      Icon(
+                                        Icons.timer,
+                                        size: 19,
+                                        color: AppColors.secondaryElement,
+                                      ),
+                                      SizedBox(width: 5),
+                                      InkWell(
+                                          onTap: () {
+                                            _timeDialog(context);
+                                          },
+                                          child: Text(
+                                            '$selectedTime ',
+                                            style: TextStyle(
+                                                color: Color(0xFF6b3600)),
+                                          )),
 //                        InkWell(
 //                            onTap: () {
 //                              _locationDialog(context);
 //                            },
 //                            child: Icon(Icons.edit))
-                                      ],
-                                    ),
+                                    ],
                                   ),
+                                ),
 //                                    child: Text(
 //                                      'Schedule Delivery Time',
 //                                      style: TextStyle(
 //                                          color: Colors.blue, fontSize: 20),
-                                ),
-                              ))
+                              ),
+                            ))
 //                            : Row(
 //                                crossAxisAlignment: CrossAxisAlignment.start,
 //                                children: [
@@ -2282,36 +2246,35 @@ class _CheckoutState extends State<Checkout> {
 //                                  ),
 //                                ],
 //                              ))
-                          )
-                      : Container(),
-                  _result != '833'
-                      ? Padding(
-                          padding: const EdgeInsets.only(
-                              left: 12.0, bottom: 0, top: 10),
-                          child: HeadingRow(
-                            title: 'Choose Payment Method',
-                            number: '',
-                          ),
                         )
-                      : Container(),
-                  _result != '833'
-                      ? SizedBox(
-                          height: 20,
-                        )
-                      : Container(),
-                  Column(
-                    children: [
-                      _result != '833' && type != 'Takeaway'
-                          ? Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 14.0),
-                              child: angadiButton('Cash On Delivery',
-                                  buttonWidth: MediaQuery.of(context)
-                                      .size
-                                      .width, onTap: () {
-                                print('-------------------------------------');
+                    : Container(),
+                _result != '833'
+                    ? Padding(
+                        padding: const EdgeInsets.only(
+                            left: 12.0, bottom: 0, top: 10),
+                        child: HeadingRow(
+                          title: 'Choose Payment Method',
+                          number: '',
+                        ),
+                      )
+                    : Container(),
+                _result != '833'
+                    ? SizedBox(
+                        height: 20,
+                      )
+                    : Container(),
+                Column(
+                  children: [
+                    _result != '833' && type != 'Takeaway'
+                        ? Padding(
+                            padding:
+                                const EdgeInsets.symmetric(horizontal: 14.0),
+                            child: angadiButton('Cash On Delivery',
+                                buttonWidth: MediaQuery.of(context).size.width,
+                                onTap: () {
+                              print('-------------------------------------');
 
-                                if (widget.address != '') {
+                              if (widget.address != '') {
 //                                  if (widget.SavedArea != '') {
 //
 //                                    for (int i = 0; i < savedarea.length; i++) {
@@ -2330,6 +2293,70 @@ class _CheckoutState extends State<Checkout> {
 //                                      print(deliveryCharge);
 //                                    }
 //                                  }
+                                if (selectedTime == 'Choose Slot') {
+                                  Fluttertoast.showToast(
+                                      msg: 'Please select time slot',
+                                      toastLength: Toast.LENGTH_SHORT);
+                                } else {
+                                  var total = 0.0;
+                                  discount != null
+                                      ? total = ((totalAmount() * 0.18) +
+                                          totalAmount() -
+                                          (totalAmount() *
+                                              (double.parse(discount.discount) /
+                                                  100)) +
+                                          deliveryCharge)
+                                      : total = ((totalAmount() * 0.18) +
+                                          totalAmount() +
+                                          deliveryCharge);
+                                  if (total > minOrderPrice) {
+                                    showAlertDialog(context);
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            'Your order amount is less \n than the minimum order price',
+                                        toastLength: Toast.LENGTH_SHORT);
+                                  }
+                                }
+//                                var total = 0.0;
+//                                discount != null
+//                                    ? total = ((totalAmount() * 0.18) +
+//                                        totalAmount() -
+//                                        (totalAmount() *
+//                                            (double.parse(discount.discount) /
+//                                                100)) +
+//                                        deliveryCharge)
+//                                    : total = ((totalAmount() * 0.18) +
+//                                        totalAmount() +
+//                                        deliveryCharge);
+//                                if (total > minOrderPrice) {
+//                                  showAlertDialog(context);
+//                                } else {
+//                                  Fluttertoast.showToast(
+//                                      msg:
+//                                          'Your order amount is less \n than the minimum order price',
+//                                      toastLength: Toast.LENGTH_SHORT);
+//                                }
+                              }
+
+                              if (widget.address == '') {
+                                if (_formkey.currentState.validate()) {
+//                                    if (widget.SavedArea != '') {
+//                                      for (int i = 0; i <
+//                                          allareas.length; i++) {
+//                                        if (widget.SavedArea ==
+//                                            allareas[i].name) {
+//                                          setState(() {
+//                                            minOrderPrice = double.parse(
+//                                                allareas[i].minOrderPrice);
+//                                            deliveryCharge = double.parse(
+//                                                allareas[i].deliveryCharge);
+//                                          });
+//                                        }
+//                                        print(minOrderPrice);
+//                                        print(deliveryCharge);
+//                                      }
+//                                    }
                                   if (selectedTime == 'Choose Slot') {
                                     Fluttertoast.showToast(
                                         msg: 'Please select time slot',
@@ -2356,104 +2383,39 @@ class _CheckoutState extends State<Checkout> {
                                           toastLength: Toast.LENGTH_SHORT);
                                     }
                                   }
-//                                var total = 0.0;
-//                                discount != null
-//                                    ? total = ((totalAmount() * 0.18) +
-//                                        totalAmount() -
-//                                        (totalAmount() *
-//                                            (double.parse(discount.discount) /
-//                                                100)) +
-//                                        deliveryCharge)
-//                                    : total = ((totalAmount() * 0.18) +
-//                                        totalAmount() +
-//                                        deliveryCharge);
-//                                if (total > minOrderPrice) {
-//                                  showAlertDialog(context);
-//                                } else {
-//                                  Fluttertoast.showToast(
-//                                      msg:
-//                                          'Your order amount is less \n than the minimum order price',
-//                                      toastLength: Toast.LENGTH_SHORT);
-//                                }
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg: 'Address required',
+                                      toastLength: Toast.LENGTH_SHORT);
                                 }
-
-                                if (widget.address == '') {
-                                  if (_formkey.currentState.validate()) {
-//                                    if (widget.SavedArea != '') {
-//                                      for (int i = 0; i <
-//                                          allareas.length; i++) {
-//                                        if (widget.SavedArea ==
-//                                            allareas[i].name) {
-//                                          setState(() {
-//                                            minOrderPrice = double.parse(
-//                                                allareas[i].minOrderPrice);
-//                                            deliveryCharge = double.parse(
-//                                                allareas[i].deliveryCharge);
-//                                          });
-//                                        }
-//                                        print(minOrderPrice);
-//                                        print(deliveryCharge);
-//                                      }
-//                                    }
-                                    if (selectedTime == 'Choose Slot') {
-                                      Fluttertoast.showToast(
-                                          msg: 'Please select time slot',
-                                          toastLength: Toast.LENGTH_SHORT);
-                                    } else {
-                                      var total = 0.0;
-                                      discount != null
-                                          ? total = ((totalAmount() * 0.18) +
-                                              totalAmount() -
-                                              (totalAmount() *
-                                                  (double.parse(
-                                                          discount.discount) /
-                                                      100)) +
-                                              deliveryCharge)
-                                          : total = ((totalAmount() * 0.18) +
-                                              totalAmount() +
-                                              deliveryCharge);
-                                      if (total > minOrderPrice) {
-                                        showAlertDialog(context);
-                                      } else {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                'Your order amount is less \n than the minimum order price',
-                                            toastLength: Toast.LENGTH_SHORT);
-                                      }
-                                    }
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg: 'Address required',
-                                        toastLength: Toast.LENGTH_SHORT);
-                                  }
-                                }
-                              }),
-                            )
-                          : type == 'Takeaway'
-                              ? Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 14),
-                                  child: angadiButton('Pay on Pickup',
-                                      buttonWidth: MediaQuery.of(context)
-                                          .size
-                                          .width, onTap: () {
-                                    placeOrder(type);
-                                  }),
-                                )
-                              : Container(),
-                      _result != '833'
-                          ? SizedBox(
-                              height: 20,
-                            )
-                          : Container(),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 14.0),
-                        child: angadiButton(
-                          _result != '833' && val
-                              ? 'Proceed to pay online'
-                              : 'Go to my orders',
-                          onTap: () {
-                            if (widget.SavedArea != '') {
+                              }
+                            }),
+                          )
+                        : type == 'Takeaway'
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 14),
+                                child: angadiButton('Pay on Pickup',
+                                    buttonWidth: MediaQuery.of(context)
+                                        .size
+                                        .width, onTap: () {
+                                  placeOrder(type);
+                                }),
+                              )
+                            : Container(),
+                    _result != '833'
+                        ? SizedBox(
+                            height: 20,
+                          )
+                        : Container(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 14.0),
+                      child: angadiButton(
+                        _result != '833' && val
+                            ? 'Proceed to pay online'
+                            : 'Go to my orders',
+                        onTap: () {
+                          if (widget.SavedArea != '') {
 //    for (int i = 0; i < savedarea.length; i++) {
 //    if (widget.SavedArea ==
 //    savedarea[i].name) {
@@ -2469,52 +2431,52 @@ class _CheckoutState extends State<Checkout> {
 //    print(minOrderPrice);
 //    print(deliveryCharge);
 //    }
-                            }
-                            if (selectedTime == 'Choose Slot') {
-                              Fluttertoast.showToast(
-                                  msg: 'Please select time slot',
-                                  toastLength: Toast.LENGTH_SHORT);
+                          }
+                          if (selectedTime == 'Choose Slot') {
+                            Fluttertoast.showToast(
+                                msg: 'Please select time slot',
+                                toastLength: Toast.LENGTH_SHORT);
+                          } else {
+                            var total = 0.0;
+                            discount != null
+                                ? total = ((totalAmount() * 0.18) +
+                                    totalAmount() -
+                                    (totalAmount() *
+                                        (double.parse(discount.discount) /
+                                            100)) +
+                                    deliveryCharge)
+                                : total = ((totalAmount() * 0.18) +
+                                    totalAmount() +
+                                    deliveryCharge);
+                            if (total > minOrderPrice) {
+                              _result != '833' && j != 1 && val
+                                  ? onlineorder(
+                                      (discount != null)
+                                          ? ((totalAmount() * 0.18) +
+                                                  totalAmount() -
+                                                  (totalAmount() *
+                                                      (double.parse(discount
+                                                              .discount) /
+                                                          100)) +
+                                                  deliveryCharge)
+                                              .toStringAsFixed(2)
+                                          : ((totalAmount() * 0.18) +
+                                                  totalAmount() +
+                                                  deliveryCharge)
+                                              .toString(),
+                                      type,
+                                      orderid)
+                                  : Checksuccess();
                             } else {
-                              var total = 0.0;
-                              discount != null
-                                  ? total = ((totalAmount() * 0.18) +
-                                      totalAmount() -
-                                      (totalAmount() *
-                                          (double.parse(discount.discount) /
-                                              100)) +
-                                      deliveryCharge)
-                                  : total = ((totalAmount() * 0.18) +
-                                      totalAmount() +
-                                      deliveryCharge);
-                              if (total > minOrderPrice) {
-                                _result != '833' && j != 1 && val
-                                    ? onlineorder(
-                                        (discount != null)
-                                            ? ((totalAmount() * 0.18) +
-                                                    totalAmount() -
-                                                    (totalAmount() *
-                                                        (double.parse(discount
-                                                                .discount) /
-                                                            100)) +
-                                                    deliveryCharge)
-                                                .toStringAsFixed(2)
-                                            : ((totalAmount() * 0.18) +
-                                                    totalAmount() +
-                                                    deliveryCharge)
-                                                .toString(),
-                                        type,
-                                        orderid)
-                                    : Checksuccess();
-                              } else {
-                                Fluttertoast.showToast(
-                                    msg:
-                                        'Your order amount is less \n than the minimum order price',
-                                    toastLength: Toast.LENGTH_SHORT);
-                              }
+                              Fluttertoast.showToast(
+                                  msg:
+                                      'Your order amount is less \n than the minimum order price',
+                                  toastLength: Toast.LENGTH_SHORT);
                             }
+                          }
 
-                            if (widget.address == '') {
-                              if (_formkey.currentState.validate()) {
+                          if (widget.address == '') {
+                            if (_formkey.currentState.validate()) {
 //                    if (widget.SavedArea != '') {
 //                    for (int i = 0; i <
 //                    allareas.length; i++) {
@@ -2531,54 +2493,54 @@ class _CheckoutState extends State<Checkout> {
 //                    print(deliveryCharge);
 //                    }
 //                    }
-                                if (selectedTime == 'Choose Slot') {
-                                  Fluttertoast.showToast(
-                                      msg: 'Please select time slot',
-                                      toastLength: Toast.LENGTH_SHORT);
-                                } else {
-                                  var total = 0.0;
-                                  discount != null
-                                      ? total = ((totalAmount() * 0.18) +
-                                          totalAmount() -
-                                          (totalAmount() *
-                                              (double.parse(discount.discount) /
-                                                  100)) +
-                                          deliveryCharge)
-                                      : total = ((totalAmount() * 0.18) +
-                                          totalAmount() +
-                                          deliveryCharge);
-                                  if (total > minOrderPrice) {
-                                    _result != '833' && j != 1 && val
-                                        ? onlineorder(
-                                            (discount != null)
-                                                ? ((totalAmount() * 0.18) +
-                                                        totalAmount() -
-                                                        (totalAmount() *
-                                                            (double.parse(discount
-                                                                    .discount) /
-                                                                100)) +
-                                                        deliveryCharge)
-                                                    .toStringAsFixed(2)
-                                                : ((totalAmount() * 0.18) +
-                                                        totalAmount() +
-                                                        deliveryCharge)
-                                                    .toString(),
-                                            type,
-                                            orderid)
-                                        : Checksuccess();
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'Your order amount is less \n than the minimum order price',
-                                        toastLength: Toast.LENGTH_SHORT);
-                                  }
-                                }
-                              } else {
+                              if (selectedTime == 'Choose Slot') {
                                 Fluttertoast.showToast(
-                                    msg: 'Address required',
+                                    msg: 'Please select time slot',
                                     toastLength: Toast.LENGTH_SHORT);
+                              } else {
+                                var total = 0.0;
+                                discount != null
+                                    ? total = ((totalAmount() * 0.18) +
+                                        totalAmount() -
+                                        (totalAmount() *
+                                            (double.parse(discount.discount) /
+                                                100)) +
+                                        deliveryCharge)
+                                    : total = ((totalAmount() * 0.18) +
+                                        totalAmount() +
+                                        deliveryCharge);
+                                if (total > minOrderPrice) {
+                                  _result != '833' && j != 1 && val
+                                      ? onlineorder(
+                                          (discount != null)
+                                              ? ((totalAmount() * 0.18) +
+                                                      totalAmount() -
+                                                      (totalAmount() *
+                                                          (double.parse(discount
+                                                                  .discount) /
+                                                              100)) +
+                                                      deliveryCharge)
+                                                  .toStringAsFixed(2)
+                                              : ((totalAmount() * 0.18) +
+                                                      totalAmount() +
+                                                      deliveryCharge)
+                                                  .toString(),
+                                          type,
+                                          orderid)
+                                      : Checksuccess();
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                          'Your order amount is less \n than the minimum order price',
+                                      toastLength: Toast.LENGTH_SHORT);
+                                }
                               }
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Address required',
+                                  toastLength: Toast.LENGTH_SHORT);
                             }
+                          }
 
 //                        if(_formkey.currentState.validate()){
 //                            _result != '833' && j != 1
@@ -2601,20 +2563,19 @@ class _CheckoutState extends State<Checkout> {
 //                            Fluttertoast.showToast(
 //                                msg: 'Address required', toastLength: Toast.LENGTH_SHORT);
 //                          }
-                          },
-                          buttonWidth: MediaQuery.of(context).size.width,
-                        ),
+                        },
+                        buttonWidth: MediaQuery.of(context).size.width,
                       ),
-                      SizedBox(
-                        height: 20,
-                      ),
-                    ],
-                  )
-                ],
-              ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                  ],
+                )
+              ],
             ),
-          )),
-    );
+          ),
+        ));
   }
 
   FirebaseUser user;
@@ -3227,7 +3188,7 @@ class _CheckoutState extends State<Checkout> {
   Future<String> Checksuccess() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String onlineid = prefs.getString('Orderid');
-    print('----------------------');
+    print('----------------------$onlineid');
     print(selectedDate);
     print(selectedDate.year);
     print(selectedTime.split(' ').join().toLowerCase());

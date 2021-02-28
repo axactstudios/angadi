@@ -38,7 +38,6 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     setState(() {
 //      print(cartItems[1]);
     });
-
   }
 
   void updateItem(
@@ -107,56 +106,68 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
     );
     pushNewScreen(context, screen: LoginScreen(), withNavBar: false);
   }
-  var order;var orderid;
-void id()async{
-  print('hiiiiiiiiiiiiiiiiiiiiiiiiiii');
-  print(cartItems.length);
-    if(cartItems.length==1){
-      Firestore.instance.collection('Orders').document('ordercount').snapshots().listen((event) {print('&&&&&&&&&&&&&&&&');print(event['Numberoforders'].toString());setState(() {
-        order=event['Numberoforders'];
-      });});
-      Firestore.instance.collection('Orders').document('ordercount').updateData({
-        'Numberoforders':order+1,
+
+  var order;
+  var orderid;
+  void id() async {
+    print('hiiiiiiiiiiiiiiiiiiiiiiiiiii');
+    print(cartItems.length);
+    if (cartItems.length == 1) {
+      Firestore.instance
+          .collection('Orders')
+          .document('ordercount')
+          .snapshots()
+          .listen((event) {
+        print('&&&&&&&&&&&&&&&&');
+        print(event['Numberoforders'].toString());
+        setState(() {
+          order = event['Numberoforders'];
+        });
       });
-      if(order+1<9){
+      Firestore.instance
+          .collection('Orders')
+          .document('ordercount')
+          .updateData({
+        'Numberoforders': order + 1,
+      });
+      if (order + 1 < 9) {
         setState(() {
-          orderid='ANG0000${order+1}';
+          orderid = 'ANG0000${order + 1}';
         });
       }
-      if(order+1>10&&order+1<99){
+      if (order + 1 > 10 && order + 1 < 99) {
         setState(() {
-          orderid='ANG000${order+1}';
+          orderid = 'ANG000${order + 1}';
         });
       }
-      if(order+1>99&&order+1<999){
+      if (order + 1 > 99 && order + 1 < 999) {
         setState(() {
-          orderid='ANG00${order+1}';
+          orderid = 'ANG00${order + 1}';
         });
       }
-      if(order+1>999&&order+1<9999){
+      if (order + 1 > 999 && order + 1 < 9999) {
         setState(() {
-          orderid='ANG0${order+1}';
+          orderid = 'ANG0${order + 1}';
         });
       }
-      if(order+1>9999&&order+1<99999){
+      if (order + 1 > 9999 && order + 1 < 99999) {
         setState(() {
-          orderid='ANG${order+1}';
+          orderid = 'ANG${order + 1}';
         });
       }
-      if(order+1>99999){
+      if (order + 1 > 99999) {
         setState(() {
-          orderid='ANG${order+1}';
+          orderid = 'ANG${order + 1}';
         });
       }
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('Orderid', orderid);
-      prefs.setString('Status','Not placed');
-
+      prefs.setString('Status', 'Not placed');
     }
-}
+  }
+
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         leading: InkWell(
@@ -187,7 +198,7 @@ void id()async{
                     user != null
                         ? Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
-                            return Checkout('',orderid,'','');
+                            return Checkout('', orderid, '', '');
                           }))
                         : login();
                   },
@@ -222,7 +233,7 @@ void id()async{
                   return SpaceH8();
                 },
                 itemBuilder: (context, index) {
-                  print(cartItems[index].qtyTag);
+                  // print(cartItems[index].qtyTag);
                   return Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     // height: 250,

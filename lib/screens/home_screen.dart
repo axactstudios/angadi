@@ -212,12 +212,12 @@ class _HomeScreenState extends State<HomeScreen> {
           timeSlots2.add(element.documents[0].data['Timeslots'][i]);
         }
       }
-      print('-----------------');
-      print(timeSlots2.length);
+      // print('-----------------');
+      // print(timeSlots2.length);
       selectedTime = timeSlots2[0];
     });
-    print('enddd');
-    print(timeSlots2.length);
+    // print('enddd');
+    // print(timeSlots2.length);
 //  if(timeSlots2.length>0){
 //    print('Heya');
 //    setState(() {
@@ -230,7 +230,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void select() {
     if (timeSlots2.length > 0) {
-      print('Heya');
+      // print('Heya');
       setState(() {
         selectedTime = timeSlots2[0];
       });
@@ -242,7 +242,7 @@ class _HomeScreenState extends State<HomeScreen> {
     List prices = [];
     List quantities = [];
     for (var v in cartItems) {
-      print(v.productName);
+      // print(v.productName);
       items.add(v.productName);
       prices.add(v.price);
       quantities.add(v.qty);
@@ -260,7 +260,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('Timeslots')
         .snapshots()
         .listen((event) {
-      print(event.documents[0].data['LastSlot']);
+      // print(event.documents[0].data['LastSlot']);
       String st = event.documents[0].data['LastSlot'];
       String s = '';
       for (int i = 0; i < st.length; i++) {
@@ -275,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
       DateTime dt = DateTime.now();
       if (dt.hour > d) {
         dateAddition = dateAddition + 1;
-        print('Exceeded');
+        // print('Exceeded');
         //run
       }
     });
@@ -308,11 +308,11 @@ class _HomeScreenState extends State<HomeScreen> {
         .listen((event) {
       if (event.data != null) {
         // print(event);
-        print(event['Numberoforders'].toString());
+        // print(event['Numberoforders'].toString());
         orderCount = event['Numberoforders'];
       }
     });
-    print('Checked');
+    // print('Checked');
     prefs = await SharedPreferences.getInstance();
     orderStatus = prefs.getString('Status');
     idorder = prefs.getString('Orderid');
@@ -334,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     _pickTime() async {
       var today = DateTime.now();
-      print(today.day + 1);
+      // print(today.day + 1);
       DateTime t = await showDatePicker(
         context: context,
         initialDate:
@@ -359,7 +359,7 @@ class _HomeScreenState extends State<HomeScreen> {
     id() async {
       if (orderStatus != null) {
         if (orderStatus == 'Placed') {
-          print('Function run');
+          // print('Function run');
           Firestore.instance
               .collection('Orders')
               .snapshots()
@@ -580,12 +580,12 @@ class _HomeScreenState extends State<HomeScreen> {
                           Dish boughtTogether;
                           await print(dishes.length);
                           for (int ind = 0; ind < dishes.length; ind++) {
-                            print('Checking $ind');
-                            print(dishes[ind].id);
-                            print(dishes[i].boughtTogetherID);
+                            // print('Checking $ind');
+                            // print(dishes[ind].id);
+                            // print(dishes[i].boughtTogetherID);
                             if (dishes[ind].id == dishes[i].boughtTogetherID) {
                               boughtTogether = await dishes[ind];
-                              print('Got it');
+                              // print('Got it');
                             }
                           }
 //                        await print('-------------$boughtTogether');
@@ -775,13 +775,13 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                           element[
                                                                               'DeliveryDate'];
 
-                                                                      print(
-                                                                          status);
+                                                                      // print(
+                                                                      //     status);
                                                                     }
                                                                   });
                                                                 });
-                                                                print(status);
-                                                                print(orderID);
+                                                                // print(status);
+                                                                // print(orderID);
                                                                 DateTime
                                                                     myDateTime =
                                                                     await deliveryDate
@@ -914,7 +914,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                      resultCardAlignment: Alignment.bottomCenter,
 //                       desiredAccuracy: LocationAccuracy.best,
                                     );
-                                    print("result = $result");
+                                    // print("result = $result");
 
                                     if (result != null) {
                                       setState(() {
@@ -929,7 +929,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     }
 
                                     await setState(() {
-                                      print(minOrderValue);
+                                      // print(minOrderValue);
                                     });
 //                                  _locationDialog(context);
 //                                   showPlacePicker();
