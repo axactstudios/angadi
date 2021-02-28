@@ -167,10 +167,10 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
                         padding: EdgeInsets.all(8.0),
                         child: InkWell(
                           onTap: () {
-                            Navigator.push(context, MaterialPageRoute(
-                                builder: (BuildContext context) {
-                              return CategoriesScreen('Grocery');
-                            }));
+//                            Navigator.push(context, MaterialPageRoute(
+//                                builder: (BuildContext context) {
+//                              return CategoriesScreen('Grocery');
+//                            }));
                           },
                           child: Column(
                             children: [

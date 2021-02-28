@@ -136,34 +136,34 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     };
     if (cartItems.length == 0) {
       await print('----------------$widget.orderCount');
-      if (widget.orderCount + 1 < 9) {
+      if (order + 1 < 9) {
         await setState(() {
-          orderid = 'ANG0000${widget.orderCount + 1}';
+          orderid = 'ANG0000${order + 1}';
         });
       }
-      if (widget.orderCount + 1 > 10 && widget.orderCount + 1 < 99) {
+      if (order + 1 > 10 && order + 1 < 99) {
         await setState(() {
-          orderid = 'ANG000${widget.orderCount + 1}';
+          orderid = 'ANG000${order + 1}';
         });
       }
-      if (widget.orderCount + 1 > 99 && widget.orderCount + 1 < 999) {
+      if (order + 1 > 99 && order + 1 < 999) {
         await setState(() {
-          orderid = 'ANG00${widget.orderCount + 1}';
+          orderid = 'ANG00${order + 1}';
         });
       }
-      if (widget.orderCount + 1 > 999 && widget.orderCount + 1 < 9999) {
+      if (order + 1 > 999 && order + 1 < 9999) {
         await setState(() {
-          orderid = 'ANG0${widget.orderCount + 1}';
+          orderid = 'ANG0${order + 1}';
         });
       }
-      if (widget.orderCount + 1 > 9999 && widget.orderCount + 1 < 99999) {
+      if (order + 1 > 9999 && order + 1 < 99999) {
         await setState(() {
-          orderid = 'ANG${widget.orderCount + 1}';
+          orderid = 'ANG${order + 1}';
         });
       }
-      if (widget.orderCount + 1 > 99999) {
+      if (order + 1 > 99999) {
         await setState(() {
-          orderid = 'ANG${widget.orderCount + 1}';
+          orderid = 'ANG${order + 1}';
         });
       }
       SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -175,7 +175,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
           .collection('Ordercount')
           .document('ordercount')
           .updateData({
-        'Numberoforders': widget.orderCount + 1,
+        'Numberoforders': order + 1,
       });
     }
 
@@ -248,8 +248,22 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
         });
     }
   }
+  int order=0;
 
   first() async {
+    await Firestore.instance
+        .collection('Ordercount')
+        .document('ordercount')
+        .snapshots()
+        .listen((event) {
+      print(event['Numberoforders'].toString());
+
+      order = event['Numberoforders'];
+    });
+    print('Checked');
+//    qty = await getQuantity(widget.restaurantDetail.name, '500 ML');
+//    present = await checkInWishlist();
+//    print('-------------%%%%%$present');
     qty = await getQuantity(widget.cardTitle, '${widget.quantities[0]}');
   }
   void getquantities(){
@@ -262,6 +276,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
   void initState() {
     choice = 0;
     qtyTag=widget.quantities[0];
+    print('@###############${widget.orderCount.toString()}');
     first();
     proprice=widget.allquantities[0].iPrice;
     prodisprice=widget.allquantities[0].price;

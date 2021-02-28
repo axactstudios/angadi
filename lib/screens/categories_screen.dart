@@ -273,12 +273,12 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               fontWeight: FontWeight.w600,
                               fontSize: Sizes.TEXT_SIZE_20,
                             )),
-                        Text('${widget.sCat} ITEMS'.toUpperCase(),
-                            style: Styles.customTitleTextStyle(
-                              color: AppColors.secondaryElement,
-                              fontWeight: FontWeight.w600,
-                              fontSize: Sizes.TEXT_SIZE_28,
-                            )),
+//                        Text('${widget.sCat} ITEMS'.toUpperCase(),
+//                            style: Styles.customTitleTextStyle(
+//                              color: AppColors.secondaryElement,
+//                              fontWeight: FontWeight.w600,
+//                              fontSize: Sizes.TEXT_SIZE_28,
+//                            )),
                         SizedBox(height: 20),
                         Expanded(
                           child: GridView.count(

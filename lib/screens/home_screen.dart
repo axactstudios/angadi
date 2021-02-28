@@ -887,7 +887,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.6,
                                   child: location.address != null
-                                      ? Text('Deliver to ${location.address}',
+                                      ? Text('Deliver to ${location.address}',maxLines: 2,
                                           style: TextStyle(color: Colors.white))
                                       : Text('Deliver to Sharjah, UAE',
                                           style:
