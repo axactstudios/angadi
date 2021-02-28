@@ -16,6 +16,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/custom_text_form_field.dart';
 import 'package:angadi/widgets/heading_row.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
+import 'package:back_button_interceptor/back_button_interceptor.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -34,6 +35,7 @@ import 'package:place_picker/widgets/place_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'bookmarks_screen.dart';
 import 'order_placed.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
@@ -529,13 +531,18 @@ class _CheckoutState extends State<Checkout> {
     time = TimeOfDay.now();
     date = DateTime(DateTime.now().year, DateTime.now().month,
         DateTime.now().day + dateAddition);
+    BackButtonInterceptor.add(myInterceptor);
+
     super.initState();
   }
 
   bool myInterceptor(bool stopDefaultButtonEvent) {
     print("BACK BUTTON!");
     Checksuccess();
-    Navigator.pop(context);
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => BookmarksScreen()),
+    );
     return true;
   }
 
@@ -3186,6 +3193,7 @@ class _CheckoutState extends State<Checkout> {
   int k = 0;
   int length = 0;
   Future<String> Checksuccess() async {
+    print('running check');
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String onlineid = prefs.getString('Orderid');
     print('----------------------$onlineid');
