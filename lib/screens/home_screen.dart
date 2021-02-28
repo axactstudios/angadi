@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
   DateTime date;
   DateTime selectedDate = DateTime(
       DateTime.now().year, DateTime.now().month, DateTime.now().day + 1);
-  String selectedTime = 'Choose Slot';
+  String selectedTime = '';
   FirebaseUser user;
   List<String> quantities = [];
   getUser() async {
@@ -164,7 +164,90 @@ class _HomeScreenState extends State<HomeScreen> {
       print(event.documents[0].documentID);
     });
   }
+  List<String> timeSlots2=[];
 
+void time(){
+
+  Firestore.instance.collection('Timeslots').snapshots().forEach((element) {
+    for (int i = 0;
+    i < element.documents[0].data['Timeslots'].length;
+    i++) {
+      DateTime dt = DateTime.now();
+
+      if (dt.hour > 12) {
+        String st =
+        element.documents[0].data['Timeslots'][i];
+        String s = '';
+        for (int i = 0; i < st.length; i++) {
+          if (st[i] != ' ')
+            s = s + st[i];
+          else
+            break;
+        }
+
+        double d = double.parse(s);
+        if (d > (dt.hour - 12) &&
+            element.documents[0].data['Timeslots'][i]
+                .contains('PM')) {
+          timeSlots2.add(
+              element.documents[0].data['Timeslots'][i]);
+        }
+      } else {
+        String st =
+        element.documents[0].data['Timeslots'][i];
+        String s = '';
+        for (int i = 0; i < st.length; i++) {
+          if (st[i] != ' ')
+            s = s + st[i];
+          else
+            break;
+        }
+
+        double d = double.parse(s);
+        if (d > (dt.hour) &&
+            element.documents[0].data['Timeslots'][i]
+                .contains('AM')) {
+          timeSlots2.add(
+              element.documents[0].data['Timeslots'][i]);
+        }
+      }
+    }
+    if (timeSlots2.length == 0) {
+      selectedDate =
+          selectedDate.add(new Duration(days: 1));
+      for (int i = 0;
+      i <
+          element.documents[0].data['Timeslots']
+              .length;
+      i++) {
+        timeSlots2.add(
+            element.documents[0].data['Timeslots'][i]);
+      }
+    }
+    print('-----------------');
+print(timeSlots2.length);
+    selectedTime=timeSlots2[0];
+  });
+  print('enddd');
+  print(timeSlots2.length);
+//  if(timeSlots2.length>0){
+//    print('Heya');
+//    setState(() {
+//      selectedTime=timeSlots2[0];
+//    });
+//
+//  }
+  select();
+}
+void select(){
+  if(timeSlots2.length>0){
+    print('Heya');
+    setState(() {
+      selectedTime=timeSlots2[0];
+    });
+
+  }
+}
   void removeAll() async {
     List items = [];
     List prices = [];
@@ -222,6 +305,7 @@ class _HomeScreenState extends State<HomeScreen> {
     getSharedPrefs();
     checkLastSlot();
     address();
+    time();
     date = DateTime.now();
     date2 = DateTime(date.year, date.month, date.day + dateAddition);
     _getCurrentLocation();
