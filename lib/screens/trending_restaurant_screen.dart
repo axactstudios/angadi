@@ -50,7 +50,8 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
           appBar: AppBar(
             elevation: 0.0,
             leading: InkWell(
-              onTap: () => R.Router.navigator.pushNamed(R.Router.rootScreen),
+              // onTap: () => R.Router.navigator.pushNamed(R.Router.rootScreen),
+              onTap: () => Navigator.pop(context),
               child: Image.asset(
                 ImagePath.arrowBackIcon,
                 color: AppColors.headingText,
@@ -71,143 +72,193 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                 left: Sizes.MARGIN_16,
                 right: Sizes.MARGIN_16,
                 top: Sizes.MARGIN_16),
-            child: Column(
-              children: <Widget>[
-//                FoodyBiteSearchInputField(
-//                  ImagePath.searchIcon,
-//                  textFormFieldStyle:
-//                      Styles.customNormalTextStyle(color: AppColors.accentText),
-//                  hintText: StringConst.HINT_TEXT_TRENDING_SEARCH_BAR,
-//                  hintTextStyle:
-//                      Styles.customNormalTextStyle(color: AppColors.accentText),
-//                  suffixIconImagePath: ImagePath.settingsIcon,
-//                  borderWidth: 0.0,
-//                  borderStyle: BorderStyle.solid,
-//                ),
-                SizedBox(height: Sizes.WIDTH_16),
-                StreamBuilder(
-                    stream:
-                        Firestore.instance.collection('Dishes').snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snap) {
-                      if (snap.hasData &&
-                          !snap.hasError &&
-                          snap.data != null) {
-                        dishes.clear();
-                        trending.clear();
-                        for (int i = 0;
-                            i < snap.data.documents.length;
-                            i++) {
-                          List<Quantity> allquantities = [];
-                          List<String> quantities = [];
+            child: StreamBuilder(
+                stream: Firestore.instance.collection('Dishes').snapshots(),
+                builder:
+                    (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+                  if (snap.hasData && !snap.hasError && snap.data != null) {
+                    dishes.clear();
+                    trending.clear();
+                    for (int i = 0; i < snap.data.documents.length; i++) {
+                      List<Quantity> allquantities = [];
+                      List<String> quantities = [];
 
-                          allquantities.clear();
-                          quantities.clear();
+                      allquantities.clear();
+                      quantities.clear();
 
-                          for (int j = 0;
+                      for (int j = 0;
                           j < snap.data.documents[i]['Quantity'].length;
                           j++) {
-                            Quantity qu = Quantity(
-                                snap.data.documents[i]['Quantity'][j]['iPrice'],
-                                snap.data.documents[i]['Quantity'][j]['price'],
-                                snap.data.documents[i]['Quantity'][j]['productId'],
-                                '${ snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                        Quantity qu = Quantity(
+                            snap.data.documents[i]['Quantity'][j]['iPrice'],
+                            snap.data.documents[i]['Quantity'][j]['price'],
+                            snap.data.documents[i]['Quantity'][j]['productId'],
+                            '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
 
-                            allquantities.add(qu);
-                            quantities.add(
-                                '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
-                          }
+                        allquantities.add(qu);
+                        quantities.add(
+                            '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                      }
 
 //              print(snap.data.documents[i]['url']);
-                          dishes.add(Dish(
-                              boughtTogetherDiscount: snap.data.documents[i]
-                                  ['boughtTogetherDiscount'],
-                              id: snap.data.documents[i].documentID,
-                              name: snap.data.documents[i]['name'],
-                              category: snap.data.documents[i]['category'],
-                              rating: snap.data.documents[i]['rating'],
-                              price: snap.data.documents[i]['price'],
-                              desc: snap.data.documents[i]['description'],
-                              url: snap.data.documents[i]['url'],
-                              boughtTogetherID: snap.data.documents[i]
-                                  ['boughtTogether']));
-                          print(snap.data.documents[i]['name']);
-                          if ((money != null
-                                  ? int.parse(snap.data.documents[i]
-                                          ['price']) <=
-                                      money
-                                  : 1 == 1) &&
-                              (rat != null
-                                  ? double.parse(snap.data.documents[i]
-                                              ['rating'])
-                                          .ceil() >=
-                                      rat
-                                  : 1 == 1) &&
-                              (cat != null
-                                  ? snap.data.documents[i]['category'] ==
-                                      cat
-                                  : 1 == 1))
-                            trending.add(Container(
+                      if ((money != null
+                              ? int.parse(snap.data.documents[i]['price']) <=
+                                  money
+                              : 1 == 1) &&
+                          (rat != null
+                              ? double.parse(snap.data.documents[i]['rating'])
+                                      .ceil() >=
+                                  rat
+                              : 1 == 1) &&
+                          (cat != null
+                              ? snap.data.documents[i]['category'] == cat
+                              : 1 == 1)) {
+                        print(snap.data.documents[i]['price']);
+                        print(money);
+                        dishes.add(Dish(
+                            boughtTogetherDiscount: snap.data.documents[i]
+                                ['boughtTogetherDiscount'],
+                            id: snap.data.documents[i].documentID,
+                            name: snap.data.documents[i]['name'],
+                            category: snap.data.documents[i]['category'],
+                            rating: snap.data.documents[i]['rating'],
+                            price: snap.data.documents[i]['price'],
+                            desc: snap.data.documents[i]['description'],
+                            url: snap.data.documents[i]['url'],
+                            quantities: quantities,
+                            allquantities: allquantities,
+                            boughtTogetherID: snap.data.documents[i]
+                                ['boughtTogether']));
+                      }
+                      print(dishes);
+
+                      // trending.add(Padding(
+                      //   padding: const EdgeInsets.all(8.0),
+                      //   child: Container(
+                      //     // height: 100,100
+                      //     width: 100,
+                      //     // color: Colors.black,
+                      //     child:
+                      //         Text(snap.data.documents[i]['url'].toString()),
+                      //   ),
+                      // ));
+
+                      // trending.add(Container(
+                      //   margin: EdgeInsets.only(right: 4.0),
+                      //   child: FoodyBiteCard(
+                      //     // onTap: () async {
+                      //     //   Dish boughtTogether;
+                      //     //   for (int ind = 0; ind < dishes.length; ind++) {
+                      //     //     if (dishes[ind].id ==
+                      //     //         dishes[i].boughtTogetherID) {
+                      //     //       boughtTogether = await dishes[ind];
+                      //     //     }
+                      //     //   }
+                      //     //
+                      //     //   pushNewScreen(
+                      //     //     context,
+                      //     //     screen: RestaurantDetailsScreen(
+                      //     //       RestaurantDetails(
+                      //     //           boughtTogetherDiscount:
+                      //     //               dishes[i].boughtTogetherDiscount,
+                      //     //           url: dishes[i].url,
+                      //     //           name: dishes[i].name,
+                      //     //           desc: dishes[i].desc,
+                      //     //           category: dishes[i].category,
+                      //     //           rating: dishes[i].rating,
+                      //     //           price: dishes[i].price,
+                      //     //           boughtTogether: boughtTogether,
+                      //     //           allquantities: dishes[i].allquantities,
+                      //     //           quantities: dishes[i].quantities,
+                      //     //           boughtTogetherQuantity:
+                      //     //               dishes[i].boughtTogetherQuantity),
+                      //     //     ),
+                      //     //     withNavBar:
+                      //     //         true, // OPTIONAL VALUE. True by default.
+                      //     //     pageTransitionAnimation:
+                      //     //         PageTransitionAnimation.cupertino,
+                      //     //   );
+                      //     // },
+                      //     imagePath: snap.data.documents[i]['url'],
+                      //     cardTitle: snap.data.documents[i]['name'],
+                      //     rating: snap.data.documents[i]['rating'],
+                      //     category: snap.data.documents[i]['category'],
+                      //     price: snap.data.documents[i]['price'],
+                      //     iPrice: snap.data.documents[i]['iPrice'],
+                      //     address: snap.data.documents[i]['description'],
+                      //     // allquantities: dishes[i].allquantities,
+                      //     // quantities: dishes[i].quantities,
+                      //   ),
+                      // ));
+                    }
+                  }
+                  return dishes.length != 0
+                      ? ListView.separated(
+                          itemCount: dishes.length,
+                          separatorBuilder: (context, index) {
+                            return SpaceH8();
+                          },
+                          itemBuilder: (context, index) {
+                            print(
+                                '============${dishes[index].boughtTogetherID}');
+                            return Container(
+                              // color: Colors.black,
                               margin: EdgeInsets.only(right: 4.0),
                               child: FoodyBiteCard(
-                                onTap: () async {
-                                  Dish boughtTogether;
-                                  for (int ind = 0;
-                                      ind < dishes.length;
-                                      ind++) {
-                                    if (dishes[ind].id ==
-                                        dishes[i].boughtTogetherID) {
-                                      boughtTogether = await dishes[ind];
+                                  onTap: () async {
+                                    Dish boughtTogether;
+                                    if (dishes[index].boughtTogetherID !=
+                                        null) {
+                                      for (int i = 0; i < dishes.length; i++) {
+                                        if (dishes[i].id ==
+                                            dishes[index].boughtTogetherID) {
+                                          boughtTogether = await dishes[i];
+                                        }
+                                      }
                                     }
-                                  }
-
-                                  pushNewScreen(
-                                    context,
-                                    screen: RestaurantDetailsScreen(
-                                      RestaurantDetails(
-                                          boughtTogetherDiscount: dishes[i]
-                                              .boughtTogetherDiscount,
-                                          url: dishes[i].url,
-                                          name: dishes[i].name,
-                                          desc: dishes[i].desc,
-                                          category: dishes[i].category,
-                                          rating: dishes[i].rating,
-                                          price: dishes[i].price,
-                                          boughtTogether: boughtTogether,
-                                        allquantities: dishes[i].allquantities,
-                                        quantities: dishes[i].quantities,
-                                        boughtTogetherQuantity: dishes[i].boughtTogetherQuantity
+                                    pushNewScreen(
+                                      context,
+                                      screen: RestaurantDetailsScreen(
+                                        RestaurantDetails(
+                                            url: dishes[index].url,
+                                            name: dishes[index].name,
+                                            desc: dishes[index].desc,
+                                            category: dishes[index].category,
+                                            rating: dishes[index].rating,
+                                            price: dishes[index].price,
+                                            boughtTogetherDiscount:
+                                                dishes[index]
+                                                    .boughtTogetherDiscount,
+                                            boughtTogether: boughtTogether,
+                                            allquantities:
+                                                dishes[index].allquantities,
+                                            quantities:
+                                                dishes[index].quantities),
                                       ),
-                                    ),
-                                    withNavBar:
-                                        true, // OPTIONAL VALUE. True by default.
-                                    pageTransitionAnimation:
-                                        PageTransitionAnimation.cupertino,
-                                  );
-                                },
-                                imagePath: snap.data.documents[i]['url'],
-                                cardTitle: snap.data.documents[i]['name'],
-                                rating: snap.data.documents[i]['rating'],
-                                category: snap.data.documents[i]
-                                    ['category'],
-                                price: snap.data.documents[i]['price'],
-                                iPrice: snap.data.documents[i]['iPrice'],
-                                address: snap.data.documents[i]
-                                    ['description'],
-                                allquantities: dishes[i].allquantities,
-                                quantities:dishes[i].quantities,
-                              ),
-                            ));
-                        }
-                      }
-                      return trending.length != 0
-                          ? ListView(
-                              children: trending,
-                            )
-                          : Container();
-                    }),
-              ],
-            ),
+                                      withNavBar:
+                                          true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
+                                    );
+                                  },
+                                  imagePath: dishes[index].url,
+//                            status: status[index],
+                                  cardTitle: dishes[index].name,
+                                  rating: dishes[index].rating,
+                                  price: dishes[index].price,
+                                  iPrice: dishes[index].iPrice,
+                                  category: dishes[index].category,
+                                  // orderCount: orderCount,
+//                            distance: distance[index],
+                                  address: dishes[index].desc,
+                                  allquantities: dishes[index].allquantities,
+                                  quantities: dishes[index].quantities),
+                            );
+                          },
+                        )
+                      : Container(
+                          child: Center(child: Text('No items to show')));
+                }),
           )),
     );
   }
@@ -330,24 +381,28 @@ class _TrendingRestaurantsScreen1State
                             for (int i = 0;
                                 i < snap.data.documents.length;
                                 i++) {
-    List<Quantity> allquantities = [];
-    List<String> quantities = [];
+                              List<Quantity> allquantities = [];
+                              List<String> quantities = [];
 
-    allquantities.clear();
-    quantities.clear();
+                              allquantities.clear();
+                              quantities.clear();
 
-    for (int j = 0;
-    j < snap.data.documents[i]['Quantity'].length;
-    j++) {
-    Quantity qu = Quantity(
-    snap.data.documents[i]['Quantity'][j]['iPrice'],
-    snap.data.documents[i]['Quantity'][j]['price'],
-    snap.data.documents[i]['Quantity'][j]['productId'],
-    '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                              for (int j = 0;
+                                  j < snap.data.documents[i]['Quantity'].length;
+                                  j++) {
+                                Quantity qu = Quantity(
+                                    snap.data.documents[i]['Quantity'][j]
+                                        ['iPrice'],
+                                    snap.data.documents[i]['Quantity'][j]
+                                        ['price'],
+                                    snap.data.documents[i]['Quantity'][j]
+                                        ['productId'],
+                                    '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
 
-    allquantities.add(qu);
-    quantities.add(
-    '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');}
+                                allquantities.add(qu);
+                                quantities.add(
+                                    '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                              }
 //              print(snap.data.documents[i]['url']);
                               dishes.add(Dish(
                                   boughtTogetherDiscount: snap.data.documents[i]
@@ -361,9 +416,10 @@ class _TrendingRestaurantsScreen1State
                                   url: snap.data.documents[i]['url'],
                                   boughtTogetherID: snap.data.documents[i]
                                       ['boughtTogether'],
-                              allquantities:allquantities,
-                              quantities: quantities));
-                              print(snap.data.documents[i]['name'],
+                                  allquantities: allquantities,
+                                  quantities: quantities));
+                              print(
+                                snap.data.documents[i]['name'],
                               );
                               if (snap.data.documents[i][widget.type])
                                 trending.add(Container(
@@ -383,19 +439,20 @@ class _TrendingRestaurantsScreen1State
                                         context,
                                         screen: RestaurantDetailsScreen(
                                           RestaurantDetails(
-                                              boughtTogetherDiscount: dishes[i]
-                                                  .boughtTogetherDiscount,
-
-                                              url: dishes[i].url,
-                                              name: dishes[i].name,
-                                              desc: dishes[i].desc,
-                                              category: dishes[i].category,
-                                              rating: dishes[i].rating,
-                                              price: dishes[i].price,
-                                              boughtTogether: boughtTogether,
-                                          allquantities: dishes[i].allquantities,
-                                          quantities: dishes[i].quantities,
-                                          boughtTogetherQuantity: dishes[i].boughtTogetherQuantity,
+                                            boughtTogetherDiscount: dishes[i]
+                                                .boughtTogetherDiscount,
+                                            url: dishes[i].url,
+                                            name: dishes[i].name,
+                                            desc: dishes[i].desc,
+                                            category: dishes[i].category,
+                                            rating: dishes[i].rating,
+                                            price: dishes[i].price,
+                                            boughtTogether: boughtTogether,
+                                            allquantities:
+                                                dishes[i].allquantities,
+                                            quantities: dishes[i].quantities,
+                                            boughtTogetherQuantity: dishes[i]
+                                                .boughtTogetherQuantity,
                                           ),
                                         ),
                                         withNavBar:

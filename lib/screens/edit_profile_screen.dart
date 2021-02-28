@@ -25,9 +25,24 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
+  String whatsappMessage = '';
   @override
   void initState() {
     getUserDetails();
+
+    setState(() {
+      final firestoreInstance = Firestore.instance;
+
+      firestoreInstance
+          .collection("WhatsappMessage")
+          .getDocuments()
+          .then((querySnapshot) {
+        querySnapshot.documents.forEach((result) {
+          whatsappMessage = result.data['WhatsappMessage'];
+          print('Whatsapp Message ${result.data['WhatsappMessage']}');
+        });
+      });
+    });
     super.initState();
   }
 
@@ -112,9 +127,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(
-                      phone: '7060222315',
-                      message: 'Check out this awesome app');
+                  launchWhatsApp(phone: '7060222315', message: whatsappMessage);
                 },
                 child: Container(
                     alignment: Alignment.center,

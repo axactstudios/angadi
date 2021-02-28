@@ -1,5 +1,3 @@
-
-
 import 'dart:io';
 
 import 'package:angadi/widgets/custom_floating_button.dart';
@@ -46,6 +44,26 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       throw 'Could not launch ${url()}';
     }
   }
+
+  String whatsappMessage = '';
+  @override
+  void initState() {
+    setState(() {
+      final firestoreInstance = Firestore.instance;
+
+      firestoreInstance
+          .collection("WhatsappMessage")
+          .getDocuments()
+          .then((querySnapshot) {
+        querySnapshot.documents.forEach((result) {
+          whatsappMessage = result.data['WhatsappMessage'];
+          print('Whatsapp Message ${result.data['WhatsappMessage']}');
+        });
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     var textTheme = Theme.of(context).textTheme;
@@ -69,13 +87,13 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(
-                    phone: '7060222315', message: 'Check out this awesome app');
+                launchWhatsApp(phone: '7060222315', message: whatsappMessage);
               },
               child: Container(
                   alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-          SizedBox(width:8),
+                  child: FaIcon(FontAwesomeIcons.whatsapp,
+                      color: Color(0xFF6b3600)))),
+          SizedBox(width: 8),
           InkWell(
               onTap: () {
 //                print(1);
@@ -273,12 +291,14 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                               fontWeight: FontWeight.w600,
                               fontSize: Sizes.TEXT_SIZE_20,
                             )),
-//                        Text('${widget.sCat} ITEMS'.toUpperCase(),
-//                            style: Styles.customTitleTextStyle(
-//                              color: AppColors.secondaryElement,
-//                              fontWeight: FontWeight.w600,
-//                              fontSize: Sizes.TEXT_SIZE_28,
-//                            )),
+                        widget.sCat != 'Both'
+                            ? Text('${widget.sCat} ITEMS'.toUpperCase(),
+                                style: Styles.customTitleTextStyle(
+                                  color: AppColors.secondaryElement,
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: Sizes.TEXT_SIZE_28,
+                                ))
+                            : Container(),
                         SizedBox(height: 20),
                         Expanded(
                           child: GridView.count(

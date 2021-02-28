@@ -210,6 +210,7 @@ class _FilterScreenState extends State<FilterScreen> {
       child: InkWell(
         onTap: () => setState(() {
           cat = buttonTitle;
+          print(cat);
           activeButtonValue = index;
         }),
         child: angadiButton(

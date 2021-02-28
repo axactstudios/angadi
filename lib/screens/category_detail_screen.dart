@@ -67,8 +67,22 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
     }
   }
 
+  String whatsappMessage = '';
   void initState() {
     getOrderCount();
+    setState(() {
+      final firestoreInstance = Firestore.instance;
+
+      firestoreInstance
+          .collection("WhatsappMessage")
+          .getDocuments()
+          .then((querySnapshot) {
+        querySnapshot.documents.forEach((result) {
+          whatsappMessage = result.data['WhatsappMessage'];
+          print('Whatsapp Message ${result.data['WhatsappMessage']}');
+        });
+      });
+    });
     super.initState();
   }
 
@@ -201,8 +215,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(
-                    phone: '7060222315', message: 'Check out this awesome app');
+                launchWhatsApp(phone: '7060222315', message: whatsappMessage);
               },
               child: Container(
                   alignment: Alignment.center,
@@ -346,13 +359,13 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                 quantities.clear();
 
                 for (int j = 0;
-                j < snap.data.documents[i]['Quantity'].length;
-                j++) {
+                    j < snap.data.documents[i]['Quantity'].length;
+                    j++) {
                   Quantity qu = Quantity(
                       snap.data.documents[i]['Quantity'][j]['iPrice'],
                       snap.data.documents[i]['Quantity'][j]['price'],
                       snap.data.documents[i]['Quantity'][j]['productId'],
-                      '${ snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
 
                   allquantities.add(qu);
                   quantities.add(
@@ -373,9 +386,10 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                           ['boughtTogetherDiscount'],
                       boughtTogetherID: snap.data.documents[i]
                           ['boughtTogether'],
-                  allquantities: allquantities,
-                  quantities:quantities));
-                print(snap.data.documents[i]['price'],
+                      allquantities: allquantities,
+                      quantities: quantities));
+                print(
+                  snap.data.documents[i]['price'],
                 );
               }
 
@@ -432,49 +446,51 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                               return Container(
                                 margin: EdgeInsets.only(right: 4.0),
                                 child: FoodyBiteCard(
-                                  onTap: () async {
-                                    Dish boughtTogether;
-                                    for (int i = 0; i < dishes.length; i++) {
-                                      if (dishes[i].id ==
-                                          dishes[index].boughtTogetherID) {
-                                        boughtTogether = await dishes[i];
+                                    onTap: () async {
+                                      Dish boughtTogether;
+                                      for (int i = 0; i < dishes.length; i++) {
+                                        if (dishes[i].id ==
+                                            dishes[index].boughtTogetherID) {
+                                          boughtTogether = await dishes[i];
+                                        }
                                       }
-                                    }
-                                    pushNewScreen(
-                                      context,
-                                      screen: RestaurantDetailsScreen(
-                                        RestaurantDetails(
-                                            url: dishes[index].url,
-                                            name: dishes[index].name,
-                                            desc: dishes[index].desc,
-                                            category: dishes[index].category,
-                                            rating: dishes[index].rating,
-                                            price: dishes[index].price,
-                                            boughtTogetherDiscount:
-                                                dishes[index]
-                                                    .boughtTogetherDiscount,
-                                            boughtTogether: boughtTogether,allquantities:dishes[index].allquantities,
-                                        quantities: dishes[index].quantities),
-                                      ),
-                                      withNavBar:
-                                          true, // OPTIONAL VALUE. True by default.
-                                      pageTransitionAnimation:
-                                          PageTransitionAnimation.cupertino,
-                                    );
-                                  },
-                                  imagePath: dishes[index].url,
+                                      pushNewScreen(
+                                        context,
+                                        screen: RestaurantDetailsScreen(
+                                          RestaurantDetails(
+                                              url: dishes[index].url,
+                                              name: dishes[index].name,
+                                              desc: dishes[index].desc,
+                                              category: dishes[index].category,
+                                              rating: dishes[index].rating,
+                                              price: dishes[index].price,
+                                              boughtTogetherDiscount:
+                                                  dishes[index]
+                                                      .boughtTogetherDiscount,
+                                              boughtTogether: boughtTogether,
+                                              allquantities:
+                                                  dishes[index].allquantities,
+                                              quantities:
+                                                  dishes[index].quantities),
+                                        ),
+                                        withNavBar:
+                                            true, // OPTIONAL VALUE. True by default.
+                                        pageTransitionAnimation:
+                                            PageTransitionAnimation.cupertino,
+                                      );
+                                    },
+                                    imagePath: dishes[index].url,
 //                            status: status[index],
-                                  cardTitle: dishes[index].name,
-                                  rating: dishes[index].rating,
-                                  price: dishes[index].price,
-                                  iPrice: dishes[index].iPrice,
-                                  category: dishes[index].category,
-                                  orderCount: orderCount,
+                                    cardTitle: dishes[index].name,
+                                    rating: dishes[index].rating,
+                                    price: dishes[index].price,
+                                    iPrice: dishes[index].iPrice,
+                                    category: dishes[index].category,
+                                    orderCount: orderCount,
 //                            distance: distance[index],
-                                  address: dishes[index].desc,
-                                  allquantities: dishes[index].allquantities,
-                                  quantities:dishes[index].quantities
-                                ),
+                                    address: dishes[index].desc,
+                                    allquantities: dishes[index].allquantities,
+                                    quantities: dishes[index].quantities),
                               );
                             },
                           ),
@@ -515,8 +531,10 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                                   dishes[index]
                                                       .boughtTogetherDiscount,
                                               boughtTogether: boughtTogether,
-                                          allquantities: dishes[index].allquantities,
-                                          quantities: dishes[index].quantities),
+                                              allquantities:
+                                                  dishes[index].allquantities,
+                                              quantities:
+                                                  dishes[index].quantities),
                                         ),
                                         withNavBar:
                                             true, // OPTIONAL VALUE. True by default.

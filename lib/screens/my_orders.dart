@@ -55,9 +55,24 @@ class _MyOrdersState extends State<MyOrders> {
   }
 
   bool show;
+
+  String whatsappMessage = '';
   @override
   void initState() {
     show = true;
+    setState(() {
+      final firestoreInstance = Firestore.instance;
+
+      firestoreInstance
+          .collection("WhatsappMessage")
+          .getDocuments()
+          .then((querySnapshot) {
+        querySnapshot.documents.forEach((result) {
+          whatsappMessage = result.data['WhatsappMessage'];
+          print('Whatsapp Message ${result.data['WhatsappMessage']}');
+        });
+      });
+    });
     super.initState();
   }
 
@@ -182,9 +197,7 @@ class _MyOrdersState extends State<MyOrders> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(
-                      phone: '7060222315',
-                      message: 'Check out this awesome app');
+                  launchWhatsApp(phone: '7060222315', message: whatsappMessage);
                 },
                 child: Container(
                     alignment: Alignment.center,

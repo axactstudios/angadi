@@ -6,6 +6,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/category_card.dart';
 import 'package:angadi/widgets/custom_floating_button.dart';
 import 'package:angadi/widgets/nav_drawer.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -38,6 +39,25 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
     }
   }
 
+  String whatsappMessage = '';
+  @override
+  void initState() {
+    setState(() {
+      final firestoreInstance = Firestore.instance;
+
+      firestoreInstance
+          .collection("WhatsappMessage")
+          .getDocuments()
+          .then((querySnapshot) {
+        querySnapshot.documents.forEach((result) {
+          whatsappMessage = result.data['WhatsappMessage'];
+          print('Whatsapp Message ${result.data['WhatsappMessage']}');
+        });
+      });
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,13 +79,13 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(
-                      phone: '7060222315', message: 'Check out this awesome app');
+                  launchWhatsApp(phone: '7060222315', message: whatsappMessage);
                 },
                 child: Container(
                     alignment: Alignment.center,
-                    child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-            SizedBox(width:10),
+                    child: FaIcon(FontAwesomeIcons.whatsapp,
+                        color: Color(0xFF6b3600)))),
+            SizedBox(width: 10),
             InkWell(
                 onTap: () {
 //                print(1);

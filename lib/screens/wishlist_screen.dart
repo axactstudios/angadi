@@ -5,6 +5,7 @@ import 'package:angadi/classes/wishlist.dart';
 import 'package:angadi/services/database_helper.dart';
 import 'package:angadi/services/database_helper_wishlist.dart';
 import 'package:angadi/widgets/cart_card.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
@@ -49,10 +50,27 @@ class _WishlistScreenState extends State<WishlistScreen> {
         msg: 'Removed from Wishlist', toastLength: Toast.LENGTH_SHORT);
   }
 
+  String whatsappMessage = '';
   @override
   void initState() {
     getAllItems();
+
+    setState(() {
+      final firestoreInstance = Firestore.instance;
+
+      firestoreInstance
+          .collection("WhatsappMessage")
+          .getDocuments()
+          .then((querySnapshot) {
+        querySnapshot.documents.forEach((result) {
+          whatsappMessage = result.data['WhatsappMessage'];
+          print('Whatsapp Message ${result.data['WhatsappMessage']}');
+        });
+      });
+    });
+    super.initState();
   }
+
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -91,13 +109,13 @@ class _WishlistScreenState extends State<WishlistScreen> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(
-                    phone: '7060222315', message: 'Check out this awesome app');
+                launchWhatsApp(phone: '7060222315', message: whatsappMessage);
               },
               child: Container(
                   alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-          SizedBox(width:8),
+                  child: FaIcon(FontAwesomeIcons.whatsapp,
+                      color: Color(0xFF6b3600)))),
+          SizedBox(width: 8),
           InkWell(
               onTap: () {
 //                print(1);

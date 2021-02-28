@@ -516,6 +516,7 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
+  String whatsappMessage = '';
   @override
   void initState() {
     time2();
@@ -532,7 +533,19 @@ class _CheckoutState extends State<Checkout> {
     date = DateTime(DateTime.now().year, DateTime.now().month,
         DateTime.now().day + dateAddition);
     BackButtonInterceptor.add(myInterceptor);
+    setState(() {
+      final firestoreInstance = Firestore.instance;
 
+      firestoreInstance
+          .collection("WhatsappMessage")
+          .getDocuments()
+          .then((querySnapshot) {
+        querySnapshot.documents.forEach((result) {
+          whatsappMessage = result.data['WhatsappMessage'];
+          print('Whatsapp Message ${result.data['WhatsappMessage']}');
+        });
+      });
+    });
     super.initState();
   }
 
@@ -568,14 +581,37 @@ class _CheckoutState extends State<Checkout> {
             ],
             color: Colors.white,
           ),
-          child: WebView(
-            initialUrl: '${url}',
-            gestureRecognizers: {
-              Factory<PlatformViewVerticalGestureRecognizer>(
-                () =>
-                    PlatformViewVerticalGestureRecognizer()..onUpdate = (_) {},
+          child: Column(
+            children: [
+              Container(
+                // height: 20,
+                child: Row(
+                  children: [
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: InkWell(
+                        child: Icon(Icons.clear),
+                        onTap: () => Navigator.pop(context),
+                      ),
+                    )
+                  ],
+                ),
+                // color: Colors.black,
               ),
-            },
+              Container(
+                height: MediaQuery.of(context).size.height * 0.65,
+                child: WebView(
+                  initialUrl: '${url}',
+                  gestureRecognizers: {
+                    Factory<PlatformViewVerticalGestureRecognizer>(
+                      () => PlatformViewVerticalGestureRecognizer()
+                        ..onUpdate = (_) {},
+                    ),
+                  },
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -804,9 +840,7 @@ class _CheckoutState extends State<Checkout> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(
-                      phone: '7060222315',
-                      message: 'Check out this awesome app');
+                  launchWhatsApp(phone: '7060222315', message: whatsappMessage);
                 },
                 child: Container(
                     alignment: Alignment.center,
@@ -2447,42 +2481,41 @@ class _CheckoutState extends State<Checkout> {
                               var total = 0.0;
                               discount != null
                                   ? total = ((totalAmount() * 0.18) +
-                                  totalAmount() -
-                                  (totalAmount() *
-                                      (double.parse(discount.discount) /
-                                          100)) +
-                                  deliveryCharge)
+                                      totalAmount() -
+                                      (totalAmount() *
+                                          (double.parse(discount.discount) /
+                                              100)) +
+                                      deliveryCharge)
                                   : total = ((totalAmount() * 0.18) +
-                                  totalAmount() +
-                                  deliveryCharge);
+                                      totalAmount() +
+                                      deliveryCharge);
                               if (total > minOrderPrice) {
                                 _result != '833' && j != 1 && val
                                     ? onlineorder(
-                                    (discount != null)
-                                        ? ((totalAmount() * 0.18) +
-                                        totalAmount() -
-                                        (totalAmount() *
-                                            (double.parse(discount
-                                                .discount) /
-                                                100)) +
-                                        deliveryCharge)
-                                        .toStringAsFixed(2)
-                                        : ((totalAmount() * 0.18) +
-                                        totalAmount() +
-                                        deliveryCharge)
-                                        .toString(),
-                                    type,
-                                    orderid)
+                                        (discount != null)
+                                            ? ((totalAmount() * 0.18) +
+                                                    totalAmount() -
+                                                    (totalAmount() *
+                                                        (double.parse(discount
+                                                                .discount) /
+                                                            100)) +
+                                                    deliveryCharge)
+                                                .toStringAsFixed(2)
+                                            : ((totalAmount() * 0.18) +
+                                                    totalAmount() +
+                                                    deliveryCharge)
+                                                .toString(),
+                                        type,
+                                        orderid)
                                     : Checksuccess();
                               } else {
                                 Fluttertoast.showToast(
                                     msg:
-                                    'Your order amount is less \n than the minimum order price',
+                                        'Your order amount is less \n than the minimum order price',
                                     toastLength: Toast.LENGTH_SHORT);
                               }
                             }
                           }
-
 
                           if (widget.address == '') {
                             if (_formkey.currentState.validate()) {

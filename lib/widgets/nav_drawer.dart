@@ -38,18 +38,23 @@ class CustomDrawer extends StatefulWidget {
 }
 
 class _CustomDrawerState extends State<CustomDrawer> {
-  var id='';
+  var id = '';
   final GoogleSignIn googleSignIn = GoogleSignIn();
-  void address()async{
-    FirebaseUser user=await FirebaseAuth.instance.currentUser();
-    var email=user.email;
-    Firestore.instance.collection('Users').where('mail',isEqualTo: email).snapshots().listen((event) {setState(() {
-      id=event.documents[0].documentID;
-    });print(event.documents[0].documentID);});
-
-
-
+  void address() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    var email = user.email;
+    Firestore.instance
+        .collection('Users')
+        .where('mail', isEqualTo: email)
+        .snapshots()
+        .listen((event) {
+      setState(() {
+        id = event.documents[0].documentID;
+      });
+      print(event.documents[0].documentID);
+    });
   }
+
   List categories = [];
   getCategories() {
     Firestore.instance.collection('Categories').getDocuments().then((value) {
@@ -230,12 +235,27 @@ class _CustomDrawerState extends State<CustomDrawer> {
     );
   }
 
+  String whatsappMessage = '';
   @override
   void initState() {
     _getCurrentLocation();
     getUserDetails();
     getCategories();
     address();
+
+    setState(() {
+      final firestoreInstance = Firestore.instance;
+
+      firestoreInstance
+          .collection("WhatsappMessage")
+          .getDocuments()
+          .then((querySnapshot) {
+        querySnapshot.documents.forEach((result) {
+          whatsappMessage = result.data['WhatsappMessage'];
+          print('Whatsapp Message ${result.data['WhatsappMessage']}');
+        });
+      });
+    });
     super.initState();
   }
 
@@ -325,7 +345,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       textStyle: textTheme.button
                           .copyWith(color: AppColors.secondaryElement),
                       onPressed: () {
-                      googleSignIn.signOut();
+                        googleSignIn.signOut();
                         FirebaseAuth.instance.signOut();
                         R.Router.navigator.pushNamedAndRemoveUntil(
                           R.Router.loginScreen,
@@ -612,7 +632,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   children: [
                     InkWell(
                       onTap: () {
-                        launchWhatsApp(phone: '7060222315', message: 'Test');
+                        launchWhatsApp(
+                            phone: '7060222315', message: whatsappMessage);
                       },
                       child: Container(
                           height: 50,
@@ -632,16 +653,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       width: 5,
                     ),
                     InkWell(
-                      onTap:(){
+                      onTap: () {
                         launch('https://www.instagram.com/angadi.ae/');
                       },
                       child: Container(
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(25)),
-                              border:
-                                  Border.all(color: Color(0xFF6b3600), width: 2)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
+                              border: Border.all(
+                                  color: Color(0xFF6b3600), width: 2)),
                           alignment: Alignment.center,
                           child: FaIcon(
                             FontAwesomeIcons.instagram,
@@ -652,16 +674,17 @@ class _CustomDrawerState extends State<CustomDrawer> {
                       width: 5,
                     ),
                     InkWell(
-                      onTap:(){
+                      onTap: () {
                         launch('https://www.facebook.com/angadi.ae');
                       },
                       child: Container(
                           height: 50,
                           width: 50,
                           decoration: BoxDecoration(
-                              borderRadius: BorderRadius.all(Radius.circular(25)),
-                              border:
-                                  Border.all(color: Color(0xFF6b3600), width: 2)),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25)),
+                              border: Border.all(
+                                  color: Color(0xFF6b3600), width: 2)),
                           alignment: Alignment.center,
                           child: FaIcon(
                             FontAwesomeIcons.facebook,

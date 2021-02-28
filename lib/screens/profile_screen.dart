@@ -29,23 +29,43 @@ class ProfileScreen extends StatefulWidget {
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  String whatsappMessage = '';
   @override
   void initState() {
     getUserDetails();
     address();
+    setState(() {
+      final firestoreInstance = Firestore.instance;
+
+      firestoreInstance
+          .collection("WhatsappMessage")
+          .getDocuments()
+          .then((querySnapshot) {
+        querySnapshot.documents.forEach((result) {
+          whatsappMessage = result.data['WhatsappMessage'];
+          print('Whatsapp Message ${result.data['WhatsappMessage']}');
+        });
+      });
+    });
     super.initState();
   }
-  var id='';
-  void address()async{
-    FirebaseUser user=await FirebaseAuth.instance.currentUser();
-    var email=user.email;
-    Firestore.instance.collection('Users').where('mail',isEqualTo: email).snapshots().listen((event) {setState(() {
-      id=event.documents[0].documentID;
-    });print(event.documents[0].documentID);});
 
-
-
+  var id = '';
+  void address() async {
+    FirebaseUser user = await FirebaseAuth.instance.currentUser();
+    var email = user.email;
+    Firestore.instance
+        .collection('Users')
+        .where('mail', isEqualTo: email)
+        .snapshots()
+        .listen((event) {
+      setState(() {
+        id = event.documents[0].documentID;
+      });
+      print(event.documents[0].documentID);
+    });
   }
+
   List<Order> orders = List<Order>();
   void launchWhatsApp({
     @required String phone,
@@ -66,7 +86,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -86,13 +105,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(
-                      phone: '7060222315', message: 'Check out this awesome app');
+                  launchWhatsApp(phone: '7060222315', message: whatsappMessage);
                 },
                 child: Container(
                     alignment: Alignment.center,
-                    child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-            SizedBox(width:8),
+                    child: FaIcon(FontAwesomeIcons.whatsapp,
+                        color: Color(0xFF6b3600)))),
+            SizedBox(width: 8),
             InkWell(
                 onTap: () {
 //                print(1);
