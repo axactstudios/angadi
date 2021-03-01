@@ -427,7 +427,7 @@ items:widget.quantities,
                           SizedBox(
                             height: 2.5,
                           ),
-                          Row(
+                          (prodisprice!=proprice)?Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Align(
@@ -469,6 +469,18 @@ items:widget.quantities,
 //                              color: AppColors.accentText,
 //                              fontSize: Sizes.TEXT_SIZE_22,
                             ],
+                          ): Container(
+                            child: Text(
+                              'AED. ${(prodisprice).toString()}',
+                              textAlign: TextAlign.left,
+                              style: Styles.customMediumTextStyle(
+                                color: AppColors.black,
+                                fontSize: MediaQuery.of(context)
+                                    .size
+                                    .width *
+                                    0.035,
+                              ),
+                            ),
                           ),
                           SizedBox(
                             height: 2.5,
@@ -586,14 +598,14 @@ items:widget.quantities,
 //                                    width: Sizes.WIDTH_14,
 //                                  ),
 
-                                  Text(
+                                  (prodisprice!=proprice)?Text(
                                     ('${((int.parse(proprice) - int.parse(prodisprice)) / int.parse(proprice) * 100).toStringAsFixed(0)} % off'),
                                     style: Styles.customTitleTextStyle(
                                       color: Colors.deepOrangeAccent,
                                       fontWeight: FontWeight.w600,
                                       fontSize: 14,
                                     ),
-                                  ),
+                                  ):Container(),
                                 ],
                               ),
                             ),

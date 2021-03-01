@@ -463,6 +463,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     choice = 0;
     first();
     checkInCart('${widget.restaurantDetail.quantities[0]} ');
+    print('---------------------------------------${widget.restaurantDetail.boughtTogetherQuantity}');
     getAllItems();
     super.initState();
   }
