@@ -101,9 +101,10 @@ class RestaurantDetails {
   Dish boughtTogether;
   String boughtTogetherQuantity;
   String price;
+  String productID;
   String boughtTogetherDiscount;
-  List<Quantity>allquantities=[];
-  List<String> quantities=[];
+  List<Quantity> allquantities = [];
+  List<String> quantities = [];
 
   RestaurantDetails(
       {@required this.url,
@@ -112,6 +113,7 @@ class RestaurantDetails {
       @required this.category,
       @required this.rating,
       @required this.price,
+      @required this.productID,
       @required this.boughtTogether,
       @required this.boughtTogetherDiscount,
       @required this.boughtTogetherQuantity,

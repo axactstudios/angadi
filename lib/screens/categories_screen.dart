@@ -15,6 +15,7 @@ import 'package:url_launcher/url_launcher.dart';
 import '../routes/router.dart';
 import '../routes/router.gr.dart';
 import 'category_detail_screen.dart';
+import 'home_screen.dart';
 
 class CategoriesScreen extends StatefulWidget {
   static const int TAB_NO = 1;
@@ -214,7 +215,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         ),
                       ));
                     }
-                  } else {
+                  } else if (showGrocery == true) {
                     categoriesTop.add(Padding(
                       padding: EdgeInsets.symmetric(horizontal: 8.0),
                       child: InkWell(
@@ -279,6 +280,71 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                         ),
                       ),
                     ));
+                  } else {
+                    if (snap.data.documents[i]['sCat'] == 'Food') {
+                      categoriesTop.add(Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 8.0),
+                        child: InkWell(
+                          onTap: () {
+                            Navigator.push(context, MaterialPageRoute(
+                                builder: (BuildContext context) {
+                              return CategoryDetailScreen(
+                                categoryName: snap.data.documents[i]['catName'],
+                                imagePath: snap.data.documents[i]['imageURL'],
+                                selectedCategory: i,
+                                numberOfCategories: categoriesTop.length,
+                                gradient: gradients[i],
+                                sCat: widget.sCat,
+                              );
+                            }));
+                          },
+                          child: Column(
+                            children: [
+                              Container(
+                                  height:
+                                      MediaQuery.of(context).size.width * 0.35,
+                                  width: double.infinity,
+                                  child: ClipRRect(
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(8)),
+                                    child: FancyShimmerImage(
+                                      shimmerDuration: Duration(seconds: 2),
+                                      imageUrl: snap.data.documents[i]
+                                          ['liveImageURL'],
+                                      boxFit: BoxFit.fill,
+                                    ),
+                                  )),
+                              SizedBox(
+                                height: 5,
+                              ),
+                              Column(
+                                children: [
+                                  Text(
+                                    snap.data.documents[i]['catName'],
+                                    style: TextStyle(
+                                        color: Color(0xFF6b3600),
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 17),
+                                  ),
+                                  SizedBox(
+                                    height: 2.5,
+                                  ),
+                                  Container(
+                                    height: 2,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.35,
+                                    color: AppColors.secondaryElement,
+                                  ),
+                                  SizedBox(
+                                    height: 2.5,
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ));
+                    }
                   }
                 }
               }

@@ -24,6 +24,7 @@ dependencies:
   google_fonts: ^0.3.10
   webview_flutter: ^1.0.7
   fluttertoast: ^7.1.1
+  flutter_open_whatsapp: ^0.1.2
   flutter_paytabs_bridge_emulator: ^1.0.1-beta
   cached_network_image: ^2.3.3
   persistent_bottom_nav_bar: ^2.1.0

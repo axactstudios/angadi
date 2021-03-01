@@ -70,7 +70,7 @@ class SearchResultsScreen extends StatelessWidget {
                             dishes.add(Dish(
                                 boughtTogetherDiscount: snap.data.documents[i]
                                     ['boughtTogetherDiscount'],
-                                id: snap.data.documents[i].documentID,
+                                id: snap.data.documents[i]['productId'],
                                 name: snap.data.documents[i]['name'],
                                 category: snap.data.documents[i]['category'],
                                 rating: snap.data.documents[i]['rating'],
@@ -98,22 +98,23 @@ class SearchResultsScreen extends StatelessWidget {
                                   R.Router.navigator.pushNamed(
                                       R.Router.restaurantDetailsScreen,
                                       arguments: RestaurantDetails(
-                                        boughtTogetherDiscount:
-                                            snap.data.documents[i]
-                                                ['boughtTogetherDiscount'],
-                                        boughtTogether: boughtTogether,
-                                        url: snap.data.documents[i]['url'],
-                                        name: snap.data.documents[i]['name'],
-                                        desc: snap.data.documents[i]
-                                            ['description'],
-                                        category: snap.data.documents[i]
-                                            ['category'],
-                                        rating: snap.data.documents[i]
-                                            ['rating'],
-                                        price: snap.data.documents[i]['price'],
-                                        allquantities: dishes[i].allquantities,
-                                        quantities:dishes[i].quantities
-                                      ));
+                                          boughtTogetherDiscount:
+                                              snap.data.documents[i]
+                                                  ['boughtTogetherDiscount'],
+                                          boughtTogether: boughtTogether,
+                                          url: snap.data.documents[i]['url'],
+                                          name: snap.data.documents[i]['name'],
+                                          desc: snap.data.documents[i]
+                                              ['description'],
+                                          category: snap.data.documents[i]
+                                              ['category'],
+                                          rating: snap.data.documents[i]
+                                              ['rating'],
+                                          price: snap.data.documents[i]
+                                              ['price'],
+                                          allquantities:
+                                              dishes[i].allquantities,
+                                          quantities: dishes[i].quantities));
                                 },
                                 imagePath: snap.data.documents[i]['url'],
                                 cardTitle: snap.data.documents[i]['name'],
@@ -123,7 +124,7 @@ class SearchResultsScreen extends StatelessWidget {
                                 iPrice: snap.data.documents[i]['iPrice'],
                                 address: snap.data.documents[i]['description'],
                                 allquantities: dishes[i].allquantities,
-                                quantities:dishes[i].quantities,
+                                quantities: dishes[i].quantities,
                               ),
                             ));
                           }
@@ -210,24 +211,28 @@ class SearchScreen extends StatelessWidget {
                             quantities.clear();
 
                             for (int j = 0;
-                            j < snap.data.documents[i]['Quantity'].length;
-                            j++) {
+                                j < snap.data.documents[i]['Quantity'].length;
+                                j++) {
                               Quantity qu = Quantity(
-                                  snap.data.documents[i]['Quantity'][j]['iPrice'],
-                                  snap.data.documents[i]['Quantity'][j]['price'],
-                                  snap.data.documents[i]['Quantity'][j]['productId'],
-                                  '${ snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                                  snap.data.documents[i]['Quantity'][j]
+                                      ['iPrice'],
+                                  snap.data.documents[i]['Quantity'][j]
+                                      ['price'],
+                                  snap.data.documents[i]['Quantity'][j]
+                                      ['productId'],
+                                  '${snap.data.documents[i]['Quantity'][j]['quantity']}');
 
                               allquantities.add(qu);
                               quantities.add(
-                                  '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                                  '${snap.data.documents[i]['Quantity'][j]['quantity']}');
                             }
 //              print(snap.data.documents[i]['url']);
                             dishes.add(Dish(
                                 boughtTogetherDiscount: snap.data.documents[i]
                                     ['boughtTogetherDiscount'],
-                                boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
-                                id: snap.data.documents[i].documentID,
+                                boughtTogetherQuantity: snap.data.documents[i]
+                                    ['boughtTogetherQuantity'],
+                                id: snap.data.documents[i]['productId'],
                                 name: snap.data.documents[i]['name'],
                                 category: snap.data.documents[i]['category'],
                                 rating: snap.data.documents[i]['rating'],
@@ -254,26 +259,27 @@ class SearchScreen extends StatelessWidget {
                                   }
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (BuildContext context) {
-                                    return RestaurantDetailsScreen(
-                                        RestaurantDetails(
-                                            boughtTogetherDiscount: snap
-                                                        .data.documents[i]
+                                    return RestaurantDetailsScreen(RestaurantDetails(
+                                        boughtTogetherDiscount:
+                                            snap.data.documents[i]
                                                     ['boughtTogetherDiscount'] *
                                                 1.0,
-                                            url: snap.data.documents[i]['url'],
-                                            boughtTogetherQuantity: snap.data.documents[i]['boughtTogetherQuantity'],
-                                            name: snap.data.documents[i]
-                                                ['name'],
-                                            desc: snap.data.documents[i]
-                                                ['description'],
-                                            category: snap.data.documents[i]
-                                                ['category'],
-                                            rating: snap.data.documents[i]
-                                                ['rating'],
-                                            price: snap.data.documents[i]
-                                                ['price'],
-                                            boughtTogether: boughtTogether,
-                                        allquantities:allquantities,
+                                        url: snap.data.documents[i]['url'],
+                                        productID: snap.data.documents[i]
+                                            ['productId'],
+                                        boughtTogetherQuantity:
+                                            snap.data.documents[i]
+                                                ['boughtTogetherQuantity'],
+                                        name: snap.data.documents[i]['name'],
+                                        desc: snap.data.documents[i]
+                                            ['description'],
+                                        category: snap.data.documents[i]
+                                            ['category'],
+                                        rating: snap.data.documents[i]
+                                            ['rating'],
+                                        price: snap.data.documents[i]['price'],
+                                        boughtTogether: boughtTogether,
+                                        allquantities: allquantities,
                                         quantities: quantities));
                                   }));
                                 },

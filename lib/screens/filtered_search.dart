@@ -58,9 +58,7 @@ class _FilteredSearchState extends State<FilteredSearch> {
         allquantities.clear();
         quantities.clear();
 
-        for (int j = 0;
-        j < f['Quantity'].length;
-        j++) {
+        for (int j = 0; j < f['Quantity'].length; j++) {
           Quantity qu = Quantity(
               f['Quantity'][j]['iPrice'],
               f['Quantity'][j]['price'],
@@ -68,11 +66,10 @@ class _FilteredSearchState extends State<FilteredSearch> {
               f['Quantity'][j]['quantity']);
 
           allquantities.add(qu);
-          quantities.add(
-              '${f['Quantity'][j]['quantity']} ML');
+          quantities.add('${f['Quantity'][j]['quantity']} ML');
         }
         Dish dp = Dish(
-            id: f.documentID,
+            id: f['productId'],
             boughtTogetherDiscount: f['boughtTogetherDiscount'],
             name: f['name'],
             category: f['category'],
@@ -148,7 +145,6 @@ class _FilteredSearchState extends State<FilteredSearch> {
                       onTap: () async {
                         Dish boughtTogether;
                         for (int i = 0; i < dogList.length; i++) {
-
                           if (dogList[i].id ==
                               dogList[index].boughtTogetherID) {
                             boughtTogether = await dogList[i];
@@ -161,14 +157,15 @@ class _FilteredSearchState extends State<FilteredSearch> {
                                 boughtTogetherDiscount:
                                     item.boughtTogetherDiscount,
                                 url: item.url,
+                                productID: item.id,
                                 name: item.name,
                                 desc: item.desc,
                                 category: item.category,
                                 rating: item.rating,
                                 price: item.price,
                                 boughtTogether: boughtTogether,
-                            allquantities: item.allquantities,
-                            quantities: item.quantities),
+                                allquantities: item.allquantities,
+                                quantities: item.quantities),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
@@ -273,25 +270,22 @@ class _FilteredSearchState extends State<FilteredSearch> {
         allquantities.clear();
         quantities.clear();
 
-        for (int j = 0;
-        j < f['Quantity'].length;
-        j++) {
+        for (int j = 0; j < f['Quantity'].length; j++) {
           Quantity qu = Quantity(
               f['Quantity'][j]['iPrice'],
               f['Quantity'][j]['price'],
               f['Quantity'][j]['productId'],
-             '${ f['Quantity'][j]['quantity']} ML');
+              '${f['Quantity'][j]['quantity']}');
 
           allquantities.add(qu);
-          quantities.add(
-              '${f['Quantity'][j]['quantity']} ML');
+          quantities.add('${f['Quantity'][j]['quantity']}');
         }
         List<String> dogName = List<String>.from(f['nameSearch']);
         List<String> dogBreed = List<String>.from(f['categorySearch']);
         List<String> dogLowerCase = [];
         List<String> breedLowerCase = [];
         print('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-        print( f['Quantity'].length);
+        print(f['Quantity'].length);
         for (var dog in dogName) {
           dogLowerCase.add(dog.toLowerCase());
         }
@@ -303,7 +297,7 @@ class _FilteredSearchState extends State<FilteredSearch> {
           print('Match found ${f['name']}');
           docList.add(f);
           Dish dog = Dish(
-              id: f.documentID,
+              id: f['producrID'],
               boughtTogetherDiscount: f['boughtTogetherDiscount'],
               name: f['name'],
               category: f['category'],
@@ -312,8 +306,8 @@ class _FilteredSearchState extends State<FilteredSearch> {
               desc: f['description'],
               url: f['url'],
               boughtTogetherID: f['boughtTogether'],
-                allquantities: allquantities,
-          quantities: quantities);
+              allquantities: allquantities,
+              quantities: quantities);
           dogList.add(dog);
           setState(() {
             print('Updated');
@@ -337,21 +331,18 @@ class _FilteredSearchState extends State<FilteredSearch> {
         allquantities.clear();
         quantities.clear();
 
-        for (int j = 0;
-        j < f['Quantity'].length;
-        j++) {
+        for (int j = 0; j < f['Quantity'].length; j++) {
           Quantity qu = Quantity(
               f['Quantity'][j]['iPrice'],
               f['Quantity'][j]['price'],
               f['Quantity'][j]['productId'],
-             '${ f['Quantity'][j]['quantity']} ML');
+              '${f['Quantity'][j]['quantity']} ML');
 
           allquantities.add(qu);
-          quantities.add(
-              '${f['Quantity'][j]['quantity']} ML');
+          quantities.add('${f['Quantity'][j]['quantity']} ML');
         }
         dogList.add(Dish(
-            id: f.documentID,
+            id: f['productId'],
             boughtTogetherDiscount: f['boughtTogetherDiscount'],
             name: f['name'],
             category: f['category'],
@@ -360,8 +351,8 @@ class _FilteredSearchState extends State<FilteredSearch> {
             desc: f['description'],
             url: f['url'],
             boughtTogetherID: f['boughtTogether'],
-        allquantities: allquantities,
-        quantities: quantities));
+            allquantities: allquantities,
+            quantities: quantities));
         print('Dog added');
         print(f['profileImage'].toString());
         print('--------------------${f['Quantity'].length}');

@@ -365,16 +365,16 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       snap.data.documents[i]['Quantity'][j]['iPrice'],
                       snap.data.documents[i]['Quantity'][j]['price'],
                       snap.data.documents[i]['Quantity'][j]['productId'],
-                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                      '${snap.data.documents[i]['Quantity'][j]['quantity']}');
 
                   allquantities.add(qu);
                   quantities.add(
-                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                      '${snap.data.documents[i]['Quantity'][j]['quantity']}');
                 }
 
                 if (snap.data.documents[i]['category'] == widget.categoryName)
                   dishes.add(Dish(
-                      id: snap.data.documents[i].documentID,
+                      id: snap.data.documents[i]['productId'],
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
                       rating: snap.data.documents[i]['rating'],
@@ -461,6 +461,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                               url: dishes[index].url,
                                               name: dishes[index].name,
                                               desc: dishes[index].desc,
+                                              productID: dishes[index].id,
                                               category: dishes[index].category,
                                               rating: dishes[index].rating,
                                               price: dishes[index].price,
@@ -523,6 +524,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                           RestaurantDetails(
                                               url: dishes[index].url,
                                               name: dishes[index].name,
+                                              productID: dishes[index].id,
                                               desc: dishes[index].desc,
                                               category: dishes[index].category,
                                               rating: dishes[index].rating,

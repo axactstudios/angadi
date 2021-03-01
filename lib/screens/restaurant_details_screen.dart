@@ -441,7 +441,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       order = event['Numberoforders'];
     });
     print('Checked');
-    qty = await getQuantity(widget.restaurantDetail.name, '500 ML');
+    qty = await getQuantity(widget.restaurantDetail.name, '500');
     present = await checkInWishlist();
     print('-------------%%%%%$present');
   }
@@ -463,7 +463,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     choice = 0;
     first();
     checkInCart('${widget.restaurantDetail.quantities[0]} ');
-    print('---------------------------------------${widget.restaurantDetail.boughtTogetherQuantity}');
+    print(
+        '---------------------------------------${widget.restaurantDetail.boughtTogetherQuantity}');
     getAllItems();
     super.initState();
   }
@@ -588,7 +589,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
                 allquantities.add(qu);
                 quantities.add(
-                    '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                    '${snap.data.documents[i]['Quantity'][j]['quantity']}');
               }
               if (snap.data.documents[i]['name'] ==
                   widget.restaurantDetail.name) {
@@ -619,7 +620,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   ['boughtTogetherDiscount'],
                               boughtTogetherQuantity: snap.data.documents[ind]
                                   ['boughtTogetherQuantity'],
-                              id: snap.data.documents[ind].documentID,
+                              id: snap.data.documents[ind]['productId'],
                               name: snap.data.documents[ind]['name'],
                               category: snap.data.documents[ind]['category'],
                               rating:
@@ -641,6 +642,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                     ['boughtTogetherDiscount'],
                                 boughtTogetherQuantity: snap.data.documents[i]
                                     ['boughtTogetherQuantity'],
+                                productID: snap.data.documents[i]['productId'],
                                 url: snap.data.documents[i]['url'],
                                 name: snap.data.documents[i]['name'],
                                 desc: snap.data.documents[i]['description'],
@@ -680,7 +682,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   ['boughtTogetherDiscount'],
                               boughtTogetherQuantity: snap.data.documents[ind]
                                   ['boughtTogetherQuantity'],
-                              id: snap.data.documents[ind].documentID,
+                              id: snap.data.documents[ind]['productId'],
                               name: snap.data.documents[ind]['name'],
                               category: snap.data.documents[ind]['category'],
                               rating:
@@ -702,6 +704,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 boughtTogetherQuantity: snap.data.documents[i]
                                     ['boughtTogetherQuantity'],
                                 boughtTogether: boughtTogether,
+                                productID: snap.data.documents[i]['productId'],
                                 url: snap.data.documents[i]['url'],
                                 name: snap.data.documents[i]['name'],
                                 desc: snap.data.documents[i]['description'],
@@ -743,6 +746,13 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 // fontWeight: FontWeight.w600,
                                 fontSize: Sizes.TEXT_SIZE_20,
                               ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
+                            child: Text(
+                              widget.restaurantDetail.productID,
+                              style: addressTextStyle,
                             ),
                           ),
                           Padding(
@@ -1122,65 +1132,57 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               'Pack Sizes',
                             ),
                           ),
-                          Container(
-                            height:
-                                widget.restaurantDetail.allquantities.length *
-                                    50.0,
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: ListView.builder(
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: widget
-                                      .restaurantDetail.allquantities.length,
-                                  itemBuilder: (context, index) {
-                                    var item = widget
-                                        .restaurantDetail.allquantities[index];
-                                    return Padding(
-                                      padding: const EdgeInsets.all(2.0),
-                                      child: InkWell(
-                                        onTap: () async {
-                                          await getAllItems();
-                                          factor = await 1;
-                                          qtyTag = await item.quantity;
-                                          choice = await index;
+                          ListView.builder(
+                              physics: const NeverScrollableScrollPhysics(),
+                              shrinkWrap: true,
+                              itemCount:
+                                  widget.restaurantDetail.allquantities.length,
+                              itemBuilder: (context, index) {
+                                var item = widget
+                                    .restaurantDetail.allquantities[index];
+                                return Padding(
+                                  padding: const EdgeInsets.all(2.0),
+                                  child: InkWell(
+                                    onTap: () async {
+                                      await getAllItems();
+                                      factor = await 1;
+                                      qtyTag = await item.quantity;
+                                      choice = await index;
 
-                                          await checkInCart(item.quantity);
-                                          qty = await getQuantity(
-                                              widget.restaurantDetail.name,
-                                              item.quantity);
-                                          setState(() {
-                                            choice = index;
-                                            prodisprice = item.price;
-                                            tag = '${item.quantity}';
-                                          });
-                                        },
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                              color: choice == index
-                                                  ? AppColors.secondaryElement
-                                                  : Colors.transparent,
-                                              borderRadius: BorderRadius.all(
-                                                  Radius.circular(3)),
-                                              border: Border.all(width: 1)),
-                                          child: Padding(
-                                            padding: const EdgeInsets.all(8.0),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(item.quantity.toString()),
-                                                Text(
-                                                    'AED. ${int.parse(item.price)}'),
-                                              ],
-                                            ),
-                                          ),
+                                      await checkInCart(item.quantity);
+                                      qty = await getQuantity(
+                                          widget.restaurantDetail.name,
+                                          item.quantity);
+                                      setState(() {
+                                        choice = index;
+                                        prodisprice = item.price;
+                                        tag = '${item.quantity}';
+                                      });
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                          color: choice == index
+                                              ? AppColors.secondaryElement
+                                              : Colors.transparent,
+                                          borderRadius: BorderRadius.all(
+                                              Radius.circular(3)),
+                                          border: Border.all(width: 1)),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(item.quantity.toString()),
+                                            Text(
+                                                'AED. ${int.parse(item.price)}'),
+                                          ],
                                         ),
                                       ),
-                                    );
-                                  }),
-                            ),
-                          ),
+                                    ),
+                                  ),
+                                );
+                              }),
 
                           Padding(
                             padding: const EdgeInsets.fromLTRB(8.0, 8, 8, 2),

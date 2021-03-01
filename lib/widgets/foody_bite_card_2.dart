@@ -35,9 +35,8 @@ class FoodyBiteCard2 extends StatefulWidget {
   final double ratingsAndStatusCardElevation;
   final List<String> followersImagePath;
   final int orderCount;
-  List<Quantity> allquantities=[];
-  List<String>quantities=[];
-
+  List<Quantity> allquantities = [];
+  List<String> quantities = [];
 
   FoodyBiteCard2(
       {this.status = "OPEN",
@@ -60,7 +59,9 @@ class FoodyBiteCard2 extends StatefulWidget {
       this.cardElevation = 4.0,
       this.ratingsAndStatusCardElevation = 8.0,
       this.followersImagePath,
-      this.orderCount,this.allquantities,this.quantities});
+      this.orderCount,
+      this.allquantities,
+      this.quantities});
 
   @override
   _FoodyBiteCard2State createState() => _FoodyBiteCard2State();
@@ -110,8 +111,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
     await allRows.forEach((row) => cartItems.add(Cart.fromMap(row)));
     setState(() {
       for (var v in cartItems) {
-        if (v.productName == widget.cardTitle &&
-            v.qtyTag == qtyTag) {
+        if (v.productName == widget.cardTitle && v.qtyTag == qtyTag) {
           qty = v.qty;
         }
       }
@@ -213,7 +213,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
   }
 
   var factor = 1;
-  String qtyTag ;
+  String qtyTag;
 //  List<String> listOfQuantities = [
 //    '500 ML',
 //    '1 Ltr',
@@ -260,14 +260,14 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
   @override
   void initState() {
     choice = 0;
-    qtyTag=widget.quantities[0];
+    qtyTag = widget.quantities[0];
     first();
-    proprice=widget.allquantities[0].iPrice;
-    prodisprice=widget.allquantities[0].price;
-    checkInCart('${widget.quantities[0]} ML');
+    proprice = widget.allquantities[0].iPrice;
+    prodisprice = widget.allquantities[0].price;
+    checkInCart('${widget.quantities[0]}');
     getAllItems();
     print('@@@@@@@${widget.quantities}');
-    qtyTag=widget.quantities[0];
+    qtyTag = widget.quantities[0];
 //    getquantities();
 //    choice = 0;
 //    first();
@@ -343,8 +343,8 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                           Container(
                             width: widget.width - 30,
                             child: DropDown<String>(
-                              initialValue:  widget.quantities[0],
-items:widget.quantities,
+                              initialValue: widget.quantities[0],
+                              items: widget.quantities,
 //                              items: <String>[
 ////                                '500 ML',
 ////                                '1 Ltr:  Rs.${(int.parse(widget.price) * 2).toString()}',
@@ -356,18 +356,27 @@ items:widget.quantities,
                               onChanged: (value) async {
                                 await getAllItems();
                                 await checkInCart(value);
-                                qty = await getQuantity(widget.cardTitle, value);
-                                for(int i =0;i<widget.allquantities.length;i++){
-                                  print('--------------------------${widget.allquantities[i].iPrice}');
+                                qty =
+                                    await getQuantity(widget.cardTitle, value);
+                                for (int i = 0;
+                                    i < widget.allquantities.length;
+                                    i++) {
+                                  print(
+                                      '--------------------------${widget.allquantities[i].iPrice}');
                                   print(value);
-                                  print('-----${widget.allquantities[i].quantity}');
-                                  if(value=='${widget.allquantities[i].quantity}'){
+                                  print(
+                                      '-----${widget.allquantities[i].quantity}');
+                                  if (value ==
+                                      '${widget.allquantities[i].quantity}') {
                                     print('&&&&&&&&&&&&&&&&&&');
-                                    print('--------------------------${widget.allquantities[i].iPrice}');
+                                    print(
+                                        '--------------------------${widget.allquantities[i].iPrice}');
                                     setState(() {
-                                      qtyTag='${widget.allquantities[i].quantity} ';
-                                      proprice=widget.allquantities[i].iPrice;
-                                      prodisprice=widget.allquantities[i].price;
+                                      qtyTag =
+                                          '${widget.allquantities[i].quantity} ';
+                                      proprice = widget.allquantities[i].iPrice;
+                                      prodisprice =
+                                          widget.allquantities[i].price;
                                     });
                                   }
                                 }
@@ -427,61 +436,65 @@ items:widget.quantities,
                           SizedBox(
                             height: 2.5,
                           ),
-                          (prodisprice!=proprice)?Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Align(
-                                alignment: Alignment.topLeft,
-                                child: Row(
+                          (prodisprice != proprice)
+                              ? Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Container(
-                                      child: Text(
-                                        'AED. ${(prodisprice).toString()}',
-                                        textAlign: TextAlign.left,
-                                        style: Styles.customMediumTextStyle(
-                                          color: AppColors.black,
-                                          fontSize: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.035,
-                                        ),
+                                    Align(
+                                      alignment: Alignment.topLeft,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            child: Text(
+                                              'AED. ${(prodisprice).toString()}',
+                                              textAlign: TextAlign.left,
+                                              style:
+                                                  Styles.customMediumTextStyle(
+                                                color: AppColors.black,
+                                                fontSize: MediaQuery.of(context)
+                                                        .size
+                                                        .width *
+                                                    0.035,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(
+                                            width: 10,
+                                          ),
+                                          Container(
+                                            child: Text(
+                                                'AED. ${(proprice).toString()}',
+                                                textAlign: TextAlign.left,
+                                                style: TextStyle(
+                                                    fontSize:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.035,
+                                                    decoration: TextDecoration
+                                                        .lineThrough)),
+                                          ),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 10,
-                                    ),
-                                    Container(
-                                      child: Text(
-                                          'AED. ${(proprice).toString()}',
-                                          textAlign: TextAlign.left,
-                                          style: TextStyle(
-                                              fontSize: MediaQuery.of(context)
-                                                      .size
-                                                      .width *
-                                                  0.035,
-                                              decoration:
-                                                  TextDecoration.lineThrough)),
-                                    ),
-                                  ],
-                                ),
-                              ),
 
 //                              color: AppColors.accentText,
 //                              fontSize: Sizes.TEXT_SIZE_22,
-                            ],
-                          ): Container(
-                            child: Text(
-                              'AED. ${(prodisprice).toString()}',
-                              textAlign: TextAlign.left,
-                              style: Styles.customMediumTextStyle(
-                                color: AppColors.black,
-                                fontSize: MediaQuery.of(context)
-                                    .size
-                                    .width *
-                                    0.035,
-                              ),
-                            ),
-                          ),
+                                  ],
+                                )
+                              : Container(
+                                  child: Text(
+                                    'AED. ${(prodisprice).toString()}',
+                                    textAlign: TextAlign.left,
+                                    style: Styles.customMediumTextStyle(
+                                      color: AppColors.black,
+                                      fontSize:
+                                          MediaQuery.of(context).size.width *
+                                              0.035,
+                                    ),
+                                  ),
+                                ),
                           SizedBox(
                             height: 2.5,
                           ),
@@ -598,14 +611,16 @@ items:widget.quantities,
 //                                    width: Sizes.WIDTH_14,
 //                                  ),
 
-                                  (prodisprice!=proprice)?Text(
-                                    ('${((int.parse(proprice) - int.parse(prodisprice)) / int.parse(proprice) * 100).toStringAsFixed(0)} % off'),
-                                    style: Styles.customTitleTextStyle(
-                                      color: Colors.deepOrangeAccent,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 14,
-                                    ),
-                                  ):Container(),
+                                  (prodisprice != proprice)
+                                      ? Text(
+                                          ('${((int.parse(proprice) - int.parse(prodisprice)) / int.parse(proprice) * 100).toStringAsFixed(0)} % off'),
+                                          style: Styles.customTitleTextStyle(
+                                            color: Colors.deepOrangeAccent,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 14,
+                                          ),
+                                        )
+                                      : Container(),
                                 ],
                               ),
                             ),

@@ -13,6 +13,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'categories_screen.dart';
+import 'home_screen.dart';
 
 class MainCategoriesScreen extends StatefulWidget {
   @override
@@ -186,12 +187,14 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
                       Padding(
                         padding: EdgeInsets.all(8.0),
                         child: InkWell(
-                          onTap: () {
-//                            Navigator.push(context, MaterialPageRoute(
-//                                builder: (BuildContext context) {
-//                              return CategoriesScreen('Grocery');
-//                            }));
-                          },
+                          onTap: showGrocery
+                              ? () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                    return CategoriesScreen('Grocery');
+                                  }));
+                                }
+                              : () {},
                           child: Column(
                             children: [
                               Stack(children: [

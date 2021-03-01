@@ -19,6 +19,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -43,7 +44,7 @@ import 'filter_screen.dart';
 import 'order_placed.dart';
 import 'restaurant_details_screen.dart';
 
-var cat, money, rat;
+var cat, money, rat, showGrocery;
 bool showStatus = true;
 
 class HomeScreen extends StatefulWidget {
@@ -125,9 +126,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }) async {
     String url() {
       if (Platform.isIOS) {
-        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+        return "whatsapp://send?abid=7060222315&text=Hello%2C%20World!";
       } else {
-        return "whatsapp://send?   phone=$phone&text=${Uri.parse(message)}";
+        return "whatsapp://send?abid=7060222315&text=Hello%2C%20World!";
       }
     }
 
@@ -138,7 +139,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  var showGrocery;
   void Checkgrocery() {
     Firestore.instance
         .collection('AppSettings')
@@ -410,7 +410,8 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(phone: '7060222315', message: whatsappMessage);
+                FlutterOpenWhatsapp.sendSingleMessage("971 50 7175406", "");
+                // launchWhatsApp(phone: '7060222315', message: whatsappMessage);
               },
               child: Container(
                   alignment: Alignment.center,
@@ -472,22 +473,23 @@ class _HomeScreenState extends State<HomeScreen> {
                       snap.data.documents[i]['Quantity'][j]['iPrice'],
                       snap.data.documents[i]['Quantity'][j]['price'],
                       snap.data.documents[i]['Quantity'][j]['productId'],
-                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                      '${snap.data.documents[i]['Quantity'][j]['quantity']}');
 
                   allquantities.add(qu);
                   quantities.add(
-                      '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                      '${snap.data.documents[i]['Quantity'][j]['quantity']}');
                 }
 //                print('&&&&&&&&&&&&&&&&&&&&&&');
 //               print(quantities.length);
                 // print('Imp ${snap.data.documents[i]['boughtTogether']}');
+                print('PID: ${snap.data.documents[i]['productId']}');
                 dishes.add(Dish(
                     name: snap.data.documents[i]['name'],
                     boughtTogetherDiscount: snap.data.documents[i]
                         ['boughtTogetherDiscount'],
                     boughtTogetherQuantity: snap.data.documents[i]
                         ['boughtTogetherQuantity'],
-                    id: snap.data.documents[i].documentID,
+                    id: snap.data.documents[i]['productId'],
                     category: snap.data.documents[i]['category'],
                     rating: snap.data.documents[i]['rating'].toString(),
                     price: snap.data.documents[i]['price'],
@@ -503,7 +505,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ['boughtTogetherDiscount'],
                       boughtTogetherQuantity: snap.data.documents[i]
                           ['boughtTogetherQuantity'],
-                      id: snap.data.documents[i].documentID,
+                      id: snap.data.documents[i]['productId'],
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
                       rating: snap.data.documents[i]['rating'].toString(),
@@ -534,6 +536,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     dishes[i].boughtTogetherDiscount,
                                 boughtTogetherQuantity:
                                     dishes[i].boughtTogetherQuantity,
+                                productID: dishes[i].id,
                                 url: dishes[i].url,
                                 name: dishes[i].name,
                                 desc: dishes[i].desc,
@@ -570,7 +573,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ['boughtTogetherDiscount'],
                       boughtTogetherQuantity: snap.data.documents[i]
                           ['boughtTogetherQuantity'],
-                      id: snap.data.documents[i].documentID,
+                      id: snap.data.documents[i]['productId'],
                       name: snap.data.documents[i]['name'],
                       category: snap.data.documents[i]['category'],
                       rating: snap.data.documents[i]['rating'].toString(),
@@ -608,6 +611,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 boughtTogetherQuantity:
                                     dishes[i].boughtTogetherQuantity,
                                 url: dishes[i].url,
+                                productID: dishes[i].id,
                                 name: dishes[i].name,
                                 desc: dishes[i].desc,
                                 category: dishes[i].category,
@@ -656,6 +660,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 boughtTogetherQuantity:
                                     dishes[i].boughtTogetherQuantity,
                                 url: dishes[i].url,
+                                productID: dishes[i].id,
                                 name: dishes[i].name,
                                 desc: dishes[i].desc,
                                 category: dishes[i].category,
@@ -701,7 +706,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                               'Awaiting Confirmation' ||
                                           snap.data.documents[i]['Status'] ==
                                               'Processing')) {
-                                    orderID = snap.data.documents[i].documentID;
+                                    orderID =
+                                        snap.data.documents[i]['productId'];
                                     status = snap.data.documents[i]['Status'];
                                   }
                                 }
@@ -1175,12 +1181,14 @@ class _HomeScreenState extends State<HomeScreen> {
                         SizedBox(
                             width: MediaQuery.of(context).size.width * 0.02),
                         InkWell(
-                          onTap: () {
-//                            Navigator.push(context, MaterialPageRoute(
-//                                builder: (BuildContext context) {
-//                              return CategoriesScreen('Food');
-//                            }));
-                          },
+                          onTap: showGrocery == true
+                              ? () {
+                                  Navigator.push(context, MaterialPageRoute(
+                                      builder: (BuildContext context) {
+                                    return CategoriesScreen('Food');
+                                  }));
+                                }
+                              : () {},
                           child: Stack(
                             children: [
                               Container(
@@ -1927,62 +1935,58 @@ class _HomeScreenState extends State<HomeScreen> {
                         for (int i = 0;
                             i < snap.data.documents[0].data['Timeslots'].length;
                             i++) {
+                          DateTime dt = DateTime.now();
 
-                            DateTime dt = DateTime.now();
-
-                            if (dt.hour > 12) {
-                              String st =
-                              snap.data.documents[0].data['Timeslots'][i];
-                              String s = '';
-                              for (int i = 0; i < st.length; i++) {
-                                if (st[i] != ' ')
-                                  s = s + st[i];
-                                else
-                                  break;
-                              }
-
-                              double d = double.parse(s);
-                              if (d > (dt.hour - 12) &&
-                                  snap.data.documents[0].data['Timeslots'][i]
-                                      .contains('PM')) {
-                                timeSlots.add(
-                                    snap.data.documents[0].data['Timeslots'][i]);
-                              }
-                            } else {
-                              String st =
-                              snap.data.documents[0].data['Timeslots'][i];
-                              String s = '';
-                              for (int i = 0; i < st.length; i++) {
-                                if (st[i] != ' ')
-                                  s = s + st[i];
-                                else
-                                  break;
-                              }
-
-                              double d = double.parse(s);
-                              if (d > (dt.hour) &&
-                                  snap.data.documents[0].data['Timeslots'][i]
-                                      .contains('AM')) {
-                                timeSlots.add(
-                                    snap.data.documents[0].data['Timeslots'][i]);
-                              }
+                          if (dt.hour > 12) {
+                            String st =
+                                snap.data.documents[0].data['Timeslots'][i];
+                            String s = '';
+                            for (int i = 0; i < st.length; i++) {
+                              if (st[i] != ' ')
+                                s = s + st[i];
+                              else
+                                break;
                             }
-                          }
-                          if (timeSlots.length == 0) {
-                            selectedDate =
-                                selectedDate.add(new Duration(days: 1));
-                            for (int i = 0;
-                            i <
-                                snap.data.documents[0].data['Timeslots']
-                                    .length;
-                            i++) {
+
+                            double d = double.parse(s);
+                            if (d > (dt.hour - 12) &&
+                                snap.data.documents[0].data['Timeslots'][i]
+                                    .contains('PM')) {
                               timeSlots.add(
                                   snap.data.documents[0].data['Timeslots'][i]);
+                            }
+                          } else {
+                            String st =
+                                snap.data.documents[0].data['Timeslots'][i];
+                            String s = '';
+                            for (int i = 0; i < st.length; i++) {
+                              if (st[i] != ' ')
+                                s = s + st[i];
+                              else
+                                break;
+                            }
 
+                            double d = double.parse(s);
+                            if (d > (dt.hour) &&
+                                snap.data.documents[0].data['Timeslots'][i]
+                                    .contains('AM')) {
+                              timeSlots.add(
+                                  snap.data.documents[0].data['Timeslots'][i]);
+                            }
                           }
-
+                        }
+                        if (timeSlots.length == 0) {
+                          selectedDate =
+                              selectedDate.add(new Duration(days: 1));
+                          for (int i = 0;
+                              i <
+                                  snap.data.documents[0].data['Timeslots']
+                                      .length;
+                              i++) {
+                            timeSlots.add(
+                                snap.data.documents[0].data['Timeslots'][i]);
                           }
-
+                        }
 
                         return timeSlots.length != 0
                             ? Column(

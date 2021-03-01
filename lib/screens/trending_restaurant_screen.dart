@@ -93,11 +93,11 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                             snap.data.documents[i]['Quantity'][j]['iPrice'],
                             snap.data.documents[i]['Quantity'][j]['price'],
                             snap.data.documents[i]['Quantity'][j]['productId'],
-                            '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                            '${snap.data.documents[i]['Quantity'][j]['quantity']}');
 
                         allquantities.add(qu);
                         quantities.add(
-                            '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                            '${snap.data.documents[i]['Quantity'][j]['quantity']}');
                       }
 
 //              print(snap.data.documents[i]['url']);
@@ -118,7 +118,7 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                         dishes.add(Dish(
                             boughtTogetherDiscount: snap.data.documents[i]
                                 ['boughtTogetherDiscount'],
-                            id: snap.data.documents[i].documentID,
+                            id: snap.data.documents[i]['productId'],
                             name: snap.data.documents[i]['name'],
                             category: snap.data.documents[i]['category'],
                             rating: snap.data.documents[i]['rating'],
@@ -223,6 +223,7 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                                             url: dishes[index].url,
                                             name: dishes[index].name,
                                             desc: dishes[index].desc,
+                                            productID: dishes[index].id,
                                             category: dishes[index].category,
                                             rating: dishes[index].rating,
                                             price: dishes[index].price,
@@ -397,17 +398,17 @@ class _TrendingRestaurantsScreen1State
                                         ['price'],
                                     snap.data.documents[i]['Quantity'][j]
                                         ['productId'],
-                                    '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                                    '${snap.data.documents[i]['Quantity'][j]['quantity']}');
 
                                 allquantities.add(qu);
                                 quantities.add(
-                                    '${snap.data.documents[i]['Quantity'][j]['quantity']} ML');
+                                    '${snap.data.documents[i]['Quantity'][j]['quantity']}');
                               }
 //              print(snap.data.documents[i]['url']);
                               dishes.add(Dish(
                                   boughtTogetherDiscount: snap.data.documents[i]
                                       ['boughtTogetherDiscount'],
-                                  id: snap.data.documents[i].documentID,
+                                  id: snap.data.documents[i]['productId'],
                                   name: snap.data.documents[i]['name'],
                                   category: snap.data.documents[i]['category'],
                                   rating: snap.data.documents[i]['rating'],
@@ -442,6 +443,7 @@ class _TrendingRestaurantsScreen1State
                                             boughtTogetherDiscount: dishes[i]
                                                 .boughtTogetherDiscount,
                                             url: dishes[i].url,
+                                            productID: dishes[i].id,
                                             name: dishes[i].name,
                                             desc: dishes[i].desc,
                                             category: dishes[i].category,
