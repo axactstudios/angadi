@@ -1927,58 +1927,62 @@ class _HomeScreenState extends State<HomeScreen> {
                         for (int i = 0;
                             i < snap.data.documents[0].data['Timeslots'].length;
                             i++) {
-                          DateTime dt = DateTime.now();
 
-                          if (dt.hour > 12) {
-                            String st =
-                                snap.data.documents[0].data['Timeslots'][i];
-                            String s = '';
-                            for (int i = 0; i < st.length; i++) {
-                              if (st[i] != ' ')
-                                s = s + st[i];
-                              else
-                                break;
-                            }
+                            DateTime dt = DateTime.now();
 
-                            double d = double.parse(s);
-                            if (d > (dt.hour - 12) &&
-                                snap.data.documents[0].data['Timeslots'][i]
-                                    .contains('PM')) {
-                              timeSlots.add(
-                                  snap.data.documents[0].data['Timeslots'][i]);
-                            }
-                          } else {
-                            String st =
-                                snap.data.documents[0].data['Timeslots'][i];
-                            String s = '';
-                            for (int i = 0; i < st.length; i++) {
-                              if (st[i] != ' ')
-                                s = s + st[i];
-                              else
-                                break;
-                            }
+                            if (dt.hour > 12) {
+                              String st =
+                              snap.data.documents[0].data['Timeslots'][i];
+                              String s = '';
+                              for (int i = 0; i < st.length; i++) {
+                                if (st[i] != ' ')
+                                  s = s + st[i];
+                                else
+                                  break;
+                              }
 
-                            double d = double.parse(s);
-                            if (d > (dt.hour) &&
-                                snap.data.documents[0].data['Timeslots'][i]
-                                    .contains('AM')) {
-                              timeSlots.add(
-                                  snap.data.documents[0].data['Timeslots'][i]);
+                              double d = double.parse(s);
+                              if (d > (dt.hour - 12) &&
+                                  snap.data.documents[0].data['Timeslots'][i]
+                                      .contains('PM')) {
+                                timeSlots.add(
+                                    snap.data.documents[0].data['Timeslots'][i]);
+                              }
+                            } else {
+                              String st =
+                              snap.data.documents[0].data['Timeslots'][i];
+                              String s = '';
+                              for (int i = 0; i < st.length; i++) {
+                                if (st[i] != ' ')
+                                  s = s + st[i];
+                                else
+                                  break;
+                              }
+
+                              double d = double.parse(s);
+                              if (d > (dt.hour) &&
+                                  snap.data.documents[0].data['Timeslots'][i]
+                                      .contains('AM')) {
+                                timeSlots.add(
+                                    snap.data.documents[0].data['Timeslots'][i]);
+                              }
                             }
                           }
-                        }
-                        if (timeSlots.length == 0) {
-                          selectedDate =
-                              selectedDate.add(new Duration(days: 1));
-                          for (int i = 0;
-                              i <
-                                  snap.data.documents[0].data['Timeslots']
-                                      .length;
-                              i++) {
-                            timeSlots.add(
-                                snap.data.documents[0].data['Timeslots'][i]);
+                          if (timeSlots.length == 0) {
+                            selectedDate =
+                                selectedDate.add(new Duration(days: 1));
+                            for (int i = 0;
+                            i <
+                                snap.data.documents[0].data['Timeslots']
+                                    .length;
+                            i++) {
+                              timeSlots.add(
+                                  snap.data.documents[0].data['Timeslots'][i]);
+
                           }
-                        }
+
+                          }
+
 
                         return timeSlots.length != 0
                             ? Column(

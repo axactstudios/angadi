@@ -339,14 +339,14 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                                    width: Sizes.WIDTH_14,
 //                                  ),
 
-                                      Text(
+                                      (proprice!=prodisprice)? Text(
                                         ('${((int.parse(proprice) - int.parse(prodisprice)) / int.parse(proprice) * 100).toStringAsFixed(0)} % off'),
                                         style: Styles.customTitleTextStyle(
                                           color: Colors.deepOrangeAccent,
                                           fontWeight: FontWeight.w600,
                                           fontSize: 14,
                                         ),
-                                      ),
+                                      ):Container(),
                                     ],
                                   ),
                                 ),
@@ -465,7 +465,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       },
                     ),
                     SizedBox(height: 6.0),
-                    Row(
+                    (prodisprice!=proprice)?Row(
                       children: [
                         Container(
                           child: Text(
@@ -486,7 +486,16 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                   decoration: TextDecoration.lineThrough)),
                         ),
                       ],
-                    ),
+                    ):Container(
+                        child: Text(
+                        'AED. ${(int.parse(prodisprice).toString())}  ',
+                        textAlign: TextAlign.left,
+                        style: Styles.customMediumTextStyle(
+                        color: AppColors.black,
+                        fontSize: 15,
+                        ),
+                        ),
+                        ),
                     SizedBox(
                       height: 5,
                     ),
