@@ -61,6 +61,9 @@ class _MyOrdersState extends State<MyOrders> {
   void initState() {
     show = true;
     setState(() {
+      orders.clear();
+    });
+    setState(() {
       final firestoreInstance = Firestore.instance;
 
       firestoreInstance
@@ -75,10 +78,10 @@ class _MyOrdersState extends State<MyOrders> {
     });
     super.initState();
   }
-
+  List<Order> orders = List<Order>();
   @override
   Widget build(BuildContext context) {
-    List<Order> orders = List<Order>();
+
     var date2;
 
     Widget bill(timestamp, total, id1, status, str) {
