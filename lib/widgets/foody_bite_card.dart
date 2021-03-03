@@ -340,7 +340,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                                  ),
 
                                       (proprice!=prodisprice)? Text(
-                                        ('${((int.parse(proprice) - int.parse(prodisprice)) / int.parse(proprice) * 100).toStringAsFixed(0)} % off'),
+                                        ('${((double.parse(proprice) - double.parse(prodisprice)) / double.parse(proprice) * 100).toStringAsFixed(0)} % off'),
                                         style: Styles.customTitleTextStyle(
                                           color: Colors.deepOrangeAccent,
                                           fontWeight: FontWeight.w600,
@@ -469,7 +469,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       children: [
                         Container(
                           child: Text(
-                            'AED. ${(int.parse(prodisprice).toString())}  ',
+                            'AED. ${(double.parse(prodisprice).toString())}  ',
                             textAlign: TextAlign.left,
                             style: Styles.customMediumTextStyle(
                               color: AppColors.black,
@@ -479,7 +479,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                         ),
                         Container(
                           child: Text(
-                              'AED. ${(int.parse(proprice).toString())}',
+                              'AED. ${(double.parse(proprice).toString())}',
                               textAlign: TextAlign.left,
                               style: TextStyle(
                                   fontSize: 15,
@@ -488,7 +488,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       ],
                     ):Container(
                         child: Text(
-                        'AED. ${(int.parse(prodisprice).toString())}  ',
+                        'AED. ${(double.parse(prodisprice).toString())}  ',
                         textAlign: TextAlign.left,
                         style: Styles.customMediumTextStyle(
                         color: AppColors.black,

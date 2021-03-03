@@ -1036,7 +1036,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 MainAxisAlignment.center,
                                             children: [
                                               Text(
-                                                'AED. ${int.parse(prodisprice).toString()}',
+                                                'AED. ${double.parse(prodisprice).toString()}',
                                                 textAlign: TextAlign.left,
                                                 style: Styles
                                                     .customMediumTextStyle(
@@ -1176,7 +1176,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                           children: [
                                             Text(item.quantity.toString()),
                                             Text(
-                                                'AED. ${int.parse(item.price)}'),
+                                                'AED. ${double.parse(item.price)}'),
                                           ],
                                         ),
                                       ),

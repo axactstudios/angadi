@@ -447,7 +447,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                         children: [
                                           Container(
                                             child: Text(
-                                              'AED. ${(prodisprice).toString()}',
+                                              'AED. ${double.parse(prodisprice).toString()}',
                                               textAlign: TextAlign.left,
                                               style:
                                                   Styles.customMediumTextStyle(
@@ -464,7 +464,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                           ),
                                           Container(
                                             child: Text(
-                                                'AED. ${(proprice).toString()}',
+                                                'AED. ${double.parse(proprice).toString()}',
                                                 textAlign: TextAlign.left,
                                                 style: TextStyle(
                                                     fontSize:
@@ -485,7 +485,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                 )
                               : Container(
                                   child: Text(
-                                    'AED. ${(prodisprice).toString()}',
+                                    'AED. ${double.parse(prodisprice).toString()}',
                                     textAlign: TextAlign.left,
                                     style: Styles.customMediumTextStyle(
                                       color: AppColors.black,
@@ -613,7 +613,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
 
                                   (prodisprice != proprice)
                                       ? Text(
-                                          ('${((int.parse(proprice) - int.parse(prodisprice)) / int.parse(proprice) * 100).toStringAsFixed(0)} % off'),
+                                          ('${((double.parse(proprice) - double.parse(prodisprice)) / double.parse(proprice) * 100).toStringAsFixed(0)} % off'),
                                           style: Styles.customTitleTextStyle(
                                             color: Colors.deepOrangeAccent,
                                             fontWeight: FontWeight.w600,
