@@ -748,13 +748,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               ),
                             ),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
-                            child: Text(
-                              widget.restaurantDetail.productID,
-                              style: addressTextStyle,
-                            ),
-                          ),
+
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
                             child: Text(
@@ -1069,6 +1063,13 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             ),
                           ),
                           Padding(
+                            padding: const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
+                            child: Text(
+                              widget.restaurantDetail.productID,
+                              style: addressTextStyle,
+                            ),
+                          ),
+                          Padding(
                             padding: const EdgeInsets.fromLTRB(16.0, 3, 8, 10),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -1097,30 +1098,30 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               ],
                             ),
                           ),
-                          Container(
-                            height: 5,
-                            width: MediaQuery.of(context).size.width,
-                            color: Colors.grey.withOpacity(0.5),
-                          ),
-                          Row(
-                            children: [
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Image.asset(
-                                'assets/images/truck',
-                                height: 30,
-                                width: 30,
-                              ),
-                              SizedBox(
-                                width: 8,
-                              ),
-                              Text(
-                                'Delivers in 13 hrs',
-                                style: TextStyle(fontSize: 14),
-                              ),
-                            ],
-                          ),
+                          // Container(
+                          //   height: 5,
+                          //   width: MediaQuery.of(context).size.width,
+                          //   color: Colors.grey.withOpacity(0.5),
+                          // ),
+                          // Row(
+                          //   children: [
+                          //     SizedBox(
+                          //       width: 8,
+                          //     ),
+                          //     Image.asset(
+                          //       'assets/images/truck',
+                          //       height: 30,
+                          //       width: 30,
+                          //     ),
+                          //     SizedBox(
+                          //       width: 8,
+                          //     ),
+                          //     Text(
+                          //       'Delivers in 13 hrs',
+                          //       style: TextStyle(fontSize: 14),
+                          //     ),
+                          //   ],
+                          // ),
                           Container(
                             height: 5,
                             width: MediaQuery.of(context).size.width,

@@ -161,7 +161,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         id = event.documents[0].documentID;
       });
-      print(event.documents[0].documentID);
+      // print(event.documents[0].documentID);
     });
   }
 
@@ -482,7 +482,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                print('&&&&&&&&&&&&&&&&&&&&&&');
 //               print(quantities.length);
                 // print('Imp ${snap.data.documents[i]['boughtTogether']}');
-                print('PID: ${snap.data.documents[i]['productId']}');
+                // print('PID: ${snap.data.documents[i]['productId']}');
                 dishes.add(Dish(
                     name: snap.data.documents[i]['name'],
                     boughtTogetherDiscount: snap.data.documents[i]
@@ -1987,7 +1987,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                 snap.data.documents[0].data['Timeslots'][i]);
                           }
                         }
-
+                        print(
+                            'DIff ${selectedDate.difference(DateTime.now()).inDays}');
+                        if (selectedDate.difference(DateTime.now()).inDays >=
+                            1) {
+                          timeSlots.clear();
+                          for (int i = 0;
+                              i <
+                                  snap.data.documents[0].data['Timeslots']
+                                      .length;
+                              i++) {
+                            timeSlots.add(
+                                snap.data.documents[0].data['Timeslots'][i]);
+                          }
+                        }
                         return timeSlots.length != 0
                             ? Column(
                                 children: [

@@ -155,7 +155,8 @@ class _CheckoutState extends State<Checkout> {
               element.documents[0].data['Timeslots'][i].contains('PM')) {
             timeSlots2.add(element.documents[0].data['Timeslots'][i]);
           }
-        } else {
+        }
+        else {
           String st = element.documents[0].data['Timeslots'][i];
           String s = '';
           for (int i = 0; i < st.length; i++) {
@@ -180,6 +181,7 @@ class _CheckoutState extends State<Checkout> {
           timeSlots2.add(element.documents[0].data['Timeslots'][i]);
         }
       }
+
       print('-----------------');
       print(timeSlots2.length);
       selectedTime = timeSlots2[0];
@@ -336,7 +338,18 @@ class _CheckoutState extends State<Checkout> {
                                 snap.data.documents[0].data['Timeslots'][i]);
                           }
                         }
-
+                        if (selectedDate.difference(DateTime.now()).inDays >=
+                            1) {
+                          timeSlots.clear();
+                          for (int i = 0;
+                              i <
+                                  snap.data.documents[0].data['Timeslots']
+                                      .length;
+                              i++) {
+                            timeSlots.add(
+                                snap.data.documents[0].data['Timeslots'][i]);
+                          }
+                        }
                         return timeSlots.length != 0
                             ? Column(
                                 children: [
@@ -873,60 +886,60 @@ class _CheckoutState extends State<Checkout> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Container(
-                      child: Radio(
-                          activeColor: AppColors.secondaryElement,
-                          value: 'Delivery',
-                          groupValue: type,
-                          onChanged: (value) {
-                            setState(() {
-                              type = value;
-                            });
-                          }),
-                    ),
-                    Text(
-                      'Delivery',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    Container(
-                      height: 6,
-                      child: Radio(
-                          activeColor: AppColors.secondaryElement,
-                          value: 'Takeaway',
-                          groupValue: type,
-                          onChanged: (value) {
-                            setState(() {
-                              type = value;
-                            });
-                          }),
-                    ),
-                    Text(
-                      'Takeaway',
-                      style: TextStyle(fontSize: 15),
-                    ),
-                    SizedBox(
-                      width: 1,
-                    ),
-//                    Radio(
-//                        activeColor: AppColors.secondaryElement,
-//                        value: 'Schedule Delivery',
-//                        groupValue: type,
-//                        onChanged: (value) {
-//                          setState(() {
-//                            type = value;
-//                          });
-//                        }),
-//                    Container(
-//                        width: MediaQuery.of(context).size.width * 0.2,
-//                        child: Text(
-//                          'Schedule Delivery',
-//                          style: TextStyle(fontSize: 15),
-//                        )),
-                  ],
-                ),
+//                 Row(
+//                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+//                   children: [
+//                     Container(
+//                       child: Radio(
+//                           activeColor: AppColors.secondaryElement,
+//                           value: 'Delivery',
+//                           groupValue: type,
+//                           onChanged: (value) {
+//                             setState(() {
+//                               type = value;
+//                             });
+//                           }),
+//                     ),
+//                     Text(
+//                       'Delivery',
+//                       style: TextStyle(fontSize: 15),
+//                     ),
+//                     Container(
+//                       height: 6,
+//                       child: Radio(
+//                           activeColor: AppColors.secondaryElement,
+//                           value: 'Takeaway',
+//                           groupValue: type,
+//                           onChanged: (value) {
+//                             setState(() {
+//                               type = value;
+//                             });
+//                           }),
+//                     ),
+//                     Text(
+//                       'Takeaway',
+//                       style: TextStyle(fontSize: 15),
+//                     ),
+//                     SizedBox(
+//                       width: 1,
+//                     ),
+// //                    Radio(
+// //                        activeColor: AppColors.secondaryElement,
+// //                        value: 'Schedule Delivery',
+// //                        groupValue: type,
+// //                        onChanged: (value) {
+// //                          setState(() {
+// //                            type = value;
+// //                          });
+// //                        }),
+// //                    Container(
+// //                        width: MediaQuery.of(context).size.width * 0.2,
+// //                        child: Text(
+// //                          'Schedule Delivery',
+// //                          style: TextStyle(fontSize: 15),
+// //                        )),
+//                   ],
+//                 ),
                 SizedBox(
                   height: 10,
                 ),
@@ -3154,21 +3167,9 @@ class _CheckoutState extends State<Checkout> {
         ((X509Certificate cert, String host, int port) => true);
     final String apiUrl = "https://paytab.herokuapp.com/pay";
     Map map = {
-      'Items': items,
-      'Price': prices,
-      'Qty': quantities,
-      'Type': type,
       'UserID': user.uid,
-      'Address':
-          'Street :${buildingController.text}, Area:${floorcontroller.text}, Landmark:${flatcontroller.text},Additional Directions :${additionalcontroller.text}',
-      // 'DeliveryDate': Timestamp.now(),
-      'DeliveryTime': selectedTime,
-      // 'TimeStamp': Timestamp.now(),
-      'Status': 'Awaiting Confirmation',
-      'Notes': notesController.text != null ? notesController.text : 'None',
       'GrandTotal': price,
       'orderid': orderid,
-      'Phone': user.phoneNumber
     };
     HttpClientRequest request = await httpClient.postUrl(Uri.parse(apiUrl));
 
