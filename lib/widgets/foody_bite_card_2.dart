@@ -76,10 +76,11 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
   List<Cart> cartItems = [];
   var proprice;
   var prodisprice;
+  String productID;
 
   static List<bool> check = [false, false, false, false, false];
   void updateItem(
-      {int id,
+      {String id,
       String name,
       String imgUrl,
       String price,
@@ -122,12 +123,14 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
   String orderid;
 
   void addToCart(
-      {String name,
+      {String productId,
+      String name,
       String imgUrl,
       String price,
       int qty,
       String qtyTag}) async {
     Map<String, dynamic> row = {
+      DatabaseHelper.columnId: productId,
       DatabaseHelper.columnProductName: name,
       DatabaseHelper.columnImageUrl: imgUrl,
       DatabaseHelper.columnPrice: price,
@@ -264,6 +267,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
     first();
     proprice = widget.allquantities[0].iPrice;
     prodisprice = widget.allquantities[0].price;
+    productID = widget.allquantities[0].productId;
     checkInCart('${widget.quantities[0]}');
     getAllItems();
     print('@@@@@@@${widget.quantities}');
@@ -377,6 +381,8 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                       proprice = widget.allquantities[i].iPrice;
                                       prodisprice =
                                           widget.allquantities[i].price;
+                                      productID =
+                                          widget.allquantities[i].productId;
                                     });
                                   }
                                 }
@@ -503,6 +509,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                   onTap: () {
                                     print('===========$qtyTag=======');
                                     addToCart(
+                                        productId: productID,
                                         name: widget.cardTitle,
                                         imgUrl: widget.imagePath,
                                         price: prodisprice,

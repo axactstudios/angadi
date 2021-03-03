@@ -2670,11 +2670,13 @@ class _CheckoutState extends State<Checkout> {
     List items = [];
     List prices = [];
     List quantities = [];
+    List productIDs = [];
     for (var v in cartItems) {
       print(v.productName);
       items.add(v.productName);
       prices.add(v.price);
       quantities.add(v.qty);
+      productIDs.add(v.id);
     }
     final databaseReference = Firestore.instance;
     orderType == 'Delivery' &&
@@ -2688,6 +2690,7 @@ class _CheckoutState extends State<Checkout> {
             'Price': prices,
             'Qty': quantities,
             'Type': orderType,
+            'ProductIDs': productIDs,
             'UserID': user.uid,
             'Address':
                 'Building :${buildingController.text} , Apartment :${flatcontroller.text} , Floor:${floorcontroller.text}, Additional Directions :${additionalcontroller.text}',
@@ -2716,6 +2719,7 @@ class _CheckoutState extends State<Checkout> {
                 'Items': items,
                 'Price': prices,
                 'Qty': quantities,
+                'ProductIDs': productIDs,
                 'Type': orderType,
                 'UserID': user.uid,
                 'Address':
@@ -2746,6 +2750,7 @@ class _CheckoutState extends State<Checkout> {
                     'Items': items,
                     'Price': prices,
                     'Qty': quantities,
+                    'ProductIDs': productIDs,
                     'Type': orderType,
                     'UserID': user.uid,
                     'Address':
@@ -2777,6 +2782,7 @@ class _CheckoutState extends State<Checkout> {
                         'Qty': quantities,
                         'Type': orderType,
                         'UserID': user.uid,
+                        'ProductIDs': productIDs,
                         'Address': widget.address,
                         'DeliveryDate': DateTime(selectedDate.year,
                             selectedDate.month, selectedDate.day, dd),
@@ -2804,6 +2810,7 @@ class _CheckoutState extends State<Checkout> {
                             'Price': prices,
                             'Qty': quantities,
                             'Type': orderType,
+                            'ProductIDs': productIDs,
                             'UserID': user.uid,
                             'isPaid': false,
                             // 'Status':'${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
@@ -2825,6 +2832,7 @@ class _CheckoutState extends State<Checkout> {
                             'Price': prices,
                             'Qty': quantities,
                             'Type': orderType,
+                            'ProductIDs': productIDs,
                             'UserID': user.uid,
                             'DeliveryDate': selectedDate,
                             'DeliveryTime': selectedTime,

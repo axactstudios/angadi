@@ -100,6 +100,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   String tag;
   var proprice;
   var prodisprice;
+  String productID;
   List<Cart> cartItems = [];
   List<Wishlist> wishlistItems = [];
   List<Widget> youMayAlsoLike = new List();
@@ -107,7 +108,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   List<Widget> dishesLike = new List<Widget>();
   List<Widget> dishesBought = new List<Widget>();
   void updateItem(
-      {int id,
+      {String id,
       String name,
       String imgUrl,
       String price,
@@ -235,12 +236,14 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   }
 
   void addToCart(ctxt,
-      {String name,
+      {String productId,
+      String name,
       String imgUrl,
       String price,
       int qty,
       String qtyTag}) async {
     Map<String, dynamic> row = {
+      DatabaseHelper.columnId: productId,
       DatabaseHelper.columnProductName: name,
       DatabaseHelper.columnImageUrl: imgUrl,
       DatabaseHelper.columnPrice: price,
@@ -460,6 +463,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       qtyTag = '${widget.restaurantDetail.quantities[0]} ';
     });
     prodisprice = widget.restaurantDetail.allquantities[0].price;
+    productID = widget.restaurantDetail.allquantities[0].productId;
     choice = 0;
     first();
     checkInCart('${widget.restaurantDetail.quantities[0]} ');
@@ -1157,6 +1161,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                       setState(() {
                                         choice = index;
                                         prodisprice = item.price;
+                                        productID = item.productId;
                                         tag = '${item.quantity}';
                                       });
                                     },
@@ -1585,6 +1590,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                       0.04,
                                               onTap: () {
                                                 addToCart(context,
+                                                    productId: widget
+                                                        .restaurantDetail
+                                                        .productID,
                                                     name: widget
                                                         .restaurantDetail.name,
                                                     imgUrl: widget
@@ -1596,6 +1604,10 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                         .restaurantDetail
                                                         .boughtTogetherQuantity);
                                                 addToCart(context,
+                                                    productId: widget
+                                                        .restaurantDetail
+                                                        .boughtTogether
+                                                        .id,
                                                     name: widget
                                                         .restaurantDetail
                                                         .boughtTogether
@@ -1766,6 +1778,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   addToCart(context,
                                       name: widget.restaurantDetail.name,
                                       imgUrl: widget.restaurantDetail.url,
+                                      productId: productID,
                                       price: prodisprice,
 //                                      price: (int.parse(widget
 //                                                  .restaurantDetail.price) *

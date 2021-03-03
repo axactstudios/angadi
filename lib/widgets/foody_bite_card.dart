@@ -35,8 +35,8 @@ class FoodyBiteCard extends StatefulWidget {
   final double ratingsAndStatusCardElevation;
   final List<String> followersImagePath;
   final int orderCount;
-  List<Quantity>allquantities=[];
-  List<String>quantities=[];
+  List<Quantity> allquantities = [];
+  List<String> quantities = [];
 
   FoodyBiteCard(
       {this.status = "OPEN",
@@ -59,7 +59,9 @@ class FoodyBiteCard extends StatefulWidget {
       this.cardElevation = 4.0,
       this.ratingsAndStatusCardElevation = 8.0,
       this.followersImagePath,
-      this.orderCount,this.allquantities,this.quantities});
+      this.orderCount,
+      this.allquantities,
+      this.quantities});
 
   @override
   _FoodyBiteCardState createState() => _FoodyBiteCardState();
@@ -74,11 +76,11 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
   var proprice;
   var prodisprice;
 
-  List<String>allqan=[];
+  List<String> allqan = [];
   List<Cart> cartItems = [];
   static List<bool> check = [false, false, false, false, false];
   void updateItem(
-      {int id,
+      {String id,
       String name,
       String imgUrl,
       String price,
@@ -111,7 +113,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
     setState(() {
       for (var v in cartItems) {
         if (v.productName == widget.cardTitle &&
-           v.qtyTag == widget.quantities[choice]) {
+            v.qtyTag == widget.quantities[choice]) {
           qty = v.qty;
         }
       }
@@ -122,13 +124,15 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
   String orderid;
 
   void addToCart(
-      {String name,
+      {String productid,
+      String name,
       String imgUrl,
       String price,
       int qty,
       String qtyTag}) async {
     Map<String, dynamic> row = {
       DatabaseHelper.columnProductName: name,
+      DatabaseHelper.columnId: productid,
       DatabaseHelper.columnImageUrl: imgUrl,
       DatabaseHelper.columnPrice: price,
       DatabaseHelper.columnQuantity: qty,
@@ -214,9 +218,8 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 
   var factor = 1;
   String qtyTag;
-  List<String> listOfQuantities = [
-
-  ];
+  String productID;
+  List<String> listOfQuantities = [];
 
   Future<int> getQuantity(String name, String qtyTag) async {
     var temp = await _query(name, qtyTag);
@@ -248,7 +251,8 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
         });
     }
   }
-  int order=0;
+
+  int order = 0;
 
   first() async {
     await Firestore.instance
@@ -266,20 +270,21 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //    print('-------------%%%%%$present');
     qty = await getQuantity(widget.cardTitle, '${widget.quantities[0]}');
   }
-  void getquantities(){
-    listOfQuantities.clear();
-    for(int i=0;i<widget.allquantities.length;i++){
 
-      }}
+  void getquantities() {
+    listOfQuantities.clear();
+    for (int i = 0; i < widget.allquantities.length; i++) {}
+  }
 
   @override
   void initState() {
     choice = 0;
-    qtyTag=widget.quantities[0];
+    qtyTag = widget.quantities[0];
     print('@###############${widget.orderCount.toString()}');
     first();
-    proprice=widget.allquantities[0].iPrice;
-    prodisprice=widget.allquantities[0].price;
+    proprice = widget.allquantities[0].iPrice;
+    prodisprice = widget.allquantities[0].price;
+    productID = widget.allquantities[0].productId;
     checkInCart('${widget.quantities[0]}');
     getAllItems();
     print('@@@@@@@${widget.quantities}');
@@ -339,14 +344,17 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                                    width: Sizes.WIDTH_14,
 //                                  ),
 
-                                      (proprice!=prodisprice)? Text(
-                                        ('${((double.parse(proprice) - double.parse(prodisprice)) / double.parse(proprice) * 100).toStringAsFixed(0)} % off'),
-                                        style: Styles.customTitleTextStyle(
-                                          color: Colors.deepOrangeAccent,
-                                          fontWeight: FontWeight.w600,
-                                          fontSize: 14,
-                                        ),
-                                      ):Container(),
+                                      (proprice != prodisprice)
+                                          ? Text(
+                                              ('${((double.parse(proprice) - double.parse(prodisprice)) / double.parse(proprice) * 100).toStringAsFixed(0)} % off'),
+                                              style:
+                                                  Styles.customTitleTextStyle(
+                                                color: Colors.deepOrangeAccent,
+                                                fontWeight: FontWeight.w600,
+                                                fontSize: 14,
+                                              ),
+                                            )
+                                          : Container(),
                                     ],
                                   ),
                                 ),
@@ -393,7 +401,6 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       ),
                     ),
                     DropDown<String>(
-
 //                      items: <String>[
 //
 //                        '500 ML',
@@ -402,7 +409,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                        '5 Ltr:  Rs.${(int.parse(widget.price) * 10).toString()}',
 //                        '10 Ltr:   Rs.${(int.parse(widget.price) * 20).toString()}'
 //                      ],
-                    items: widget.quantities,
+                      items: widget.quantities,
 
                       hint: Text("Select quantity"),
                       onChanged: (value) async {
@@ -412,17 +419,18 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                          factor = await 1;
 //                          qtyTag = await '500 ML';
 //                          choice = await 0;
-                          await checkInCart(value);
-                          qty = await getQuantity(widget.cardTitle, value);
-                          for(int i =0;i<widget.allquantities.length;i++){
-                            if(value=='${widget.allquantities[i].quantity}'){
-                              setState(() {
-                                qtyTag='${widget.allquantities[i].quantity}';
-                                proprice=widget.allquantities[i].iPrice;
-                                prodisprice=widget.allquantities[i].price;
-                              });
-                            }
+                        await checkInCart(value);
+                        qty = await getQuantity(widget.cardTitle, value);
+                        for (int i = 0; i < widget.allquantities.length; i++) {
+                          if (value == '${widget.allquantities[i].quantity}') {
+                            setState(() {
+                              qtyTag = '${widget.allquantities[i].quantity}';
+                              productID = widget.allquantities[i].productId;
+                              proprice = widget.allquantities[i].iPrice;
+                              prodisprice = widget.allquantities[i].price;
+                            });
                           }
+                        }
 //                        }
 //                        if (value ==
 //                            '1 Ltr:  Rs.${(int.parse(widget.price) * 2).toString()}') {
@@ -458,6 +466,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                        }
                         setState(() {
                           print(factor);
+                          print(productID);
                           print(choice);
                           print(qtyTag);
                           print(qty);
@@ -465,37 +474,40 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                       },
                     ),
                     SizedBox(height: 6.0),
-                    (prodisprice!=proprice)?Row(
-                      children: [
-                        Container(
-                          child: Text(
-                            'AED. ${(double.parse(prodisprice).toString())}  ',
-                            textAlign: TextAlign.left,
-                            style: Styles.customMediumTextStyle(
-                              color: AppColors.black,
-                              fontSize: 15,
+                    (prodisprice != proprice)
+                        ? Row(
+                            children: [
+                              Container(
+                                child: Text(
+                                  'AED. ${(double.parse(prodisprice).toString())}  ',
+                                  textAlign: TextAlign.left,
+                                  style: Styles.customMediumTextStyle(
+                                    color: AppColors.black,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                child: Text(
+                                    'AED. ${(double.parse(proprice).toString())}',
+                                    textAlign: TextAlign.left,
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        decoration:
+                                            TextDecoration.lineThrough)),
+                              ),
+                            ],
+                          )
+                        : Container(
+                            child: Text(
+                              'AED. ${(double.parse(prodisprice).toString())}  ',
+                              textAlign: TextAlign.left,
+                              style: Styles.customMediumTextStyle(
+                                color: AppColors.black,
+                                fontSize: 15,
+                              ),
                             ),
                           ),
-                        ),
-                        Container(
-                          child: Text(
-                              'AED. ${(double.parse(proprice).toString())}',
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                  fontSize: 15,
-                                  decoration: TextDecoration.lineThrough)),
-                        ),
-                      ],
-                    ):Container(
-                        child: Text(
-                        'AED. ${(double.parse(prodisprice).toString())}  ',
-                        textAlign: TextAlign.left,
-                        style: Styles.customMediumTextStyle(
-                        color: AppColors.black,
-                        fontSize: 15,
-                        ),
-                        ),
-                        ),
                     SizedBox(
                       height: 5,
                     ),
@@ -506,6 +518,7 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                             onTap: () {
                               print('===========$qtyTag=======');
                               addToCart(
+                                  productid: productID,
                                   name: widget.cardTitle,
                                   imgUrl: widget.imagePath,
                                   price: prodisprice,

@@ -41,7 +41,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
   }
 
   void updateItem(
-      {int id,
+      {String id,
       String name,
       String imgUrl,
       String price,
@@ -233,7 +233,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                   return SpaceH8();
                 },
                 itemBuilder: (context, index) {
-                  // print(cartItems[index].qtyTag);
+                  print(cartItems[index].id);
                   return Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     // height: 250,

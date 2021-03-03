@@ -40,7 +40,7 @@ class DatabaseHelper {
     Database db = await instance.database;
     db.execute('''
           CREATE TABLE $table (
-            $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
+            $columnId TEXT NOT NULL,
             $columnProductName TEXT NOT NULL,
             $columnImageUrl TEXT NOT NULL,
             $columnPrice TEXT NOT NULL,
@@ -53,7 +53,7 @@ class DatabaseHelper {
   Future _onCreate(Database db, int version) async {
     await db.execute('''
           CREATE TABLE $table (
-            $columnId INTEGER PRIMARY KEY AUTOINCREMENT,
+            $columnId TEXT NOT NULL,
             $columnProductName TEXT NOT NULL,
             $columnImageUrl TEXT NOT NULL,
             $columnPrice TEXT NOT NULL,
@@ -72,6 +72,7 @@ class DatabaseHelper {
     Database db = await instance.database;
     return await db.insert(table, {
       'productName': item.productName,
+      'id': item.id,
       'imgUrl': item.imgUrl,
       'price': item.price,
       'qty': item.qty,

@@ -1,7 +1,7 @@
 import 'package:angadi/services/database_helper.dart';
 
 class Cart {
-  int id;
+  String id;
   String productName, imgUrl, price, qtyTag;
 //  String details;
   int qty;
