@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:angadi/screens/order_placed.dart';
 import 'package:angadi/values/values.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -10,6 +11,8 @@ import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class MyOrders extends StatefulWidget {
+  FirebaseUser user;
+  MyOrders(this.user);
   @override
   _MyOrdersState createState() => _MyOrdersState();
 }
@@ -57,11 +60,16 @@ class _MyOrdersState extends State<MyOrders> {
   bool show;
 
   String whatsappMessage = '';
+
   @override
   void initState() {
     show = true;
     setState(() {
       orders.clear();
+    });
+
+    setState(() {
+      print('User ID=${widget.user.uid}');
     });
     setState(() {
       final firestoreInstance = Firestore.instance;
@@ -78,10 +86,10 @@ class _MyOrdersState extends State<MyOrders> {
     });
     super.initState();
   }
+
   List<Order> orders = List<Order>();
   @override
   Widget build(BuildContext context) {
-
     var date2;
 
     Widget bill(timestamp, total, id1, status, str) {
@@ -234,6 +242,8 @@ class _MyOrdersState extends State<MyOrders> {
             stream: Firestore.instance
                 .collection('Orders')
                 .orderBy('TimeStamp', descending: true)
+                .where('UserID',
+                    isEqualTo: widget.user != null ? widget.user.uid : '')
                 .snapshots(),
             builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
               if (snap.hasData && !snap.hasError && snap.data != null) {

@@ -155,8 +155,7 @@ class _CheckoutState extends State<Checkout> {
               element.documents[0].data['Timeslots'][i].contains('PM')) {
             timeSlots2.add(element.documents[0].data['Timeslots'][i]);
           }
-        }
-        else {
+        } else {
           String st = element.documents[0].data['Timeslots'][i];
           String s = '';
           for (int i = 0; i < st.length; i++) {
@@ -3373,7 +3372,8 @@ class _CheckoutState extends State<Checkout> {
             });
             Timestamp myTimeStamp = Timestamp.fromDate(selectedDate);
             print(myTimeStamp.toString());
-            pushNewScreen(context, screen: MyOrders());
+
+            pushNewScreen(context, screen: MyOrders(user));
           }
 
 //    HttpClient httpClient = new HttpClient();

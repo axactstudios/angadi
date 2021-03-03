@@ -548,8 +548,10 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     fontWeight: FontWeight.w600),
               ),
             ),
-            onTap: () {
-              pushNewScreen(context, screen: MyOrders());
+            onTap: () async {
+              FirebaseUser user = await FirebaseAuth.instance.currentUser();
+
+              pushNewScreen(context, screen: MyOrders(user));
             },
           ),
           Container(

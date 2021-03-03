@@ -298,9 +298,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           children: [
                             angadiButton(
                               'My orders',
-                              onTap: () {
+                              onTap: () async {
+                                FirebaseUser user =
+                                    await FirebaseAuth.instance.currentUser();
+
                                 pushNewScreen(context,
-                                    screen: MyOrders(), withNavBar: true);
+                                    screen: MyOrders(user), withNavBar: true);
                               },
                               buttonWidth:
                                   MediaQuery.of(context).size.width / 2,

@@ -42,7 +42,9 @@ class _ApplyOffersState extends State<ApplyOffers> {
                     snap.data.documents[i]['Title'],
                     snap.data.documents[i]['Subtitle'],
                     snap.data.documents[i]['ImageURL'],
-                    snap.data.documents[i]['discountPercentage']));
+                    snap.data.documents[i]['discountPercentage'],
+                    snap.data.documents[i]['categorySpecific'],
+                    snap.data.documents[i]['forFirstUser']));
               }
 
               return Container(
@@ -61,7 +63,9 @@ class _ApplyOffersState extends State<ApplyOffers> {
                                   offers[index].title,
                                   offers[index].subtitle,
                                   offers[index].imageURL,
-                                  offers[index].discount);
+                                  offers[index].discount,
+                                  offers[index].categorySpecific,
+                                  offers[index].forFirstUser);
 
                               widget.state.setState(() {
                                 print(1);

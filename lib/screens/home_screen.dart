@@ -1048,8 +1048,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                   snap.data.documents[i]['Title'],
                                   snap.data.documents[i]['Subtitle'],
                                   snap.data.documents[i]['ImageURL'],
-                                  snap.data.documents[i]
-                                      ['discountPercentage']));
+                                  snap.data.documents[i]['discountPercentage'],
+                                  snap.data.documents[i]['categorySpecific'],
+                                  snap.data.documents[i]['forFirstUser']));
                             }
 
                             return Container(
