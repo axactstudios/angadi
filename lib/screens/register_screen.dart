@@ -256,7 +256,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 gravity: ToastGravity.CENTER);
 
             final databaseReference = Firestore.instance;
-            await databaseReference.collection('Users').add({
+            await databaseReference
+                .collection('Users')
+                .document(user.uid)
+                .setData({
               'Name': name.text,
               'id': user.uid,
               'mail': mail.text,

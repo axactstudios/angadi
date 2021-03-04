@@ -1,5 +1,3 @@
-
-
 import 'package:angadi/screens/home_screen.dart';
 import 'package:angadi/utils/my_shared_prefs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -21,6 +19,7 @@ import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+
 class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
@@ -125,7 +124,6 @@ class _LoginScreenState extends State<LoginScreen> {
                     _buildHeader(),
                     SizedBox(height: 60),
                     _buildForm(),
-
                     SpaceH36(),
                     _buildFooter()
                   ],
@@ -137,16 +135,16 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
-  int j =0;
-  int length=0;
+
+  int j = 0;
+  int length = 0;
   Future<String> signInWithGoogle() async {
-
-
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
-    final GoogleSignInAuthentication googleSignInAuthentication = await googleSignInAccount.authentication;
+    final GoogleSignInAuthentication googleSignInAuthentication =
+        await googleSignInAccount.authentication;
     final ProgressDialog pr = await ProgressDialog(context);
     pr.style(
-        message:'Logging in..',
+        message: 'Logging in..',
         backgroundColor: Colors.white,
         progressWidget: GFLoader(
           type: GFLoaderType.ios,
@@ -165,7 +163,7 @@ class _LoginScreenState extends State<LoginScreen> {
       idToken: googleSignInAuthentication.idToken,
     );
 
-    final  authResult = await _auth.signInWithCredential(credential);
+    final authResult = await _auth.signInWithCredential(credential);
     final FirebaseUser user = authResult.user;
 
     if (user != null) {
@@ -177,26 +175,28 @@ class _LoginScreenState extends State<LoginScreen> {
 
       print('signInWithGoogle succeeded: $user');
       Firestore.instance.collection('Users').snapshots().forEach((element) {
-        length=element.documents.length;
+        length = element.documents.length;
         print(length);
-        for(int i =0;i<element.documents.length;i++){
-          if(element.documents[i]['mail']!=googleSignIn.currentUser.email){
+        for (int i = 0; i < element.documents.length; i++) {
+          if (element.documents[i]['mail'] != googleSignIn.currentUser.email) {
             print(element.documents[i]['mail']);
             j++;
             print(j.toString());
           }
         }
-        if(j==length){
-          Firestore.instance.collection('Users').add({
-            'Name':googleSignIn.currentUser.displayName,
-            'id':currentUser.uid,
-            'mail':googleSignIn.currentUser.email,
-            'pUrl':googleSignIn.currentUser.photoUrl,
-            'role':'user'
+        if (j == length) {
+          Firestore.instance
+              .collection('Users')
+              .document(currentUser.uid)
+              .setData({
+            'Name': googleSignIn.currentUser.displayName,
+            'id': currentUser.uid,
+            'mail': googleSignIn.currentUser.email,
+            'pUrl': googleSignIn.currentUser.photoUrl,
+            'role': 'user'
           });
         }
       });
-
 
       await pr.hide();
       return '$user';
@@ -210,6 +210,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
     print("User Signed Out");
   }
+
   Widget _buildHeader() {
     return Align(
       alignment: Alignment.topCenter,
@@ -270,11 +271,11 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
   Widget _signInButton() {
     return Container(
-      width:300,
+      width: 300,
       child: OutlineButton(
-
         splashColor: Colors.grey,
         onPressed: () {
           signInWithGoogle().then((result) {
@@ -299,7 +300,8 @@ class _LoginScreenState extends State<LoginScreen> {
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Image(image: AssetImage("assets/images/google.png"), height: 35.0),
+              Image(
+                  image: AssetImage("assets/images/google.png"), height: 35.0),
               Padding(
                 padding: const EdgeInsets.only(left: 10),
                 child: Text(
@@ -316,6 +318,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
     );
   }
+
   Widget _buildFooter() {
     return Column(
       children: <Widget>[
@@ -323,7 +326,9 @@ class _LoginScreenState extends State<LoginScreen> {
           _getToken();
           _signIn(mail.text, password.text);
         }),
-        SizedBox(height: Sizes. HEIGHT_20,),
+        SizedBox(
+          height: Sizes.HEIGHT_20,
+        ),
         _signInButton(),
         SizedBox(height: Sizes.HEIGHT_60),
         InkWell(
@@ -354,8 +359,6 @@ class _LoginScreenState extends State<LoginScreen> {
       ],
     );
   }
-
-
 
   void _signIn(String email, String pw) {
     _auth

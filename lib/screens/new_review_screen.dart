@@ -46,7 +46,7 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
             "userImage": url,
             "userID": id,
             "rating": ratingGlobal,
-            "details": contrl.text,
+//            "details": contrl.text,
             "dishName": 'Idli Batter'
           }).then((value) {
             print(value.documentID);
@@ -130,7 +130,7 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
                   ),
                 ),
                 Text(
-                  "New Review",
+                  "New Rating",
                   style: Styles.customTitleTextStyle(
                     color: AppColors.headingText,
                     fontWeight: FontWeight.w600,
@@ -252,18 +252,18 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
                   ),
                 ),
               ),
-              SpaceH12(),
-              Center(
-                child: Text(
-                  'Rate your experience',
-                  style: Styles.customNormalTextStyle(
-                    color: AppColors.accentText,
-                    fontSize: Sizes.TEXT_SIZE_16,
-                  ),
-                ),
-              ),
-              SpaceH30(),
-              _buildReview(context: context),
+//              SpaceH12(),
+//              Center(
+//                child: Text(
+//                  'Rate your experience',
+//                  style: Styles.customNormalTextStyle(
+//                    color: AppColors.accentText,
+//                    fontSize: Sizes.TEXT_SIZE_16,
+//                  ),
+//                ),
+//              ),
+//              SpaceH30(),
+//              _buildReview(context: context),
             ],
           ),
         ),

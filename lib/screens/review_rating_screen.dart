@@ -42,9 +42,11 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
     fontWeight: FontWeight.w600,
     fontSize: Sizes.TEXT_SIZE_18,
   );
-  void navigate(){
-    Navigator.push(context,MaterialPageRoute(builder:(context)=>NewReviewScreen()));
+  void navigate() {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => NewReviewScreen()));
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -59,7 +61,7 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
         ),
         centerTitle: true,
         title: Text(
-          'Review & Ratings',
+          'Ratings',
           style: Styles.customTitleTextStyle(
             color: AppColors.headingText,
             fontWeight: FontWeight.w600,
@@ -71,10 +73,11 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
         child: Column(
           children: [
             Container(
-              height:MediaQuery.of(context).size.height*0.75,
+              height: MediaQuery.of(context).size.height * 0.75,
               child: StreamBuilder(
                 stream: Firestore.instance.collection('Reviews').snapshots(),
-                builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
+                builder:
+                    (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
                   if (snap.hasData && !snap.hasError && snap.data != null) {
                     reviews.clear();
 
@@ -82,7 +85,8 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
                       if (snap.data.documents[i]['dishName'] ==
                           widget.reviewRating.name) {
                         reviews.add(ListTile(
-                          leading: Image.network(snap.data.documents[i]['userImage']),
+                          leading: Image.network(
+                              snap.data.documents[i]['userImage']),
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: <Widget>[
@@ -94,10 +98,10 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
                             ],
                           ),
                           contentPadding: EdgeInsets.symmetric(horizontal: 0),
-                          subtitle: Text(
-                            snap.data.documents[i]['details'],
-                            style: addressTextStyle,
-                          ),
+//                          subtitle: Text(
+//                            snap.data.documents[i]['details'],
+//                            style: addressTextStyle,
+//                          ),
                         ));
                       }
                     }
@@ -121,10 +125,11 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
                 },
               ),
             ),
-            Align(alignment:Alignment.bottomCenter,child: angadiButton('Add your review',onTap:navigate))
+            Align(
+                alignment: Alignment.bottomCenter,
+                child: angadiButton('Add your review', onTap: navigate))
           ],
         ),
-
       ),
     );
   }
