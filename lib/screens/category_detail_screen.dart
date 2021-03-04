@@ -226,7 +226,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
               onTap: () {
 //                print(1);
                 launch(
-                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+                    'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),
           SizedBox(

@@ -172,7 +172,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
               onTap: () {
 //                print(1);
                 launch(
-                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+                    'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),
           SizedBox(
@@ -266,7 +266,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
 
                                       pushNewScreen(context,
                                           screen: OrderPlaced(
-                                              bill(timestamp),
+                                              bill(timestamp, snap.data.documents[index]['OrderID']),
                                               snap.data.documents[index]
                                                   ['OrderID'],
                                               status,
@@ -311,7 +311,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
     );
   }
 
-  Widget bill(Timestamp time) {
+  Widget bill(Timestamp time,String id) {
     return Card(
       elevation: 5,
       child: Padding(
@@ -326,7 +326,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                 height: 10,
               ),
               Text(
-                'Order Id- $id1',
+                'Order Id- $id',
                 style: TextStyle(
                     fontSize: 15,
                     color: Colors.black,
@@ -386,7 +386,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
                     fontWeight: FontWeight.bold),
               ),
               Text(
-                'AED. ' + total,
+                'AED. ' + total.toString(),
                 style: TextStyle(fontSize: 14),
               ),
               SizedBox(
@@ -413,7 +413,7 @@ class _NotificationsScreenState extends State<NotificationsScreen> {
   var str = '', timestamp, status, total, id1;
 
   fetchOrderDetail(id) {
-    Firestore.instance.collection('Orders').document(id1).get().then((value) {
+    Firestore.instance.collection('Orders').document(id).get().then((value) {
       setState(() {
         id1 = id;
         print(id1);

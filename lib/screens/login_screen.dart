@@ -1,4 +1,5 @@
 import 'package:angadi/screens/home_screen.dart';
+import 'package:angadi/screens/root_screen.dart';
 import 'package:angadi/utils/my_shared_prefs.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -284,7 +285,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Navigator.of(context).push(
                 MaterialPageRoute(
                   builder: (context) {
-                    return HomeScreen();
+                    return RootScreen();
                   },
                 ),
               );

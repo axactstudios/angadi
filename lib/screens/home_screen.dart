@@ -422,7 +422,7 @@ class _HomeScreenState extends State<HomeScreen> {
               onTap: () {
 //                print(1);
                 launch(
-                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+                    'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),
           SizedBox(
@@ -707,7 +707,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                           snap.data.documents[i]['Status'] ==
                                               'Processing')) {
                                     orderID =
-                                        snap.data.documents[i]['productId'];
+                                        snap.data.documents[i]['orderid'];
                                     status = snap.data.documents[i]['Status'];
                                   }
                                 }
@@ -782,6 +782,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     deliveryDate =
                                                                         element[
                                                                             'DeliveryDate'];
+                                                                    print('deliveryDate:${element[
+                                                                    'DeliveryDate']}');
 
                                                                     // print(
                                                                     //     status);
@@ -807,7 +809,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       bill(),
                                                                       orderID,
                                                                       status,
-                                                                      myDateTime));
+                                                                    myDateTime));
                                                             },
                                                             child: Text(
                                                                 'View Details',

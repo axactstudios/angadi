@@ -87,6 +87,7 @@ class _CheckoutState extends State<Checkout> {
   final additionalcontroller = TextEditingController();
   final hnoController = TextEditingController();
   final notesController = TextEditingController();
+  final PhoneNumber=TextEditingController();
 
   final dbHelper = DatabaseHelper.instance;
 //  final dbRef = FirebaseDatabase.instance.reference();
@@ -227,6 +228,19 @@ class _CheckoutState extends State<Checkout> {
         savedemirate.add(emi);
       }
     });
+    emirate=savedemirate[0].name;
+    if(savedarea.length>0){
+
+      area=savedarea[0].name;
+      deliveryCharge=double.parse(savedarea[0].deliveryCharge);
+      minOrderPrice=double.parse(savedarea[0].minOrderPrice);
+    }
+    else{
+      area='Others';
+      deliveryCharge=double.parse(savedemirate[0].deliverycharge);
+      minOrderPrice=double.parse(savedemirate[0].minorderprice);
+    }
+
   }
 
   List<String> timeSlots = [];
@@ -539,6 +553,7 @@ class _CheckoutState extends State<Checkout> {
     shared();
     areas();
     val = true;
+
     print('---------------${orderid}');
     checkLastSlot();
     time = TimeOfDay.now();
@@ -803,6 +818,7 @@ class _CheckoutState extends State<Checkout> {
     }
   }
 
+
   Future<bool> onPressed() {
     print('pressed');
     Checksuccess();
@@ -865,7 +881,7 @@ class _CheckoutState extends State<Checkout> {
                 onTap: () {
 //                print(1);
                   launch(
-                      'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+                      'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
             SizedBox(width: 7)
@@ -1360,6 +1376,26 @@ class _CheckoutState extends State<Checkout> {
                                                                 emirate2 =
                                                                     newValue;
                                                                 print(emirate);
+                                                                if(savedarea.length>0){
+                                                                  for(int i=0;i<savedarea.length;i++){
+                                                                    if(savedarea[i].Emirate==emirate){
+                                                                      deliveryCharge=double.parse(savedarea[i].deliveryCharge);
+                                                                      minOrderPrice=double.parse(savedarea[i].minOrderPrice);
+                                                                      area=savedarea[i].name;
+                                                                    }
+
+                                                                  }
+                                                                }
+                                                                else{
+                                                                  for(int i =0;i<savedemirate.length;i++){
+                                                                    if(savedemirate[i].name==emirate){
+                                                                      deliveryCharge=double.parse(savedemirate[i].deliverycharge);
+                                                                      minOrderPrice=double.parse(savedarea[i].minOrderPrice);
+                                                                      area='Others';
+                                                                    }
+                                                                  }
+                                                                }
+
 
 //                      Navigator.pop(context);
                                                               });
@@ -1717,6 +1753,25 @@ class _CheckoutState extends State<Checkout> {
                                                                 emirate2 =
                                                                     newValue;
                                                                 print(emirate);
+                                                                if(savedarea.length>0){
+                                                                  for(int i=0;i<savedarea.length;i++){
+                                                                    if(savedarea[i].Emirate==emirate){
+                                                                      deliveryCharge=double.parse(savedarea[i].deliveryCharge);
+                                                                      minOrderPrice=double.parse(savedarea[i].minOrderPrice);
+                                                                      area=savedarea[i].name;
+                                                                    }
+
+                                                                  }
+                                                                }
+                                                                else{
+                                                                  for(int i =0;i<savedemirate.length;i++){
+                                                                    if(savedemirate[i].name==emirate){
+                                                                      deliveryCharge=double.parse(savedemirate[i].deliverycharge);
+                                                                      minOrderPrice=double.parse(savedarea[i].minOrderPrice);
+                                                                      area='Others';
+                                                                    }
+                                                                  }
+                                                                }
 
 //                      Navigator.pop(context);
                                                               });
@@ -2006,6 +2061,35 @@ class _CheckoutState extends State<Checkout> {
                       )
                     : Container(),
                 Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextFormField(
+                    validator: (value) {
+                      if (value == null || value == '')
+                        return 'Required field';
+                      return null;
+                    },
+                    decoration: InputDecoration(
+                        border: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(2),
+                            borderSide: BorderSide(
+                                color: Colors.grey)),
+                        enabledBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(2),
+                            borderSide: BorderSide(
+                                color: Colors.grey)),
+                        focusedBorder: OutlineInputBorder(
+                            borderRadius:
+                            BorderRadius.circular(2),
+                            borderSide: BorderSide(
+                                color: Color(0xFF6b3600))),
+                        hintText:
+                        'Phone Number *'),
+                    controller:PhoneNumber,
+                  ),
+                ),
+                Padding(
                   padding:
                       const EdgeInsets.only(left: 12.0, bottom: 0, top: 20),
                   child: HeadingRow(
@@ -2013,6 +2097,7 @@ class _CheckoutState extends State<Checkout> {
                     number: '',
                   ),
                 ),
+
                 Bill(),
                 discount == null
                     ? Row(
@@ -2367,7 +2452,7 @@ class _CheckoutState extends State<Checkout> {
                                   } else {
                                     Fluttertoast.showToast(
                                         msg:
-                                            'Your order amount is less \n than the minimum order price',
+                                            'The minimum order price is :${minOrderPrice.toString()}',
                                         toastLength: Toast.LENGTH_SHORT);
                                   }
                                 }
@@ -2432,7 +2517,7 @@ class _CheckoutState extends State<Checkout> {
                                     } else {
                                       Fluttertoast.showToast(
                                           msg:
-                                              'Your order amount is less \n than the minimum order price',
+                                              'The minimum order price is:${minOrderPrice.toString()}',
                                           toastLength: Toast.LENGTH_SHORT);
                                     }
                                   }
@@ -2523,7 +2608,7 @@ class _CheckoutState extends State<Checkout> {
                               } else {
                                 Fluttertoast.showToast(
                                     msg:
-                                        'Your order amount is less \n than the minimum order price',
+                                        'The minimum order price is :${minOrderPrice.toString()}',
                                     toastLength: Toast.LENGTH_SHORT);
                               }
                             }
@@ -2585,7 +2670,7 @@ class _CheckoutState extends State<Checkout> {
                                 } else {
                                   Fluttertoast.showToast(
                                       msg:
-                                          'Your order amount is less \n than the minimum order price',
+                                          'The minimum order price is:${minOrderPrice.toString()}',
                                       toastLength: Toast.LENGTH_SHORT);
                                 }
                               }
@@ -2641,7 +2726,18 @@ class _CheckoutState extends State<Checkout> {
   var docID;
   var dd;
   var id;
+
   placeOrder(orderType) async {
+    var dis;
+//    if(discount.discount==''&&discount.discount==null){
+//      dis='0.0';
+//    }
+//    else{
+//      dis=double.parse(discount.discount).toString();
+//    }
+    discount != null
+        ? dis= ('${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}')
+        : dis=' 0';
     print('----------------------');
     print(selectedDate);
     print(selectedDate.year);
@@ -2691,7 +2787,12 @@ class _CheckoutState extends State<Checkout> {
             'Qty': quantities,
             'Type': orderType,
             'ProductIDs': productIDs,
+            'orderid':orderid,
             'UserID': user.uid,
+            'phoneNumber':PhoneNumber.text,
+            'paymentMethod':'Cash On Delivery',
+            'discountPrice':dis,
+
             'Address':
                 'Building :${buildingController.text} , Apartment :${flatcontroller.text} , Floor:${floorcontroller.text}, Additional Directions :${additionalcontroller.text}',
             'DeliveryDate': DateTime(
@@ -2722,6 +2823,10 @@ class _CheckoutState extends State<Checkout> {
                 'ProductIDs': productIDs,
                 'Type': orderType,
                 'UserID': user.uid,
+                 'orderid':orderid,
+      'phoneNumber':PhoneNumber.text,
+      'paymentMethod':'Cash On Delivery',
+      'discountPrice':dis,
                 'Address':
                     'Emirate:${emirate},Area:${area},${buildingController.text},Additional Directions :${additionalcontroller.text}',
                 'DeliveryDate': DateTime(selectedDate.year, selectedDate.month,
@@ -2752,7 +2857,11 @@ class _CheckoutState extends State<Checkout> {
                     'Qty': quantities,
                     'ProductIDs': productIDs,
                     'Type': orderType,
+                    'orderid':orderid,
                     'UserID': user.uid,
+      'phoneNumber':PhoneNumber.text,
+      'paymentMethod':'Cash On Delivery',
+      'discountPrice':dis,
                     'Address':
                         'Emirate:${emirate},Area:${area},${buildingController.text},Additional Directions:${additionalcontroller.text}',
                     'DeliveryDate': DateTime(selectedDate.year,
@@ -2782,6 +2891,10 @@ class _CheckoutState extends State<Checkout> {
                         'Qty': quantities,
                         'Type': orderType,
                         'UserID': user.uid,
+      'orderid':orderid,
+      'phoneNumber':PhoneNumber.text,
+      'paymentMethod':'Cash On Delivery',
+      'discountPrice':dis,
                         'ProductIDs': productIDs,
                         'Address': widget.address,
                         'DeliveryDate': DateTime(selectedDate.year,
@@ -2810,8 +2923,12 @@ class _CheckoutState extends State<Checkout> {
                             'Price': prices,
                             'Qty': quantities,
                             'Type': orderType,
+                            'OrderID':orderid,
                             'ProductIDs': productIDs,
                             'UserID': user.uid,
+      'phoneNumber':phncontroller.text,
+      'paymentMethod':'Takeaway',
+      'discountPrice':dis,
                             'isPaid': false,
                             // 'Status':'${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
                             'TimeStamp': Timestamp.now(),
@@ -2834,7 +2951,11 @@ class _CheckoutState extends State<Checkout> {
                             'Type': orderType,
                             'ProductIDs': productIDs,
                             'UserID': user.uid,
+                            'orderid':orderid,
                             'DeliveryDate': selectedDate,
+      'phoneNumber':PhoneNumber.text,
+      'paymentMethod':'Cash On Delivery',
+      'discountPrice':dis,
                             'DeliveryTime': selectedTime,
                             'Address':
                                 '${hnoController.text},${addressController.text} ',
@@ -3251,7 +3372,16 @@ class _CheckoutState extends State<Checkout> {
       else
         break;
     }
-
+    var dis;
+//    if(discount.discount==''&&discount.discount==null){
+//      dis='0.0';
+//    }
+//    else{
+//      dis=double.parse(discount.discount).toString();
+//    }
+    discount != null
+        ? dis= ('${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}')
+        : dis=' 0';
     dd = int.parse(s);
     if (selectedTime.contains('PM')) dd = dd + 12;
     print(
@@ -3295,6 +3425,10 @@ class _CheckoutState extends State<Checkout> {
                     'Qty': quantities,
                     'Type': 'Online order',
                     'UserID': user.uid,
+              'orderid':orderid,
+              'phoneNumber':PhoneNumber.text,
+              'paymentMethod':'Online payment',
+              'discountPrice':dis,
                     'Address':
                         'Emirate:${emirate},Area:${area},${buildingController.text},Additional Directions :${additionalcontroller.text}',
                     'DeliveryDate': DateTime(selectedDate.year,
@@ -3324,6 +3458,11 @@ class _CheckoutState extends State<Checkout> {
                     'Type': 'Online order',
                     'UserID': user.uid,
                     'Address': widget.address,
+              'orderid':orderid,
+              'phoneNumber':PhoneNumber.text,
+              'paymentMethod':'Online Payment',
+              'discountPrice':dis,
+
                     'DeliveryDate': DateTime(selectedDate.year,
                         selectedDate.month, selectedDate.day, dd),
                     'DeliveryTime': selectedTime,
