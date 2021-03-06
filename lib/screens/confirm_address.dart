@@ -119,7 +119,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
             InkWell(
                 onTap: () {
                   launchWhatsApp(
-                      phone: '7060222315',
+                      phone: '+971 50 7175405',
                       message: 'Check out this awesome app');
                 },
                 child: Container(

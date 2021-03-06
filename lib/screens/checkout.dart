@@ -53,6 +53,7 @@ class Checkout extends StatefulWidget {
 
 class _CheckoutState extends State<Checkout> {
   final _formkey = GlobalKey<FormState>();
+  final _formkey2=GlobalKey<FormState>();
   List<EmiratesArea> savedarea = [];
   bool val = true;
   GlobalKey key = new GlobalKey();
@@ -868,7 +869,7 @@ class _CheckoutState extends State<Checkout> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone: '7060222315', message: whatsappMessage);
+                  launchWhatsApp(phone: '+971 50 7175405', message: whatsappMessage);
                 },
                 child: Container(
                     alignment: Alignment.center,
@@ -2060,33 +2061,36 @@ class _CheckoutState extends State<Checkout> {
                         ),
                       )
                     : Container(),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    validator: (value) {
-                      if (value == null || value == '')
-                        return 'Required field';
-                      return null;
-                    },
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.circular(2),
-                            borderSide: BorderSide(
-                                color: Colors.grey)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.circular(2),
-                            borderSide: BorderSide(
-                                color: Colors.grey)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius:
-                            BorderRadius.circular(2),
-                            borderSide: BorderSide(
-                                color: Color(0xFF6b3600))),
-                        hintText:
-                        'Phone Number *'),
-                    controller:PhoneNumber,
+                Form(
+                  key:_formkey2,
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: TextFormField(
+                      validator: (value) {
+                        if (value == null || value == '')
+                          return 'Required field';
+                        return null;
+                      },
+                      decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.circular(2),
+                              borderSide: BorderSide(
+                                  color: Colors.grey)),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.circular(2),
+                              borderSide: BorderSide(
+                                  color: Colors.grey)),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius:
+                              BorderRadius.circular(2),
+                              borderSide: BorderSide(
+                                  color: Color(0xFF6b3600))),
+                          hintText:
+                          'Phone Number *'),
+                      controller:PhoneNumber,
+                    ),
                   ),
                 ),
                 Padding(
@@ -2412,7 +2416,7 @@ class _CheckoutState extends State<Checkout> {
                                 onTap: () {
                               print('-------------------------------------');
 
-                              if (widget.address != '') {
+                              if (widget.address != ''&&_formkey2.currentState.validate()) {
 //                                  if (widget.SavedArea != '') {
 //
 //                                    for (int i = 0; i < savedarea.length; i++) {
@@ -2476,9 +2480,14 @@ class _CheckoutState extends State<Checkout> {
 //                                      toastLength: Toast.LENGTH_SHORT);
 //                                }
                               }
+                              else{
+                                Fluttertoast.showToast(
+                                    msg: 'Please enter the details correctly',
+                                    toastLength: Toast.LENGTH_SHORT);
+                              }
 
                               if (widget.address == '') {
-                                if (_formkey.currentState.validate()) {
+                                if (_formkey.currentState.validate()&&_formkey2.currentState.validate()) {
 //                                    if (widget.SavedArea != '') {
 //                                      for (int i = 0; i <
 //                                          allareas.length; i++) {
@@ -2523,7 +2532,7 @@ class _CheckoutState extends State<Checkout> {
                                   }
                                 } else {
                                   Fluttertoast.showToast(
-                                      msg: 'Address required',
+                                      msg: 'Please enter the details correctly',
                                       toastLength: Toast.LENGTH_SHORT);
                                 }
                               }
@@ -2553,7 +2562,7 @@ class _CheckoutState extends State<Checkout> {
                             ? 'Proceed to pay online'
                             : 'Go to my orders',
                         onTap: () {
-                          if (widget.SavedArea != '') {
+                          if (widget.SavedArea != ''&&_formkey2.currentState.validate()) {
 //    for (int i = 0; i < savedarea.length; i++) {
 //    if (widget.SavedArea ==
 //    savedarea[i].name) {
@@ -2612,10 +2621,14 @@ class _CheckoutState extends State<Checkout> {
                                     toastLength: Toast.LENGTH_SHORT);
                               }
                             }
+                          }else{
+                            Fluttertoast.showToast(
+                                msg: 'Please enter the details correctly',
+                                toastLength: Toast.LENGTH_SHORT);
                           }
 
                           if (widget.address == '') {
-                            if (_formkey.currentState.validate()) {
+                            if (_formkey.currentState.validate()&&_formkey2.currentState.validate()) {
 //                    if (widget.SavedArea != '') {
 //                    for (int i = 0; i <
 //                    allareas.length; i++) {
@@ -2676,7 +2689,7 @@ class _CheckoutState extends State<Checkout> {
                               }
                             } else {
                               Fluttertoast.showToast(
-                                  msg: 'Address required',
+                                  msg: 'Please enter the details correctly',
                                   toastLength: Toast.LENGTH_SHORT);
                             }
                           }

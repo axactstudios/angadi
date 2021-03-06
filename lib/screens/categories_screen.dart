@@ -88,7 +88,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(phone: '7060222315', message: whatsappMessage);
+                launchWhatsApp(phone: '+971 50 7175405', message: whatsappMessage);
               },
               child: Container(
                   alignment: Alignment.center,

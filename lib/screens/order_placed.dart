@@ -397,7 +397,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
           InkWell(
               onTap: () {
                 launchWhatsApp(
-                    phone: '7060222315', message: 'Check out this awesome app');
+                    phone: '+971 50 7175405', message: 'Check out this awesome app');
               },
               child: Container(
                   alignment: Alignment.center,

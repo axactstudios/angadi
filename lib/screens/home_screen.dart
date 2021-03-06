@@ -410,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
               onTap: () {
-                FlutterOpenWhatsapp.sendSingleMessage("971 50 7175406", "");
+                FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175405", "");
                 // launchWhatsApp(phone: '7060222315', message: whatsappMessage);
               },
               child: Container(

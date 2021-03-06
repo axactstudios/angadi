@@ -66,7 +66,7 @@ class _FilteredSearchState extends State<FilteredSearch> {
               f['Quantity'][j]['quantity']);
 
           allquantities.add(qu);
-          quantities.add('${f['Quantity'][j]['quantity']} ML');
+          quantities.add('${f['Quantity'][j]['quantity']} ');
         }
         Dish dp = Dish(
             id: f['productId'],
@@ -336,10 +336,10 @@ class _FilteredSearchState extends State<FilteredSearch> {
               f['Quantity'][j]['iPrice'],
               f['Quantity'][j]['price'],
               f['Quantity'][j]['productId'],
-              '${f['Quantity'][j]['quantity']} ML');
+              '${f['Quantity'][j]['quantity']} ');
 
           allquantities.add(qu);
-          quantities.add('${f['Quantity'][j]['quantity']} ML');
+          quantities.add('${f['Quantity'][j]['quantity']} ');
         }
         dogList.add(Dish(
             id: f['productId'],
