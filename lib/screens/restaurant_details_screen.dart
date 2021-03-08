@@ -463,6 +463,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       qtyTag = '${widget.restaurantDetail.quantities[0]} ';
     });
     prodisprice = widget.restaurantDetail.allquantities[0].price;
+    proprice=widget.restaurantDetail.allquantities[0].iPrice;
     productID = widget.restaurantDetail.allquantities[0].productId;
     choice = 0;
     first();
@@ -635,7 +636,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               boughtTogetherID: snap.data.documents[ind]
                                   ['boughtTogether'],
                               allquantities: allquantities,
-                              quantities: quantities);
+                              quantities: quantities,
+                          stock: snap.data.documents[ind]['stock']);
                         }
                       }
                       R.Router.navigator
@@ -665,6 +667,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                     iPrice: snap.data.documents[i]['iPrice'].toString(),
                     allquantities: allquantities,
                     quantities: quantities,
+                    stock: snap.data.documents[i]['stock'],
                   ),
                 ));
               }
@@ -697,7 +700,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                               boughtTogetherID: snap.data.documents[ind]
                                   ['boughtTogether'],
                               allquantities: allquantities,
-                              quantities: quantities);
+                              quantities: quantities,
+                          stock:snap.data.documents[ind]['stock']);
                         }
                       }
                       R.Router.navigator
@@ -727,6 +731,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                     iPrice: snap.data.documents[i]['iPrice'].toString(),
                     allquantities: allquantities,
                     quantities: quantities,
+                    stock:snap.data.documents[i]['stock']
                   ),
                 ));
               }
@@ -1069,10 +1074,34 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
                             child: Text(
-                              widget.restaurantDetail.productID,
+                             'Product ID: ${ widget.restaurantDetail.productID}',
                               style: addressTextStyle,
                             ),
                           ),
+                         ( widget.restaurantDetail.stock)?Padding(
+                           padding:  const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
+                           child: Row(children: [
+                             Icon(Icons.check_circle,color:Colors.green,size: 12,),
+                             Text('in stock', style: Styles.customTitleTextStyle(
+                               color: Colors.green,
+                               fontWeight: FontWeight.w400,
+                               fontSize: 12,
+                             ),)
+                           ],),
+                         ):Padding(
+                           padding:  const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
+                           child: Row(
+                             children: [
+                               Icon(Icons.cancel,color:Colors.red,size:12),
+                               Text('Out of stock',style: Styles.customTitleTextStyle(
+                                 color: Colors.red,
+                                 fontWeight: FontWeight.w400,
+                                 fontSize: 12,
+
+                               ))
+                             ],
+                           ),
+                         ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16.0, 3, 8, 10),
                             child: Row(
@@ -1098,6 +1127,21 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                     ),
                                   ),
                                 ),
+                                SizedBox(width:120),
+                                (proprice != prodisprice)
+                                    ? Align(
+                                  alignment: Alignment.bottomRight,
+                                      child: Text(
+                                  ('${((double.parse(proprice) - double.parse(prodisprice)) / double.parse(proprice) * 100).toStringAsFixed(0)} % off'),
+                                  style:
+                                  Styles.customTitleTextStyle(
+                                      color: Colors.deepOrangeAccent,
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 18,
+                                  ),
+                                ),
+                                    )
+                                    : Container(),
                                 Spacer(flex: 1),
                               ],
                             ),
@@ -1162,6 +1206,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                         choice = index;
                                         prodisprice = item.price;
                                         productID = item.productId;
+                                        proprice=item.iPrice;
                                         tag = '${item.quantity}';
                                       });
                                     },
@@ -1762,7 +1807,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   topRightRadius: Sizes.RADIUS_14,
                                 ),
                               ),
-                        qty == 0 || qty == null
+                        (widget.restaurantDetail.stock)?qty == 0 || qty == null
                             ? angadiButton(
                                 'Add to Cart ',
 
@@ -1880,7 +1925,46 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                     width: 100,
                                   ),
                                 ),
-                              )
+                              ): angadiButton(
+                          'Unavailable ',
+
+                          onTap: () async {
+//                  await dbHelper.onCreate();
+//                  int l = await dbHelper.check(widget.restaurantDetail.name);
+//                  print(l);
+//                                   var temp = await _query(
+//                                       widget.restaurantDetail.name,
+//                                       sizes[choice]);
+//                                   print(temp);
+////                                   if (temp == null)
+//                            addToCart(context,
+//                                name: widget.restaurantDetail.name,
+//                                imgUrl: widget.restaurantDetail.url,
+//                                productId: productID,
+//                                price: prodisprice,
+////                                      price: (int.parse(widget
+////                                                  .restaurantDetail.price) *
+////                                              priceFactors[choice])
+////                                          .toString(),
+//                                qty: 1,
+//                                qtyTag: qtyTag);
+//                            // else
+//                            //   setState(() {
+//                            //     print('Item already exists');
+//                            //     check[choice] = true;
+//                            //   });
+                          },
+//                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
+                          buttonHeight: 65,
+                          buttonWidth:
+                          MediaQuery.of(context).size.width * 0.5,
+                          decoration: Decorations
+                              .customHalfCurvedButtonDecoration(
+                            color: Color(0xFF6b3600),
+                            topleftRadius: Sizes.RADIUS_14,
+                            topRightRadius: Sizes.RADIUS_14,
+                          ),
+                        )
                       ],
                     )
                   ],

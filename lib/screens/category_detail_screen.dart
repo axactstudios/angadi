@@ -387,7 +387,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       boughtTogetherID: snap.data.documents[i]
                           ['boughtTogether'],
                       allquantities: allquantities,
-                      quantities: quantities));
+                      quantities: quantities,
+                  stock:snap.data.documents[i]['stock']));
                 print(
                   snap.data.documents[i]['price'],
                 );
@@ -472,7 +473,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                               allquantities:
                                                   dishes[index].allquantities,
                                               quantities:
-                                                  dishes[index].quantities),
+                                                  dishes[index].quantities,
+                                          stock:dishes[index].stock),
                                         ),
                                         withNavBar:
                                             true, // OPTIONAL VALUE. True by default.
@@ -491,7 +493,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
 //                            distance: distance[index],
                                     address: dishes[index].desc,
                                     allquantities: dishes[index].allquantities,
-                                    quantities: dishes[index].quantities),
+                                    quantities: dishes[index].quantities,
+                                stock: dishes[index].stock,),
                               );
                             },
                           ),
@@ -536,7 +539,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                               allquantities:
                                                   dishes[index].allquantities,
                                               quantities:
-                                                  dishes[index].quantities),
+                                                  dishes[index].quantities,
+                                          stock: dishes[index].stock),
                                         ),
                                         withNavBar:
                                             true, // OPTIONAL VALUE. True by default.
@@ -556,6 +560,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                     address: dishes[index].desc,
                                     allquantities: dishes[index].allquantities,
                                     quantities: dishes[index].quantities,
+                                    stock: dishes[index].stock,
                                   ),
                                 );
                               })),

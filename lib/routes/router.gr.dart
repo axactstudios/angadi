@@ -238,7 +238,7 @@ class Router {
         );
       case Router.newReviewScreen:
         return CupertinoPageRoute<dynamic>(
-          builder: (_) => NewReviewScreen(),
+          builder: (_) => NewReviewScreen(''),
           settings: settings,
         );
       default:

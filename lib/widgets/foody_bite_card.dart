@@ -37,7 +37,7 @@ class FoodyBiteCard extends StatefulWidget {
   final int orderCount;
   List<Quantity> allquantities = [];
   List<String> quantities = [];
-
+    final bool stock;
   FoodyBiteCard(
       {this.status = "OPEN",
       this.rating = "4.5",
@@ -61,7 +61,8 @@ class FoodyBiteCard extends StatefulWidget {
       this.followersImagePath,
       this.orderCount,
       this.allquantities,
-      this.quantities});
+      this.quantities,
+      this.stock});
 
   @override
   _FoodyBiteCardState createState() => _FoodyBiteCardState();
@@ -298,109 +299,128 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 
     return InkWell(
       onTap: widget.onTap,
-      child: Container(
-        width: width,
-        child: Card(
-          elevation: widget.cardElevation,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Row(
-            children: <Widget>[
-              Expanded(
-                child: Stack(children: [
-                  Positioned(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(4),
-                      child: FancyShimmerImage(
-                        shimmerDuration: Duration(seconds: 2),
-                        imageUrl: widget.imagePath,
-                        height: 180,
-                        boxFit: BoxFit.cover,
+      child: SingleChildScrollView(
+        child: Container(
+          width: width,
+          child: Card(
+            elevation: widget.cardElevation,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(4),
+            ),
+            child: Row(
+              children: <Widget>[
+                Expanded(
+                  child: Stack(children: [
+                    Positioned(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(4),
+                        child: FancyShimmerImage(
+                          shimmerDuration: Duration(seconds: 2),
+                          imageUrl: widget.imagePath,
+                          height: 180,
+                          boxFit: BoxFit.cover,
+                        ),
                       ),
                     ),
-                  ),
-                  Positioned(
-                    right: 2,
-                    // right: 16.0,
-                    top: 2,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: <Widget>[
-                        widget.isThereRatings
-                            ? Card(
-                                elevation: widget.ratingsAndStatusCardElevation,
-                                child: Container(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: 4,
-                                    vertical: 2,
-                                  ),
-                                  child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
-                                    children: <Widget>[
+                    Positioned(
+                      right: 2,
+                      // right: 16.0,
+                      top: 2,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: <Widget>[
+                          widget.isThereRatings
+                              ? Card(
+                                  elevation: widget.ratingsAndStatusCardElevation,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: 4,
+                                      vertical: 2,
+                                    ),
+                                    child: Row(
+                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                      children: <Widget>[
 //                                  Image.asset(
 //                                    ImagePath.starIcon,
 //                                    height: Sizes.WIDTH_14,
 //                                    width: Sizes.WIDTH_14,
 //                                  ),
 
-                                      (proprice != prodisprice)
-                                          ? Text(
-                                              ('${((double.parse(proprice) - double.parse(prodisprice)) / double.parse(proprice) * 100).toStringAsFixed(0)} % off'),
-                                              style:
-                                                  Styles.customTitleTextStyle(
-                                                color: Colors.deepOrangeAccent,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 14,
-                                              ),
-                                            )
-                                          : Container(),
-                                    ],
+                                        (proprice != prodisprice)
+                                            ? Text(
+                                                ('${((double.parse(proprice) - double.parse(prodisprice)) / double.parse(proprice) * 100).toStringAsFixed(0)} % off'),
+                                                style:
+                                                    Styles.customTitleTextStyle(
+                                                  color: Colors.deepOrangeAccent,
+                                                  fontWeight: FontWeight.w600,
+                                                  fontSize: 14,
+                                                ),
+                                              )
+                                            : Container(),
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  ),
-                ]),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(
-                  horizontal: 8,
-                  vertical: 8,
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Container(
-                      width: MediaQuery.of(context).size.width * 0.4,
-                      child: Text(
-                        widget.cardTitle,
-                        textAlign: TextAlign.left,
-                        style: Styles.customTitleTextStyle(
-                          color: AppColors.headingText,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                    SizedBox(
-                      height: 5,
-                    ),
-                    CardTags(
-                      title: widget.category,
-                      decoration: BoxDecoration(
-                        gradient: Gradients.secondaryGradient,
-                        boxShadow: [
-                          Shadows.secondaryShadow,
+                                )
+                              : Container(),
                         ],
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(widget.tagRadius),
-                        ),
                       ),
                     ),
-                    DropDown<String>(
+                  ]),
+                ),
+                Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 8,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Container(
+                        width: MediaQuery.of(context).size.width * 0.4,
+                        child: Text(
+                          widget.cardTitle,
+                          textAlign: TextAlign.left,
+                          style: Styles.customTitleTextStyle(
+                            color: AppColors.headingText,
+                            fontWeight: FontWeight.w600,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 5,
+                      ),
+                      CardTags(
+                        title: widget.category,
+                        decoration: BoxDecoration(
+                          gradient: Gradients.secondaryGradient,
+                          boxShadow: [
+                            Shadows.secondaryShadow,
+                          ],
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(widget.tagRadius),
+                          ),
+                        ),
+                      ),
+                      (widget.stock)?Row(children: [
+                        Icon(Icons.check_circle,color:Colors.green,size: 12,),
+                        Text('in stock', style: Styles.customTitleTextStyle(
+                          color: Colors.green,
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12,
+                        ),)
+                      ],):Row(
+                        children: [
+                          Icon(Icons.cancel,color:Colors.red,size:12),
+                          Text('Out of stock',style: Styles.customTitleTextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12,
+
+                          ))
+                        ],
+                      ),
+                      DropDown<String>(
 //                      items: <String>[
 //
 //                        '500 ML',
@@ -409,28 +429,28 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                        '5 Ltr:  Rs.${(int.parse(widget.price) * 10).toString()}',
 //                        '10 Ltr:   Rs.${(int.parse(widget.price) * 20).toString()}'
 //                      ],
-                      items: widget.quantities,
+                        items: widget.quantities,
 
-                      hint: Text("Select quantity"),
-                      onChanged: (value) async {
-                        await getAllItems();
+                        hint: Text("Select quantity"),
+                        onChanged: (value) async {
+                          await getAllItems();
 
 //                        if (value == '500 ML') {
 //                          factor = await 1;
 //                          qtyTag = await '500 ML';
 //                          choice = await 0;
-                        await checkInCart(value);
-                        qty = await getQuantity(widget.cardTitle, value);
-                        for (int i = 0; i < widget.allquantities.length; i++) {
-                          if (value == '${widget.allquantities[i].quantity}') {
-                            setState(() {
-                              qtyTag = '${widget.allquantities[i].quantity}';
-                              productID = widget.allquantities[i].productId;
-                              proprice = widget.allquantities[i].iPrice;
-                              prodisprice = widget.allquantities[i].price;
-                            });
+                          await checkInCart(value);
+                          qty = await getQuantity(widget.cardTitle, value);
+                          for (int i = 0; i < widget.allquantities.length; i++) {
+                            if (value == '${widget.allquantities[i].quantity}') {
+                              setState(() {
+                                qtyTag = '${widget.allquantities[i].quantity}';
+                                productID = widget.allquantities[i].productId;
+                                proprice = widget.allquantities[i].iPrice;
+                                prodisprice = widget.allquantities[i].price;
+                              });
+                            }
                           }
-                        }
 //                        }
 //                        if (value ==
 //                            '1 Ltr:  Rs.${(int.parse(widget.price) * 2).toString()}') {
@@ -464,116 +484,87 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
 //                          await checkInCart('10 Ltr');
 //                          qty = await getQuantity(widget.cardTitle, '10 Ltr');
 //                        }
-                        setState(() {
-                          print(factor);
-                          print(productID);
-                          print(choice);
-                          print(qtyTag);
-                          print(qty);
-                        });
-                      },
-                    ),
-                    SizedBox(height: 6.0),
-                    (prodisprice != proprice)
-                        ? Row(
-                            children: [
-                              Container(
-                                child: Text(
-                                  'AED. ${(double.parse(prodisprice).toString())}  ',
-                                  textAlign: TextAlign.left,
-                                  style: Styles.customMediumTextStyle(
-                                    color: AppColors.black,
-                                    fontSize: 15,
+                          setState(() {
+                            print(factor);
+                            print(productID);
+                            print(choice);
+                            print(qtyTag);
+                            print(qty);
+                          });
+                        },
+                      ),
+                      SizedBox(height: 6.0),
+                      (prodisprice != proprice)
+                          ? Row(
+                              children: [
+                                Container(
+                                  child: Text(
+                                    'AED. ${(double.parse(prodisprice).toString())}  ',
+                                    textAlign: TextAlign.left,
+                                    style: Styles.customMediumTextStyle(
+                                      color: AppColors.black,
+                                      fontSize: 15,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Container(
-                                child: Text(
-                                    'AED. ${(double.parse(proprice).toString())}',
-                                    textAlign: TextAlign.left,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        decoration:
-                                            TextDecoration.lineThrough)),
-                              ),
-                            ],
-                          )
-                        : Container(
-                            child: Text(
-                              'AED. ${(double.parse(prodisprice).toString())}  ',
-                              textAlign: TextAlign.left,
-                              style: Styles.customMediumTextStyle(
-                                color: AppColors.black,
-                                fontSize: 15,
+                                Container(
+                                  child: Text(
+                                      'AED. ${(double.parse(proprice).toString())}',
+                                      textAlign: TextAlign.left,
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          decoration:
+                                              TextDecoration.lineThrough)),
+                                ),
+                              ],
+                            )
+                          : Container(
+                              child: Text(
+                                'AED. ${(double.parse(prodisprice).toString())}  ',
+                                textAlign: TextAlign.left,
+                                style: Styles.customMediumTextStyle(
+                                  color: AppColors.black,
+                                  fontSize: 15,
+                                ),
                               ),
                             ),
-                          ),
-                    SizedBox(
-                      height: 5,
-                    ),
+                      SizedBox(
+                        height: 5,
+                      ),
 //                              color: AppColors.accentText,
 //                              fontSize: Sizes.TEXT_SIZE_22,
-                    qty == 0 || qty == null
-                        ? InkWell(
-                            onTap: () {
-                              print('===========$qtyTag=======');
-                              addToCart(
-                                  productid: productID,
-                                  name: widget.cardTitle,
-                                  imgUrl: widget.imagePath,
-                                  price: prodisprice,
-                                  qty: 1,
-                                  qtyTag: qtyTag);
-                            },
-                            child: angadiButton(
-                              'Add',
-                              buttonHeight: 25,
-                              buttonWidth: 90,
-                            ),
-                          )
-                        : Container(
-                            decoration: BoxDecoration(
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                                color: AppColors.secondaryElement),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                InkWell(
-                                  onTap: () async {
-                                    await getAllItems();
-                                    for (var v in cartItems) {
-                                      if (v.productName == widget.cardTitle) {
-                                        var newQty = v.qty + 1;
-                                        updateItem(
-                                            id: v.id,
-                                            name: v.productName,
-                                            imgUrl: v.imgUrl,
-                                            price: v.price,
-                                            qty: newQty,
-                                            qtyTag: qtyTag);
-                                      }
-                                    }
-                                  },
-                                  child: Icon(
-                                    Icons.add,
-                                    color: AppColors.secondaryColor,
-                                  ),
-                                ),
-                                Text(
-                                  qty.toString(),
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                                InkWell(
-                                  onTap: () async {
-                                    await getAllItems();
-
-                                    for (var v in cartItems) {
-                                      if (v.productName == widget.cardTitle) {
-                                        if (v.qty == 1) {
-                                          removeItem(v.productName, qtyTag);
-                                        } else {
-                                          var newQty = v.qty - 1;
+                      (widget.stock)? qty == 0 || qty == null
+                          ? InkWell(
+                              onTap: () {
+                                print('===========$qtyTag=======');
+                                addToCart(
+                                    productid: productID,
+                                    name: widget.cardTitle,
+                                    imgUrl: widget.imagePath,
+                                    price: prodisprice,
+                                    qty: 1,
+                                    qtyTag: qtyTag);
+                              },
+                              child: angadiButton(
+                                'Add',
+                                buttonHeight: 25,
+                                buttonWidth: 90,
+                              ),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                  borderRadius:
+                                      BorderRadius.all(Radius.circular(5)),
+                                  color: AppColors.secondaryElement),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  InkWell(
+                                    onTap: () async {
+                                      await getAllItems();
+                                      for (var v in cartItems) {
+                                        if (v.productName == widget.cardTitle) {
+                                          var newQty = v.qty + 1;
                                           updateItem(
                                               id: v.id,
                                               name: v.productName,
@@ -583,22 +574,62 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
                                               qtyTag: qtyTag);
                                         }
                                       }
-                                    }
-                                  },
-                                  child: Icon(
-                                    Icons.remove,
-                                    color: AppColors.secondaryColor,
+                                    },
+                                    child: Icon(
+                                      Icons.add,
+                                      color: AppColors.secondaryColor,
+                                    ),
                                   ),
-                                )
-                              ],
-                            ),
-                            height: 25,
-                            width: 90,
-                          ),
-                  ],
+                                  Text(
+                                    qty.toString(),
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  InkWell(
+                                    onTap: () async {
+                                      await getAllItems();
+
+                                      for (var v in cartItems) {
+                                        if (v.productName == widget.cardTitle) {
+                                          if (v.qty == 1) {
+                                            removeItem(v.productName, qtyTag);
+                                          } else {
+                                            var newQty = v.qty - 1;
+                                            updateItem(
+                                                id: v.id,
+                                                name: v.productName,
+                                                imgUrl: v.imgUrl,
+                                                price: v.price,
+                                                qty: newQty,
+                                                qtyTag: qtyTag);
+                                          }
+                                        }
+                                      }
+                                    },
+                                    child: Icon(
+                                      Icons.remove,
+                                      color: AppColors.secondaryColor,
+                                    ),
+                                  )
+                                ],
+                              ),
+                              height: 25,
+                              width: 90,
+                            ):Container(
+                        height:25,
+                        width:100,
+                        decoration: BoxDecoration(borderRadius:BorderRadius.all(Radius.circular(5)),color:Color(0xFF6b3600),),
+                        child: Center(
+                          child: Text('Unavailable',textAlign:TextAlign.center,style: Styles.customTitleTextStyle(
+    color: Colors.white,
+    fontWeight: FontWeight.w400,
+    fontSize: 14),
+                      ),
+                        ),
+                      )],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

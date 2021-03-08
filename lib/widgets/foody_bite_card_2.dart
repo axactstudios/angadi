@@ -37,7 +37,7 @@ class FoodyBiteCard2 extends StatefulWidget {
   final int orderCount;
   List<Quantity> allquantities = [];
   List<String> quantities = [];
-
+  final bool stock;
   FoodyBiteCard2(
       {this.status = "OPEN",
       this.rating = "4.5",
@@ -61,7 +61,8 @@ class FoodyBiteCard2 extends StatefulWidget {
       this.followersImagePath,
       this.orderCount,
       this.allquantities,
-      this.quantities});
+      this.quantities,
+      this.stock});
 
   @override
   _FoodyBiteCard2State createState() => _FoodyBiteCard2State();
@@ -344,6 +345,24 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                           //     ),
                           //   ),
                           // ),
+                          (widget.stock)?Row(children: [
+                            Icon(Icons.check_circle,color:Colors.green,size: 12,),
+                            Text('in stock', style: Styles.customTitleTextStyle(
+                              color: Colors.green,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12,
+                            ),)
+                          ],):Row(
+                            children: [
+                              Icon(Icons.cancel,color:Colors.red,size:12),
+                              Text('Out of stock',style: Styles.customTitleTextStyle(
+                                color: Colors.red,
+                                fontWeight: FontWeight.w400,
+                                fontSize: 12,
+
+                              ))
+                            ],
+                          ),
                           Container(
                             width: widget.width - 30,
                             child: DropDown<String>(
@@ -504,7 +523,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                           SizedBox(
                             height: 2.5,
                           ),
-                          qty == 0 || qty == null
+                          (widget.stock)?qty == 0 || qty == null
                               ? InkWell(
                                   onTap: () {
                                     print('===========$qtyTag=======');
@@ -588,7 +607,18 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                   ),
                                   height: 30,
                                   width: 100,
-                                )
+                                ):Container(
+                            height:25,
+                            width:100,
+                            decoration: BoxDecoration(borderRadius:BorderRadius.all(Radius.circular(5)),color:Color(0xFF6b3600),),
+                            child: Center(
+                              child: Text('Unavailable',textAlign:TextAlign.center,style: Styles.customTitleTextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 14),
+                              ),
+                            ),
+                          )
                         ],
                       ),
                     ),

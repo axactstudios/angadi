@@ -14,6 +14,8 @@ import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class NewReviewScreen extends StatefulWidget {
+  String name;
+  NewReviewScreen(this.name);
   static const int TAB_NO = 4;
 
   @override
@@ -47,7 +49,7 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
             "userID": id,
             "rating": ratingGlobal,
 //            "details": contrl.text,
-            "dishName": 'Idli Batter'
+            "dishName": widget.name
           }).then((value) {
             print(value.documentID);
           });

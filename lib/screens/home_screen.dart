@@ -497,7 +497,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     url: snap.data.documents[i]['url'],
                     boughtTogetherID: snap.data.documents[i]['boughtTogether'],
                     allquantities: allquantities,
-                    quantities: quantities));
+                    quantities: quantities,
+                stock: snap.data.documents[i]['stock']));
 
                 if (snap.data.documents[i]['special']) {
                   dishesSpecial.add(Dish(
@@ -515,7 +516,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       boughtTogetherID: snap.data.documents[i]
                           ['boughtTogether'],
                       allquantities: snap.data.documents[i]['Quantity'],
-                      quantities: dishes[i].quantities));
+                      quantities: dishes[i].quantities,
+                  stock: snap.data.documents[i]['stock']));
 //                  print('Checkinggggg${dishes[i].quantities}');
 //                  print(snap.data.documents[i]['name']);
                   special.add(Container(
@@ -545,7 +547,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 price: dishes[i].price,
                                 boughtTogether: boughtTogether,
                                 allquantities: dishes[i].allquantities,
-                                quantities: dishes[i].quantities),
+                                quantities: dishes[i].quantities,
+                            stock: dishes[i].stock),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
@@ -561,6 +564,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       orderCount: orderCount,
                       allquantities: dishes[i].allquantities,
                       quantities: dishes[i].quantities,
+                      stock:dishes[i].stock
                     ),
                   ));
 //                  print('++++++++++++++');
@@ -583,7 +587,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       boughtTogetherID: snap.data.documents[i]
                           ['boughtTogether'],
                       allquantities: dishes[i].allquantities,
-                      quantities: dishes[i].quantities));
+                      quantities: dishes[i].quantities,
+                  stock: dishes[i].stock));
 //                  print(snap.data.documents[i]['name']);
                   top.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
@@ -619,7 +624,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 price: dishes[i].price,
                                 boughtTogether: boughtTogether,
                                 allquantities: dishes[i].allquantities,
-                                quantities: dishes[i].quantities),
+                                quantities: dishes[i].quantities,
+                            stock:dishes[i].stock),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
@@ -635,6 +641,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       orderCount: orderCount,
                       allquantities: dishes[i].allquantities,
                       quantities: dishes[i].quantities,
+                      stock:dishes[i].stock
                     ),
                   ));
                 }
@@ -668,7 +675,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 price: dishes[i].price,
                                 boughtTogether: boughtTogether,
                                 allquantities: dishes[i].allquantities,
-                                quantities: dishes[i].quantities),
+                                quantities: dishes[i].quantities,
+                            stock:dishes[i].stock),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:

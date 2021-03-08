@@ -77,7 +77,8 @@ class _FilteredSearchState extends State<FilteredSearch> {
             price: f['price'],
             desc: f['description'],
             url: f['url'],
-            boughtTogetherID: f['boughtTogether']);
+            boughtTogetherID: f['boughtTogether'],
+        stock:f['stock']);
         await dogList1.add(dp);
         // await dogCardsList1.add(MyDogCard(dp, width, height));
         print('Dog added');
@@ -165,7 +166,8 @@ class _FilteredSearchState extends State<FilteredSearch> {
                                 price: item.price,
                                 boughtTogether: boughtTogether,
                                 allquantities: item.allquantities,
-                                quantities: item.quantities),
+                                quantities: item.quantities,
+                            stock:item.stock),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
@@ -307,7 +309,8 @@ class _FilteredSearchState extends State<FilteredSearch> {
               url: f['url'],
               boughtTogetherID: f['boughtTogether'],
               allquantities: allquantities,
-              quantities: quantities);
+              quantities: quantities,
+          stock:f['stock']);
           dogList.add(dog);
           setState(() {
             print('Updated');
@@ -352,7 +355,8 @@ class _FilteredSearchState extends State<FilteredSearch> {
             url: f['url'],
             boughtTogetherID: f['boughtTogether'],
             allquantities: allquantities,
-            quantities: quantities));
+            quantities: quantities,
+        stock:f['stock']));
         print('Dog added');
         print(f['profileImage'].toString());
         print('--------------------${f['Quantity'].length}');

@@ -44,9 +44,13 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
   );
   void navigate() {
     Navigator.push(
-        context, MaterialPageRoute(builder: (context) => NewReviewScreen()));
+        context, MaterialPageRoute(builder: (context) => NewReviewScreen(widget.reviewRating.name)));
   }
-
+@override
+  void initState() {
+    print(widget.reviewRating.name);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
