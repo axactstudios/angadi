@@ -231,16 +231,25 @@ class _CheckoutState extends State<Checkout> {
     });
     emirate=savedemirate[0].name;
     if(savedarea.length>0){
+        for(int k=0;k<savedarea.length;k++){
+          if(emirate==savedarea[k].name){
+            area=savedarea[k].name;
+            deliveryCharge=double.parse(savedarea[k].deliveryCharge);
+            minOrderPrice=double.parse(savedarea[k].minOrderPrice);
+            break;
+          }
+          else{
+            setState(() {
+              area='Others';
+            });
 
-      area=savedarea[0].name;
-      deliveryCharge=double.parse(savedarea[0].deliveryCharge);
-      minOrderPrice=double.parse(savedarea[0].minOrderPrice);
+            deliveryCharge=double.parse(savedemirate[0].deliverycharge);
+            minOrderPrice=double.parse(savedemirate[0].minorderprice);
+          }
+        }
+
     }
-    else{
-      area='Others';
-      deliveryCharge=double.parse(savedemirate[0].deliverycharge);
-      minOrderPrice=double.parse(savedemirate[0].minorderprice);
-    }
+
 
   }
 
@@ -2416,8 +2425,9 @@ class _CheckoutState extends State<Checkout> {
                                 onTap: () {
                               print('-------------------------------------');
 
-                              if (widget.address != ''&&_formkey2.currentState.validate()) {
-//                                  if (widget.SavedArea != '') {
+                              if (widget.address != '') {
+                                if (_formkey2.currentState.validate()) {
+                                  if (widget.SavedArea != '') {
 //
 //                                    for (int i = 0; i < savedarea.length; i++) {
 //                                      if (widget.SavedArea ==
@@ -2435,31 +2445,32 @@ class _CheckoutState extends State<Checkout> {
 //                                      print(deliveryCharge);
 //                                    }
 //                                  }
-                                if (selectedTime == 'Choose Slot') {
-                                  Fluttertoast.showToast(
-                                      msg: 'Please select time slot',
-                                      toastLength: Toast.LENGTH_SHORT);
-                                } else {
-                                  var total = 0.0;
-                                  discount != null
-                                      ? total = ((totalAmount() * 0.18) +
+                                    if (selectedTime == 'Choose Slot') {
+                                      Fluttertoast.showToast(
+                                          msg: 'Please select time slot',
+                                          toastLength: Toast.LENGTH_SHORT);
+                                    } else {
+                                      var total = 0.0;
+                                      discount != null
+                                          ? total = ((totalAmount() * 0.18) +
                                           totalAmount() -
                                           (totalAmount() *
                                               (double.parse(discount.discount) /
                                                   100)) +
                                           deliveryCharge)
-                                      : total = ((totalAmount() * 0.18) +
+                                          : total = ((totalAmount() * 0.18) +
                                           totalAmount() +
                                           deliveryCharge);
-                                  if (total > minOrderPrice) {
-                                    showAlertDialog(context);
-                                  } else {
-                                    Fluttertoast.showToast(
-                                        msg:
-                                            'The minimum order price is :${minOrderPrice.toString()}',
-                                        toastLength: Toast.LENGTH_SHORT);
-                                  }
-                                }
+                                      if (total > minOrderPrice) {
+                                        showAlertDialog(context);
+                                      } else {
+                                        Fluttertoast.showToast(
+                                            msg:
+                                            'The minimum order price is :${minOrderPrice
+                                                .toString()}',
+                                            toastLength: Toast.LENGTH_SHORT);
+                                      }
+                                    }
 //                                var total = 0.0;
 //                                discount != null
 //                                    ? total = ((totalAmount() * 0.18) +
@@ -2479,12 +2490,15 @@ class _CheckoutState extends State<Checkout> {
 //                                          'Your order amount is less \n than the minimum order price',
 //                                      toastLength: Toast.LENGTH_SHORT);
 //                                }
+                                  }
+                                  else {
+                                    Fluttertoast.showToast(
+                                        msg: 'Please enter the details correctly',
+                                        toastLength: Toast.LENGTH_SHORT);
+                                  }
+                                }
                               }
-                              else{
-                                Fluttertoast.showToast(
-                                    msg: 'Please enter the details correctly',
-                                    toastLength: Toast.LENGTH_SHORT);
-                              }
+//
 
                               if (widget.address == '') {
                                 if (_formkey.currentState.validate()&&_formkey2.currentState.validate()) {
@@ -2562,8 +2576,9 @@ class _CheckoutState extends State<Checkout> {
                             ? 'Proceed to pay online'
                             : 'Go to my orders',
                         onTap: () {
-                          if (widget.SavedArea != ''&&_formkey2.currentState.validate()) {
-//    for (int i = 0; i < savedarea.length; i++) {
+                          if (widget.SavedArea != '') {
+                            if(_formkey2.currentState.validate()){
+                              //    for (int i = 0; i < savedarea.length; i++) {
 //    if (widget.SavedArea ==
 //    savedarea[i].name) {
 //    print(widget.SavedArea);
@@ -2579,53 +2594,55 @@ class _CheckoutState extends State<Checkout> {
 //    print(deliveryCharge);
 
 //    }
-                            if (selectedTime == 'Choose Slot') {
-                              Fluttertoast.showToast(
-                                  msg: 'Please select time slot',
-                                  toastLength: Toast.LENGTH_SHORT);
-                            } else {
-                              var total = 0.0;
-                              discount != null
-                                  ? total = ((totalAmount() * 0.18) +
-                                      totalAmount() -
-                                      (totalAmount() *
-                                          (double.parse(discount.discount) /
-                                              100)) +
-                                      deliveryCharge)
-                                  : total = ((totalAmount() * 0.18) +
-                                      totalAmount() +
-                                      deliveryCharge);
-                              if (total > minOrderPrice) {
-                                _result != '833' && j != 1 && val
-                                    ? onlineorder(
-                                        (discount != null)
-                                            ? ((totalAmount() * 0.18) +
-                                                    totalAmount() -
-                                                    (totalAmount() *
-                                                        (double.parse(discount
-                                                                .discount) /
-                                                            100)) +
-                                                    deliveryCharge)
-                                                .toStringAsFixed(2)
-                                            : ((totalAmount() * 0.18) +
-                                                    totalAmount() +
-                                                    deliveryCharge)
-                                                .toString(),
-                                        type,
-                                        orderid)
-                                    : Checksuccess();
-                              } else {
+                              if (selectedTime == 'Choose Slot') {
                                 Fluttertoast.showToast(
-                                    msg:
-                                        'The minimum order price is :${minOrderPrice.toString()}',
+                                    msg: 'Please select time slot',
                                     toastLength: Toast.LENGTH_SHORT);
+                              } else {
+                                var total = 0.0;
+                                discount != null
+                                    ? total = ((totalAmount() * 0.18) +
+                                    totalAmount() -
+                                    (totalAmount() *
+                                        (double.parse(discount.discount) /
+                                            100)) +
+                                    deliveryCharge)
+                                    : total = ((totalAmount() * 0.18) +
+                                    totalAmount() +
+                                    deliveryCharge);
+                                if (total > minOrderPrice) {
+                                  _result != '833' && j != 1 && val
+                                      ? onlineorder(
+                                      (discount != null)
+                                          ? ((totalAmount() * 0.18) +
+                                          totalAmount() -
+                                          (totalAmount() *
+                                              (double.parse(discount
+                                                  .discount) /
+                                                  100)) +
+                                          deliveryCharge)
+                                          .toStringAsFixed(2)
+                                          : ((totalAmount() * 0.18) +
+                                          totalAmount() +
+                                          deliveryCharge)
+                                          .toString(),
+                                      type,
+                                      orderid)
+                                      : Checksuccess();
+                                } else {
+                                  Fluttertoast.showToast(
+                                      msg:
+                                      'The minimum order price is :${minOrderPrice.toString()}',
+                                      toastLength: Toast.LENGTH_SHORT);
+                                }
                               }
+                            }else{
+                              Fluttertoast.showToast(
+                                  msg: 'Please enter the details correctly',
+                                  toastLength: Toast.LENGTH_SHORT);
                             }
-                          }else{
-                            Fluttertoast.showToast(
-                                msg: 'Please enter the details correctly',
-                                toastLength: Toast.LENGTH_SHORT);
-                          }
+                            }
+
 
                           if (widget.address == '') {
                             if (_formkey.currentState.validate()&&_formkey2.currentState.validate()) {
@@ -2742,6 +2759,11 @@ class _CheckoutState extends State<Checkout> {
 
   placeOrder(orderType) async {
     var dis;
+    var coupon;
+    (discount!=null)?
+      coupon=discount.title:coupon='';
+
+
 //    if(discount.discount==''&&discount.discount==null){
 //      dis='0.0';
 //    }
@@ -2780,12 +2802,14 @@ class _CheckoutState extends State<Checkout> {
     List prices = [];
     List quantities = [];
     List productIDs = [];
+    List qtytags=[];
     for (var v in cartItems) {
       print(v.productName);
       items.add(v.productName);
       prices.add(v.price);
       quantities.add(v.qty);
       productIDs.add(v.id);
+      qtytags.add(v.qtyTag);
     }
     final databaseReference = Firestore.instance;
     orderType == 'Delivery' &&
@@ -2802,6 +2826,8 @@ class _CheckoutState extends State<Checkout> {
             'ProductIDs': productIDs,
             'orderid':orderid,
             'UserID': user.uid,
+              'Quantity':qtytags,
+      'CouponUsed':coupon,
             'phoneNumber':PhoneNumber.text,
             'paymentMethod':'Cash On Delivery',
             'discountPrice':dis,
@@ -2835,13 +2861,15 @@ class _CheckoutState extends State<Checkout> {
                 'Qty': quantities,
                 'ProductIDs': productIDs,
                 'Type': orderType,
+      'Quantity':qtytags,
+      'CouponUsed':coupon,
                 'UserID': user.uid,
                  'orderid':orderid,
       'phoneNumber':PhoneNumber.text,
       'paymentMethod':'Cash On Delivery',
       'discountPrice':dis,
                 'Address':
-                    'Emirate:${emirate},Area:${area},${buildingController.text},Additional Directions :${additionalcontroller.text}',
+                    'Emirate:${emirate},Area:${area},${buildingController.text},Street:${flatcontroller.text},Additional Directions :${additionalcontroller.text}',
                 'DeliveryDate': DateTime(selectedDate.year, selectedDate.month,
                     selectedDate.day, dd),
                 'DeliveryTime': selectedTime,
@@ -2872,6 +2900,8 @@ class _CheckoutState extends State<Checkout> {
                     'Type': orderType,
                     'orderid':orderid,
                     'UserID': user.uid,
+      'Quantity':qtytags,
+      'CouponUsed':coupon,
       'phoneNumber':PhoneNumber.text,
       'paymentMethod':'Cash On Delivery',
       'discountPrice':dis,
@@ -2904,6 +2934,8 @@ class _CheckoutState extends State<Checkout> {
                         'Qty': quantities,
                         'Type': orderType,
                         'UserID': user.uid,
+      'Quantity':qtytags,
+      'CouponUsed':coupon,
       'orderid':orderid,
       'phoneNumber':PhoneNumber.text,
       'paymentMethod':'Cash On Delivery',
@@ -2938,7 +2970,9 @@ class _CheckoutState extends State<Checkout> {
                             'Type': orderType,
                             'OrderID':orderid,
                             'ProductIDs': productIDs,
+      'CouponUsed':coupon,
                             'UserID': user.uid,
+                              'Quantity':qtytags,
       'phoneNumber':phncontroller.text,
       'paymentMethod':'Takeaway',
       'discountPrice':dis,
@@ -2965,6 +2999,8 @@ class _CheckoutState extends State<Checkout> {
                             'ProductIDs': productIDs,
                             'UserID': user.uid,
                             'orderid':orderid,
+      'Quantity':qtytags,
+      'CouponUsed':coupon,
                             'DeliveryDate': selectedDate,
       'phoneNumber':PhoneNumber.text,
       'paymentMethod':'Cash On Delivery',
@@ -3371,6 +3407,8 @@ class _CheckoutState extends State<Checkout> {
   int length = 0;
   Future<String> Checksuccess() async {
     print('running check');
+    var coupon;
+    (discount!=null)?coupon=discount.title:coupon='';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String onlineid = prefs.getString('Orderid');
     print('----------------------$onlineid');
@@ -3404,11 +3442,13 @@ class _CheckoutState extends State<Checkout> {
     List items = [];
     List prices = [];
     List quantities = [];
+    List qtytags=[];
     for (var v in cartItems) {
       print(v.productName);
       items.add(v.productName);
       prices.add(v.price);
       quantities.add(v.qty);
+      qtytags.add(v.qtyTag);
     }
     Firestore.instance
         .collection('OnlineOrders')
@@ -3438,6 +3478,8 @@ class _CheckoutState extends State<Checkout> {
                     'Qty': quantities,
                     'Type': 'Online order',
                     'UserID': user.uid,
+              'Quantity':qtytags,
+              'CouponUsed':coupon,
               'orderid':orderid,
               'phoneNumber':PhoneNumber.text,
               'paymentMethod':'Online payment',
@@ -3470,6 +3512,8 @@ class _CheckoutState extends State<Checkout> {
                     'Qty': quantities,
                     'Type': 'Online order',
                     'UserID': user.uid,
+              'Quantity':qtytags,
+              'CouponUsed':coupon,
                     'Address': widget.address,
               'orderid':orderid,
               'phoneNumber':PhoneNumber.text,
