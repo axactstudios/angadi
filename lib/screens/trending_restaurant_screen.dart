@@ -102,7 +102,7 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
 
 //              print(snap.data.documents[i]['url']);
                       if ((money != null
-                              ? int.parse(snap.data.documents[i]['price']) <=
+                              ? double.parse(snap.data.documents[i]['price']) <=
                                   money
                               : 1 == 1) &&
                           (rat != null
@@ -128,7 +128,8 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                             quantities: quantities,
                             allquantities: allquantities,
                             boughtTogetherID: snap.data.documents[i]
-                                ['boughtTogether']));
+                                ['boughtTogether'],
+                        stock: snap.data.documents[i]['stock']));
                       }
                       print(dishes);
 
@@ -234,7 +235,8 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                                             allquantities:
                                                 dishes[index].allquantities,
                                             quantities:
-                                                dishes[index].quantities),
+                                                dishes[index].quantities,
+                                        stock: dishes[index].stock),
                                       ),
                                       withNavBar:
                                           true, // OPTIONAL VALUE. True by default.
@@ -253,7 +255,8 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
 //                            distance: distance[index],
                                   address: dishes[index].desc,
                                   allquantities: dishes[index].allquantities,
-                                  quantities: dishes[index].quantities),
+                                  quantities: dishes[index].quantities,
+                              stock:dishes[index].stock),
                             );
                           },
                         )

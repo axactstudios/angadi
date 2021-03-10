@@ -2053,6 +2053,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .then((value) {
       setState(() {
         banner1Url = value['url'];
+        imageList.add(banner1Url);
       });
     });
     Firestore.instance
@@ -2062,6 +2063,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .then((value) {
       setState(() {
         banner2Url = value['url'];
+        imageList.add(banner1Url);
       });
     });
   }

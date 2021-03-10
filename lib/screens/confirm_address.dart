@@ -24,9 +24,70 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
   final locationselected = TextEditingController();
   List<Emirates> allemirates = [];
   List<EmiratesArea> allareas = [];
+  List<Emirates>savedemirate=[];
+  List<EmiratesArea>savedarea=[];
+  double minOrderPrice=0;
+  double deliveryCharge=0;
   String area;
   String emirate2;
   String emirate;
+  void areas() async {
+    await Firestore.instance
+        .collection('EmiratesArea')
+        .getDocuments()
+        .then((value) {
+      for (int i = 0; i < value.documents.length; i++) {
+        setState(() {
+          EmiratesArea emi2 = EmiratesArea(
+              value.documents[i]['Emirate'],
+              value.documents[i]['deliveryCharge'],
+              value.documents[i]['minOrderPrice'],
+              value.documents[i]['name'],
+              value.documents[i]['zone']);
+          savedarea.add(emi2);
+        });
+      }
+    });
+
+    await Firestore.instance
+        .collection('Emirates')
+        .getDocuments()
+        .then((value) {
+      for (int i = 0; i < value.documents.length; i++) {
+        print(value.documents.length);
+
+        emiratesname.add(value.documents[i]['name']);
+        Emirates emi = Emirates(value.documents[i]['deliveryCharge'],
+            value.documents[i]['minOrderPrice'], value.documents[i]['name']);
+
+        savedemirate.add(emi);
+      }
+    });
+    emirate=savedemirate[0].name;
+    if(savedarea.length>0){
+      for(int k=0;k<savedarea.length;k++){
+        if(emirate==savedarea[k].name){
+          area=savedarea[k].name;
+          deliveryCharge=double.parse(savedarea[k].deliveryCharge);
+          minOrderPrice=double.parse(savedarea[k].minOrderPrice);
+          break;
+        }
+        else{
+          setState(() {
+            area='Others';
+          });
+
+          deliveryCharge=double.parse(savedemirate[0].deliverycharge);
+          minOrderPrice=double.parse(savedemirate[0].minorderprice);
+        }
+      }
+
+    }
+
+
+  }
+
+
   List<String> emiratesname = [];
   List<String> areaname = [];
   var id = '';
@@ -69,6 +130,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
     locationselected.text = widget.location;
 
     addAddress();
+    areas();
 
     super.initState();
   }

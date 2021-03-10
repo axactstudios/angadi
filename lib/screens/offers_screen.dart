@@ -2,6 +2,7 @@ import 'package:angadi/classes/offer.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/offer_card.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 Offer discount;
@@ -16,7 +17,72 @@ class ApplyOffers extends StatefulWidget {
 
 class _ApplyOffersState extends State<ApplyOffers> {
   List<Offer> offers = new List<Offer>();
+  List<Offer>filteroffers=[];
+  FirebaseUser user;
+  List test=[];
 
+void check()async{
+  test.clear();
+  user=await FirebaseAuth.instance.currentUser();
+  await Firestore.instance.collection('Users').document(user.uid).get().then((value) {
+  Map map=value.data;
+  test=map['couponUsed'];
+  });
+print('---------------------${test.length}');
+filter();
+}
+int add=0;
+List<Offer>alloffers=[];
+void filter()async{
+  user=await FirebaseAuth.instance.currentUser();
+  filteroffers.clear();
+  alloffers.clear();
+  Firestore.instance.collection('Offers').snapshots().forEach((element) {
+    for(int i=0;i<element.documents.length;i++){
+      alloffers.add(
+          Offer(
+              element.documents[i]['Title'],
+              element.documents[i]['Subtitle'],
+              element.documents[i]['ImageURL'],
+              element.documents[i]['discountPercentage'],
+
+              element.documents[i]['perUserLimit'])
+      );
+    }
+    for(int j=0;j<alloffers.length;j++){
+      add=0;
+      for(int k=0;k<test.length;k++){
+        print(test[k].toString());
+        if(test[k]==alloffers[j].title){
+          add++;
+          print('----------Add:${add}');
+        }
+      }
+      if(int.parse(alloffers[j].perUserLimit)!=add){
+        setState(() {
+          filteroffers.add(Offer(
+              alloffers[j].title,
+              alloffers[j].subtitle,
+              alloffers[j].imageURL,
+              alloffers[j].discount,
+
+              alloffers[j].perUserLimit));
+        });
+      print('-----------Filter${filteroffers.length}');
+      }
+    }
+  });
+
+
+
+
+
+}
+@override
+  void initState() {
+    check();
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,22 +103,43 @@ class _ApplyOffersState extends State<ApplyOffers> {
           builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
             if (snap.hasData && !snap.hasError && snap.data != null) {
               offers.clear();
+
               for (int i = 0; i < snap.data.documents.length; i++) {
                 offers.add(Offer(
                     snap.data.documents[i]['Title'],
                     snap.data.documents[i]['Subtitle'],
                     snap.data.documents[i]['ImageURL'],
                     snap.data.documents[i]['discountPercentage'],
-                    snap.data.documents[i]['categorySpecific'],
-                    snap.data.documents[i]['forFirstUser']));
+
+                    snap.data.documents[i]['perUserLimit']));
+
 
               }
+//              for(int j=0;j<offers.length;j++){
+//                add=0;
+//               for(int k=0;k<test.length;k++){
+//                 print(test[k].toString());
+//                 if(test[k]==offers[j].title){
+//                   add++;
+//                   print('----------Add:${add}');
+//                 }
+//               }
+//               if(int.parse(offers[j].perUserLimit)!=add){
+//                 filteroffers.add(Offer(
+//                     snap.data.documents[j]['Title'],
+//                     snap.data.documents[j]['Subtitle'],
+//                     snap.data.documents[j]['ImageURL'],
+//                     snap.data.documents[j]['discountPercentage'],
+//
+//                     snap.data.documents[j]['perUserLimit']));
+//               }
+//              }
 
               return Container(
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
-                    itemCount: offers.length,
+                    itemCount: filteroffers.length,
                     itemBuilder: (context, index) {
                       return Container(
                         height: 280,
@@ -61,12 +148,11 @@ class _ApplyOffersState extends State<ApplyOffers> {
                           onTap: () {
                             setState(() {
                               discount = Offer(
-                                  offers[index].title,
-                                  offers[index].subtitle,
-                                  offers[index].imageURL,
-                                  offers[index].discount,
-                                  offers[index].categorySpecific,
-                                  offers[index].forFirstUser);
+                                  filteroffers[index].title,
+                                  filteroffers[index].subtitle,
+                                  filteroffers[index].imageURL,
+                                  filteroffers[index].discount,
+                                  filteroffers[index].perUserLimit);
 
                               widget.state.setState(() {
                                 print(1);
@@ -74,13 +160,13 @@ class _ApplyOffersState extends State<ApplyOffers> {
                               Navigator.of(context).pop();
                             });
                           },
-                          imagePath: offers[index].imageURL,
+                          imagePath: filteroffers[index].imageURL,
                           // status: '90% OFF',
-                          cardTitle: offers[index].title,
+                          cardTitle: filteroffers[index].title,
                           // rating: ratings[index],
                           // category: category[index],
                           // distance: '',
-                          details: offers[index].subtitle,
+                          details: filteroffers[index].subtitle,
                         ),
                       );
                     }),

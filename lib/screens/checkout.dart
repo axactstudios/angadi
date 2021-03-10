@@ -204,15 +204,32 @@ class _CheckoutState extends State<Checkout> {
         .getDocuments()
         .then((value) {
       for (int i = 0; i < value.documents.length; i++) {
-        setState(() {
-          EmiratesArea emi2 = EmiratesArea(
-              value.documents[i]['Emirate'],
-              value.documents[i]['deliveryCharge'],
-              value.documents[i]['minOrderPrice'],
-              value.documents[i]['name'],
-              value.documents[i]['zone']);
-          savedarea.add(emi2);
-        });
+        if(savedarea.length==0){
+          setState(() {
+            EmiratesArea emi2 = EmiratesArea(
+                value.documents[i]['Emirate'],
+                value.documents[i]['deliveryCharge'],
+                value.documents[i]['minOrderPrice'],
+                value.documents[i]['name'],
+                value.documents[i]['zone']);
+            savedarea.add(emi2);
+          });
+        }
+        if(savedarea.length>0){
+          for(int j=0;j<savedarea.length;j++){
+            if(savedarea[j].name==value.documents[i]['name']){
+
+
+              EmiratesArea emi2 = EmiratesArea(
+                  value.documents[i]['Emirate'],
+                  value.documents[i]['deliveryCharge'],
+                  value.documents[i]['minOrderPrice'],
+                  ' ${value.documents[i]['name']}',
+                  value.documents[i]['zone']);
+              savedarea.add(emi2);
+            }
+          }
+        }
       }
     });
     await Firestore.instance
@@ -1437,22 +1454,64 @@ class _CheckoutState extends State<Checkout> {
                                                 i < snap.data.documents.length;
                                                 i++) {
                                               print(snap.data.documents.length);
+                                                 if(allareas.length==0){
+                                                   areaname.add(snap
+                                                       .data.documents[i]['name']);
 
-                                              areaname.add(snap
-                                                  .data.documents[i]['name']);
+                                                   EmiratesArea emi2 = EmiratesArea(
+                                                       snap.data.documents[i]
+                                                       ['Emirate'],
+                                                       snap.data.documents[i]
+                                                       ['deliveryCharge'],
+                                                       snap.data.documents[i]
+                                                       ['minOrderPrice'],
+                                                       snap.data.documents[i]
+                                                       ['name'],
+                                                       snap.data.documents[i]
+                                                       ['zone']);
+                                                   allareas.add(emi2);
+                                                 }
+                                                 if(allareas.length>0){
+                                                   for(int j=0;j<areaname.length;j++){
+                                                     if(areaname[j]==snap.data.documents[i]['name']){
+                                                       areaname.add(' ${snap
+                                                           .data.documents[i]['name']}');
 
-                                              EmiratesArea emi2 = EmiratesArea(
-                                                  snap.data.documents[i]
-                                                      ['Emirate'],
-                                                  snap.data.documents[i]
-                                                      ['deliveryCharge'],
-                                                  snap.data.documents[i]
-                                                      ['minOrderPrice'],
-                                                  snap.data.documents[i]
-                                                      ['name'],
-                                                  snap.data.documents[i]
-                                                      ['zone']);
-                                              allareas.add(emi2);
+                                                       EmiratesArea emi2 = EmiratesArea(
+                                                           snap.data.documents[i]
+                                                           ['Emirate'],
+                                                           snap.data.documents[i]
+                                                           ['deliveryCharge'],
+                                                           snap.data.documents[i]
+                                                           ['minOrderPrice'],
+                                                          ' ${ snap.data.documents[i]
+                                                           ['name']}',
+                                                           snap.data.documents[i]
+                                                           ['zone']);
+                                                       allareas.add(emi2);
+                                                     }
+//                                                     else{
+//                                                       areaname.add('${snap
+//                                                           .data.documents[i]['name']}');
+//
+//                                                       EmiratesArea emi2 = EmiratesArea(
+//                                                           snap.data.documents[i]
+//                                                           ['Emirate'],
+//                                                           snap.data.documents[i]
+//                                                           ['deliveryCharge'],
+//                                                           snap.data.documents[i]
+//                                                           ['minOrderPrice'],
+//                                                           '${ snap.data.documents[i]
+//                                                           ['name']}',
+//                                                           snap.data.documents[i]
+//                                                           ['zone']);
+//                                                       allareas.add(emi2);
+//
+//                                                     }
+
+                                                   }
+                                                 }
+
                                             }
                                             areaname.add('Others');
                                             return areaname.length != 0
@@ -1810,25 +1869,49 @@ class _CheckoutState extends State<Checkout> {
                                             allareas.clear();
                                             areaname.clear();
                                             for (int i = 0;
-                                                i < snap.data.documents.length;
-                                                i++) {
+                                            i < snap.data.documents.length;
+                                            i++) {
                                               print(snap.data.documents.length);
+                                              if(allareas.length==0){
+                                                areaname.add(snap
+                                                    .data.documents[i]['name']);
 
-                                              areaname.add(snap
-                                                  .data.documents[i]['name']);
+                                                EmiratesArea emi2 = EmiratesArea(
+                                                    snap.data.documents[i]
+                                                    ['Emirate'],
+                                                    snap.data.documents[i]
+                                                    ['deliveryCharge'],
+                                                    snap.data.documents[i]
+                                                    ['minOrderPrice'],
+                                                    snap.data.documents[i]
+                                                    ['name'],
+                                                    snap.data.documents[i]
+                                                    ['zone']);
+                                                allareas.add(emi2);
+                                              }
+                                              if(allareas.length>0){
+                                                for(int j=0;j<areaname.length;j++){
+                                                  if(areaname[j]==snap.data.documents[i]['name']){
+                                                    areaname.add(' ${snap
+                                                        .data.documents[i]['name']}');
 
-                                              EmiratesArea emi2 = EmiratesArea(
-                                                  snap.data.documents[i]
-                                                      ['Emirate'],
-                                                  snap.data.documents[i]
-                                                      ['deliveryCharge'],
-                                                  snap.data.documents[i]
-                                                      ['minOrderPrice'],
-                                                  snap.data.documents[i]
-                                                      ['name'],
-                                                  snap.data.documents[i]
-                                                      ['zone']);
-                                              allareas.add(emi2);
+                                                    EmiratesArea emi2 = EmiratesArea(
+                                                        snap.data.documents[i]
+                                                        ['Emirate'],
+                                                        snap.data.documents[i]
+                                                        ['deliveryCharge'],
+                                                        snap.data.documents[i]
+                                                        ['minOrderPrice'],
+                                                        ' ${ snap.data.documents[i]
+                                                        ['name']}',
+                                                        snap.data.documents[i]
+                                                        ['zone']);
+                                                    allareas.add(emi2);
+                                                  }
+                                                }
+                                              }
+
+
                                             }
                                             areaname.add('Others');
                                             return areaname.length != 0
@@ -2757,19 +2840,27 @@ class _CheckoutState extends State<Checkout> {
   var dd;
   var id;
   void set(String title)async{
+    await getUserDetails();
+    print('title:${title}');
     List titles=[];
 //    titles.add(title);
     List check=[];
  await  Firestore.instance.collection('Users').document(user.uid).get().then((value) {
     Map map=value.data;
     check=map['couponUsed'];
+    for(int i=0;i<check.length;i++){
+      titles.add(check[i]);
+    }
 
+    print('checkkkkkkkkkkkkkkkkkkkk${check.length}');
+
+    titles.add(title);
+    print('========================${titles}');
+    Firestore.instance.collection('Users').document(user.uid).updateData({
+      'couponUsed':titles,
+    });
   });
- titles.add(check);
- titles.add(title);
- await Firestore.instance.collection('Users').document(user.uid).updateData({
-   'couponUsed':titles,
- });
+
   
   }
 

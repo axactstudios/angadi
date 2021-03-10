@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
@@ -14,7 +15,7 @@ class FilterScreen extends StatefulWidget {
 }
 
 class _FilterScreenState extends State<FilterScreen> {
-  double initialSliderValue = 10;
+  double initialSliderValue = 0;
   int ratingValue = 4;
   int activeButtonValue = 1;
   TextStyle buttonTextStyle =
@@ -30,7 +31,23 @@ class _FilterScreenState extends State<FilterScreen> {
     color: AppColors.accentText,
     fontSize: Sizes.TEXT_SIZE_16,
   );
+  List<String> categories=[];
+  @override
+  void initState() {
+    getcategory();
+    super.initState();
+  }
+void getcategory()async{
+ await Firestore.instance.collection('Categories').snapshots().forEach((element) {
+    for(int i=0;i<element.documents.length;i++){
+      setState(() {
+        categories.add(element.documents[i]['catName'].toString());
+      });
 
+    }
+  });
+  print('-------------------cat:${categories.length}');
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,7 +105,7 @@ class _FilterScreenState extends State<FilterScreen> {
                     direction: Axis.horizontal,
                     spacing: 16,
                     runAlignment: WrapAlignment.spaceBetween,
-                    children: createCategoryButtons(numberOfButtons: 7),
+                    children: createCategoryButtons(numberOfButtons: categories.length),
                   ),
                   SizedBox(height: 24.0),
                   Column(
@@ -114,7 +131,7 @@ class _FilterScreenState extends State<FilterScreen> {
                         child: Slider(
 //                          label: '$initialSliderValue players',
                             min: 0,
-                            max: 1000,
+                            max: 100,
                             value: initialSliderValue,
                             onChanged: (value) {
                               setState(() {
@@ -136,7 +153,7 @@ class _FilterScreenState extends State<FilterScreen> {
                           Container(
                             margin: EdgeInsets.only(right: 24),
                             child: Text(
-                              '1000',
+                              '100',
                               style: lightTextStyle,
                             ),
                           ),
@@ -241,16 +258,16 @@ class _FilterScreenState extends State<FilterScreen> {
 
   createCategoryButtons({@required numberOfButtons}) {
     List<Widget> categoryButtons = <Widget>[];
-    List<String> buttonTitles = [
-      'Pickles/Podi',
-      'Curries/Koottu',
-      'Snacks',
-      "Sweet/Savoury",
-      'Desserts',
-      'Tiffin',
-      'Rice'
-    ];
-
+//    List<String> buttonTitles = [
+//      'Pickles/Podi',
+//      'Curries/Koottu',
+//      'Snacks',
+//      "Sweet/Savoury",
+//      'Desserts',
+//      'Tiffin',
+//      'Rice'
+//    ];
+List<String>buttonTitles=categories;
     List<int> list = List<int>.generate(numberOfButtons, (i) => i + 1);
 
     list.forEach((i) {
@@ -288,7 +305,7 @@ class RetroSliderThumbShape extends SliderComponentShape {
     double textScaleFactor,
     Size sizeWithOverflow,
   }) {
-    String sliderValue = (value * 1000).toInt().toString();
+    String sliderValue = (value * 100).toInt().toString();
     final Canvas canvas = context.canvas;
     final paint = Paint()
       ..style = PaintingStyle.fill
