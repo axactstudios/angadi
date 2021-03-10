@@ -297,6 +297,7 @@ class _HomeScreenState extends State<HomeScreen> {
     date = DateTime.now();
     date2 = DateTime(date.year, date.month, date.day + dateAddition);
     _getCurrentLocation();
+
     setState(() {
       final firestoreInstance = Firestore.instance;
 
@@ -498,7 +499,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     boughtTogetherID: snap.data.documents[i]['boughtTogether'],
                     allquantities: allquantities,
                     quantities: quantities,
-                stock: snap.data.documents[i]['stock']));
+                    stock: snap.data.documents[i]['stock']));
 
                 if (snap.data.documents[i]['special']) {
                   dishesSpecial.add(Dish(
@@ -517,55 +518,55 @@ class _HomeScreenState extends State<HomeScreen> {
                           ['boughtTogether'],
                       allquantities: snap.data.documents[i]['Quantity'],
                       quantities: dishes[i].quantities,
-                  stock: snap.data.documents[i]['stock']));
+                      stock: snap.data.documents[i]['stock']));
 //                  print('Checkinggggg${dishes[i].quantities}');
 //                  print(snap.data.documents[i]['name']);
                   special.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
-                      onTap: () async {
-                        Dish boughtTogether;
-                        for (int ind = 0; ind < dishes.length; ind++) {
-                          if (dishes[ind].id == dishes[i].boughtTogetherID) {
-                            boughtTogether = await dishes[ind];
+                        onTap: () async {
+                          Dish boughtTogether;
+                          for (int ind = 0; ind < dishes.length; ind++) {
+                            if (dishes[ind].id == dishes[i].boughtTogetherID) {
+                              boughtTogether = await dishes[ind];
+                            }
                           }
-                        }
-                        pushNewScreen(
-                          context,
-                          screen: RestaurantDetailsScreen(
-                            RestaurantDetails(
-                                boughtTogetherDiscount:
-                                    dishes[i].boughtTogetherDiscount,
-                                boughtTogetherQuantity:
-                                    dishes[i].boughtTogetherQuantity,
-                                productID: dishes[i].id,
-                                url: dishes[i].url,
-                                name: dishes[i].name,
-                                desc: dishes[i].desc,
-                                category: dishes[i].category,
-                                rating: dishes[i].rating,
-                                price: dishes[i].price,
-                                boughtTogether: boughtTogether,
-                                allquantities: dishes[i].allquantities,
-                                quantities: dishes[i].quantities,
-                            stock: dishes[i].stock),
-                          ),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.cupertino,
-                        );
-                      },
-                      imagePath: snap.data.documents[i]['url'],
-                      cardTitle: snap.data.documents[i]['name'],
-                      rating: snap.data.documents[i]['rating'].toString(),
-                      category: snap.data.documents[i]['category'],
-                      price: snap.data.documents[i]['price'].toString(),
-                      iPrice: snap.data.documents[i]['iPrice'].toString(),
-                      orderCount: orderCount,
-                      allquantities: dishes[i].allquantities,
-                      quantities: dishes[i].quantities,
-                      stock:dishes[i].stock
-                    ),
+                          pushNewScreen(
+                            context,
+                            screen: RestaurantDetailsScreen(
+                              RestaurantDetails(
+                                  boughtTogetherDiscount:
+                                      dishes[i].boughtTogetherDiscount,
+                                  boughtTogetherQuantity:
+                                      dishes[i].boughtTogetherQuantity,
+                                  productID: dishes[i].id,
+                                  url: dishes[i].url,
+                                  name: dishes[i].name,
+                                  desc: dishes[i].desc,
+                                  category: dishes[i].category,
+                                  rating: dishes[i].rating,
+                                  price: dishes[i].price,
+                                  boughtTogether: boughtTogether,
+                                  allquantities: dishes[i].allquantities,
+                                  quantities: dishes[i].quantities,
+                                  stock: dishes[i].stock),
+                            ),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                        imagePath: snap.data.documents[i]['url'],
+                        cardTitle: snap.data.documents[i]['name'],
+                        rating: snap.data.documents[i]['rating'].toString(),
+                        category: snap.data.documents[i]['category'],
+                        price: snap.data.documents[i]['price'].toString(),
+                        iPrice: snap.data.documents[i]['iPrice'].toString(),
+                        orderCount: orderCount,
+                        allquantities: dishes[i].allquantities,
+                        quantities: dishes[i].quantities,
+                        stock: dishes[i].stock),
                   ));
 //                  print('++++++++++++++');
 //                  print(quantities);
@@ -588,61 +589,61 @@ class _HomeScreenState extends State<HomeScreen> {
                           ['boughtTogether'],
                       allquantities: dishes[i].allquantities,
                       quantities: dishes[i].quantities,
-                  stock: dishes[i].stock));
+                      stock: dishes[i].stock));
 //                  print(snap.data.documents[i]['name']);
                   top.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
-                      onTap: () async {
-                        Dish boughtTogether;
-                        await print(dishes.length);
-                        for (int ind = 0; ind < dishes.length; ind++) {
-                          // print('Checking $ind');
-                          // print(dishes[ind].id);
-                          // print(dishes[i].boughtTogetherID);
-                          if (dishes[ind].id == dishes[i].boughtTogetherID) {
-                            boughtTogether = await dishes[ind];
-                            // print('Got it');
+                        onTap: () async {
+                          Dish boughtTogether;
+                          await print(dishes.length);
+                          for (int ind = 0; ind < dishes.length; ind++) {
+                            // print('Checking $ind');
+                            // print(dishes[ind].id);
+                            // print(dishes[i].boughtTogetherID);
+                            if (dishes[ind].id == dishes[i].boughtTogetherID) {
+                              boughtTogether = await dishes[ind];
+                              // print('Got it');
+                            }
                           }
-                        }
 //                        await print('-------------$boughtTogether');
 //                        print('Checkkk${dishes[i].quantities}');
-                        pushNewScreen(
-                          context,
-                          screen: RestaurantDetailsScreen(
-                            RestaurantDetails(
-                                boughtTogetherDiscount:
-                                    dishes[i].boughtTogetherDiscount,
-                                boughtTogetherQuantity:
-                                    dishes[i].boughtTogetherQuantity,
-                                url: dishes[i].url,
-                                productID: dishes[i].id,
-                                name: dishes[i].name,
-                                desc: dishes[i].desc,
-                                category: dishes[i].category,
-                                rating: dishes[i].rating,
-                                price: dishes[i].price,
-                                boughtTogether: boughtTogether,
-                                allquantities: dishes[i].allquantities,
-                                quantities: dishes[i].quantities,
-                            stock:dishes[i].stock),
-                          ),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.cupertino,
-                        );
-                      },
-                      imagePath: snap.data.documents[i]['url'],
-                      cardTitle: snap.data.documents[i]['name'],
-                      rating: snap.data.documents[i]['rating'].toString(),
-                      category: snap.data.documents[i]['category'],
-                      price: snap.data.documents[i]['price'].toString(),
-                      iPrice: snap.data.documents[i]['iPrice'].toString(),
-                      orderCount: orderCount,
-                      allquantities: dishes[i].allquantities,
-                      quantities: dishes[i].quantities,
-                      stock:dishes[i].stock
-                    ),
+                          pushNewScreen(
+                            context,
+                            screen: RestaurantDetailsScreen(
+                              RestaurantDetails(
+                                  boughtTogetherDiscount:
+                                      dishes[i].boughtTogetherDiscount,
+                                  boughtTogetherQuantity:
+                                      dishes[i].boughtTogetherQuantity,
+                                  url: dishes[i].url,
+                                  productID: dishes[i].id,
+                                  name: dishes[i].name,
+                                  desc: dishes[i].desc,
+                                  category: dishes[i].category,
+                                  rating: dishes[i].rating,
+                                  price: dishes[i].price,
+                                  boughtTogether: boughtTogether,
+                                  allquantities: dishes[i].allquantities,
+                                  quantities: dishes[i].quantities,
+                                  stock: dishes[i].stock),
+                            ),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                        imagePath: snap.data.documents[i]['url'],
+                        cardTitle: snap.data.documents[i]['name'],
+                        rating: snap.data.documents[i]['rating'].toString(),
+                        category: snap.data.documents[i]['category'],
+                        price: snap.data.documents[i]['price'].toString(),
+                        iPrice: snap.data.documents[i]['iPrice'].toString(),
+                        orderCount: orderCount,
+                        allquantities: dishes[i].allquantities,
+                        quantities: dishes[i].quantities,
+                        stock: dishes[i].stock),
                   ));
                 }
 
@@ -676,7 +677,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 boughtTogether: boughtTogether,
                                 allquantities: dishes[i].allquantities,
                                 quantities: dishes[i].quantities,
-                            stock:dishes[i].stock),
+                                stock: dishes[i].stock),
                           ),
                           withNavBar: true, // OPTIONAL VALUE. True by default.
                           pageTransitionAnimation:
@@ -714,8 +715,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                               'Awaiting Confirmation' ||
                                           snap.data.documents[i]['Status'] ==
                                               'Processing')) {
-                                    orderID =
-                                        snap.data.documents[i]['orderid'];
+                                    orderID = snap.data.documents[i]['orderid'];
                                     status = snap.data.documents[i]['Status'];
                                   }
                                 }
@@ -790,8 +790,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     deliveryDate =
                                                                         element[
                                                                             'DeliveryDate'];
-                                                                    print('deliveryDate:${element[
-                                                                    'DeliveryDate']}');
+                                                                    print(
+                                                                        'deliveryDate:${element['DeliveryDate']}');
 
                                                                     // print(
                                                                     //     status);
@@ -817,7 +817,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                       bill(),
                                                                       orderID,
                                                                       status,
-                                                                    myDateTime));
+                                                                      myDateTime));
                                                             },
                                                             child: Text(
                                                                 'View Details',
@@ -1040,64 +1040,39 @@ class _HomeScreenState extends State<HomeScreen> {
 //                          .pushNamed(R.Router.trendingRestaurantsScreen),
 //                    ),
                     SizedBox(height: 15),
-                    StreamBuilder(
-                        stream:
-                            Firestore.instance.collection('Offers').snapshots(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<QuerySnapshot> snap) {
-                          if (snap.hasData &&
-                              !snap.hasError &&
-                              snap.data != null) {
-                            offers.clear();
-                            imageList.clear();
-                            for (int i = 0;
-                                i < snap.data.documents.length;
-                                i++) {
-                              imageList.add(snap.data.documents[i]['ImageURL']);
-                              offers.add(Offer(
-                                  snap.data.documents[i]['Title'],
-                                  snap.data.documents[i]['Subtitle'],
-                                  snap.data.documents[i]['ImageURL'],
-                                  snap.data.documents[i]['discountPercentage'],
-                                  snap.data.documents[i]['categorySpecific'],
-                                  snap.data.documents[i]['forFirstUser']));
-                            }
-
+                    Container(
+                      height: 170,
+                      width: MediaQuery.of(context).size.width,
+                      child: GFCarousel(
+                        items: imageList.map(
+                          (url) {
                             return Container(
-                              height: 170,
-                              width: MediaQuery.of(context).size.width,
-                              child: GFCarousel(
-                                items: imageList.map(
-                                  (url) {
-                                    return Container(
-                                      child: Padding(
-                                        padding: const EdgeInsets.all(1.0),
-                                        child: FancyShimmerImage(
-                                          shimmerDuration: Duration(seconds: 2),
-                                          imageUrl: '$url',
-                                          width: 10000.0,
-                                        ),
-                                      ),
-                                    );
-                                  },
-                                ).toList(),
-                                onPageChanged: (index) {
-                                  setState(() {
-//                                    print('change');
-                                  });
-                                },
-                                viewportFraction: 1.0,
-                                aspectRatio:
-                                    (MediaQuery.of(context).size.width / 18) /
-                                        (MediaQuery.of(context).size.width /
-                                            40),
-                                autoPlay: true,
-                                pagination: true,
-                                passiveIndicator: Colors.black,
-                                activeIndicator: Colors.grey,
-                                pauseAutoPlayOnTouch: Duration(seconds: 8),
-                                pagerSize: 8,
+                              child: Padding(
+                                padding: const EdgeInsets.all(1.0),
+                                child: FancyShimmerImage(
+                                  shimmerDuration: Duration(seconds: 2),
+                                  imageUrl: '$url',
+                                  width: 10000.0,
+                                ),
                               ),
+                            );
+                          },
+                        ).toList(),
+                        onPageChanged: (index) {
+                          setState(() {
+//                                    print('change');
+                          });
+                        },
+                        viewportFraction: 1.0,
+                        aspectRatio: (MediaQuery.of(context).size.width / 18) /
+                            (MediaQuery.of(context).size.width / 40),
+                        autoPlay: true,
+                        pagination: true,
+                        passiveIndicator: Colors.black,
+                        activeIndicator: Colors.grey,
+                        pauseAutoPlayOnTouch: Duration(seconds: 8),
+                        pagerSize: 8,
+                      ),
 //                              ListView.builder(
 //                                  scrollDirection: Axis.horizontal,
 //                                  itemCount: offers.length,
@@ -1122,11 +1097,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                                      ),
 //                                    );
 //                                  }),
-                            );
-                          } else {
-                            return Container();
-                          }
-                        }),
+                    ),
                     SizedBox(height: 0.0),
                     HeadingRow(
                       title: StringConst.CATEGORY,
