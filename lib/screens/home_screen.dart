@@ -144,7 +144,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('AppSettings')
         .getDocuments()
         .then((val) => val.documents.forEach((element) {
-              print(element['showGrocery']);
               showGrocery = element['showGrocery'];
             }));
   }
@@ -161,7 +160,6 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         id = event.documents[0].documentID;
       });
-      // print(event.documents[0].documentID);
     });
   }
 
@@ -212,14 +210,9 @@ class _HomeScreenState extends State<HomeScreen> {
           timeSlots2.add(element.documents[0].data['Timeslots'][i]);
         }
       }
-      // print('-----------------');
-      // print(timeSlots2.length);
       selectedTime = timeSlots2[0];
     });
-    // print('enddd');
-    // print(timeSlots2.length);
 //  if(timeSlots2.length>0){
-//    print('Heya');
 //    setState(() {
 //      selectedTime=timeSlots2[0];
 //    });
@@ -230,7 +223,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void select() {
     if (timeSlots2.length > 0) {
-      // print('Heya');
       setState(() {
         selectedTime = timeSlots2[0];
       });
@@ -242,7 +234,6 @@ class _HomeScreenState extends State<HomeScreen> {
     List prices = [];
     List quantities = [];
     for (var v in cartItems) {
-      // print(v.productName);
       items.add(v.productName);
       prices.add(v.price);
       quantities.add(v.qty);
@@ -260,7 +251,6 @@ class _HomeScreenState extends State<HomeScreen> {
         .collection('Timeslots')
         .snapshots()
         .listen((event) {
-      // print(event.documents[0].data['LastSlot']);
       String st = event.documents[0].data['LastSlot'];
       String s = '';
       for (int i = 0; i < st.length; i++) {
@@ -275,7 +265,6 @@ class _HomeScreenState extends State<HomeScreen> {
       DateTime dt = DateTime.now();
       if (dt.hour > d) {
         dateAddition = dateAddition + 1;
-        // print('Exceeded');
         //run
       }
     });
@@ -322,12 +311,9 @@ class _HomeScreenState extends State<HomeScreen> {
         .snapshots()
         .listen((event) {
       if (event.data != null) {
-        // print(event);
-        // print(event['Numberoforders'].toString());
         orderCount = event['Numberoforders'];
       }
     });
-    // print('Checked');
     prefs = await SharedPreferences.getInstance();
     orderStatus = prefs.getString('Status');
     idorder = prefs.getString('Orderid');
@@ -345,11 +331,8 @@ class _HomeScreenState extends State<HomeScreen> {
   var orderStatus, idorder;
   @override
   Widget build(BuildContext context) {
-//    print(MediaQuery.of(context).size.width);
-
     _pickTime() async {
       var today = DateTime.now();
-      // print(today.day + 1);
       DateTime t = await showDatePicker(
         context: context,
         initialDate:
@@ -374,7 +357,6 @@ class _HomeScreenState extends State<HomeScreen> {
     id() async {
       if (orderStatus != null) {
         if (orderStatus == 'Placed') {
-          // print('Function run');
           Firestore.instance
               .collection('Orders')
               .snapshots()
@@ -421,7 +403,6 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width: 8),
           InkWell(
               onTap: () {
-//                print(1);
                 launch(
                     'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
               },
@@ -480,10 +461,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   quantities.add(
                       '${snap.data.documents[i]['Quantity'][j]['quantity']}');
                 }
-//                print('&&&&&&&&&&&&&&&&&&&&&&');
-//               print(quantities.length);
-                // print('Imp ${snap.data.documents[i]['boughtTogether']}');
-                // print('PID: ${snap.data.documents[i]['productId']}');
+
                 dishes.add(Dish(
                     name: snap.data.documents[i]['name'],
                     boughtTogetherDiscount: snap.data.documents[i]
@@ -519,8 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       allquantities: snap.data.documents[i]['Quantity'],
                       quantities: dishes[i].quantities,
                       stock: snap.data.documents[i]['stock']));
-//                  print('Checkinggggg${dishes[i].quantities}');
-//                  print(snap.data.documents[i]['name']);
+
                   special.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
@@ -568,9 +545,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         quantities: dishes[i].quantities,
                         stock: dishes[i].stock),
                   ));
-//                  print('++++++++++++++');
-//                  print(quantities);
-//                  print(dishes[i].quantities);
                 }
                 if (snap.data.documents[i]['top']) {
                   dishesTop.add(Dish(
@@ -590,24 +564,17 @@ class _HomeScreenState extends State<HomeScreen> {
                       allquantities: dishes[i].allquantities,
                       quantities: dishes[i].quantities,
                       stock: dishes[i].stock));
-//                  print(snap.data.documents[i]['name']);
                   top.add(Container(
                     margin: EdgeInsets.only(right: 4.0),
                     child: FoodyBiteCard(
                         onTap: () async {
                           Dish boughtTogether;
-                          await print(dishes.length);
                           for (int ind = 0; ind < dishes.length; ind++) {
-                            // print('Checking $ind');
-                            // print(dishes[ind].id);
-                            // print(dishes[i].boughtTogetherID);
                             if (dishes[ind].id == dishes[i].boughtTogetherID) {
                               boughtTogether = await dishes[ind];
-                              // print('Got it');
                             }
                           }
-//                        await print('-------------$boughtTogether');
-//                        print('Checkkk${dishes[i].quantities}');
+
                           pushNewScreen(
                             context,
                             screen: RestaurantDetailsScreen(
@@ -648,44 +615,47 @@ class _HomeScreenState extends State<HomeScreen> {
                 }
 
                 if (i < 5)
-                  trending.add(Container(
-                    margin: EdgeInsets.only(right: 4.0),
-                    child: FoodyBiteCard(
-                      orderCount: orderCount,
-                      onTap: () async {
-                        Dish boughtTogether;
-                        for (int ind = 0; ind < dishes.length; ind++) {
-                          if (dishes[ind].id == dishes[i].boughtTogetherID) {
-                            boughtTogether = await dishes[ind];
+                  trending.add(
+                    Container(
+                      margin: EdgeInsets.only(right: 4.0),
+                      child: FoodyBiteCard(
+                        orderCount: orderCount,
+                        onTap: () async {
+                          Dish boughtTogether;
+                          for (int ind = 0; ind < dishes.length; ind++) {
+                            if (dishes[ind].id == dishes[i].boughtTogetherID) {
+                              boughtTogether = await dishes[ind];
+                            }
                           }
-                        }
-                        pushNewScreen(
-                          context,
-                          screen: RestaurantDetailsScreen(
-                            RestaurantDetails(
-                                boughtTogetherDiscount:
-                                    dishes[i].boughtTogetherDiscount,
-                                boughtTogetherQuantity:
-                                    dishes[i].boughtTogetherQuantity,
-                                url: dishes[i].url,
-                                productID: dishes[i].id,
-                                name: dishes[i].name,
-                                desc: dishes[i].desc,
-                                category: dishes[i].category,
-                                rating: dishes[i].rating,
-                                price: dishes[i].price,
-                                boughtTogether: boughtTogether,
-                                allquantities: dishes[i].allquantities,
-                                quantities: dishes[i].quantities,
-                                stock: dishes[i].stock),
-                          ),
-                          withNavBar: true, // OPTIONAL VALUE. True by default.
-                          pageTransitionAnimation:
-                              PageTransitionAnimation.cupertino,
-                        );
-                      },
+                          pushNewScreen(
+                            context,
+                            screen: RestaurantDetailsScreen(
+                              RestaurantDetails(
+                                  boughtTogetherDiscount:
+                                      dishes[i].boughtTogetherDiscount,
+                                  boughtTogetherQuantity:
+                                      dishes[i].boughtTogetherQuantity,
+                                  url: dishes[i].url,
+                                  productID: dishes[i].id,
+                                  name: dishes[i].name,
+                                  desc: dishes[i].desc,
+                                  category: dishes[i].category,
+                                  rating: dishes[i].rating,
+                                  price: dishes[i].price,
+                                  boughtTogether: boughtTogether,
+                                  allquantities: dishes[i].allquantities,
+                                  quantities: dishes[i].quantities,
+                                  stock: dishes[i].stock),
+                            ),
+                            withNavBar:
+                                true, // OPTIONAL VALUE. True by default.
+                            pageTransitionAnimation:
+                                PageTransitionAnimation.cupertino,
+                          );
+                        },
+                      ),
                     ),
-                  ));
+                  );
               }
 
               return Container(
@@ -790,16 +760,9 @@ class _HomeScreenState extends State<HomeScreen> {
                                                                     deliveryDate =
                                                                         element[
                                                                             'DeliveryDate'];
-                                                                    print(
-                                                                        'deliveryDate:${element['DeliveryDate']}');
-
-                                                                    // print(
-                                                                    //     status);
                                                                   }
                                                                 });
                                                               });
-                                                              // print(status);
-                                                              // print(orderID);
                                                               DateTime
                                                                   myDateTime =
                                                                   await deliveryDate
@@ -929,7 +892,6 @@ class _HomeScreenState extends State<HomeScreen> {
 //                      resultCardAlignment: Alignment.bottomCenter,
 //                       desiredAccuracy: LocationAccuracy.best,
                                   );
-                                  // print("result = $result");
 
                                   if (result != null) {
                                     setState(() {
@@ -942,9 +904,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                     location.address)));
                                   }
 
-                                  await setState(() {
-                                    // print(minOrderValue);
-                                  });
+                                  await setState(() {});
 //                                  _locationDialog(context);
 //                                   showPlacePicker();
 //                                   Navigator.push(context, MaterialPageRoute(
@@ -1059,9 +1019,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           },
                         ).toList(),
                         onPageChanged: (index) {
-                          setState(() {
-//                                    print('change');
-                          });
+                          setState(() {});
                         },
                         viewportFraction: 1.0,
                         aspectRatio: (MediaQuery.of(context).size.width / 18) /
@@ -1284,8 +1242,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               if (snap.data.documents[i]['sCat'] == 'Food')
                                 categories.add(InkWell(
                                   onTap: () {
-//                                    print(
-//                                        '---------==========${snap.data.documents[i]['imageURL']}');
                                     pushNewScreen(
                                       context,
                                       screen: CategoryDetailScreen(
@@ -1438,8 +1394,7 @@ class _HomeScreenState extends State<HomeScreen> {
 //                                   gradient: gradients[i],
 //                                   category: snap.data.documents[i]['catName'],
 //                                   onTap: () {
-// //                                    print(
-// //                                        '---------==========${snap.data.documents[i]['imageURL']}');
+
 //                                     pushNewScreen(
 //                                       context,
 //                                       screen: CategoryDetailScreen(
@@ -1558,8 +1513,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                         'Grocery')
                                       categoriesGrocery.add(InkWell(
                                         onTap: () {
-//                                    print(
-//                                        '---------==========${snap.data.documents[i]['imageURL']}');
                                           pushNewScreen(
                                             context,
                                             screen: CategoryDetailScreen(
@@ -1711,16 +1664,13 @@ class _HomeScreenState extends State<HomeScreen> {
     _currentPosition = await loc.getLocation();
 //    Position position = await geolocator.getCurrentPosition(
 //        desiredAccuracy: LocationAccuracy.high);
-//    print(position);
 //    geolocator
 //        .getCurrentPosition(desiredAccuracy: LocationAccuracy.best)
 //        .then((Position position) {
 //      setState(() {
 //        _currentPosition = position;
 //      });
-    print(_currentPosition);
     _getAddressFromLatLng();
-    print(_currentPosition);
   }
 
   _getAddressFromLatLng() async {
@@ -1732,7 +1682,6 @@ class _HomeScreenState extends State<HomeScreen> {
 //      ${place.subLocality},
       setState(() {
         currentAddress = "${place.locality}, ${place.administrativeArea}";
-        print(currentAddress);
         location = LocationResult(address: currentAddress);
         pass.text = currentAddress;
       });
@@ -1913,7 +1862,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         AsyncSnapshot<QuerySnapshot> snap) {
                       if (snap.hasData && !snap.hasError && snap.data != null) {
                         timeSlots.clear();
-                        print(snap.data.documents[0].data['Timeslots']);
                         for (int i = 0;
                             i < snap.data.documents[0].data['Timeslots'].length;
                             i++) {
@@ -1969,8 +1917,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 snap.data.documents[0].data['Timeslots'][i]);
                           }
                         }
-                        print(
-                            'DIff ${selectedDate.difference(DateTime.now()).inDays}');
+
                         if (selectedDate.difference(DateTime.now()).inDays >=
                             1) {
                           timeSlots.clear();
@@ -2091,7 +2038,6 @@ class _HomeScreenState extends State<HomeScreen> {
   //     location = result.formattedAddress;
   //   });
   //   // Handle the result in your way
-  //   print(location);
   // }
 
   Widget bill() {
@@ -2223,7 +2169,6 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         id1 = id;
         str = '';
-        // print('===============${value.data}');
         if (value.data != null) {
           for (int it = 0; it < value['Items'].length; it++) {
             it != value['Items'].length - 1

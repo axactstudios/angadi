@@ -228,6 +228,15 @@ class _CheckoutState extends State<Checkout> {
                   value.documents[i]['zone']);
               savedarea.add(emi2);
             }
+            else{
+              EmiratesArea emi2 = EmiratesArea(
+                  value.documents[i]['Emirate'],
+                  value.documents[i]['deliveryCharge'],
+                  value.documents[i]['minOrderPrice'],
+                  value.documents[i]['name'],
+                  value.documents[i]['zone']);
+              savedarea.add(emi2);
+            }
           }
         }
       }
@@ -1904,6 +1913,23 @@ class _CheckoutState extends State<Checkout> {
                                                         ['minOrderPrice'],
                                                         ' ${ snap.data.documents[i]
                                                         ['name']}',
+                                                        snap.data.documents[i]
+                                                        ['zone']);
+                                                    allareas.add(emi2);
+                                                  }
+                                                  else{
+                                                    areaname.add(' ${snap
+                                                        .data.documents[i]['name']}');
+
+                                                    EmiratesArea emi2 = EmiratesArea(
+                                                        snap.data.documents[i]
+                                                        ['Emirate'],
+                                                        snap.data.documents[i]
+                                                        ['deliveryCharge'],
+                                                        snap.data.documents[i]
+                                                        ['minOrderPrice'],
+                                                         snap.data.documents[i]
+                                                        ['name'],
                                                         snap.data.documents[i]
                                                         ['zone']);
                                                     allareas.add(emi2);
