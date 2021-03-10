@@ -1520,26 +1520,23 @@ class _CheckoutState extends State<Checkout> {
                                                         snap.data.documents[i]
                                                             ['zone']);
                                                     allareas.add(emi2);
-                                                  }
-//                                                     else{
-//                                                       areaname.add('${snap
-//                                                           .data.documents[i]['name']}');
-//
-//                                                       EmiratesArea emi2 = EmiratesArea(
-//                                                           snap.data.documents[i]
-//                                                           ['Emirate'],
-//                                                           snap.data.documents[i]
-//                                                           ['deliveryCharge'],
-//                                                           snap.data.documents[i]
-//                                                           ['minOrderPrice'],
-//                                                           '${ snap.data.documents[i]
-//                                                           ['name']}',
-//                                                           snap.data.documents[i]
-//                                                           ['zone']);
-//                                                       allareas.add(emi2);
-//
-//                                                     }
+                                                  } else {
+                                                    areaname.add(
+                                                        ' ${snap.data.documents[i]['name']}');
 
+                                                    EmiratesArea emi2 = EmiratesArea(
+                                                        snap.data.documents[i]
+                                                            ['Emirate'],
+                                                        snap.data.documents[i]
+                                                            ['deliveryCharge'],
+                                                        snap.data.documents[i]
+                                                            ['minOrderPrice'],
+                                                        snap.data.documents[i]
+                                                            ['name'],
+                                                        snap.data.documents[i]
+                                                            ['zone']);
+                                                    allareas.add(emi2);
+                                                  }
                                                 }
                                               }
                                             }
