@@ -53,7 +53,7 @@ class Checkout extends StatefulWidget {
 
 class _CheckoutState extends State<Checkout> {
   final _formkey = GlobalKey<FormState>();
-  final _formkey2=GlobalKey<FormState>();
+  final _formkey2 = GlobalKey<FormState>();
   List<EmiratesArea> savedarea = [];
   bool val = true;
   GlobalKey key = new GlobalKey();
@@ -88,7 +88,7 @@ class _CheckoutState extends State<Checkout> {
   final additionalcontroller = TextEditingController();
   final hnoController = TextEditingController();
   final notesController = TextEditingController();
-  final PhoneNumber=TextEditingController();
+  final PhoneNumber = TextEditingController();
 
   final dbHelper = DatabaseHelper.instance;
 //  final dbRef = FirebaseDatabase.instance.reference();
@@ -200,48 +200,6 @@ class _CheckoutState extends State<Checkout> {
 
   void areas() async {
     await Firestore.instance
-        .collection('EmiratesArea')
-        .getDocuments()
-        .then((value) {
-      for (int i = 0; i < value.documents.length; i++) {
-        if(savedarea.length==0){
-          setState(() {
-            EmiratesArea emi2 = EmiratesArea(
-                value.documents[i]['Emirate'],
-                value.documents[i]['deliveryCharge'],
-                value.documents[i]['minOrderPrice'],
-                value.documents[i]['name'],
-                value.documents[i]['zone']);
-            savedarea.add(emi2);
-          });
-        }
-        if(savedarea.length>0){
-          for(int j=0;j<savedarea.length;j++){
-            if(savedarea[j].name==value.documents[i]['name']){
-
-
-              EmiratesArea emi2 = EmiratesArea(
-                  value.documents[i]['Emirate'],
-                  value.documents[i]['deliveryCharge'],
-                  value.documents[i]['minOrderPrice'],
-                  ' ${value.documents[i]['name']}',
-                  value.documents[i]['zone']);
-              savedarea.add(emi2);
-            }
-            else{
-              EmiratesArea emi2 = EmiratesArea(
-                  value.documents[i]['Emirate'],
-                  value.documents[i]['deliveryCharge'],
-                  value.documents[i]['minOrderPrice'],
-                  value.documents[i]['name'],
-                  value.documents[i]['zone']);
-              savedarea.add(emi2);
-            }
-          }
-        }
-      }
-    });
-    await Firestore.instance
         .collection('Emirates')
         .getDocuments()
         .then((value) {
@@ -255,28 +213,64 @@ class _CheckoutState extends State<Checkout> {
         savedemirate.add(emi);
       }
     });
-    emirate=savedemirate[0].name;
-    if(savedarea.length>0){
-        for(int k=0;k<savedarea.length;k++){
-          if(emirate==savedarea[k].name){
-            area=savedarea[k].name;
-            deliveryCharge=double.parse(savedarea[k].deliveryCharge);
-            minOrderPrice=double.parse(savedarea[k].minOrderPrice);
-            break;
-          }
-          else{
-            setState(() {
-              area='Others';
-            });
-
-            deliveryCharge=double.parse(savedemirate[0].deliverycharge);
-            minOrderPrice=double.parse(savedemirate[0].minorderprice);
+    emirate = savedemirate[0].name;
+    await Firestore.instance
+        .collection('EmiratesArea')
+        .where('Emirate', isEqualTo: emirate)
+        .getDocuments()
+        .then((value) {
+      for (int i = 0; i < value.documents.length; i++) {
+        if (savedarea.length == 0) {
+          setState(() {
+            EmiratesArea emi2 = EmiratesArea(
+                value.documents[i]['Emirate'],
+                value.documents[i]['deliveryCharge'],
+                value.documents[i]['minOrderPrice'],
+                value.documents[i]['name'],
+                value.documents[i]['zone']);
+            savedarea.add(emi2);
+          });
+        }
+        if (savedarea.length > 0) {
+          for (int j = 0; j < savedarea.length; j++) {
+            if (savedarea[j].name == value.documents[i]['name']) {
+              EmiratesArea emi2 = EmiratesArea(
+                  value.documents[i]['Emirate'],
+                  value.documents[i]['deliveryCharge'],
+                  value.documents[i]['minOrderPrice'],
+                  ' ${value.documents[i]['name']}',
+                  value.documents[i]['zone']);
+              savedarea.add(emi2);
+            } else {
+              EmiratesArea emi2 = EmiratesArea(
+                  value.documents[i]['Emirate'],
+                  value.documents[i]['deliveryCharge'],
+                  value.documents[i]['minOrderPrice'],
+                  value.documents[i]['name'],
+                  value.documents[i]['zone']);
+              savedarea.add(emi2);
+            }
           }
         }
+      }
+    });
+    if (savedarea.length > 0) {
+      for (int k = 0; k < savedarea.length; k++) {
+        if (emirate == savedarea[k].name) {
+          area = savedarea[k].name;
+          deliveryCharge = double.parse(savedarea[k].deliveryCharge);
+          minOrderPrice = double.parse(savedarea[k].minOrderPrice);
+          break;
+        } else {
+          setState(() {
+            area = 'Others';
+          });
 
+          deliveryCharge = double.parse(savedemirate[0].deliverycharge);
+          minOrderPrice = double.parse(savedemirate[0].minorderprice);
+        }
+      }
     }
-
-
   }
 
   List<String> timeSlots = [];
@@ -854,7 +848,6 @@ class _CheckoutState extends State<Checkout> {
     }
   }
 
-
   Future<bool> onPressed() {
     print('pressed');
     Checksuccess();
@@ -904,7 +897,8 @@ class _CheckoutState extends State<Checkout> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone: '+971 50 7175405', message: whatsappMessage);
+                  launchWhatsApp(
+                      phone: '+971 50 7175405', message: whatsappMessage);
                 },
                 child: Container(
                     alignment: Alignment.center,
@@ -1412,26 +1406,50 @@ class _CheckoutState extends State<Checkout> {
                                                                 emirate2 =
                                                                     newValue;
                                                                 print(emirate);
-                                                                if(savedarea.length>0){
-                                                                  for(int i=0;i<savedarea.length;i++){
-                                                                    if(savedarea[i].Emirate==emirate){
-                                                                      deliveryCharge=double.parse(savedarea[i].deliveryCharge);
-                                                                      minOrderPrice=double.parse(savedarea[i].minOrderPrice);
-                                                                      area=savedarea[i].name;
+                                                                if (savedarea
+                                                                        .length >
+                                                                    0) {
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          savedarea
+                                                                              .length;
+                                                                      i++) {
+                                                                    if (savedarea[i]
+                                                                            .Emirate ==
+                                                                        emirate) {
+                                                                      deliveryCharge =
+                                                                          double.parse(
+                                                                              savedarea[i].deliveryCharge);
+                                                                      minOrderPrice =
+                                                                          double.parse(
+                                                                              savedarea[i].minOrderPrice);
+                                                                      area = savedarea[
+                                                                              i]
+                                                                          .name;
                                                                     }
-
+                                                                  }
+                                                                } else {
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          savedemirate
+                                                                              .length;
+                                                                      i++) {
+                                                                    if (savedemirate[i]
+                                                                            .name ==
+                                                                        emirate) {
+                                                                      deliveryCharge =
+                                                                          double.parse(
+                                                                              savedemirate[i].deliverycharge);
+                                                                      minOrderPrice =
+                                                                          double.parse(
+                                                                              savedarea[i].minOrderPrice);
+                                                                      area =
+                                                                          'Others';
+                                                                    }
                                                                   }
                                                                 }
-                                                                else{
-                                                                  for(int i =0;i<savedemirate.length;i++){
-                                                                    if(savedemirate[i].name==emirate){
-                                                                      deliveryCharge=double.parse(savedemirate[i].deliverycharge);
-                                                                      minOrderPrice=double.parse(savedarea[i].minOrderPrice);
-                                                                      area='Others';
-                                                                    }
-                                                                  }
-                                                                }
-
 
 //                      Navigator.pop(context);
                                                               });
@@ -1463,42 +1481,46 @@ class _CheckoutState extends State<Checkout> {
                                                 i < snap.data.documents.length;
                                                 i++) {
                                               print(snap.data.documents.length);
-                                                 if(allareas.length==0){
-                                                   areaname.add(snap
-                                                       .data.documents[i]['name']);
+                                              if (allareas.length == 0) {
+                                                areaname.add(snap
+                                                    .data.documents[i]['name']);
 
-                                                   EmiratesArea emi2 = EmiratesArea(
-                                                       snap.data.documents[i]
-                                                       ['Emirate'],
-                                                       snap.data.documents[i]
-                                                       ['deliveryCharge'],
-                                                       snap.data.documents[i]
-                                                       ['minOrderPrice'],
-                                                       snap.data.documents[i]
-                                                       ['name'],
-                                                       snap.data.documents[i]
-                                                       ['zone']);
-                                                   allareas.add(emi2);
-                                                 }
-                                                 if(allareas.length>0){
-                                                   for(int j=0;j<areaname.length;j++){
-                                                     if(areaname[j]==snap.data.documents[i]['name']){
-                                                       areaname.add(' ${snap
-                                                           .data.documents[i]['name']}');
+                                                EmiratesArea emi2 =
+                                                    EmiratesArea(
+                                                        snap.data.documents[i]
+                                                            ['Emirate'],
+                                                        snap.data.documents[i]
+                                                            ['deliveryCharge'],
+                                                        snap.data.documents[i]
+                                                            ['minOrderPrice'],
+                                                        snap.data.documents[i]
+                                                            ['name'],
+                                                        snap.data.documents[i]
+                                                            ['zone']);
+                                                allareas.add(emi2);
+                                              }
+                                              if (allareas.length > 0) {
+                                                for (int j = 0;
+                                                    j < areaname.length;
+                                                    j++) {
+                                                  if (areaname[j] ==
+                                                      snap.data.documents[i]
+                                                          ['name']) {
+                                                    areaname.add(
+                                                        ' ${snap.data.documents[i]['name']}');
 
-                                                       EmiratesArea emi2 = EmiratesArea(
-                                                           snap.data.documents[i]
-                                                           ['Emirate'],
-                                                           snap.data.documents[i]
-                                                           ['deliveryCharge'],
-                                                           snap.data.documents[i]
-                                                           ['minOrderPrice'],
-                                                          ' ${ snap.data.documents[i]
-                                                           ['name']}',
-                                                           snap.data.documents[i]
-                                                           ['zone']);
-                                                       allareas.add(emi2);
-                                                     }
+                                                    EmiratesArea emi2 = EmiratesArea(
+                                                        snap.data.documents[i]
+                                                            ['Emirate'],
+                                                        snap.data.documents[i]
+                                                            ['deliveryCharge'],
+                                                        snap.data.documents[i]
+                                                            ['minOrderPrice'],
+                                                        ' ${snap.data.documents[i]['name']}',
+                                                        snap.data.documents[i]
+                                                            ['zone']);
+                                                    allareas.add(emi2);
+                                                  }
 //                                                     else{
 //                                                       areaname.add('${snap
 //                                                           .data.documents[i]['name']}');
@@ -1518,9 +1540,8 @@ class _CheckoutState extends State<Checkout> {
 //
 //                                                     }
 
-                                                   }
-                                                 }
-
+                                                }
+                                              }
                                             }
                                             areaname.add('Others');
                                             return areaname.length != 0
@@ -1831,22 +1852,47 @@ class _CheckoutState extends State<Checkout> {
                                                                 emirate2 =
                                                                     newValue;
                                                                 print(emirate);
-                                                                if(savedarea.length>0){
-                                                                  for(int i=0;i<savedarea.length;i++){
-                                                                    if(savedarea[i].Emirate==emirate){
-                                                                      deliveryCharge=double.parse(savedarea[i].deliveryCharge);
-                                                                      minOrderPrice=double.parse(savedarea[i].minOrderPrice);
-                                                                      area=savedarea[i].name;
+                                                                if (savedarea
+                                                                        .length >
+                                                                    0) {
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          savedarea
+                                                                              .length;
+                                                                      i++) {
+                                                                    if (savedarea[i]
+                                                                            .Emirate ==
+                                                                        emirate) {
+                                                                      deliveryCharge =
+                                                                          double.parse(
+                                                                              savedarea[i].deliveryCharge);
+                                                                      minOrderPrice =
+                                                                          double.parse(
+                                                                              savedarea[i].minOrderPrice);
+                                                                      area = savedarea[
+                                                                              i]
+                                                                          .name;
                                                                     }
-
                                                                   }
-                                                                }
-                                                                else{
-                                                                  for(int i =0;i<savedemirate.length;i++){
-                                                                    if(savedemirate[i].name==emirate){
-                                                                      deliveryCharge=double.parse(savedemirate[i].deliverycharge);
-                                                                      minOrderPrice=double.parse(savedarea[i].minOrderPrice);
-                                                                      area='Others';
+                                                                } else {
+                                                                  for (int i =
+                                                                          0;
+                                                                      i <
+                                                                          savedemirate
+                                                                              .length;
+                                                                      i++) {
+                                                                    if (savedemirate[i]
+                                                                            .name ==
+                                                                        emirate) {
+                                                                      deliveryCharge =
+                                                                          double.parse(
+                                                                              savedemirate[i].deliverycharge);
+                                                                      minOrderPrice =
+                                                                          double.parse(
+                                                                              savedarea[i].minOrderPrice);
+                                                                      area =
+                                                                          'Others';
                                                                     }
                                                                   }
                                                                 }
@@ -1878,66 +1924,67 @@ class _CheckoutState extends State<Checkout> {
                                             allareas.clear();
                                             areaname.clear();
                                             for (int i = 0;
-                                            i < snap.data.documents.length;
-                                            i++) {
+                                                i < snap.data.documents.length;
+                                                i++) {
                                               print(snap.data.documents.length);
-                                              if(allareas.length==0){
+                                              if (allareas.length == 0) {
                                                 areaname.add(snap
                                                     .data.documents[i]['name']);
 
-                                                EmiratesArea emi2 = EmiratesArea(
-                                                    snap.data.documents[i]
-                                                    ['Emirate'],
-                                                    snap.data.documents[i]
-                                                    ['deliveryCharge'],
-                                                    snap.data.documents[i]
-                                                    ['minOrderPrice'],
-                                                    snap.data.documents[i]
-                                                    ['name'],
-                                                    snap.data.documents[i]
-                                                    ['zone']);
+                                                EmiratesArea emi2 =
+                                                    EmiratesArea(
+                                                        snap.data.documents[i]
+                                                            ['Emirate'],
+                                                        snap.data.documents[i]
+                                                            ['deliveryCharge'],
+                                                        snap.data.documents[i]
+                                                            ['minOrderPrice'],
+                                                        snap.data.documents[i]
+                                                            ['name'],
+                                                        snap.data.documents[i]
+                                                            ['zone']);
                                                 allareas.add(emi2);
                                               }
-                                              if(allareas.length>0){
-                                                for(int j=0;j<areaname.length;j++){
-                                                  if(areaname[j]==snap.data.documents[i]['name']){
-                                                    areaname.add(' ${snap
-                                                        .data.documents[i]['name']}');
+                                              if (allareas.length > 0) {
+                                                for (int j = 0;
+                                                    j < areaname.length;
+                                                    j++) {
+                                                  if (areaname[j] ==
+                                                      snap.data.documents[i]
+                                                          ['name']) {
+                                                    areaname.add(
+                                                        ' ${snap.data.documents[i]['name']}');
 
                                                     EmiratesArea emi2 = EmiratesArea(
                                                         snap.data.documents[i]
-                                                        ['Emirate'],
+                                                            ['Emirate'],
                                                         snap.data.documents[i]
-                                                        ['deliveryCharge'],
+                                                            ['deliveryCharge'],
                                                         snap.data.documents[i]
-                                                        ['minOrderPrice'],
-                                                        ' ${ snap.data.documents[i]
-                                                        ['name']}',
+                                                            ['minOrderPrice'],
+                                                        ' ${snap.data.documents[i]['name']}',
                                                         snap.data.documents[i]
-                                                        ['zone']);
+                                                            ['zone']);
                                                     allareas.add(emi2);
-                                                  }
-                                                  else{
-                                                    areaname.add(' ${snap
-                                                        .data.documents[i]['name']}');
+                                                  } else {
+                                                    areaname.add(
+                                                        ' ${snap.data.documents[i]['name']}');
 
                                                     EmiratesArea emi2 = EmiratesArea(
                                                         snap.data.documents[i]
-                                                        ['Emirate'],
+                                                            ['Emirate'],
                                                         snap.data.documents[i]
-                                                        ['deliveryCharge'],
+                                                            ['deliveryCharge'],
                                                         snap.data.documents[i]
-                                                        ['minOrderPrice'],
-                                                         snap.data.documents[i]
-                                                        ['name'],
+                                                            ['minOrderPrice'],
                                                         snap.data.documents[i]
-                                                        ['zone']);
+                                                            ['name'],
+                                                        snap.data.documents[i]
+                                                            ['zone']);
                                                     allareas.add(emi2);
                                                   }
                                                 }
                                               }
-
-
                                             }
                                             areaname.add('Others');
                                             return areaname.length != 0
@@ -2180,7 +2227,7 @@ class _CheckoutState extends State<Checkout> {
                       )
                     : Container(),
                 Form(
-                  key:_formkey2,
+                  key: _formkey2,
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: TextFormField(
@@ -2191,23 +2238,16 @@ class _CheckoutState extends State<Checkout> {
                       },
                       decoration: InputDecoration(
                           border: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(2),
-                              borderSide: BorderSide(
-                                  color: Colors.grey)),
+                              borderRadius: BorderRadius.circular(2),
+                              borderSide: BorderSide(color: Colors.grey)),
                           enabledBorder: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(2),
-                              borderSide: BorderSide(
-                                  color: Colors.grey)),
+                              borderRadius: BorderRadius.circular(2),
+                              borderSide: BorderSide(color: Colors.grey)),
                           focusedBorder: OutlineInputBorder(
-                              borderRadius:
-                              BorderRadius.circular(2),
-                              borderSide: BorderSide(
-                                  color: Color(0xFF6b3600))),
-                          hintText:
-                          'Phone Number *'),
-                      controller:PhoneNumber,
+                              borderRadius: BorderRadius.circular(2),
+                              borderSide: BorderSide(color: Color(0xFF6b3600))),
+                          hintText: 'Phone Number *'),
+                      controller: PhoneNumber,
                     ),
                   ),
                 ),
@@ -2562,21 +2602,21 @@ class _CheckoutState extends State<Checkout> {
                                       var total = 0.0;
                                       discount != null
                                           ? total = ((totalAmount() * 0.18) +
-                                          totalAmount() -
-                                          (totalAmount() *
-                                              (double.parse(discount.discount) /
-                                                  100)) +
-                                          deliveryCharge)
+                                              totalAmount() -
+                                              (totalAmount() *
+                                                  (double.parse(
+                                                          discount.discount) /
+                                                      100)) +
+                                              deliveryCharge)
                                           : total = ((totalAmount() * 0.18) +
-                                          totalAmount() +
-                                          deliveryCharge);
+                                              totalAmount() +
+                                              deliveryCharge);
                                       if (total > minOrderPrice) {
                                         showAlertDialog(context);
                                       } else {
                                         Fluttertoast.showToast(
                                             msg:
-                                            'The minimum order price is :${minOrderPrice
-                                                .toString()}',
+                                                'The minimum order price is :${minOrderPrice.toString()}',
                                             toastLength: Toast.LENGTH_SHORT);
                                       }
                                     }
@@ -2599,10 +2639,10 @@ class _CheckoutState extends State<Checkout> {
 //                                          'Your order amount is less \n than the minimum order price',
 //                                      toastLength: Toast.LENGTH_SHORT);
 //                                }
-                                  }
-                                  else {
+                                  } else {
                                     Fluttertoast.showToast(
-                                        msg: 'Please enter the details correctly',
+                                        msg:
+                                            'Please enter the details correctly',
                                         toastLength: Toast.LENGTH_SHORT);
                                   }
                                 }
@@ -2610,7 +2650,8 @@ class _CheckoutState extends State<Checkout> {
 //
 
                               if (widget.address == '') {
-                                if (_formkey.currentState.validate()&&_formkey2.currentState.validate()) {
+                                if (_formkey.currentState.validate() &&
+                                    _formkey2.currentState.validate()) {
 //                                    if (widget.SavedArea != '') {
 //                                      for (int i = 0; i <
 //                                          allareas.length; i++) {
@@ -2686,7 +2727,7 @@ class _CheckoutState extends State<Checkout> {
                             : 'Go to my orders',
                         onTap: () {
                           if (widget.SavedArea != '') {
-                            if(_formkey2.currentState.validate()){
+                            if (_formkey2.currentState.validate()) {
                               //    for (int i = 0; i < savedarea.length; i++) {
 //    if (widget.SavedArea ==
 //    savedarea[i].name) {
@@ -2711,50 +2752,50 @@ class _CheckoutState extends State<Checkout> {
                                 var total = 0.0;
                                 discount != null
                                     ? total = ((totalAmount() * 0.18) +
-                                    totalAmount() -
-                                    (totalAmount() *
-                                        (double.parse(discount.discount) /
-                                            100)) +
-                                    deliveryCharge)
+                                        totalAmount() -
+                                        (totalAmount() *
+                                            (double.parse(discount.discount) /
+                                                100)) +
+                                        deliveryCharge)
                                     : total = ((totalAmount() * 0.18) +
-                                    totalAmount() +
-                                    deliveryCharge);
+                                        totalAmount() +
+                                        deliveryCharge);
                                 if (total > minOrderPrice) {
                                   _result != '833' && j != 1 && val
                                       ? onlineorder(
-                                      (discount != null)
-                                          ? ((totalAmount() * 0.18) +
-                                          totalAmount() -
-                                          (totalAmount() *
-                                              (double.parse(discount
-                                                  .discount) /
-                                                  100)) +
-                                          deliveryCharge)
-                                          .toStringAsFixed(2)
-                                          : ((totalAmount() * 0.18) +
-                                          totalAmount() +
-                                          deliveryCharge)
-                                          .toString(),
-                                      type,
-                                      orderid)
+                                          (discount != null)
+                                              ? ((totalAmount() * 0.18) +
+                                                      totalAmount() -
+                                                      (totalAmount() *
+                                                          (double.parse(discount
+                                                                  .discount) /
+                                                              100)) +
+                                                      deliveryCharge)
+                                                  .toStringAsFixed(2)
+                                              : ((totalAmount() * 0.18) +
+                                                      totalAmount() +
+                                                      deliveryCharge)
+                                                  .toString(),
+                                          type,
+                                          orderid)
                                       : Checksuccess();
                                 } else {
                                   Fluttertoast.showToast(
                                       msg:
-                                      'The minimum order price is :${minOrderPrice.toString()}',
+                                          'The minimum order price is :${minOrderPrice.toString()}',
                                       toastLength: Toast.LENGTH_SHORT);
                                 }
                               }
-                            }else{
+                            } else {
                               Fluttertoast.showToast(
                                   msg: 'Please enter the details correctly',
                                   toastLength: Toast.LENGTH_SHORT);
                             }
-                            }
-
+                          }
 
                           if (widget.address == '') {
-                            if (_formkey.currentState.validate()&&_formkey2.currentState.validate()) {
+                            if (_formkey.currentState.validate() &&
+                                _formkey2.currentState.validate()) {
 //                    if (widget.SavedArea != '') {
 //                    for (int i = 0; i <
 //                    allareas.length; i++) {
@@ -2865,39 +2906,38 @@ class _CheckoutState extends State<Checkout> {
   var docID;
   var dd;
   var id;
-  void set(String title)async{
+  void set(String title) async {
     await getUserDetails();
     print('title:${title}');
-    List titles=[];
+    List titles = [];
 //    titles.add(title);
-    List check=[];
- await  Firestore.instance.collection('Users').document(user.uid).get().then((value) {
-    Map map=value.data;
-    check=map['couponUsed'];
-    for(int i=0;i<check.length;i++){
-      titles.add(check[i]);
-    }
+    List check = [];
+    await Firestore.instance
+        .collection('Users')
+        .document(user.uid)
+        .get()
+        .then((value) {
+      Map map = value.data;
+      check = map['couponUsed'];
+      for (int i = 0; i < check.length; i++) {
+        titles.add(check[i]);
+      }
 
-    print('checkkkkkkkkkkkkkkkkkkkk${check.length}');
+      print('checkkkkkkkkkkkkkkkkkkkk${check.length}');
 
-    titles.add(title);
-    print('========================${titles}');
-    Firestore.instance.collection('Users').document(user.uid).updateData({
-      'couponUsed':titles,
+      titles.add(title);
+      print('========================${titles}');
+      Firestore.instance.collection('Users').document(user.uid).updateData({
+        'couponUsed': titles,
+      });
     });
-  });
-
-  
   }
-
 
   placeOrder(orderType) async {
     var dis;
     var coupon;
-    (discount!=null)?
-      coupon=discount.title:coupon='';
+    (discount != null) ? coupon = discount.title : coupon = '';
     set(coupon);
-
 
 //    if(discount.discount==''&&discount.discount==null){
 //      dis='0.0';
@@ -2906,8 +2946,9 @@ class _CheckoutState extends State<Checkout> {
 //      dis=double.parse(discount.discount).toString();
 //    }
     discount != null
-        ? dis= ('${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}')
-        : dis=' 0';
+        ? dis =
+            ('${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}')
+        : dis = ' 0';
     print('----------------------');
     print(selectedDate);
     print(selectedDate.year);
@@ -2937,7 +2978,7 @@ class _CheckoutState extends State<Checkout> {
     List prices = [];
     List quantities = [];
     List productIDs = [];
-    List qtytags=[];
+    List qtytags = [];
     for (var v in cartItems) {
       print(v.productName);
       items.add(v.productName);
@@ -2959,14 +3000,13 @@ class _CheckoutState extends State<Checkout> {
             'Qty': quantities,
             'Type': orderType,
             'ProductIDs': productIDs,
-            'orderid':orderid,
+            'orderid': orderid,
             'UserID': user.uid,
-              'Quantity':qtytags,
-      'CouponUsed':coupon,
-            'phoneNumber':PhoneNumber.text,
-            'paymentMethod':'Cash On Delivery',
-            'discountPrice':dis,
-
+            'Quantity': qtytags,
+            'CouponUsed': coupon,
+            'phoneNumber': PhoneNumber.text,
+            'paymentMethod': 'Cash On Delivery',
+            'discountPrice': dis,
             'Address':
                 'Building :${buildingController.text} , Apartment :${flatcontroller.text} , Floor:${floorcontroller.text}, Additional Directions :${additionalcontroller.text}',
             'DeliveryDate': DateTime(
@@ -2996,13 +3036,13 @@ class _CheckoutState extends State<Checkout> {
                 'Qty': quantities,
                 'ProductIDs': productIDs,
                 'Type': orderType,
-      'Quantity':qtytags,
-      'CouponUsed':coupon,
+                'Quantity': qtytags,
+                'CouponUsed': coupon,
                 'UserID': user.uid,
-                 'orderid':orderid,
-      'phoneNumber':PhoneNumber.text,
-      'paymentMethod':'Cash On Delivery',
-      'discountPrice':dis,
+                'orderid': orderid,
+                'phoneNumber': PhoneNumber.text,
+                'paymentMethod': 'Cash On Delivery',
+                'discountPrice': dis,
                 'Address':
                     'Emirate:${emirate},Area:${area},${buildingController.text},Street:${flatcontroller.text},Additional Directions :${additionalcontroller.text}',
                 'DeliveryDate': DateTime(selectedDate.year, selectedDate.month,
@@ -3033,13 +3073,13 @@ class _CheckoutState extends State<Checkout> {
                     'Qty': quantities,
                     'ProductIDs': productIDs,
                     'Type': orderType,
-                    'orderid':orderid,
+                    'orderid': orderid,
                     'UserID': user.uid,
-      'Quantity':qtytags,
-      'CouponUsed':coupon,
-      'phoneNumber':PhoneNumber.text,
-      'paymentMethod':'Cash On Delivery',
-      'discountPrice':dis,
+                    'Quantity': qtytags,
+                    'CouponUsed': coupon,
+                    'phoneNumber': PhoneNumber.text,
+                    'paymentMethod': 'Cash On Delivery',
+                    'discountPrice': dis,
                     'Address':
                         'Emirate:${emirate},Area:${area},${buildingController.text},Additional Directions:${additionalcontroller.text}',
                     'DeliveryDate': DateTime(selectedDate.year,
@@ -3069,12 +3109,12 @@ class _CheckoutState extends State<Checkout> {
                         'Qty': quantities,
                         'Type': orderType,
                         'UserID': user.uid,
-      'Quantity':qtytags,
-      'CouponUsed':coupon,
-      'orderid':orderid,
-      'phoneNumber':PhoneNumber.text,
-      'paymentMethod':'Cash On Delivery',
-      'discountPrice':dis,
+                        'Quantity': qtytags,
+                        'CouponUsed': coupon,
+                        'orderid': orderid,
+                        'phoneNumber': PhoneNumber.text,
+                        'paymentMethod': 'Cash On Delivery',
+                        'discountPrice': dis,
                         'ProductIDs': productIDs,
                         'Address': widget.address,
                         'DeliveryDate': DateTime(selectedDate.year,
@@ -3103,14 +3143,14 @@ class _CheckoutState extends State<Checkout> {
                             'Price': prices,
                             'Qty': quantities,
                             'Type': orderType,
-                            'OrderID':orderid,
+                            'OrderID': orderid,
                             'ProductIDs': productIDs,
-      'CouponUsed':coupon,
+                            'CouponUsed': coupon,
                             'UserID': user.uid,
-                              'Quantity':qtytags,
-      'phoneNumber':phncontroller.text,
-      'paymentMethod':'Takeaway',
-      'discountPrice':dis,
+                            'Quantity': qtytags,
+                            'phoneNumber': phncontroller.text,
+                            'paymentMethod': 'Takeaway',
+                            'discountPrice': dis,
                             'isPaid': false,
                             // 'Status':'${DateTime.now().year}-${DateTime.now().month}-${DateTime.now().day}',
                             'TimeStamp': Timestamp.now(),
@@ -3133,13 +3173,13 @@ class _CheckoutState extends State<Checkout> {
                             'Type': orderType,
                             'ProductIDs': productIDs,
                             'UserID': user.uid,
-                            'orderid':orderid,
-      'Quantity':qtytags,
-      'CouponUsed':coupon,
+                            'orderid': orderid,
+                            'Quantity': qtytags,
+                            'CouponUsed': coupon,
                             'DeliveryDate': selectedDate,
-      'phoneNumber':PhoneNumber.text,
-      'paymentMethod':'Cash On Delivery',
-      'discountPrice':dis,
+                            'phoneNumber': PhoneNumber.text,
+                            'paymentMethod': 'Cash On Delivery',
+                            'discountPrice': dis,
                             'DeliveryTime': selectedTime,
                             'Address':
                                 '${hnoController.text},${addressController.text} ',
@@ -3543,7 +3583,7 @@ class _CheckoutState extends State<Checkout> {
   Future<String> Checksuccess() async {
     print('running check');
     var coupon;
-    (discount!=null)?coupon=discount.title:coupon='';
+    (discount != null) ? coupon = discount.title : coupon = '';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String onlineid = prefs.getString('Orderid');
     print('----------------------$onlineid');
@@ -3566,8 +3606,9 @@ class _CheckoutState extends State<Checkout> {
 //      dis=double.parse(discount.discount).toString();
 //    }
     discount != null
-        ? dis= ('${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}')
-        : dis=' 0';
+        ? dis =
+            ('${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}')
+        : dis = ' 0';
     dd = int.parse(s);
     if (selectedTime.contains('PM')) dd = dd + 12;
     print(
@@ -3577,7 +3618,7 @@ class _CheckoutState extends State<Checkout> {
     List items = [];
     List prices = [];
     List quantities = [];
-    List qtytags=[];
+    List qtytags = [];
     for (var v in cartItems) {
       print(v.productName);
       items.add(v.productName);
@@ -3613,12 +3654,12 @@ class _CheckoutState extends State<Checkout> {
                     'Qty': quantities,
                     'Type': 'Online order',
                     'UserID': user.uid,
-              'Quantity':qtytags,
-              'CouponUsed':coupon,
-              'orderid':orderid,
-              'phoneNumber':PhoneNumber.text,
-              'paymentMethod':'Online payment',
-              'discountPrice':dis,
+                    'Quantity': qtytags,
+                    'CouponUsed': coupon,
+                    'orderid': orderid,
+                    'phoneNumber': PhoneNumber.text,
+                    'paymentMethod': 'Online payment',
+                    'discountPrice': dis,
                     'Address':
                         'Emirate:${emirate},Area:${area},${buildingController.text},Additional Directions :${additionalcontroller.text}',
                     'DeliveryDate': DateTime(selectedDate.year,
@@ -3647,14 +3688,13 @@ class _CheckoutState extends State<Checkout> {
                     'Qty': quantities,
                     'Type': 'Online order',
                     'UserID': user.uid,
-              'Quantity':qtytags,
-              'CouponUsed':coupon,
+                    'Quantity': qtytags,
+                    'CouponUsed': coupon,
                     'Address': widget.address,
-              'orderid':orderid,
-              'phoneNumber':PhoneNumber.text,
-              'paymentMethod':'Online Payment',
-              'discountPrice':dis,
-
+                    'orderid': orderid,
+                    'phoneNumber': PhoneNumber.text,
+                    'paymentMethod': 'Online Payment',
+                    'discountPrice': dis,
                     'DeliveryDate': DateTime(selectedDate.year,
                         selectedDate.month, selectedDate.day, dd),
                     'DeliveryTime': selectedTime,
