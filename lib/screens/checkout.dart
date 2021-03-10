@@ -2756,12 +2756,30 @@ class _CheckoutState extends State<Checkout> {
   var docID;
   var dd;
   var id;
+  void set(String title)async{
+    List titles=[];
+//    titles.add(title);
+    List check=[];
+ await  Firestore.instance.collection('Users').document(user.uid).get().then((value) {
+    Map map=value.data;
+    check=map['couponUsed'];
+
+  });
+ titles.add(check);
+ titles.add(title);
+ await Firestore.instance.collection('Users').document(user.uid).updateData({
+   'couponUsed':titles,
+ });
+  
+  }
+
 
   placeOrder(orderType) async {
     var dis;
     var coupon;
     (discount!=null)?
       coupon=discount.title:coupon='';
+    set(coupon);
 
 
 //    if(discount.discount==''&&discount.discount==null){

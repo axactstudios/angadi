@@ -45,6 +45,7 @@ class _ApplyOffersState extends State<ApplyOffers> {
                     snap.data.documents[i]['discountPercentage'],
                     snap.data.documents[i]['categorySpecific'],
                     snap.data.documents[i]['forFirstUser']));
+
               }
 
               return Container(

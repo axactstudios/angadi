@@ -244,6 +244,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   _createUser(String email, String pw, context) {
+    List titles=[];
     password.text == cpassword.text
         ? _auth
             .createUserWithEmailAndPassword(email: email, password: pw)
@@ -264,6 +265,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               'id': user.uid,
               'mail': mail.text,
               'phone': phone.text,
+              'couponUsed':titles,
               'pUrl': url,
               'dTokens': dTokens,
             });

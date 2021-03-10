@@ -186,6 +186,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         }
         if (j == length) {
+          List<String>titles=[];
           Firestore.instance
               .collection('Users')
               .document(currentUser.uid)
@@ -194,6 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
             'id': currentUser.uid,
             'mail': googleSignIn.currentUser.email,
             'pUrl': googleSignIn.currentUser.photoUrl,
+            'couponUsed':titles,
             'role': 'user'
           });
         }
