@@ -198,55 +198,97 @@ class _CheckoutState extends State<Checkout> {
 //  }
   }
   List<EmiratesArea>getall=[];
-void alldata()async{
+void alldata(String newemirate)async {
   getall.clear();
-    await Firestore.instance.collection('EmiratesArea').snapshots().listen((event) {
+  print(newemirate);
+  await Firestore.instance.collection('EmiratesArea').where(
+      'Emirate', isEqualTo: newemirate).snapshots().listen((event) {
+    index = 0;
+    for (int i = 0;
+    i < event.documents.length;
+    i++) {
+      if(i==0){
+        areaname.add('${event.documents[i]['name']}');
+//                                                print('5555555555555${snap.data.documents[i]['name']}');
+        EmiratesArea emi2=EmiratesArea( event.documents[i]
+        ['Emirate'],
+            event.documents[i]
+            ['deliveryCharge'],
+            event.documents[i]
+            ['minOrderPrice'],
+            '${event.documents[i]['name']}',
+            event.documents[i]
+            ['zone']);
+        getall.add(emi2);
+        setState(() {
+          deliveryCharge = double.parse(getall[0].deliveryCharge);
+          minOrderPrice = double.parse(getall[0].minOrderPrice);
+        });
 
-        index=0;
-        for (int i = 0;
-        i < event.documents.length;
-        i++) {
-          print(event.documents.length);
-          for(int j=i+1;j<event.documents.length;j++){
-            if(event.documents[i]['name']==event.documents[j]['name']){
+      }
+      print(event.documents.length);
+      for (int j = i + 1; j < event.documents.length; j++) {
+        if (event.documents[i]['name'] == event.documents[j]['name']) {
 //              areaname.add(' ${event.documents[j]['name']}');
-              print('5555555555555${event.documents[j]['name']}');
-              print('Minorder${  event.documents[j]
-              ['minOrderPrice']}');
-              EmiratesArea emi2=EmiratesArea( event.documents[j]
-              ['Emirate'],
-                  event.documents[j]
-                  ['deliveryCharge'],
-                  event.documents[j]
-                  ['minOrderPrice'],
-                  ' ${event.documents[j]['name']}',
-                  event.documents[j]
-                  ['zone']);
-              getall.add(emi2);
+          print('5555555555555${event.documents[j]['name']}');
+          print('Minorder${ event.documents[j]
+          ['minOrderPrice']}');
+          EmiratesArea emi2 = EmiratesArea(event.documents[j]
+          ['Emirate'],
+              event.documents[j]
+              ['deliveryCharge'],
+              event.documents[j]
+              ['minOrderPrice'],
+              ' ${event.documents[j]['name']}',
+              event.documents[j]
+              ['zone']);
+          getall.add(emi2);
 //              print('length:${areaname.length}');
-              index=j;
-              print('Index:${index}');
-
-
-            }
-
-          }
-          if(i!=index){
+          index = j;
+          print('Index:${index}');
+        }
+      }
+      if (i != index) {
 //            areaname.add('${.documents[i]['name']}');
 //                                                print('5555555555555${snap.data.documents[i]['name']}');
-            EmiratesArea emi2=EmiratesArea( event.documents[i]
-            ['Emirate'],
-                event.documents[i]
-                ['deliveryCharge'],
-                event.documents[i]
-                ['minOrderPrice'],
-                '${event.documents[i]['name']}',
-                event.documents[i]
-                ['zone']);
-            getall.add(emi2);
-          }
+        EmiratesArea emi2 = EmiratesArea(event.documents[i]
+        ['Emirate'],
+            event.documents[i]
+            ['deliveryCharge'],
+            event.documents[i]
+            ['minOrderPrice'],
+            '${event.documents[i]['name']}',
+            event.documents[i]
+            ['zone']);
+        getall.add(emi2);
       }
-    });
+    }
+    if (getall.length > 0) {
+      deliveryCharge = double.parse(getall[0].deliveryCharge);
+      minOrderPrice = double.parse(getall[0].minOrderPrice);
+    }
+    else {
+      for (int i =
+      0;
+      i <
+          savedemirate
+              .length;
+      i++) {
+        if (savedemirate[i]
+            .name ==
+            newemirate) {
+          deliveryCharge =
+              double.parse(
+                  savedemirate[i].deliverycharge);
+          minOrderPrice =
+              double.parse(
+                  savedarea[i].minOrderPrice);
+          area =
+          'Others';
+        }
+      }
+    }
+  });
 }
   void areas() async {
     await Firestore.instance
@@ -634,7 +676,7 @@ void alldata()async{
     address();
     shared();
     areas();
-    alldata();
+//    alldata();
     val = true;
 
     print('---------------${orderid}');
@@ -1459,43 +1501,7 @@ int index=0;
                                                                 emirate2 =
                                                                     newValue;
                                                                 print(emirate);
-                                                                for(int i=0;i<getall.length;i++){
-                                                                  if(emirate==getall[i].Emirate){
-                                                                    deliveryCharge =
-                                                                        double.parse(
-                                                                            getall[i].deliveryCharge);
-                                                                    minOrderPrice =
-                                                                        double.parse(
-                                                                            getall[i].minOrderPrice);
-                                                                    area = getall[
-                                                                    i]
-
-                                                                        .name;
-
-                                                                    break;
-                                                                  }
-                                                                  else{
-                                                                    for (int i =
-                                                                    0;
-                                                                    i <
-                                                                        savedemirate
-                                                                            .length;
-                                                                    i++) {
-                                                                      if (savedemirate[i]
-                                                                          .name ==
-                                                                          emirate) {
-                                                                        deliveryCharge =
-                                                                            double.parse(
-                                                                                savedemirate[i].deliverycharge);
-                                                                        minOrderPrice =
-                                                                            double.parse(
-                                                                                savedarea[i].minOrderPrice);
-                                                                        area =
-                                                                        'Others';
-                                                                      }
-                                                                    }
-                                                                  }
-                                                                }
+                                                                alldata(emirate);
 
 //                      Navigator.pop(context);
                                                               });
@@ -1527,6 +1533,20 @@ int index=0;
                                             for (int i = 0;
                                                 i < snap.data.documents.length;
                                                 i++) {
+                                              if(i==0){
+                                                areaname.add('${snap.data.documents[i]['name']}');
+//                                                print('5555555555555${snap.data.documents[i]['name']}');
+                                                EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
+                                                ['Emirate'],
+                                                    snap.data.documents[i]
+                                                    ['deliveryCharge'],
+                                                    snap.data.documents[i]
+                                                    ['minOrderPrice'],
+                                                    '${snap.data.documents[i]['name']}',
+                                                    snap.data.documents[i]
+                                                    ['zone']);
+                                                allareas.add(emi2);
+                                              }
                                               print(snap.data.documents.length);
                                               for(int j=i+1;j<snap.data.documents.length;j++){
                                                 if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
@@ -1552,22 +1572,25 @@ int index=0;
                                                 }
 
                                               }
-                                              if(i!=index){
-                                                areaname.add('${snap.data.documents[i]['name']}');
-//                                                print('5555555555555${snap.data.documents[i]['name']}');
-                                                EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
-                                                ['Emirate'],
-                                                    snap.data.documents[i]
-                                                    ['deliveryCharge'],
-                                                    snap.data.documents[i]
-                                                    ['minOrderPrice'],
-                                                    '${snap.data.documents[i]['name']}',
-                                                    snap.data.documents[i]
-                                                    ['zone']);
-                                                allareas.add(emi2);
-                                              }
 
-                                            }
+                                               if(index!=i){
+                                                 areaname.add('${snap.data.documents[i]['name']}');
+//                                                print('5555555555555${snap.data.documents[i]['name']}');
+                                                 EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
+                                                 ['Emirate'],
+                                                     snap.data.documents[i]
+                                                     ['deliveryCharge'],
+                                                     snap.data.documents[i]
+                                                     ['minOrderPrice'],
+                                                     '${snap.data.documents[i]['name']}',
+                                                     snap.data.documents[i]
+                                                     ['zone']);
+                                                 allareas.add(emi2);
+                                               }
+                                               }
+
+
+
                                             areaname.add('Others');
                                             return areaname.length != 0
                                                 ? Column(
@@ -1879,51 +1902,7 @@ int index=0;
                                                                 emirate2 =
                                                                     newValue;
                                                                 print(emirate);
-                                                                if (savedarea
-                                                                        .length >
-                                                                    0) {
-                                                                  for (int i =
-                                                                          0;
-                                                                      i <
-                                                                          savedarea
-                                                                              .length;
-                                                                      i++) {
-                                                                    if (savedarea[i]
-                                                                            .Emirate ==
-                                                                        emirate) {
-                                                                      deliveryCharge =
-                                                                          double.parse(
-                                                                              savedarea[i].deliveryCharge);
-                                                                      minOrderPrice =
-                                                                          double.parse(
-                                                                              savedarea[i].minOrderPrice);
-                                                                      area = savedarea[
-                                                                              i]
-                                                                          .name;
-                                                                    }
-                                                                  }
-                                                                } else {
-                                                                  for (int i =
-                                                                          0;
-                                                                      i <
-                                                                          savedemirate
-                                                                              .length;
-                                                                      i++) {
-                                                                    if (savedemirate[i]
-                                                                            .name ==
-                                                                        emirate) {
-                                                                      deliveryCharge =
-                                                                          double.parse(
-                                                                              savedemirate[i].deliverycharge);
-                                                                      minOrderPrice =
-                                                                          double.parse(
-                                                                              savedarea[i].minOrderPrice);
-                                                                      area =
-                                                                          'Others';
-                                                                    }
-                                                                  }
-                                                                }
-
+                                                                alldata(emirate);
 //                      Navigator.pop(context);
                                                               });
                                                             },
@@ -1950,71 +1929,50 @@ int index=0;
                                               snap.data != null) {
                                             allareas.clear();
                                             areaname.clear();
+                                            index=0;
                                             for (int i = 0;
-                                                i < snap.data.documents.length;
-                                                i++) {
+                                            i < snap.data.documents.length;
+                                            i++) {
                                               print(snap.data.documents.length);
-                                              if (allareas.length == 0) {
-                                                areaname.add(snap
-                                                    .data.documents[i]['name']);
+                                              for(int j=i+1;j<snap.data.documents.length;j++){
+                                                if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
+                                                  areaname.add(' ${snap.data.documents[j]['name']}');
+                                                  print('5555555555555${snap.data.documents[j]['name']}');
+                                                  print('Minorder${  snap.data.documents[j]
+                                                  ['minOrderPrice']}');
+                                                  EmiratesArea emi2=EmiratesArea( snap.data.documents[j]
+                                                  ['Emirate'],
+                                                      snap.data.documents[j]
+                                                      ['deliveryCharge'],
+                                                      snap.data.documents[j]
+                                                      ['minOrderPrice'],
+                                                      ' ${snap.data.documents[j]['name']}',
+                                                      snap.data.documents[j]
+                                                      ['zone']);
+                                                  allareas.add(emi2);
+                                                  print('length:${areaname.length}');
+                                                  index=j;
+                                                  print('Index:${index}');
 
-                                                EmiratesArea emi2 =
-                                                    EmiratesArea(
-                                                        snap.data.documents[i]
-                                                            ['Emirate'],
-                                                        snap.data.documents[i]
-                                                            ['deliveryCharge'],
-                                                        snap.data.documents[i]
-                                                            ['minOrderPrice'],
-                                                        snap.data.documents[i]
-                                                            ['name'],
-                                                        snap.data.documents[i]
-                                                            ['zone']);
-                                                allareas.add(emi2);
-                                              }
-                                              if (allareas.length > 0) {
-                                                for (int j = 0;
-                                                    j < areaname.length;
-                                                    j++) {
-                                                  if (areaname[j] ==
-                                                      snap.data.documents[i]
-                                                          ['name']) {
-                                                    areaname.add(
-                                                        ' ${snap.data.documents[i]['name']}');
 
-                                                    EmiratesArea emi2 = EmiratesArea(
-                                                        snap.data.documents[i]
-                                                            ['Emirate'],
-                                                        snap.data.documents[i]
-                                                            ['deliveryCharge'],
-                                                        snap.data.documents[i]
-                                                            ['minOrderPrice'],
-                                                        ' ${snap.data.documents[i]['name']}',
-                                                        snap.data.documents[i]
-                                                            ['zone']);
-                                                    allareas.add(emi2);
-
-                                                    break;
-                                                  }
                                                 }
 
-                                                areaname.add(
-                                                    '${snap.data.documents[i]['name']}');
-
-                                                EmiratesArea emi2 = EmiratesArea(
-                                                    snap.data.documents[i]
-                                                    ['Emirate'],
+                                              }
+                                              if(i!=index){
+                                                areaname.add('${snap.data.documents[i]['name']}');
+//                                                print('5555555555555${snap.data.documents[i]['name']}');
+                                                EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
+                                                ['Emirate'],
                                                     snap.data.documents[i]
                                                     ['deliveryCharge'],
                                                     snap.data.documents[i]
                                                     ['minOrderPrice'],
-                                                    snap.data.documents[i]
-                                                    ['name'],
+                                                    '${snap.data.documents[i]['name']}',
                                                     snap.data.documents[i]
                                                     ['zone']);
                                                 allareas.add(emi2);
-
                                               }
+
                                             }
                                             areaname.add('Others');
                                             return areaname.length != 0
