@@ -2010,7 +2010,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .then((value) {
       setState(() {
         banner2Url = value['url'];
-        imageList.add(banner1Url);
+        imageList.add(banner2Url);
       });
     });
   }
