@@ -385,7 +385,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           InkWell(
               onTap: () {
-                launch('tel:+919027553376');
+                launch('tel:+971 50 7175406');
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -393,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
               onTap: () {
-                FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175405", "");
+                FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
                 // launchWhatsApp(phone: '7060222315', message: whatsappMessage);
               },
               child: Container(
@@ -1586,7 +1586,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 405,
+                      height: 440,
                       child: top.length != 0
                           ? GridView(
                               scrollDirection: Axis.horizontal,

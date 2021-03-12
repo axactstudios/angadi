@@ -88,24 +88,27 @@ class _ReviewRatingScreenState extends State<ReviewRatingScreen> {
                     for (int i = 0; i < snap.data.documents.length; i++) {
                       if (snap.data.documents[i]['dishName'] ==
                           widget.reviewRating.name) {
-                        reviews.add(ListTile(
-                          leading: Image.network(
-                              snap.data.documents[i]['userImage']),
-                          title: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: <Widget>[
-                              Text(
-                                snap.data.documents[i]['userName'],
-                                style: subHeadingTextStyle,
-                              ),
-                              Ratings(snap.data.documents[i]['rating']),
-                            ],
-                          ),
-                          contentPadding: EdgeInsets.symmetric(horizontal: 0),
+                        reviews.add(Padding(
+                          padding:  EdgeInsets.only(bottom:8.0),
+                          child: ListTile(
+                            leading: Image.network(
+                                snap.data.documents[i]['userImage']),
+                            title: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: <Widget>[
+                                Text(
+                                  snap.data.documents[i]['userName'],
+                                  style: subHeadingTextStyle,
+                                ),
+                                Ratings(snap.data.documents[i]['rating'].toString()),
+                              ],
+                            ),
+                            contentPadding: EdgeInsets.symmetric(horizontal: 0),
 //                          subtitle: Text(
 //                            snap.data.documents[i]['details'],
 //                            style: addressTextStyle,
 //                          ),
+                          ),
                         ));
                       }
                     }

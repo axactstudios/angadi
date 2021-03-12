@@ -620,6 +620,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           ind++) {
                         if (snap.data.documents[ind].documentID ==
                             snap.data.documents[i]['boughtTogether']) {
+                          print('999999999999999999${  snap.data.documents[i]['boughtTogether']}');
                           boughtTogether = await Dish(
                               boughtTogetherDiscount: snap.data.documents[ind]
                                   ['boughtTogetherDiscount'],
@@ -657,6 +658,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 price: snap.data.documents[i]['price'],
                                 allquantities: allquantities,
                                 quantities: quantities,
+                                stock: snap.data.documents[i]['stock']
                               ));
                     },
                     imagePath: snap.data.documents[i]['url'],
@@ -721,6 +723,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 price: snap.data.documents[i]['price'],
                                 allquantities: allquantities,
                                 quantities: quantities,
+                                stock: snap.data.documents[i]['stock']
                               ));
                     },
                     imagePath: snap.data.documents[i]['url'],
@@ -1044,7 +1047,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Text(
+                                              (prodisprice==proprice)? Text(
                                                 'AED. ${double.parse(prodisprice).toString()}',
                                                 textAlign: TextAlign.left,
                                                 style: Styles
@@ -1054,6 +1057,28 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                   // fontWeight: FontWeight.w600,
                                                   fontSize: 24,
                                                 ),
+                                              ):Row(
+                                                children: [
+                                                  Container(
+                                                    child: Text(
+                                                      'AED. ${(double.parse(prodisprice).toString())}  ',
+                                                      textAlign: TextAlign.left,
+                                                      style: Styles.customMediumTextStyle(
+                                                        color: AppColors.black,
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Container(
+                                                    child: Text(
+                                                        'AED. ${(double.parse(proprice).toString())}',
+                                                        textAlign: TextAlign.left,
+                                                        style: TextStyle(
+                                                            fontSize: 15,
+                                                            decoration:
+                                                            TextDecoration.lineThrough)),
+                                                  ),
+                                                ],
                                               ),
                                               Text(
                                                 '(${qtyTag})',
@@ -1225,8 +1250,31 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(item.quantity.toString()),
-                                            Text(
-                                                'AED. ${double.parse(item.price)}'),
+                                            (item.iPrice==item.price)?Text(
+                                                'AED. ${double.parse(item.price)}'):
+                                            Row(
+                                              children: [
+                                                Container(
+                                                  child: Text(
+                                                    'AED. ${(double.parse(item.price).toString())}  ',
+                                                    textAlign: TextAlign.left,
+                                                    style: Styles.customMediumTextStyle(
+                                                      color: AppColors.black,
+                                                      fontSize: 15,
+                                                    ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  child: Text(
+                                                      'AED. ${(double.parse(item.iPrice).toString())}',
+                                                      textAlign: TextAlign.left,
+                                                      style: TextStyle(
+                                                          fontSize: 15,
+                                                          decoration:
+                                                          TextDecoration.lineThrough)),
+                                                ),
+                                              ],
+                                            )
                                           ],
                                         ),
                                       ),
@@ -1396,7 +1444,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           //     ],
                           //   ),
                           // )
-                          widget.restaurantDetail.boughtTogether != null
+                          widget.restaurantDetail.boughtTogether != null&& widget.restaurantDetail.boughtTogether != ''
                               ? Container(
                                   height: 205,
                                   width: MediaQuery.of(context).size.width,
@@ -1448,11 +1496,11 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 ),
                                               ),
                                               SizedBox(height: 10.0),
-                                              Align(
+                                              (widget.restaurantDetail.boughtTogetherQuantity!=null&&widget.restaurantDetail.boughtTogetherQuantity!='')?Align(
                                                 alignment: Alignment.bottomLeft,
                                                 child: Container(
                                                   child: Text(
-                                                    " ${widget.restaurantDetail.name} (${widget.restaurantDetail.boughtTogetherQuantity})}",
+                                                    " ${widget.restaurantDetail.name} (${widget.restaurantDetail.boughtTogetherQuantity})",
                                                     maxLines: 2,
                                                     overflow:
                                                         TextOverflow.ellipsis,
@@ -1460,6 +1508,20 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                         .customNormalTextStyle(
                                                             color: Color(
                                                                 0xFF6b3600)),
+                                                  ),
+                                                ),
+                                              ):Align(
+                                                alignment: Alignment.bottomLeft,
+                                                child: Container(
+                                                  child: Text(
+                                                    "${widget.restaurantDetail.name}",
+                                                    maxLines: 2,
+                                                    overflow:
+                                                    TextOverflow.ellipsis,
+                                                    style: Styles
+                                                        .customNormalTextStyle(
+                                                        color: Color(
+                                                            0xFF6b3600)),
                                                   ),
                                                 ),
                                               ),
@@ -1532,7 +1594,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 ),
                                               ),
                                               SizedBox(height: 10.0),
-                                              Align(
+                                             Align(
                                                 alignment: Alignment.bottomLeft,
                                                 child: Container(
                                                   child: Text(
@@ -1589,7 +1651,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 spreadRadius: 0),
                                           ],
                                         ),
-                                        child: Column(
+                                        child: (widget.restaurantDetail.boughtTogether.boughtTogetherDiscount!=null&&widget.restaurantDetail.boughtTogetherDiscount!='')?Column(
                                           children: <Widget>[
                                             Spacer(),
                                             Container(
@@ -1619,7 +1681,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 textAlign: TextAlign.center,
                                               ),
                                             ),
-
                                             Spacer(),
                                             angadiButton(
                                               'Add',
@@ -1663,6 +1724,102 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                         .url,
                                                     price:
                                                         '${((double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
+                                                    qty: 1,
+                                                    qtyTag: widget
+                                                        .restaurantDetail
+                                                        .boughtTogether
+                                                        .boughtTogetherQuantity);
+                                              },
+                                            )
+                                            // GestureDetector(
+                                            //   child: Container(
+                                            //       width: 100.0,
+                                            //       height: 25.0,
+                                            //       padding: const EdgeInsets.all(4.0),
+                                            //       decoration: BoxDecoration(
+                                            //         color: Color(0xFF6b3600),
+                                            //         borderRadius:
+                                            //             BorderRadius.circular(8.0),
+                                            //       ),
+                                            //       child: FaIcon(
+                                            //         FontAwesomeIcons.cartArrowDown,
+                                            //         size: 20,
+                                            //         color: Colors.white,
+                                            //       )),
+                                            // ),
+                                          ],
+                                        ):Column(
+                                          children: [
+                                            Spacer(),
+                                            Container(
+                                              child: Text(
+                                                "AED ${double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)}",
+                                                style: GoogleFonts.poppins(
+                                                    color: Color(0xFF6b3600),
+                                                    fontSize: 15,
+                                                    fontWeight: FontWeight.w600,
+                                                    ),
+                                                textAlign: TextAlign.center,
+                                              ),
+                                            ),
+//                                            Icon(
+//                                              Icons.arrow_downward_rounded,
+//                                              color: Color(0xFF6b3600),
+//                                            ),
+//                                            Container(
+//                                              child: Text(
+//                                                "AED ${(double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100)}",
+//                                                style: GoogleFonts.poppins(
+//                                                  color: Color(0xFF6b3600),
+//                                                  fontSize: 15,
+//                                                  fontWeight: FontWeight.w600,
+//                                                ),
+//                                                textAlign: TextAlign.center,
+//                                              ),
+//                                            ),
+                                            Spacer(),
+                                            angadiButton(
+                                              'Add',
+                                              buttonWidth:
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                                  0.2,
+                                              buttonHeight:
+                                              MediaQuery.of(context)
+                                                  .size
+                                                  .height *
+                                                  0.04,
+                                              onTap: () {
+                                                addToCart(context,
+                                                    productId: widget
+                                                        .restaurantDetail
+                                                        .productID,
+                                                    name: widget
+                                                        .restaurantDetail.name,
+                                                    imgUrl: widget
+                                                        .restaurantDetail.url,
+                                                    price:
+                                                    '${((double.parse(widget.restaurantDetail.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
+                                                    qty: 1,
+                                                    qtyTag: widget
+                                                        .restaurantDetail
+                                                        .boughtTogetherQuantity);
+                                                addToCart(context,
+                                                    productId: widget
+                                                        .restaurantDetail
+                                                        .boughtTogether
+                                                        .id,
+                                                    name: widget
+                                                        .restaurantDetail
+                                                        .boughtTogether
+                                                        .name,
+                                                    imgUrl: widget
+                                                        .restaurantDetail
+                                                        .boughtTogether
+                                                        .url,
+                                                    price:
+                                                    '${((double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
                                                     qty: 1,
                                                     qtyTag: widget
                                                         .restaurantDetail

@@ -78,7 +78,8 @@ class SearchResultsScreen extends StatelessWidget {
                                 desc: snap.data.documents[i]['description'],
                                 url: snap.data.documents[i]['url'],
                                 boughtTogetherID: snap.data.documents[i]
-                                    ['boughtTogether']));
+                                    ['boughtTogether'],
+                            stock: snap.data.documents[i]['stock']));
                             print(snap.data.documents[i]['name']);
 
                             trending.add(Container(
@@ -114,7 +115,8 @@ class SearchResultsScreen extends StatelessWidget {
                                               ['price'],
                                           allquantities:
                                               dishes[i].allquantities,
-                                          quantities: dishes[i].quantities));
+                                          quantities: dishes[i].quantities,
+                                      stock:dishes[i].stock ));
                                 },
                                 imagePath: snap.data.documents[i]['url'],
                                 cardTitle: snap.data.documents[i]['name'],
@@ -125,6 +127,7 @@ class SearchResultsScreen extends StatelessWidget {
                                 address: snap.data.documents[i]['description'],
                                 allquantities: dishes[i].allquantities,
                                 quantities: dishes[i].quantities,
+                                stock:dishes[i].stock
                               ),
                             ));
                           }

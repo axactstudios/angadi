@@ -635,7 +635,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                     InkWell(
                       onTap: () {
                         launchWhatsApp(
-                            phone: '7060222315', message: whatsappMessage);
+                            phone: '+971 50 7175406', message: whatsappMessage);
                       },
                       child: Container(
                           height: 50,

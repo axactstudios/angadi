@@ -26,7 +26,7 @@ class Ratings extends StatelessWidget {
           ),
           SizedBox(width: Sizes.WIDTH_4),
           Text(
-            rating,
+            double.parse(rating).toStringAsFixed(1),
             style: Styles.customTitleTextStyle(
               color: AppColors.headingText,
               fontWeight: FontWeight.w600,

@@ -421,7 +421,8 @@ class _TrendingRestaurantsScreen1State
                                   boughtTogetherID: snap.data.documents[i]
                                       ['boughtTogether'],
                                   allquantities: allquantities,
-                                  quantities: quantities));
+                                  quantities: quantities,
+                              stock: snap.data.documents[i]['stock']));
                               print(
                                 snap.data.documents[i]['name'],
                               );
@@ -458,6 +459,7 @@ class _TrendingRestaurantsScreen1State
                                             quantities: dishes[i].quantities,
                                             boughtTogetherQuantity: dishes[i]
                                                 .boughtTogetherQuantity,
+                                            stock: dishes[i].stock,
                                           ),
                                         ),
                                         withNavBar:
@@ -477,6 +479,8 @@ class _TrendingRestaurantsScreen1State
                                         ['description'],
                                     allquantities: dishes[i].allquantities,
                                     quantities: dishes[i].quantities,
+                                    stock:dishes[i].stock,
+
                                   ),
                                 ));
                             }

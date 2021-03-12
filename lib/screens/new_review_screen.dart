@@ -25,6 +25,14 @@ class NewReviewScreen extends StatefulWidget {
 class _NewReviewScreenState extends State<NewReviewScreen> {
   String nameGlb, emailGlb, urlGlb, idGlb;
   TextEditingController contrl = new TextEditingController();
+  var docid;
+  void id(){
+    Firestore.instance.collection('Dishes').where('name',isEqualTo: widget.name).snapshots().listen((event) {
+      for(int i=0;i<event.documents.length;i++){
+        docid=event.documents[i].documentID;
+      }
+    });
+  }
 
   getUserDetails() async {
     FirebaseUser user = await FirebaseAuth.instance.currentUser();
@@ -52,6 +60,7 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
             "dishName": widget.name
           }).then((value) {
             print(value.documentID);
+            updaterat();
           });
 
           Fluttertoast.showToast(
@@ -69,6 +78,28 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
     });
 //    await contrl.clear();
   }
+  List<String>rats=[];
+  double count=0.0;
+  double avg=0.0;
+  void updaterat()async{
+   await  Firestore.instance.collection('Reviews').where('dishName',isEqualTo: widget.name).snapshots().listen((event) {
+      for(int i=0;i<event.documents.length;i++){
+        rats.add(event.documents[i]['rating'].toString());
+        print('Rats:${rats.length}');
+      }
+      for(int j=0;j<rats.length;j++){
+        count=count+double.parse(rats[j]);
+        print('Count:${count}');
+      }
+      avg=count/rats.length;
+      up();
+    });
+  }
+  void up()async{
+    await Firestore.instance.collection('Dishes').document(docid).updateData({
+      'rating':avg.toString()
+    });
+  }
 
   TextEditingController controller = TextEditingController();
   bool showSuffixIcon = false;
@@ -80,6 +111,11 @@ class _NewReviewScreenState extends State<NewReviewScreen> {
     color: AppColors.accentText,
     fontSize: Sizes.TEXT_SIZE_16,
   );
+  @override
+  void initState() {
+    id();
+    super.initState();
+  }
   var ratingGlobal = '1';
 
   void postReview() async {

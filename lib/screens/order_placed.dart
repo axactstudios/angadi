@@ -388,7 +388,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
         actions: [
           InkWell(
               onTap: () {
-                launch('tel:+919027553376');
+                launch('tel:+971 50 7175406');
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -397,7 +397,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
           InkWell(
               onTap: () {
                 launchWhatsApp(
-                    phone: '+971 50 7175405', message: 'Check out this awesome app');
+                    phone: '+971 50 7175406', message: 'Check out this awesome app');
               },
               child: Container(
                   alignment: Alignment.center,
@@ -639,9 +639,9 @@ class _OrderPlacedState extends State<OrderPlaced> {
                           children: [
                             InkWell(
                                 onTap: () {
-                                  launch('tel:06 746 7406');
+                                  launch('tel:+971 50 7175406');
                                 },
-                                child: Text('Call Us : 06 746 7406',
+                                child: Text('Call Us : +971 50 7175406',
                                     style: TextStyle(
                                         decoration: TextDecoration.underline,
                                         fontSize:
@@ -650,10 +650,10 @@ class _OrderPlacedState extends State<OrderPlaced> {
                             InkWell(
                                 onTap: () {
                                   launchWhatsApp(
-                                      phone: '+971 50 7175405',
+                                      phone: '+971 50 7175406',
                                       message: 'Check out this awesome app');
                                 },
-                                child: Text('Whatsapp : +971 50 7175405',
+                                child: Text('Whatsapp : +971 50 7175406',
                                     style: TextStyle(
                                         decoration: TextDecoration.underline,
                                         fontSize:

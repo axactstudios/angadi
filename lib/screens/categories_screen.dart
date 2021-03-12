@@ -80,7 +80,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         actions: [
           InkWell(
               onTap: () {
-                launch('tel:+919027553376');
+                launch('tel:+971 50 7175406');
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -88,7 +88,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(phone: '+971 50 7175405', message: whatsappMessage);
+                launchWhatsApp(phone: '+971 50 7175406', message: whatsappMessage);
               },
               child: Container(
                   alignment: Alignment.center,
