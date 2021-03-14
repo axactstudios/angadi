@@ -277,12 +277,14 @@ class _HomeScreenState extends State<HomeScreen> {
     messagesList = List<Message>();
     _configureFirebaseListeners();
     getUser();
+    carousel();
     getBanners();
     Checkgrocery();
     getSharedPrefs();
     checkLastSlot();
     address();
     time();
+
     date = DateTime.now();
     date2 = DateTime(date.year, date.month, date.day + dateAddition);
     _getCurrentLocation();
@@ -2000,7 +2002,7 @@ class _HomeScreenState extends State<HomeScreen> {
         .then((value) {
       setState(() {
         banner1Url = value['url'];
-        imageList.add(banner1Url);
+//        imageList.add(banner1Url);
       });
     });
     Firestore.instance
@@ -2010,11 +2012,18 @@ class _HomeScreenState extends State<HomeScreen> {
         .then((value) {
       setState(() {
         banner2Url = value['url'];
-        imageList.add(banner2Url);
+//        imageList.add(banner2Url);
       });
     });
   }
-
+carousel(){
+    Firestore.instance.collection('Background').snapshots().listen((event) {
+      for(int i=0;i<event.documents.length;i++){
+        imageList.add(event.documents[i]['url'].toString());
+      }
+      print(imageList.length);
+    });
+}
   addFields() {
     Firestore.instance.collection('Dishes').getDocuments().then((value) {
       value.documents.forEach((element) {
