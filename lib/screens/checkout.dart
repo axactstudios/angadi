@@ -28,10 +28,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:getwidget/components/loader/gf_loader.dart';
+import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:location/location.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -138,6 +141,7 @@ class _CheckoutState extends State<Checkout> {
   List<String> timeSlots2 = [];
 
   void time2() {
+    timeSlots2.clear();
     Firestore.instance.collection('Timeslots').snapshots().forEach((element) {
       for (int i = 0; i < element.documents[0].data['Timeslots'].length; i++) {
         DateTime dt = DateTime.now();
@@ -183,12 +187,12 @@ class _CheckoutState extends State<Checkout> {
         }
       }
 
-      print('-----------------');
-      print(timeSlots2.length);
+//      print('-----------------');
+//      print(timeSlots2.length);
       selectedTime = timeSlots2[0];
     });
-    print('enddd');
-    print(timeSlots2.length);
+//    print('enddd');
+//    print(timeSlots2.length);
 //  if(timeSlots2.length>0){
 //    print('Heya');
 //    setState(() {
@@ -201,12 +205,15 @@ class _CheckoutState extends State<Checkout> {
 void alldata(String newemirate)async {
   getall.clear();
   print(newemirate);
+//  length2=0;
+
   await Firestore.instance.collection('EmiratesArea').where(
       'Emirate', isEqualTo: newemirate).snapshots().listen((event) {
     index = 0;
     for (int i = 0;
     i < event.documents.length;
     i++) {
+      length2==event.documents.length;
       if(i==0){
         areaname.add('${event.documents[i]['name']}');
 //                                                print('5555555555555${snap.data.documents[i]['name']}');
@@ -226,7 +233,7 @@ void alldata(String newemirate)async {
         });
 
       }
-      print(event.documents.length);
+//      print(event.documents.length);
       for (int j = i + 1; j < event.documents.length; j++) {
         if (event.documents[i]['name'] == event.documents[j]['name']) {
 //              areaname.add(' ${event.documents[j]['name']}');
@@ -263,6 +270,9 @@ void alldata(String newemirate)async {
         getall.add(emi2);
       }
     }
+//    if(getall.length==length2){
+//      pr.hide();
+//    }
     if (getall.length > 0) {
       deliveryCharge = double.parse(getall[0].deliveryCharge);
       minOrderPrice = double.parse(getall[0].minOrderPrice);
@@ -291,12 +301,14 @@ void alldata(String newemirate)async {
   });
 }
   void areas() async {
+  savedemirate.clear();
+  savedarea.clear();
     await Firestore.instance
         .collection('Emirates')
         .getDocuments()
         .then((value) {
       for (int i = 0; i < value.documents.length; i++) {
-        print(value.documents.length);
+//        print(value.documents.length);
 
         emiratesname.add(value.documents[i]['name']);
         Emirates emi = Emirates(value.documents[i]['deliveryCharge'],
@@ -579,7 +591,7 @@ void alldata(String newemirate)async {
       print(event.documents[0].documentID);
     });
   }
-
+int length2=0;
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -666,9 +678,14 @@ void alldata(String newemirate)async {
     });
   }
 
+
+void indicator()async{
+
+}
   String whatsappMessage = '';
   @override
   void initState() {
+//     indicator();
     time2();
     getAllItems();
     _getCurrentLocation();
@@ -733,37 +750,39 @@ void alldata(String newemirate)async {
             ],
             color: Colors.white,
           ),
-          child: Column(
-            children: [
-              Container(
-                // height: 20,
-                child: Row(
-                  children: [
-                    Spacer(),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: InkWell(
-                        child: Icon(Icons.clear),
-                        onTap: () => Navigator.pop(context),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                Container(
+                  // height: 20,
+                  child: Row(
+                    children: [
+                      Spacer(),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: InkWell(
+                          child: Icon(Icons.clear),
+                          onTap: () => Navigator.pop(context),
+                        ),
+                      )
+                    ],
+                  ),
+                  // color: Colors.black,
+                ),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.65,
+                  child: WebView(
+                    initialUrl: '${url}',
+                    gestureRecognizers: {
+                      Factory<PlatformViewVerticalGestureRecognizer>(
+                        () => PlatformViewVerticalGestureRecognizer()
+                          ..onUpdate = (_) {},
                       ),
-                    )
-                  ],
+                    },
+                  ),
                 ),
-                // color: Colors.black,
-              ),
-              Container(
-                height: MediaQuery.of(context).size.height * 0.65,
-                child: WebView(
-                  initialUrl: '${url}',
-                  gestureRecognizers: {
-                    Factory<PlatformViewVerticalGestureRecognizer>(
-                      () => PlatformViewVerticalGestureRecognizer()
-                        ..onUpdate = (_) {},
-                    ),
-                  },
-                ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -951,7 +970,7 @@ void alldata(String newemirate)async {
 int index=0;
   @override
   Widget build(BuildContext context) {
-    print(_result);
+//    print(_result);
     delivery();
 
 //    _pickTime() async {
@@ -1441,12 +1460,13 @@ int index=0;
                                           if (snap.hasData &&
                                               !snap.hasError &&
                                               snap.data != null) {
+
                                             allemirates.clear();
                                             emiratesname.clear();
                                             for (int i = 0;
                                                 i < snap.data.documents.length;
                                                 i++) {
-                                              print(snap.data.documents.length);
+//                                              print(snap.data.documents.length);
                                               emirate2 = snap.data.documents[0]
                                                   ['name'];
                                               emiratesname.add(snap
@@ -1461,6 +1481,7 @@ int index=0;
 
                                               allemirates.add(emi);
                                             }
+
                                             return allemirates.length != 0
                                                 ? Column(
                                                     children: [
@@ -1524,15 +1545,52 @@ int index=0;
                                             .snapshots(),
                                         builder: (BuildContext context,
                                             AsyncSnapshot<QuerySnapshot> snap) {
+
                                           if (snap.hasData &&
                                               !snap.hasError &&
                                               snap.data != null) {
+                                            length2=0;
+//                                            final ProgressDialog pr =  ProgressDialog(context);
+//                                            pr.style(
+//                                                message: 'Please wait ..',
+//                                                backgroundColor: Colors.white,
+//                                                progressWidget: GFLoader(
+//                                                  type: GFLoaderType.ios,
+//                                                ),
+//                                                elevation: 10.0,
+//                                                insetAnimCurve: Curves.easeInOut,
+//                                                progress: 0.0,
+//                                                maxProgress: 100.0,
+//                                                progressTextStyle: TextStyle(
+//                                                    color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+//                                                messageTextStyle: TextStyle(
+//                                                    color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+//                                            pr.show();
+//                                            final ProgressDialog pr =  ProgressDialog(context);
+//                                            pr.style(
+//                                                message: 'Please wait ..',
+//                                                backgroundColor: Colors.white,
+//                                                progressWidget: GFLoader(
+//                                                  type: GFLoaderType.ios,
+//                                                ),
+//                                                elevation: 10.0,
+//                                                insetAnimCurve: Curves.easeInOut,
+//                                                progress: 0.0,
+//                                                maxProgress: 100.0,
+//                                                progressTextStyle: TextStyle(
+//                                                    color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+//                                                messageTextStyle: TextStyle(
+//                                                    color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+//                                            pr.show();
                                             allareas.clear();
                                             areaname.clear();
                                             index=0;
+//                                            length2=0;
+                                            print('Streambuilder');
                                             for (int i = 0;
                                                 i < snap.data.documents.length;
                                                 i++) {
+                                              length2=snap.data.documents.length;
                                               if(i==0){
                                                 areaname.add('${snap.data.documents[i]['name']}');
 //                                                print('5555555555555${snap.data.documents[i]['name']}');
@@ -1547,7 +1605,7 @@ int index=0;
                                                     ['zone']);
                                                 allareas.add(emi2);
                                               }
-                                              print(snap.data.documents.length);
+//                                              print(snap.data.documents.length);
                                               for(int j=i+1;j<snap.data.documents.length;j++){
                                                 if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
                                                   areaname.add(' ${snap.data.documents[j]['name']}');
@@ -1588,10 +1646,14 @@ int index=0;
                                                  allareas.add(emi2);
                                                }
                                                }
+//                                            if(allareas.length==length2){
+//                                              pr.hide();
+//                                            }
 
 
 
                                             areaname.add('Others');
+
                                             return areaname.length != 0
                                                 ? Column(
                                                     children: [
@@ -3399,7 +3461,7 @@ int index=0;
 //                  ),
                   Text(discount != null
                       ? 'AED. ${((totalAmount() * 0.18) + totalAmount() - (totalAmount() * (double.parse(discount.discount) / 100)) + deliveryCharge).toStringAsFixed(2)}'
-                      : 'AED. ${((totalAmount() * 0.18) + totalAmount() + deliveryCharge)}'),
+                      : 'AED. ${((totalAmount() * 0.18) + totalAmount() + deliveryCharge).toStringAsFixed(2)}'),
                 ],
               ),
               SizedBox(
@@ -3479,6 +3541,22 @@ int index=0;
   Map<String, dynamic> map;
   int j = 0;
   Future<String> onlineorder(String price, String type, String orderid) async {
+    final ProgressDialog pr = await ProgressDialog(context);
+    pr.style(
+        message: 'Please wait...',
+        backgroundColor: Colors.white,
+        progressWidget: GFLoader(
+          type: GFLoaderType.ios,
+        ),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+    await pr.show();
     await getUserDetails();
     List items = [];
     List prices = [];
@@ -3521,7 +3599,7 @@ int index=0;
     print(reply);
     var decode = jsonDecode(reply);
     map = decode;
-
+await pr.hide();
     scaffoldState.currentState.showBottomSheet((context) {
       return StatefulBuilder(
           builder: (BuildContext context, StateSetter state) {

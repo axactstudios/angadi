@@ -33,6 +33,7 @@ filter();
 }
 int add=0;
 List<Offer>alloffers=[];
+String checking='';
 void filter()async{
   user=await FirebaseAuth.instance.currentUser();
   filteroffers.clear();
@@ -55,6 +56,7 @@ void filter()async{
         print(test[k].toString());
         if(test[k]==alloffers[j].title){
           add++;
+          
           print('----------Add:${add}');
         }
       }
@@ -134,8 +136,8 @@ void filter()async{
 //                     snap.data.documents[j]['perUserLimit']));
 //               }
 //              }
-
-              return Container(
+             
+              return (filteroffers.length!=0)?Container(
                 width: MediaQuery.of(context).size.width,
                 child: ListView.builder(
                     scrollDirection: Axis.vertical,
@@ -170,9 +172,17 @@ void filter()async{
                         ),
                       );
                     }),
+              ):Center(
+                child: Container(
+                  height:100,
+                  width:MediaQuery.of(context).size.width,
+                  child:Center(child: Text('No promo codes available!'))
+                ),
               );
             } else {
-              return Container();
+              return Container(
+                child:Center(child: Text('No coupons available'))
+              );
             }
           }),
     );

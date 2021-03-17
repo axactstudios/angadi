@@ -1457,6 +1457,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                         child: Container(
                                           margin: EdgeInsets.all(5.0),
                                           width: 110.0,
+
                                           padding: EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                             color: Colors.white,
@@ -1871,7 +1872,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                             padding: const EdgeInsets.all(8.0),
                             child: dishesLike.length != 0
                                 ? Container(
-                                    height: 405,
+                                    height: 450,
                                     child: GridView(
                                       scrollDirection: Axis.horizontal,
                                       shrinkWrap: true,
@@ -1915,7 +1916,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                         ],
                       ),
                     ),
-                    Row(
+              (widget.restaurantDetail.stock)? Row(
                       children: [
                         present == false || present == null
                             ? angadiButton(
@@ -1964,8 +1965,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   topRightRadius: Sizes.RADIUS_14,
                                 ),
                               ),
-                        (widget.restaurantDetail.stock)?qty == 0 || qty == null
-                            ? angadiButton(
+
+                        qty == 0 || qty == null? angadiButton(
                                 'Add to Cart ',
 
                                 onTap: () async {
@@ -2081,49 +2082,94 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                     height: 30,
                                     width: 100,
                                   ),
-                                ),
-                              ): angadiButton(
-                          'Unavailable ',
-
-                          onTap: () async {
-//                  await dbHelper.onCreate();
-//                  int l = await dbHelper.check(widget.restaurantDetail.name);
-//                  print(l);
-//                                   var temp = await _query(
-//                                       widget.restaurantDetail.name,
-//                                       sizes[choice]);
-//                                   print(temp);
-////                                   if (temp == null)
-//                            addToCart(context,
-//                                name: widget.restaurantDetail.name,
-//                                imgUrl: widget.restaurantDetail.url,
-//                                productId: productID,
-//                                price: prodisprice,
-////                                      price: (int.parse(widget
-////                                                  .restaurantDetail.price) *
-////                                              priceFactors[choice])
-////                                          .toString(),
-//                                qty: 1,
-//                                qtyTag: qtyTag);
-//                            // else
-//                            //   setState(() {
-//                            //     print('Item already exists');
-//                            //     check[choice] = true;
-//                            //   });
-                          },
-//                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                          buttonHeight: 65,
-                          buttonWidth:
-                          MediaQuery.of(context).size.width * 0.5,
-                          decoration: Decorations
-                              .customHalfCurvedButtonDecoration(
-                            color: Color(0xFF6b3600),
-                            topleftRadius: Sizes.RADIUS_14,
-                            topRightRadius: Sizes.RADIUS_14,
-                          ),
-                        )
+                                )),
+//                              ): angadiButton(
+//                          'Unavailable ',
+//
+//                          onTap: () async {
+////                  await dbHelper.onCreate();
+////                  int l = await dbHelper.check(widget.restaurantDetail.name);
+////                  print(l);
+////                                   var temp = await _query(
+////                                       widget.restaurantDetail.name,
+////                                       sizes[choice]);
+////                                   print(temp);
+//////                                   if (temp == null)
+////                            addToCart(context,
+////                                name: widget.restaurantDetail.name,
+////                                imgUrl: widget.restaurantDetail.url,
+////                                productId: productID,
+////                                price: prodisprice,
+//////                                      price: (int.parse(widget
+//////                                                  .restaurantDetail.price) *
+//////                                              priceFactors[choice])
+//////                                          .toString(),
+////                                qty: 1,
+////                                qtyTag: qtyTag);
+////                            // else
+////                            //   setState(() {
+////                            //     print('Item already exists');
+////                            //     check[choice] = true;
+////                            //   });
+//                          },
+////                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
+//                          buttonHeight: 65,
+//                          buttonWidth:
+//                          MediaQuery.of(context).size.width * 0.5,
+//                          decoration: Decorations
+//                              .customHalfCurvedButtonDecoration(
+//                            color: Color(0xFF6b3600),
+//                            topleftRadius: Sizes.RADIUS_14,
+//                            topRightRadius: Sizes.RADIUS_14,
+//                          ),
+//                        )
                       ],
-                    )
+                    ):    present == false || present == null?angadiButton(
+                'Save For Later',
+                buttonTextStyle: addressTextStyle,
+                onTap: () async {
+                  var temp = await _queryWishlist(
+                      widget.restaurantDetail.name);
+                  print(temp);
+                  if (temp == null)
+                    addToWishlist(
+                      context,
+                      name: widget.restaurantDetail.name,
+                      imgUrl: widget.restaurantDetail.url,
+                      price: prodisprice,
+                    );
+                  else
+                    setState(() {
+                      print('Item already exists');
+                      present = true;
+                    });
+                },
+//                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
+                buttonHeight: 65,
+                buttonWidth:
+                MediaQuery.of(context).size.width ,
+                decoration: Decorations
+                    .customHalfCurvedButtonDecoration(
+                  color: AppColors.secondaryColor,
+                  topleftRadius: Sizes.RADIUS_14,
+                  topRightRadius: Sizes.RADIUS_14,
+                ),
+              )
+                  : angadiButton(
+                'Saved In Wishlist',
+                buttonTextStyle: addressTextStyle,
+                onTap: () async {},
+//                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
+                buttonHeight: 65,
+                buttonWidth:
+                MediaQuery.of(context).size.width ,
+                decoration: Decorations
+                    .customHalfCurvedButtonDecoration(
+                  color: AppColors.secondaryColor,
+                  topleftRadius: Sizes.RADIUS_14,
+                  topRightRadius: Sizes.RADIUS_14,
+                ),
+              ),
                   ],
                 ),
               ),

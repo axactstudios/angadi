@@ -608,16 +608,7 @@ class _FoodyBiteCard2State extends State<FoodyBiteCard2> {
                                   height: 30,
                                   width: 100,
                                 ):Container(
-                            height:25,
-                            width:100,
-                            decoration: BoxDecoration(borderRadius:BorderRadius.all(Radius.circular(5)),color:Color(0xFF6b3600),),
-                            child: Center(
-                              child: Text('Unavailable',textAlign:TextAlign.center,style: Styles.customTitleTextStyle(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 14),
-                              ),
-                            ),
+
                           )
                         ],
                       ),

@@ -13,7 +13,10 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:getwidget/components/loader/gf_loader.dart';
+import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'checkout.dart';
@@ -194,13 +197,16 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 margin: EdgeInsets.only(right: Sizes.MARGIN_16),
                 child: InkWell(
-                  onTap: () {
+                  onTap: () async{
+
                     user != null
                         ? Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
                             return Checkout('', orderid, '', '');
+
                           }))
                         : login();
+
                   },
                   child: Container(
                     child: Padding(

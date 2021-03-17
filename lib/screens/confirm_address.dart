@@ -439,7 +439,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
                                 ['zone']);
                             allareas.add(emi2);
                           }
-                          print(snap.data.documents.length);
+//                          print(snap.data.documents.length);
                           for(int j=i+1;j<snap.data.documents.length;j++){
                             if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
                               areaname.add(' ${snap.data.documents[j]['name']}');

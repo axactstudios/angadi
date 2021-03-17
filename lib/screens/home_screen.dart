@@ -1588,7 +1588,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 440,
+                      height: 450,
                       child: top.length != 0
                           ? GridView(
                               scrollDirection: Axis.horizontal,
@@ -1624,7 +1624,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         }),
                     SizedBox(height: 16.0),
                     Container(
-                      height: 405,
+                      height: 450,
                       child: special.length != 0
                           ? GridView(
                               scrollDirection: Axis.horizontal,
