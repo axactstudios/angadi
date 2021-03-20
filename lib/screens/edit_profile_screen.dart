@@ -5,6 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:path/path.dart' as p;
@@ -127,7 +128,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone: '+971 50 7175405', message: whatsappMessage);
+                  FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
                 },
                 child: Container(
                     alignment: Alignment.center,

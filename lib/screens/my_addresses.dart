@@ -8,6 +8,7 @@ import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_map_location_picker/google_map_location_picker.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -117,8 +118,7 @@ class _MyAddressesState extends State<MyAddresses> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(
-                    phone: '+971 50 7175406', message: 'Check out this awesome app');
+                FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
               },
               child: Container(
                   alignment: Alignment.center,

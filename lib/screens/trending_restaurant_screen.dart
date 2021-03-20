@@ -5,10 +5,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
-import 'package:angadi/values/data.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
-import 'package:angadi/widgets/search_input_field.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 
@@ -99,6 +97,7 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                         quantities.add(
                             '${snap.data.documents[i]['Quantity'][j]['quantity']}');
                       }
+                      print('Category $cat');
 
 //              print(snap.data.documents[i]['url']);
                       if ((money != null
@@ -114,7 +113,6 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                               ? snap.data.documents[i]['category'] == cat
                               : 1 == 1)) {
                         print(snap.data.documents[i]['price']);
-                        print(money);
                         dishes.add(Dish(
                             boughtTogetherDiscount: snap.data.documents[i]
                                 ['boughtTogetherDiscount'],
@@ -129,7 +127,7 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                             allquantities: allquantities,
                             boughtTogetherID: snap.data.documents[i]
                                 ['boughtTogether'],
-                        stock: snap.data.documents[i]['stock']));
+                            stock: snap.data.documents[i]['stock']));
                       }
                       print(dishes);
 
@@ -236,7 +234,7 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                                                 dishes[index].allquantities,
                                             quantities:
                                                 dishes[index].quantities,
-                                        stock: dishes[index].stock),
+                                            stock: dishes[index].stock),
                                       ),
                                       withNavBar:
                                           true, // OPTIONAL VALUE. True by default.
@@ -256,7 +254,7 @@ class _TrendingRestaurantsScreenState extends State<TrendingRestaurantsScreen> {
                                   address: dishes[index].desc,
                                   allquantities: dishes[index].allquantities,
                                   quantities: dishes[index].quantities,
-                              stock:dishes[index].stock),
+                                  stock: dishes[index].stock),
                             );
                           },
                         )
@@ -422,7 +420,7 @@ class _TrendingRestaurantsScreen1State
                                       ['boughtTogether'],
                                   allquantities: allquantities,
                                   quantities: quantities,
-                              stock: snap.data.documents[i]['stock']));
+                                  stock: snap.data.documents[i]['stock']));
                               print(
                                 snap.data.documents[i]['name'],
                               );
@@ -479,8 +477,7 @@ class _TrendingRestaurantsScreen1State
                                         ['description'],
                                     allquantities: dishes[i].allquantities,
                                     quantities: dishes[i].quantities,
-                                    stock:dishes[i].stock,
-
+                                    stock: dishes[i].stock,
                                   ),
                                 ));
                             }

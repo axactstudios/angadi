@@ -11,6 +11,7 @@ import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -105,7 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone: '+971 50 7175406', message: whatsappMessage);
+                  FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
                 },
                 child: Container(
                     alignment: Alignment.center,

@@ -14,6 +14,7 @@ import 'package:angadi/values/data.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -109,7 +110,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(phone: '+971 50 7175405', message: whatsappMessage);
+                FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
               },
               child: Container(
                   alignment: Alignment.center,

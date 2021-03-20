@@ -13,6 +13,7 @@ import 'package:expandable/expandable.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:geocoder/geocoder.dart';
 import 'package:geolocator/geolocator.dart';
@@ -634,8 +635,8 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   children: [
                     InkWell(
                       onTap: () {
-                        launchWhatsApp(
-                            phone: '+971 50 7175406', message: whatsappMessage);
+                        FlutterOpenWhatsapp.sendSingleMessage(
+                            "+971 50 7175406", "");
                       },
                       child: Container(
                           height: 50,

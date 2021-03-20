@@ -5,6 +5,7 @@ import 'package:angadi/values/values.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
@@ -208,9 +209,7 @@ class _MyOrdersState extends State<MyOrders> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone: '+971 50 7175406'
-                      ''
-                      '', message: whatsappMessage);
+                  FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
                 },
                 child: Container(
                     alignment: Alignment.center,

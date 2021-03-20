@@ -166,7 +166,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       total = cartItems.length;
 
       for (var v in cartItems) {
-        print('######${v.productName}');
+        // print('######${v.productName}');
         if (v.productName == widget.restaurantDetail.name &&
             v.qtyTag == qtyTag) {
           qty = v.qty;
@@ -184,7 +184,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       totalWishlist = wishlistItems.length;
 
       for (var v in wishlistItems) {
-        print('######${v.productName}');
+        // print('######${v.productName}');
         if (v.productName == widget.restaurantDetail.name) {
           present = true;
         }
@@ -252,7 +252,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     };
 
     if (cartItems.length == 0) {
-      await print('----------------$order');
+      // await print('----------------$order');
       if (order + 1 < 9) {
         await setState(() {
           orderid = 'ANG0000${order + 1}';
@@ -285,7 +285,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       }
       SharedPreferences prefs = await SharedPreferences.getInstance();
       prefs.setString('Orderid', orderid);
-      print(orderid);
+      // print(orderid);
 
       prefs.setString('Status', 'Not placed');
       await Firestore.instance
@@ -333,7 +333,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     int x = await dbHelperWishlist.queryRowCount();
     length = x;
     setState(() {
-      print('Length Updated');
+      // print('Length Updated');
       length;
     });
   }
@@ -342,33 +342,33 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     int x = await dbHelper.queryRowCount();
     lengthWishlist = x;
     setState(() {
-      print('Length Updated');
+      // print('Length Updated');
       lengthWishlist;
     });
   }
 
   Future<Cart> _query(String name, String qtyTag) async {
     final allRows = await dbHelper.queryRows(name, qtyTag);
-    print(allRows);
+    // print(allRows);
 
     allRows.forEach((row) => item = Cart.fromMap(row));
     setState(() {
       item;
 //      print(item.qtyTag);
-      print('-------------Updated');
+//       print('-------------Updated');
     });
     return item;
   }
 
   Future<Wishlist> _queryWishlist(String name) async {
     final allRows = await dbHelperWishlist.queryRows(name);
-    print(allRows);
+    // print(allRows);
 
     allRows.forEach((row) => itemWishlist = Wishlist.fromMap(row));
     setState(() {
       itemWishlist;
 //      print(item.qtyTag);
-      print('-------------Updated');
+//       print('-------------Updated');
     });
     return itemWishlist;
   }
@@ -387,7 +387,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
     var temp = await _query(name, qtyTag);
     if (temp != null) {
       if (temp.productName == name && temp.qtyTag == qtyTag) {
-        print('item found');
+        // print('item found');
         qty = temp.qty;
         return temp.qty;
       } else {
@@ -398,12 +398,12 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 
   void checkInCart(String qtyTag) async {
     var temp = await _query(widget.restaurantDetail.name, qtyTag);
-    print(temp);
+    // print(temp);
     if (temp != null) {
       if (temp.productName == widget.restaurantDetail.name &&
           temp.qtyTag == qtyTag) {
         setState(() {
-          print('Item already exists');
+          // print('Item already exists');
           check[choice] = true;
           qty = temp.qty;
         });
@@ -416,13 +416,13 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   }
 
   Future<bool> checkInWishlist() async {
-    print('called');
+    // print('called');
     var temp = await _queryWishlist(widget.restaurantDetail.name);
-    print(temp);
+    // print(temp);
     if (temp != null) {
       if (temp.productName == widget.restaurantDetail.name) {
         setState(() {
-          print('Item already exists ${temp.productName}');
+          // print('Item already exists ${temp.productName}');
         });
         return true;
       } else {
@@ -439,14 +439,14 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
         .document('ordercount')
         .snapshots()
         .listen((event) {
-      print(event['Numberoforders'].toString());
+      // print(event['Numberoforders'].toString());
 
       order = event['Numberoforders'];
     });
-    print('Checked');
+    // print('Checked');
     qty = await getQuantity(widget.restaurantDetail.name, '500');
     present = await checkInWishlist();
-    print('-------------%%%%%$present');
+    // print('-------------%%%%%$present');
   }
 
   String urlUniv;
@@ -463,13 +463,13 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
       qtyTag = '${widget.restaurantDetail.quantities[0]} ';
     });
     prodisprice = widget.restaurantDetail.allquantities[0].price;
-    proprice=widget.restaurantDetail.allquantities[0].iPrice;
+    proprice = widget.restaurantDetail.allquantities[0].iPrice;
     productID = widget.restaurantDetail.allquantities[0].productId;
     choice = 0;
     first();
     checkInCart('${widget.restaurantDetail.quantities[0]} ');
-    print(
-        '---------------------------------------${widget.restaurantDetail.boughtTogetherQuantity}');
+    // print(
+    //     '---------------------------------------${widget.restaurantDetail.boughtTogetherQuantity}');
     getAllItems();
     super.initState();
   }
@@ -515,7 +515,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
           ),
           InkWell(
             onTap: () {
-              print(1);
+              // print(1);
               R.Router.navigator.pushNamed(
                 R.Router.bookmarksScreen2,
               );
@@ -620,7 +620,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           ind++) {
                         if (snap.data.documents[ind].documentID ==
                             snap.data.documents[i]['boughtTogether']) {
-                          print('999999999999999999${  snap.data.documents[i]['boughtTogether']}');
+                          // print(
+                          //     '999999999999999999${snap.data.documents[i]['boughtTogether']}');
                           boughtTogether = await Dish(
                               boughtTogetherDiscount: snap.data.documents[ind]
                                   ['boughtTogetherDiscount'],
@@ -638,28 +639,27 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                   ['boughtTogether'],
                               allquantities: allquantities,
                               quantities: quantities,
-                          stock: snap.data.documents[ind]['stock']);
+                              stock: snap.data.documents[ind]['stock']);
                         }
                       }
-                      R.Router.navigator
-                          .pushNamed(R.Router.restaurantDetailsScreen,
-                              arguments: RestaurantDetails(
-                                boughtTogether: boughtTogether,
-                                boughtTogetherDiscount: snap.data.documents[i]
-                                    ['boughtTogetherDiscount'],
-                                boughtTogetherQuantity: snap.data.documents[i]
-                                    ['boughtTogetherQuantity'],
-                                productID: snap.data.documents[i]['productId'],
-                                url: snap.data.documents[i]['url'],
-                                name: snap.data.documents[i]['name'],
-                                desc: snap.data.documents[i]['description'],
-                                category: snap.data.documents[i]['category'],
-                                rating: snap.data.documents[i]['rating'],
-                                price: snap.data.documents[i]['price'],
-                                allquantities: allquantities,
-                                quantities: quantities,
-                                stock: snap.data.documents[i]['stock']
-                              ));
+                      R.Router.navigator.pushNamed(
+                          R.Router.restaurantDetailsScreen,
+                          arguments: RestaurantDetails(
+                              boughtTogether: boughtTogether,
+                              boughtTogetherDiscount: snap.data.documents[i]
+                                  ['boughtTogetherDiscount'],
+                              boughtTogetherQuantity: snap.data.documents[i]
+                                  ['boughtTogetherQuantity'],
+                              productID: snap.data.documents[i]['productId'],
+                              url: snap.data.documents[i]['url'],
+                              name: snap.data.documents[i]['name'],
+                              desc: snap.data.documents[i]['description'],
+                              category: snap.data.documents[i]['category'],
+                              rating: snap.data.documents[i]['rating'],
+                              price: snap.data.documents[i]['price'],
+                              allquantities: allquantities,
+                              quantities: quantities,
+                              stock: snap.data.documents[i]['stock']));
                     },
                     imagePath: snap.data.documents[i]['url'],
                     cardTitle: snap.data.documents[i]['name'],
@@ -679,36 +679,36 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                 dishesLike.add(Container(
                   margin: EdgeInsets.only(right: 4.0),
                   child: FoodyBiteCard(
-                    onTap: () async {
-                      Dish boughtTogether;
-                      for (int ind = 0;
-                          ind < snap.data.documents.length;
-                          ind++) {
-                        if (snap.data.documents[ind].documentID ==
-                            snap.data.documents[i]['boughtTogether']) {
-                          boughtTogether = await Dish(
-                              boughtTogetherDiscount: snap.data.documents[ind]
-                                  ['boughtTogetherDiscount'],
-                              boughtTogetherQuantity: snap.data.documents[ind]
-                                  ['boughtTogetherQuantity'],
-                              id: snap.data.documents[ind]['productId'],
-                              name: snap.data.documents[ind]['name'],
-                              category: snap.data.documents[ind]['category'],
-                              rating:
-                                  snap.data.documents[ind]['rating'].toString(),
-                              price: snap.data.documents[ind]['price'],
-                              desc: snap.data.documents[ind]['description'],
-                              url: snap.data.documents[ind]['url'],
-                              boughtTogetherID: snap.data.documents[ind]
-                                  ['boughtTogether'],
-                              allquantities: allquantities,
-                              quantities: quantities,
-                          stock:snap.data.documents[ind]['stock']);
+                      onTap: () async {
+                        Dish boughtTogether;
+                        for (int ind = 0;
+                            ind < snap.data.documents.length;
+                            ind++) {
+                          if (snap.data.documents[ind].documentID ==
+                              snap.data.documents[i]['boughtTogether']) {
+                            boughtTogether = await Dish(
+                                boughtTogetherDiscount: snap.data.documents[ind]
+                                    ['boughtTogetherDiscount'],
+                                boughtTogetherQuantity: snap.data.documents[ind]
+                                    ['boughtTogetherQuantity'],
+                                id: snap.data.documents[ind]['productId'],
+                                name: snap.data.documents[ind]['name'],
+                                category: snap.data.documents[ind]['category'],
+                                rating: snap.data.documents[ind]['rating']
+                                    .toString(),
+                                price: snap.data.documents[ind]['price'],
+                                desc: snap.data.documents[ind]['description'],
+                                url: snap.data.documents[ind]['url'],
+                                boughtTogetherID: snap.data.documents[ind]
+                                    ['boughtTogether'],
+                                allquantities: allquantities,
+                                quantities: quantities,
+                                stock: snap.data.documents[ind]['stock']);
+                          }
                         }
-                      }
-                      R.Router.navigator
-                          .pushNamed(R.Router.restaurantDetailsScreen,
-                              arguments: RestaurantDetails(
+                        R.Router.navigator.pushNamed(
+                            R.Router.restaurantDetailsScreen,
+                            arguments: RestaurantDetails(
                                 boughtTogetherDiscount: snap.data.documents[i]
                                     ['boughtTogetherDiscount'],
                                 boughtTogetherQuantity: snap.data.documents[i]
@@ -723,19 +723,17 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                 price: snap.data.documents[i]['price'],
                                 allquantities: allquantities,
                                 quantities: quantities,
-                                stock: snap.data.documents[i]['stock']
-                              ));
-                    },
-                    imagePath: snap.data.documents[i]['url'],
-                    cardTitle: snap.data.documents[i]['name'],
-                    rating: snap.data.documents[i]['rating'],
-                    category: snap.data.documents[i]['category'],
-                    price: snap.data.documents[i]['price'].toString(),
-                    iPrice: snap.data.documents[i]['iPrice'].toString(),
-                    allquantities: allquantities,
-                    quantities: quantities,
-                    stock:snap.data.documents[i]['stock']
-                  ),
+                                stock: snap.data.documents[i]['stock']));
+                      },
+                      imagePath: snap.data.documents[i]['url'],
+                      cardTitle: snap.data.documents[i]['name'],
+                      rating: snap.data.documents[i]['rating'],
+                      category: snap.data.documents[i]['category'],
+                      price: snap.data.documents[i]['price'].toString(),
+                      iPrice: snap.data.documents[i]['iPrice'].toString(),
+                      allquantities: allquantities,
+                      quantities: quantities,
+                      stock: snap.data.documents[i]['stock']),
                 ));
               }
             }
@@ -1047,39 +1045,49 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              (prodisprice==proprice)? Text(
-                                                'AED. ${double.parse(prodisprice).toString()}',
-                                                textAlign: TextAlign.left,
-                                                style: Styles
-                                                    .customMediumTextStyle(
-                                                  fontWeight: FontWeight.w600,
-                                                  color: Color(0xFF6b3600),
-                                                  // fontWeight: FontWeight.w600,
-                                                  fontSize: 24,
-                                                ),
-                                              ):Row(
-                                                children: [
-                                                  Container(
-                                                    child: Text(
-                                                      'AED. ${(double.parse(prodisprice).toString())}  ',
+                                              (prodisprice == proprice)
+                                                  ? Text(
+                                                      'AED. ${double.parse(prodisprice).toString()}',
                                                       textAlign: TextAlign.left,
-                                                      style: Styles.customMediumTextStyle(
-                                                        color: AppColors.black,
-                                                        fontSize: 15,
+                                                      style: Styles
+                                                          .customMediumTextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                        color:
+                                                            Color(0xFF6b3600),
+                                                        // fontWeight: FontWeight.w600,
+                                                        fontSize: 24,
                                                       ),
+                                                    )
+                                                  : Row(
+                                                      children: [
+                                                        Container(
+                                                          child: Text(
+                                                            'AED. ${(double.parse(prodisprice).toString())}  ',
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            style: Styles
+                                                                .customMediumTextStyle(
+                                                              color: AppColors
+                                                                  .black,
+                                                              fontSize: 15,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Container(
+                                                          child: Text(
+                                                              'AED. ${(double.parse(proprice).toString())}',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .left,
+                                                              style: TextStyle(
+                                                                  fontSize: 15,
+                                                                  decoration:
+                                                                      TextDecoration
+                                                                          .lineThrough)),
+                                                        ),
+                                                      ],
                                                     ),
-                                                  ),
-                                                  Container(
-                                                    child: Text(
-                                                        'AED. ${(double.parse(proprice).toString())}',
-                                                        textAlign: TextAlign.left,
-                                                        style: TextStyle(
-                                                            fontSize: 15,
-                                                            decoration:
-                                                            TextDecoration.lineThrough)),
-                                                  ),
-                                                ],
-                                              ),
                                               Text(
                                                 '(${qtyTag})',
                                                 textAlign: TextAlign.left,
@@ -1099,34 +1107,48 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
                             child: Text(
-                             'Product ID: ${ widget.restaurantDetail.productID}',
+                              'Product ID: ${widget.restaurantDetail.productID}',
                               style: addressTextStyle,
                             ),
                           ),
-                         ( widget.restaurantDetail.stock)?Padding(
-                           padding:  const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
-                           child: Row(children: [
-                             Icon(Icons.check_circle,color:Colors.green,size: 12,),
-                             Text('in stock', style: Styles.customTitleTextStyle(
-                               color: Colors.green,
-                               fontWeight: FontWeight.w400,
-                               fontSize: 12,
-                             ),)
-                           ],),
-                         ):Padding(
-                           padding:  const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
-                           child: Row(
-                             children: [
-                               Icon(Icons.cancel,color:Colors.red,size:12),
-                               Text('Out of stock',style: Styles.customTitleTextStyle(
-                                 color: Colors.red,
-                                 fontWeight: FontWeight.w400,
-                                 fontSize: 12,
-
-                               ))
-                             ],
-                           ),
-                         ),
+                          (widget.restaurantDetail.stock)
+                              ? Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
+                                  child: Row(
+                                    children: [
+                                      Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                        size: 12,
+                                      ),
+                                      Text(
+                                        'in stock',
+                                        style: Styles.customTitleTextStyle(
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 12,
+                                        ),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : Padding(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(16.0, 0, 8, 8),
+                                  child: Row(
+                                    children: [
+                                      Icon(Icons.cancel,
+                                          color: Colors.red, size: 12),
+                                      Text('Out of stock',
+                                          style: Styles.customTitleTextStyle(
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w400,
+                                            fontSize: 12,
+                                          ))
+                                    ],
+                                  ),
+                                ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16.0, 3, 8, 10),
                             child: Row(
@@ -1152,20 +1174,19 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                     ),
                                   ),
                                 ),
-                                SizedBox(width:120),
+                                SizedBox(width: 120),
                                 (proprice != prodisprice)
                                     ? Align(
-                                  alignment: Alignment.bottomRight,
-                                      child: Text(
-                                  ('${((double.parse(proprice) - double.parse(prodisprice)) / double.parse(proprice) * 100).toStringAsFixed(0)} % off'),
-                                  style:
-                                  Styles.customTitleTextStyle(
-                                      color: Colors.deepOrangeAccent,
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 18,
-                                  ),
-                                ),
-                                    )
+                                        alignment: Alignment.bottomRight,
+                                        child: Text(
+                                          ('${((double.parse(proprice) - double.parse(prodisprice)) / double.parse(proprice) * 100).toStringAsFixed(0)} % off'),
+                                          style: Styles.customTitleTextStyle(
+                                            color: Colors.deepOrangeAccent,
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 18,
+                                          ),
+                                        ),
+                                      )
                                     : Container(),
                                 Spacer(flex: 1),
                               ],
@@ -1231,7 +1252,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                         choice = index;
                                         prodisprice = item.price;
                                         productID = item.productId;
-                                        proprice=item.iPrice;
+                                        proprice = item.iPrice;
                                         tag = '${item.quantity}';
                                       });
                                     },
@@ -1250,31 +1271,37 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                               MainAxisAlignment.spaceBetween,
                                           children: [
                                             Text(item.quantity.toString()),
-                                            (item.iPrice==item.price)?Text(
-                                                'AED. ${double.parse(item.price)}'):
-                                            Row(
-                                              children: [
-                                                Container(
-                                                  child: Text(
-                                                    'AED. ${(double.parse(item.price).toString())}  ',
-                                                    textAlign: TextAlign.left,
-                                                    style: Styles.customMediumTextStyle(
-                                                      color: AppColors.black,
-                                                      fontSize: 15,
-                                                    ),
-                                                  ),
-                                                ),
-                                                Container(
-                                                  child: Text(
-                                                      'AED. ${(double.parse(item.iPrice).toString())}',
-                                                      textAlign: TextAlign.left,
-                                                      style: TextStyle(
-                                                          fontSize: 15,
-                                                          decoration:
-                                                          TextDecoration.lineThrough)),
-                                                ),
-                                              ],
-                                            )
+                                            (item.iPrice == item.price)
+                                                ? Text(
+                                                    'AED. ${double.parse(item.price)}')
+                                                : Row(
+                                                    children: [
+                                                      Container(
+                                                        child: Text(
+                                                          'AED. ${(double.parse(item.price).toString())}  ',
+                                                          textAlign:
+                                                              TextAlign.left,
+                                                          style: Styles
+                                                              .customMediumTextStyle(
+                                                            color:
+                                                                AppColors.black,
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      Container(
+                                                        child: Text(
+                                                            'AED. ${(double.parse(item.iPrice).toString())}',
+                                                            textAlign:
+                                                                TextAlign.left,
+                                                            style: TextStyle(
+                                                                fontSize: 15,
+                                                                decoration:
+                                                                    TextDecoration
+                                                                        .lineThrough)),
+                                                      ),
+                                                    ],
+                                                  )
                                           ],
                                         ),
                                       ),
@@ -1444,7 +1471,8 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                           //     ],
                           //   ),
                           // )
-                          widget.restaurantDetail.boughtTogether != null&& widget.restaurantDetail.boughtTogether != ''
+                          widget.restaurantDetail.boughtTogether != null &&
+                                  widget.restaurantDetail.boughtTogether != ''
                               ? Container(
                                   height: 205,
                                   width: MediaQuery.of(context).size.width,
@@ -1457,7 +1485,6 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                         child: Container(
                                           margin: EdgeInsets.all(5.0),
                                           width: 110.0,
-
                                           padding: EdgeInsets.all(10),
                                           decoration: BoxDecoration(
                                             color: Colors.white,
@@ -1497,35 +1524,44 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 ),
                                               ),
                                               SizedBox(height: 10.0),
-                                              (widget.restaurantDetail.boughtTogetherQuantity!=null&&widget.restaurantDetail.boughtTogetherQuantity!='')?Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Container(
-                                                  child: Text(
-                                                    " ${widget.restaurantDetail.name} (${widget.restaurantDetail.boughtTogetherQuantity})",
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: Styles
-                                                        .customNormalTextStyle(
-                                                            color: Color(
-                                                                0xFF6b3600)),
-                                                  ),
-                                                ),
-                                              ):Align(
-                                                alignment: Alignment.bottomLeft,
-                                                child: Container(
-                                                  child: Text(
-                                                    "${widget.restaurantDetail.name}",
-                                                    maxLines: 2,
-                                                    overflow:
-                                                    TextOverflow.ellipsis,
-                                                    style: Styles
-                                                        .customNormalTextStyle(
-                                                        color: Color(
-                                                            0xFF6b3600)),
-                                                  ),
-                                                ),
-                                              ),
+                                              (widget.restaurantDetail
+                                                              .boughtTogetherQuantity !=
+                                                          null &&
+                                                      widget.restaurantDetail
+                                                              .boughtTogetherQuantity !=
+                                                          '')
+                                                  ? Align(
+                                                      alignment:
+                                                          Alignment.bottomLeft,
+                                                      child: Container(
+                                                        child: Text(
+                                                          " ${widget.restaurantDetail.name} (${widget.restaurantDetail.boughtTogetherQuantity})",
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: Styles
+                                                              .customNormalTextStyle(
+                                                                  color: Color(
+                                                                      0xFF6b3600)),
+                                                        ),
+                                                      ),
+                                                    )
+                                                  : Align(
+                                                      alignment:
+                                                          Alignment.bottomLeft,
+                                                      child: Container(
+                                                        child: Text(
+                                                          "${widget.restaurantDetail.name}",
+                                                          maxLines: 2,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: Styles
+                                                              .customNormalTextStyle(
+                                                                  color: Color(
+                                                                      0xFF6b3600)),
+                                                        ),
+                                                      ),
+                                                    ),
                                               Spacer(),
                                               Align(
                                                 alignment: Alignment.bottomLeft,
@@ -1595,7 +1631,7 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 ),
                                               ),
                                               SizedBox(height: 10.0),
-                                             Align(
+                                              Align(
                                                 alignment: Alignment.bottomLeft,
                                                 child: Container(
                                                   child: Text(
@@ -1652,117 +1688,141 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                                                 spreadRadius: 0),
                                           ],
                                         ),
-                                        child: (widget.restaurantDetail.boughtTogether.boughtTogetherDiscount!=null&&widget.restaurantDetail.boughtTogetherDiscount!='')?Column(
-                                          children: <Widget>[
-                                            Spacer(),
-                                            Container(
-                                              child: Text(
-                                                "AED ${double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)}",
-                                                style: GoogleFonts.poppins(
-                                                    color: Color(0xFF6b3600),
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w600,
-                                                    decoration: TextDecoration
-                                                        .lineThrough),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            Icon(
-                                              Icons.arrow_downward_rounded,
-                                              color: Color(0xFF6b3600),
-                                            ),
-                                            Container(
-                                              child: Text(
-                                                "AED ${(double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100)}",
-                                                style: GoogleFonts.poppins(
-                                                  color: Color(0xFF6b3600),
-                                                  fontSize: 15,
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
-                                            Spacer(),
-                                            angadiButton(
-                                              'Add',
-                                              buttonWidth:
-                                                  MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.2,
-                                              buttonHeight:
-                                                  MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.04,
-                                              onTap: () {
-                                                addToCart(context,
-                                                    productId: widget
-                                                        .restaurantDetail
-                                                        .productID,
-                                                    name: widget
-                                                        .restaurantDetail.name,
-                                                    imgUrl: widget
-                                                        .restaurantDetail.url,
-                                                    price:
-                                                        '${((double.parse(widget.restaurantDetail.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
-                                                    qty: 1,
-                                                    qtyTag: widget
-                                                        .restaurantDetail
-                                                        .boughtTogetherQuantity);
-                                                addToCart(context,
-                                                    productId: widget
+                                        child: (widget
                                                         .restaurantDetail
                                                         .boughtTogether
-                                                        .id,
-                                                    name: widget
-                                                        .restaurantDetail
-                                                        .boughtTogether
-                                                        .name,
-                                                    imgUrl: widget
-                                                        .restaurantDetail
-                                                        .boughtTogether
-                                                        .url,
-                                                    price:
-                                                        '${((double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
-                                                    qty: 1,
-                                                    qtyTag: widget
-                                                        .restaurantDetail
-                                                        .boughtTogether
-                                                        .boughtTogetherQuantity);
-                                              },
-                                            )
-                                            // GestureDetector(
-                                            //   child: Container(
-                                            //       width: 100.0,
-                                            //       height: 25.0,
-                                            //       padding: const EdgeInsets.all(4.0),
-                                            //       decoration: BoxDecoration(
-                                            //         color: Color(0xFF6b3600),
-                                            //         borderRadius:
-                                            //             BorderRadius.circular(8.0),
-                                            //       ),
-                                            //       child: FaIcon(
-                                            //         FontAwesomeIcons.cartArrowDown,
-                                            //         size: 20,
-                                            //         color: Colors.white,
-                                            //       )),
-                                            // ),
-                                          ],
-                                        ):Column(
-                                          children: [
-                                            Spacer(),
-                                            Container(
-                                              child: Text(
-                                                "AED ${double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)}",
-                                                style: GoogleFonts.poppins(
-                                                    color: Color(0xFF6b3600),
-                                                    fontSize: 15,
-                                                    fontWeight: FontWeight.w600,
+                                                        .boughtTogetherDiscount !=
+                                                    null &&
+                                                widget.restaurantDetail
+                                                        .boughtTogetherDiscount !=
+                                                    '')
+                                            ? Column(
+                                                children: <Widget>[
+                                                  Spacer(),
+                                                  Container(
+                                                    child: Text(
+                                                      "AED ${double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)}",
+                                                      style: GoogleFonts.poppins(
+                                                          color:
+                                                              Color(0xFF6b3600),
+                                                          fontSize: 15,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .lineThrough),
+                                                      textAlign:
+                                                          TextAlign.center,
                                                     ),
-                                                textAlign: TextAlign.center,
-                                              ),
-                                            ),
+                                                  ),
+                                                  Icon(
+                                                    Icons
+                                                        .arrow_downward_rounded,
+                                                    color: Color(0xFF6b3600),
+                                                  ),
+                                                  Container(
+                                                    child: Text(
+                                                      "AED ${(double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100)}",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        color:
+                                                            Color(0xFF6b3600),
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
+                                                  Spacer(),
+                                                  angadiButton(
+                                                    'Add',
+                                                    buttonWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.2,
+                                                    buttonHeight:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.04,
+                                                    onTap: () {
+                                                      addToCart(context,
+                                                          productId: widget
+                                                              .restaurantDetail
+                                                              .productID,
+                                                          name: widget
+                                                              .restaurantDetail
+                                                              .name,
+                                                          imgUrl: widget
+                                                              .restaurantDetail
+                                                              .url,
+                                                          price:
+                                                              '${((double.parse(widget.restaurantDetail.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
+                                                          qty: 1,
+                                                          qtyTag: widget
+                                                              .restaurantDetail
+                                                              .boughtTogetherQuantity);
+                                                      addToCart(context,
+                                                          productId: widget
+                                                              .restaurantDetail
+                                                              .boughtTogether
+                                                              .id,
+                                                          name: widget
+                                                              .restaurantDetail
+                                                              .boughtTogether
+                                                              .name,
+                                                          imgUrl: widget
+                                                              .restaurantDetail
+                                                              .boughtTogether
+                                                              .url,
+                                                          price:
+                                                              '${((double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
+                                                          qty: 1,
+                                                          qtyTag: widget
+                                                              .restaurantDetail
+                                                              .boughtTogether
+                                                              .boughtTogetherQuantity);
+                                                    },
+                                                  )
+                                                  // GestureDetector(
+                                                  //   child: Container(
+                                                  //       width: 100.0,
+                                                  //       height: 25.0,
+                                                  //       padding: const EdgeInsets.all(4.0),
+                                                  //       decoration: BoxDecoration(
+                                                  //         color: Color(0xFF6b3600),
+                                                  //         borderRadius:
+                                                  //             BorderRadius.circular(8.0),
+                                                  //       ),
+                                                  //       child: FaIcon(
+                                                  //         FontAwesomeIcons.cartArrowDown,
+                                                  //         size: 20,
+                                                  //         color: Colors.white,
+                                                  //       )),
+                                                  // ),
+                                                ],
+                                              )
+                                            : Column(
+                                                children: [
+                                                  Spacer(),
+                                                  Container(
+                                                    child: Text(
+                                                      "AED ${double.parse(widget.restaurantDetail.price) + double.parse(widget.restaurantDetail.boughtTogether.price)}",
+                                                      style:
+                                                          GoogleFonts.poppins(
+                                                        color:
+                                                            Color(0xFF6b3600),
+                                                        fontSize: 15,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                    ),
+                                                  ),
 //                                            Icon(
 //                                              Icons.arrow_downward_rounded,
 //                                              color: Color(0xFF6b3600),
@@ -1778,74 +1838,76 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                                                textAlign: TextAlign.center,
 //                                              ),
 //                                            ),
-                                            Spacer(),
-                                            angadiButton(
-                                              'Add',
-                                              buttonWidth:
-                                              MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                                  0.2,
-                                              buttonHeight:
-                                              MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                                  0.04,
-                                              onTap: () {
-                                                addToCart(context,
-                                                    productId: widget
-                                                        .restaurantDetail
-                                                        .productID,
-                                                    name: widget
-                                                        .restaurantDetail.name,
-                                                    imgUrl: widget
-                                                        .restaurantDetail.url,
-                                                    price:
-                                                    '${((double.parse(widget.restaurantDetail.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
-                                                    qty: 1,
-                                                    qtyTag: widget
-                                                        .restaurantDetail
-                                                        .boughtTogetherQuantity);
-                                                addToCart(context,
-                                                    productId: widget
-                                                        .restaurantDetail
-                                                        .boughtTogether
-                                                        .id,
-                                                    name: widget
-                                                        .restaurantDetail
-                                                        .boughtTogether
-                                                        .name,
-                                                    imgUrl: widget
-                                                        .restaurantDetail
-                                                        .boughtTogether
-                                                        .url,
-                                                    price:
-                                                    '${((double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
-                                                    qty: 1,
-                                                    qtyTag: widget
-                                                        .restaurantDetail
-                                                        .boughtTogether
-                                                        .boughtTogetherQuantity);
-                                              },
-                                            )
-                                            // GestureDetector(
-                                            //   child: Container(
-                                            //       width: 100.0,
-                                            //       height: 25.0,
-                                            //       padding: const EdgeInsets.all(4.0),
-                                            //       decoration: BoxDecoration(
-                                            //         color: Color(0xFF6b3600),
-                                            //         borderRadius:
-                                            //             BorderRadius.circular(8.0),
-                                            //       ),
-                                            //       child: FaIcon(
-                                            //         FontAwesomeIcons.cartArrowDown,
-                                            //         size: 20,
-                                            //         color: Colors.white,
-                                            //       )),
-                                            // ),
-                                          ],
-                                        ),
+                                                  Spacer(),
+                                                  angadiButton(
+                                                    'Add',
+                                                    buttonWidth:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.2,
+                                                    buttonHeight:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .height *
+                                                            0.04,
+                                                    onTap: () {
+                                                      addToCart(context,
+                                                          productId: widget
+                                                              .restaurantDetail
+                                                              .productID,
+                                                          name: widget
+                                                              .restaurantDetail
+                                                              .name,
+                                                          imgUrl: widget
+                                                              .restaurantDetail
+                                                              .url,
+                                                          price:
+                                                              '${((double.parse(widget.restaurantDetail.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
+                                                          qty: 1,
+                                                          qtyTag: widget
+                                                              .restaurantDetail
+                                                              .boughtTogetherQuantity);
+                                                      addToCart(context,
+                                                          productId: widget
+                                                              .restaurantDetail
+                                                              .boughtTogether
+                                                              .id,
+                                                          name: widget
+                                                              .restaurantDetail
+                                                              .boughtTogether
+                                                              .name,
+                                                          imgUrl: widget
+                                                              .restaurantDetail
+                                                              .boughtTogether
+                                                              .url,
+                                                          price:
+                                                              '${((double.parse(widget.restaurantDetail.boughtTogether.price)) * ((100.0 - double.parse(widget.restaurantDetail.boughtTogetherDiscount)) / 100))}',
+                                                          qty: 1,
+                                                          qtyTag: widget
+                                                              .restaurantDetail
+                                                              .boughtTogether
+                                                              .boughtTogetherQuantity);
+                                                    },
+                                                  )
+                                                  // GestureDetector(
+                                                  //   child: Container(
+                                                  //       width: 100.0,
+                                                  //       height: 25.0,
+                                                  //       padding: const EdgeInsets.all(4.0),
+                                                  //       decoration: BoxDecoration(
+                                                  //         color: Color(0xFF6b3600),
+                                                  //         borderRadius:
+                                                  //             BorderRadius.circular(8.0),
+                                                  //       ),
+                                                  //       child: FaIcon(
+                                                  //         FontAwesomeIcons.cartArrowDown,
+                                                  //         size: 20,
+                                                  //         color: Colors.white,
+                                                  //       )),
+                                                  // ),
+                                                ],
+                                              ),
                                       ),
                                     ],
                                   ),
@@ -1916,60 +1978,64 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
                         ],
                       ),
                     ),
-              (widget.restaurantDetail.stock)? Row(
-                      children: [
-                        present == false || present == null
-                            ? angadiButton(
-                                'Save For Later',
-                                buttonTextStyle: addressTextStyle,
-                                onTap: () async {
-                                  var temp = await _queryWishlist(
-                                      widget.restaurantDetail.name);
-                                  print(temp);
-                                  if (temp == null)
-                                    addToWishlist(
-                                      context,
-                                      name: widget.restaurantDetail.name,
-                                      imgUrl: widget.restaurantDetail.url,
-                                      price: prodisprice,
-                                    );
-                                  else
-                                    setState(() {
-                                      print('Item already exists');
-                                      present = true;
-                                    });
-                                },
+                    (widget.restaurantDetail.stock)
+                        ? Row(
+                            children: [
+                              present == false || present == null
+                                  ? angadiButton(
+                                      'Save For Later',
+                                      buttonTextStyle: addressTextStyle,
+                                      onTap: () async {
+                                        var temp = await _queryWishlist(
+                                            widget.restaurantDetail.name);
+                                        // print(temp);
+                                        if (temp == null)
+                                          addToWishlist(
+                                            context,
+                                            name: widget.restaurantDetail.name,
+                                            imgUrl: widget.restaurantDetail.url,
+                                            price: prodisprice,
+                                          );
+                                        else
+                                          setState(() {
+                                            // print('Item already exists');
+                                            present = true;
+                                          });
+                                      },
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                                buttonHeight: 65,
-                                buttonWidth:
-                                    MediaQuery.of(context).size.width * 0.5,
-                                decoration: Decorations
-                                    .customHalfCurvedButtonDecoration(
-                                  color: AppColors.secondaryColor,
-                                  topleftRadius: Sizes.RADIUS_14,
-                                  topRightRadius: Sizes.RADIUS_14,
-                                ),
-                              )
-                            : angadiButton(
-                                'Saved In Wishlist',
-                                buttonTextStyle: addressTextStyle,
-                                onTap: () async {},
+                                      buttonHeight: 65,
+                                      buttonWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.5,
+                                      decoration: Decorations
+                                          .customHalfCurvedButtonDecoration(
+                                        color: AppColors.secondaryColor,
+                                        topleftRadius: Sizes.RADIUS_14,
+                                        topRightRadius: Sizes.RADIUS_14,
+                                      ),
+                                    )
+                                  : angadiButton(
+                                      'Saved In Wishlist',
+                                      buttonTextStyle: addressTextStyle,
+                                      onTap: () async {},
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                                buttonHeight: 65,
-                                buttonWidth:
-                                    MediaQuery.of(context).size.width * 0.5,
-                                decoration: Decorations
-                                    .customHalfCurvedButtonDecoration(
-                                  color: AppColors.secondaryColor,
-                                  topleftRadius: Sizes.RADIUS_14,
-                                  topRightRadius: Sizes.RADIUS_14,
-                                ),
-                              ),
+                                      buttonHeight: 65,
+                                      buttonWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.5,
+                                      decoration: Decorations
+                                          .customHalfCurvedButtonDecoration(
+                                        color: AppColors.secondaryColor,
+                                        topleftRadius: Sizes.RADIUS_14,
+                                        topRightRadius: Sizes.RADIUS_14,
+                                      ),
+                                    ),
 
-                        qty == 0 || qty == null? angadiButton(
-                                'Add to Cart ',
+                              qty == 0 || qty == null
+                                  ? angadiButton(
+                                      'Add to Cart ',
 
-                                onTap: () async {
+                                      onTap: () async {
 //                  await dbHelper.onCreate();
 //                  int l = await dbHelper.check(widget.restaurantDetail.name);
 //                  print(l);
@@ -1978,111 +2044,120 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                                       sizes[choice]);
 //                                   print(temp);
 //                                   if (temp == null)
-                                  addToCart(context,
-                                      name: widget.restaurantDetail.name,
-                                      imgUrl: widget.restaurantDetail.url,
-                                      productId: productID,
-                                      price: prodisprice,
+                                        addToCart(context,
+                                            name: widget.restaurantDetail.name,
+                                            imgUrl: widget.restaurantDetail.url,
+                                            productId: productID,
+                                            price: prodisprice,
 //                                      price: (int.parse(widget
 //                                                  .restaurantDetail.price) *
 //                                              priceFactors[choice])
 //                                          .toString(),
-                                      qty: 1,
-                                      qtyTag: qtyTag);
-                                  // else
-                                  //   setState(() {
-                                  //     print('Item already exists');
-                                  //     check[choice] = true;
-                                  //   });
-                                },
+                                            qty: 1,
+                                            qtyTag: qtyTag);
+                                        // else
+                                        //   setState(() {
+                                        //     print('Item already exists');
+                                        //     check[choice] = true;
+                                        //   });
+                                      },
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                                buttonHeight: 65,
-                                buttonWidth:
-                                    MediaQuery.of(context).size.width * 0.5,
-                                decoration: Decorations
-                                    .customHalfCurvedButtonDecoration(
-                                  color: Color(0xFF6b3600),
-                                  topleftRadius: Sizes.RADIUS_14,
-                                  topRightRadius: Sizes.RADIUS_14,
-                                ),
-                              )
-                            : Container(
-                                width: MediaQuery.of(context).size.width * 0.5,
-                                child: Center(
-                                  child: Container(
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.all(
-                                            Radius.circular(5)),
-                                        color: Color(0xFF6b3600)),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceEvenly,
-                                        children: [
-                                          InkWell(
-                                            onTap: () async {
-                                              await getAllItems();
-                                              for (var v in cartItems) {
-                                                if (v.productName ==
-                                                    widget.restaurantDetail
-                                                        .name) {
-                                                  var newQty = v.qty + 1;
-                                                  updateItem(
-                                                      id: v.id,
-                                                      name: v.productName,
-                                                      imgUrl: v.imgUrl,
-                                                      price: v.price,
-                                                      qty: newQty,
-                                                      qtyTag: qtyTag);
-                                                }
-                                              }
-                                            },
-                                            child: Icon(
-                                              Icons.add,
-                                              color: AppColors.secondaryColor,
-                                            ),
-                                          ),
-                                          Text(
-                                            qty.toString(),
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                          InkWell(
-                                            onTap: () async {
-                                              await getAllItems();
-
-                                              for (var v in cartItems) {
-                                                if (v.productName ==
-                                                    widget.restaurantDetail
-                                                        .name) {
-                                                  if (v.qty == 1) {
-                                                    removeItem(
-                                                        v.productName, qtyTag);
-                                                  } else {
-                                                    var newQty = v.qty - 1;
-                                                    updateItem(
-                                                        id: v.id,
-                                                        name: v.productName,
-                                                        imgUrl: v.imgUrl,
-                                                        price: v.price,
-                                                        qty: newQty,
-                                                        qtyTag: qtyTag);
-                                                  }
-                                                }
-                                              }
-                                            },
-                                            child: Icon(
-                                              Icons.remove,
-                                              color: AppColors.secondaryColor,
-                                            ),
-                                          )
-                                        ],
+                                      buttonHeight: 65,
+                                      buttonWidth:
+                                          MediaQuery.of(context).size.width *
+                                              0.5,
+                                      decoration: Decorations
+                                          .customHalfCurvedButtonDecoration(
+                                        color: Color(0xFF6b3600),
+                                        topleftRadius: Sizes.RADIUS_14,
+                                        topRightRadius: Sizes.RADIUS_14,
                                       ),
-                                    ),
-                                    height: 30,
-                                    width: 100,
-                                  ),
-                                )),
+                                    )
+                                  : Container(
+                                      width: MediaQuery.of(context).size.width *
+                                          0.5,
+                                      child: Center(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.all(
+                                                  Radius.circular(5)),
+                                              color: Color(0xFF6b3600)),
+                                          child: Center(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: [
+                                                InkWell(
+                                                  onTap: () async {
+                                                    await getAllItems();
+                                                    for (var v in cartItems) {
+                                                      if (v.productName ==
+                                                          widget
+                                                              .restaurantDetail
+                                                              .name) {
+                                                        var newQty = v.qty + 1;
+                                                        updateItem(
+                                                            id: v.id,
+                                                            name: v.productName,
+                                                            imgUrl: v.imgUrl,
+                                                            price: v.price,
+                                                            qty: newQty,
+                                                            qtyTag: qtyTag);
+                                                      }
+                                                    }
+                                                  },
+                                                  child: Icon(
+                                                    Icons.add,
+                                                    color: AppColors
+                                                        .secondaryColor,
+                                                  ),
+                                                ),
+                                                Text(
+                                                  qty.toString(),
+                                                  style: TextStyle(
+                                                      color: Colors.white),
+                                                ),
+                                                InkWell(
+                                                  onTap: () async {
+                                                    await getAllItems();
+
+                                                    for (var v in cartItems) {
+                                                      if (v.productName ==
+                                                          widget
+                                                              .restaurantDetail
+                                                              .name) {
+                                                        if (v.qty == 1) {
+                                                          removeItem(
+                                                              v.productName,
+                                                              qtyTag);
+                                                        } else {
+                                                          var newQty =
+                                                              v.qty - 1;
+                                                          updateItem(
+                                                              id: v.id,
+                                                              name:
+                                                                  v.productName,
+                                                              imgUrl: v.imgUrl,
+                                                              price: v.price,
+                                                              qty: newQty,
+                                                              qtyTag: qtyTag);
+                                                        }
+                                                      }
+                                                    }
+                                                  },
+                                                  child: Icon(
+                                                    Icons.remove,
+                                                    color: AppColors
+                                                        .secondaryColor,
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                          height: 30,
+                                          width: 100,
+                                        ),
+                                      )),
 //                              ): angadiButton(
 //                          'Unavailable ',
 //
@@ -2123,53 +2198,53 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
 //                            topRightRadius: Sizes.RADIUS_14,
 //                          ),
 //                        )
-                      ],
-                    ):    present == false || present == null?angadiButton(
-                'Save For Later',
-                buttonTextStyle: addressTextStyle,
-                onTap: () async {
-                  var temp = await _queryWishlist(
-                      widget.restaurantDetail.name);
-                  print(temp);
-                  if (temp == null)
-                    addToWishlist(
-                      context,
-                      name: widget.restaurantDetail.name,
-                      imgUrl: widget.restaurantDetail.url,
-                      price: prodisprice,
-                    );
-                  else
-                    setState(() {
-                      print('Item already exists');
-                      present = true;
-                    });
-                },
+                            ],
+                          )
+                        : present == false || present == null
+                            ? angadiButton(
+                                'Save For Later',
+                                buttonTextStyle: addressTextStyle,
+                                onTap: () async {
+                                  var temp = await _queryWishlist(
+                                      widget.restaurantDetail.name);
+                                  // print(temp);
+                                  if (temp == null)
+                                    addToWishlist(
+                                      context,
+                                      name: widget.restaurantDetail.name,
+                                      imgUrl: widget.restaurantDetail.url,
+                                      price: prodisprice,
+                                    );
+                                  else
+                                    setState(() {
+                                      // print('Item already exists');
+                                      present = true;
+                                    });
+                                },
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                buttonHeight: 65,
-                buttonWidth:
-                MediaQuery.of(context).size.width ,
-                decoration: Decorations
-                    .customHalfCurvedButtonDecoration(
-                  color: AppColors.secondaryColor,
-                  topleftRadius: Sizes.RADIUS_14,
-                  topRightRadius: Sizes.RADIUS_14,
-                ),
-              )
-                  : angadiButton(
-                'Saved In Wishlist',
-                buttonTextStyle: addressTextStyle,
-                onTap: () async {},
+                                buttonHeight: 65,
+                                buttonWidth: MediaQuery.of(context).size.width,
+                                decoration: Decorations
+                                    .customHalfCurvedButtonDecoration(
+                                  color: AppColors.secondaryColor,
+                                  topleftRadius: Sizes.RADIUS_14,
+                                  topRightRadius: Sizes.RADIUS_14,
+                                ),
+                              )
+                            : angadiButton(
+                                'Saved In Wishlist',
+                                buttonTextStyle: addressTextStyle,
+                                onTap: () async {},
 //                    R.Router.navigator.pushNamed(R.Router.addRatingsScreen),
-                buttonHeight: 65,
-                buttonWidth:
-                MediaQuery.of(context).size.width ,
-                decoration: Decorations
-                    .customHalfCurvedButtonDecoration(
-                  color: AppColors.secondaryColor,
-                  topleftRadius: Sizes.RADIUS_14,
-                  topRightRadius: Sizes.RADIUS_14,
-                ),
-              ),
+                                buttonHeight: 65,
+                                buttonWidth: MediaQuery.of(context).size.width,
+                                decoration: Decorations
+                                    .customHalfCurvedButtonDecoration(
+                                  color: AppColors.secondaryColor,
+                                  topleftRadius: Sizes.RADIUS_14,
+                                  topRightRadius: Sizes.RADIUS_14,
+                                ),
+                              ),
                   ],
                 ),
               ),

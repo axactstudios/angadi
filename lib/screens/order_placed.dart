@@ -316,6 +316,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/heading_row.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -396,8 +397,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(
-                    phone: '+971 50 7175406', message: 'Check out this awesome app');
+                FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
               },
               child: Container(
                   alignment: Alignment.center,
@@ -567,7 +567,7 @@ class _OrderPlacedState extends State<OrderPlaced> {
                                     border:
                                         Border.all(color: Color(0xFF6b3600))),
                                 child: Center(
-                                  child: (days<=0)
+                                  child: (days <= 0)
                                       ? Align(
                                           alignment: Alignment.centerLeft,
                                           child: Text(

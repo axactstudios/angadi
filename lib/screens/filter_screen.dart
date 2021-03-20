@@ -31,23 +31,32 @@ class _FilterScreenState extends State<FilterScreen> {
     color: AppColors.accentText,
     fontSize: Sizes.TEXT_SIZE_16,
   );
-  List<String> categories=[];
+  List<String> categories = [];
   @override
   void initState() {
     getcategory();
     super.initState();
   }
-void getcategory()async{
- await Firestore.instance.collection('Categories').snapshots().forEach((element) {
-    for(int i=0;i<element.documents.length;i++){
-      setState(() {
-        categories.add(element.documents[i]['catName'].toString());
-      });
 
-    }
-  });
-  print('-------------------cat:${categories.length}');
-}
+  void getcategory() async {
+    await Firestore.instance
+        .collection('Categories')
+        .snapshots()
+        .forEach((element) {
+      for (int i = 0; i < element.documents.length; i++) {
+        setState(() {
+          categories.add(element.documents[i]['catName'].toString());
+        });
+      }
+    });
+    print('-------------------cat:${categories.length}');
+
+    setState(() {
+      cat = categories[0];
+      print(cat);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -105,7 +114,8 @@ void getcategory()async{
                     direction: Axis.horizontal,
                     spacing: 16,
                     runAlignment: WrapAlignment.spaceBetween,
-                    children: createCategoryButtons(numberOfButtons: categories.length),
+                    children: createCategoryButtons(
+                        numberOfButtons: categories.length),
                   ),
                   SizedBox(height: 24.0),
                   Column(
@@ -267,7 +277,7 @@ void getcategory()async{
 //      'Tiffin',
 //      'Rice'
 //    ];
-List<String>buttonTitles=categories;
+    List<String> buttonTitles = categories;
     List<int> list = List<int>.generate(numberOfButtons, (i) => i + 1);
 
     list.forEach((i) {

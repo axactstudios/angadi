@@ -23,6 +23,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:flutter_paytabs_bridge_emulator/flutter_paytabs_bridge_emulator.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -102,7 +103,7 @@ class _CheckoutState extends State<Checkout> {
   void shared() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     id2 = prefs.getString('Orderid');
-    print('####################${id2}');
+    // print('####################${id2}');
   }
 
   String emirate;
@@ -204,7 +205,7 @@ class _CheckoutState extends State<Checkout> {
   List<EmiratesArea>getall=[];
 void alldata(String newemirate)async {
   getall.clear();
-  print(newemirate);
+  // print(newemirate);
 //  length2=0;
 
   await Firestore.instance.collection('EmiratesArea').where(
@@ -237,9 +238,9 @@ void alldata(String newemirate)async {
       for (int j = i + 1; j < event.documents.length; j++) {
         if (event.documents[i]['name'] == event.documents[j]['name']) {
 //              areaname.add(' ${event.documents[j]['name']}');
-          print('5555555555555${event.documents[j]['name']}');
-          print('Minorder${ event.documents[j]
-          ['minOrderPrice']}');
+//           print('5555555555555${event.documents[j]['name']}');
+//           print('Minorder${ event.documents[j]
+//           ['minOrderPrice']}');
           EmiratesArea emi2 = EmiratesArea(event.documents[j]
           ['Emirate'],
               event.documents[j]
@@ -252,7 +253,7 @@ void alldata(String newemirate)async {
           getall.add(emi2);
 //              print('length:${areaname.length}');
           index = j;
-          print('Index:${index}');
+          // print('Index:${index}');
         }
       }
       if (i != index) {
@@ -431,7 +432,7 @@ void alldata(String newemirate)async {
                         AsyncSnapshot<QuerySnapshot> snap) {
                       if (snap.hasData && !snap.hasError && snap.data != null) {
                         timeSlots.clear();
-                        print(snap.data.documents[0].data['Timeslots']);
+                        // print(snap.data.documents[0].data['Timeslots']);
                         for (int i = 0;
                             i < snap.data.documents[0].data['Timeslots'].length;
                             i++) {
@@ -588,7 +589,7 @@ void alldata(String newemirate)async {
       setState(() {
         docid = event.documents[0].documentID;
       });
-      print(event.documents[0].documentID);
+      // print(event.documents[0].documentID);
     });
   }
 int length2=0;
@@ -619,10 +620,10 @@ int length2=0;
   }
 
   void setaddress() async {
-    print('=====================Reached');
+    // print('=====================Reached');
     if (addresstype == 'House') {
-      print('------------------');
-      print(docid);
+      // print('------------------');
+      // print(docid);
       (docid != null && docid != '')
           ? await Firestore.instance
               .collection('Users')
@@ -661,7 +662,7 @@ int length2=0;
         .collection('Timeslots')
         .snapshots()
         .listen((event) {
-      print(event.documents[0].data['LastSlot']);
+      // print(event.documents[0].data['LastSlot']);
       String st = event.documents[0].data['LastSlot'];
       String s = '';
       for (int i = 0; i < st.length; i++) {
@@ -696,7 +697,7 @@ void indicator()async{
 //    alldata();
     val = true;
 
-    print('---------------${orderid}');
+    // print('---------------${orderid}');
     checkLastSlot();
     time = TimeOfDay.now();
     date = DateTime(DateTime.now().year, DateTime.now().month,
@@ -943,7 +944,7 @@ void indicator()async{
     if (widget.address != '') {
       for (int i = 0; i < savedarea.length; i++) {
         if (widget.SavedArea == savedarea[i].name) {
-          print(widget.SavedArea);
+          // print(widget.SavedArea);
           setState(() {
             minOrderPrice = double.parse(savedarea[i].minOrderPrice);
             deliveryCharge = double.parse(savedarea[i].deliveryCharge);
@@ -963,7 +964,7 @@ void indicator()async{
   }
 
   Future<bool> onPressed() {
-    print('pressed');
+    // print('pressed');
     Checksuccess();
     return Future.value(false);
   }
@@ -1011,8 +1012,8 @@ int index=0;
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(
-                      phone: '+971 50 7175406', message: whatsappMessage);
+                  FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
+
                 },
                 child: Container(
                     alignment: Alignment.center,
@@ -1521,7 +1522,7 @@ int index=0;
                                                                     newValue;
                                                                 emirate2 =
                                                                     newValue;
-                                                                print(emirate);
+                                                                // print(emirate);
                                                                 alldata(emirate);
 
 //                      Navigator.pop(context);
@@ -1586,7 +1587,7 @@ int index=0;
                                             areaname.clear();
                                             index=0;
 //                                            length2=0;
-                                            print('Streambuilder');
+//                                             print('Streambuilder');
                                             for (int i = 0;
                                                 i < snap.data.documents.length;
                                                 i++) {
@@ -1609,9 +1610,9 @@ int index=0;
                                               for(int j=i+1;j<snap.data.documents.length;j++){
                                                 if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
                                                   areaname.add(' ${snap.data.documents[j]['name']}');
-                                                  print('5555555555555${snap.data.documents[j]['name']}');
-                                                  print('Minorder${  snap.data.documents[j]
-                                                  ['minOrderPrice']}');
+                                                  // print('5555555555555${snap.data.documents[j]['name']}');
+                                                  // print('Minorder${  snap.data.documents[j]
+                                                  // ['minOrderPrice']}');
                                                   EmiratesArea emi2=EmiratesArea( snap.data.documents[j]
                                                   ['Emirate'],
                                                       snap.data.documents[j]
@@ -1622,9 +1623,9 @@ int index=0;
                                                       snap.data.documents[j]
                                                       ['zone']);
                                                   allareas.add(emi2);
-                                                  print('length:${areaname.length}');
+                                                  // print('length:${areaname.length}');
                                                   index=j;
-                                                  print('Index:${index}');
+                                                  // print('Index:${index}');
 
 
                                                 }
@@ -1687,34 +1688,34 @@ int index=0;
                                                                 newValue) {
                                                               setState(() {
                                                                 area = newValue;
-                                                                print('DeliveryCharge:${deliveryCharge}');
+                                                                // print('DeliveryCharge:${deliveryCharge}');
 
-                                                                print(
-                                                                    '---------------');
-                                                                print(area);
+                                                                // print(
+                                                                //     '---------------');
+                                                                // print(area);
                                                                 if (area ==
                                                                     'Others') {
-                                                                  print(
-                                                                      'Reached');
+                                                                  // print(
+                                                                  //     'Reached');
                                                                   for (int i =
                                                                           0;
                                                                       i <
                                                                           allemirates
                                                                               .length;
                                                                       i++) {
-                                                                    print(
-                                                                        'yess');
-                                                                    print(
-                                                                        '===============${emirate}');
+                                                                    // print(
+                                                                    //     'yess');
+                                                                    // print(
+                                                                    //     '===============${emirate}');
                                                                     if (emirate ==
                                                                         allemirates[i]
                                                                             .name) {
-                                                                      print(
-                                                                          'check');
-                                                                      print(
-                                                                          emirate);
-                                                                      print(allemirates[
-                                                                          i]);
+                                                                      // print(
+                                                                      //     'check');
+                                                                      // print(
+                                                                      //     emirate);
+                                                                      // print(allemirates[
+                                                                      //     i]);
                                                                       setState(
                                                                           () {
                                                                         minOrderPrice =
@@ -1910,7 +1911,7 @@ int index=0;
                                             for (int i = 0;
                                                 i < snap.data.documents.length;
                                                 i++) {
-                                              print(snap.data.documents.length);
+                                              // print(snap.data.documents.length);
                                               emirate2 = snap.data.documents[0]
                                                   ['name'];
                                               emiratesname.add(snap
@@ -1963,7 +1964,7 @@ int index=0;
                                                                     newValue;
                                                                 emirate2 =
                                                                     newValue;
-                                                                print(emirate);
+                                                                // print(emirate);
                                                                 alldata(emirate);
 //                      Navigator.pop(context);
                                                               });
@@ -1995,13 +1996,13 @@ int index=0;
                                             for (int i = 0;
                                             i < snap.data.documents.length;
                                             i++) {
-                                              print(snap.data.documents.length);
+                                              // print(snap.data.documents.length);
                                               for(int j=i+1;j<snap.data.documents.length;j++){
                                                 if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
                                                   areaname.add(' ${snap.data.documents[j]['name']}');
-                                                  print('5555555555555${snap.data.documents[j]['name']}');
-                                                  print('Minorder${  snap.data.documents[j]
-                                                  ['minOrderPrice']}');
+                                                  // print('5555555555555${snap.data.documents[j]['name']}');
+                                                  // print('Minorder${  snap.data.documents[j]
+                                                  // ['minOrderPrice']}');
                                                   EmiratesArea emi2=EmiratesArea( snap.data.documents[j]
                                                   ['Emirate'],
                                                       snap.data.documents[j]
@@ -2012,9 +2013,9 @@ int index=0;
                                                       snap.data.documents[j]
                                                       ['zone']);
                                                   allareas.add(emi2);
-                                                  print('length:${areaname.length}');
+                                                  // print('length:${areaname.length}');
                                                   index=j;
-                                                  print('Index:${index}');
+                                                  // print('Index:${index}');
 
 
                                                 }
@@ -2070,9 +2071,9 @@ int index=0;
                                                                 newValue) {
                                                               setState(() {
                                                                 area = newValue;
-                                                                print(
-                                                                    '---------------------');
-                                                                print(area);
+                                                                // print(
+                                                                //     '---------------------');
+                                                                // print(area);
 
                                                                 if (area ==
                                                                     'Others') {
@@ -2115,7 +2116,6 @@ int index=0;
                                                                               allareas[i].deliveryCharge);
                                                                     });
                                                                 }
-//                      Navigator.pop(context);
                                                               });
                                                             },
                                                           ),
@@ -2129,7 +2129,7 @@ int index=0;
                                           }
                                         }),
 //                                  Padding(
-//                                    padding: const EdgeInsets.all(8.0),
+//                                  padding: const EdgeInsets.all(8.0),
 //                                    child: TextFormField(
 //                                      decoration: InputDecoration(
 //                                          border: OutlineInputBorder(
@@ -2247,7 +2247,7 @@ int index=0;
                             ischecked = !ischecked;
                           });
                           if (ischecked == true) {
-                            print(ischecked);
+                            // print(ischecked);
                             if (_formkey.currentState.validate()) {
                               setaddress();
                             } else {
@@ -2622,7 +2622,7 @@ int index=0;
                             child: angadiButton('Cash On Delivery',
                                 buttonWidth: MediaQuery.of(context).size.width,
                                 onTap: () {
-                              print('-------------------------------------');
+                              // print('-------------------------------------');
 
                               if (widget.address != '') {
                                 if (_formkey2.currentState.validate()) {
@@ -2958,7 +2958,7 @@ int index=0;
   var id;
   void set(String title) async {
     await getUserDetails();
-    print('title:${title}');
+    // print('title:${title}');
     List titles = [];
 //    titles.add(title);
     List check = [];
@@ -2973,10 +2973,10 @@ int index=0;
         titles.add(check[i]);
       }
 
-      print('checkkkkkkkkkkkkkkkkkkkk${check.length}');
+      // print('checkkkkkkkkkkkkkkkkkkkk${check.length}');
 
       titles.add(title);
-      print('========================${titles}');
+      // print('========================${titles}');
       Firestore.instance.collection('Users').document(user.uid).updateData({
         'couponUsed': titles,
       });
@@ -2999,10 +2999,10 @@ int index=0;
         ? dis =
             ('${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}')
         : dis = ' 0';
-    print('----------------------');
-    print(selectedDate);
-    print(selectedDate.year);
-    print(selectedTime.split(' ').join().toLowerCase());
+    // print('----------------------');
+    // print(selectedDate);
+    // print(selectedDate.year);
+    // print(selectedTime.split(' ').join().toLowerCase());
     var tt = selectedTime.split(' ').join().toLowerCase();
     String s = '';
     for (int i = 0; i < selectedTime.length; i++) {
@@ -3014,11 +3014,11 @@ int index=0;
 
     dd = int.parse(s);
     if (selectedTime.contains('PM')) dd = dd + 12;
-    print(
-        'Hours are $dd ${DateTime(selectedDate.year, selectedDate.month, selectedDate.day, dd)}');
+    // print(
+    //     'Hours are $dd ${DateTime(selectedDate.year, selectedDate.month, selectedDate.day, dd)}');
     var rng = new Random();
     var code = rng.nextInt(90000) + 10000;
-    print('ANG${code.toString()}');
+    // print('ANG${code.toString()}');
     setState(() {
       id = 'ANG${code.toString()}';
     });
@@ -3030,7 +3030,7 @@ int index=0;
     List productIDs = [];
     List qtytags = [];
     for (var v in cartItems) {
-      print(v.productName);
+      // print(v.productName);
       items.add(v.productName);
       prices.add(v.price);
       quantities.add(v.qty);
@@ -3283,7 +3283,7 @@ int index=0;
       });
     });
     Timestamp myTimeStamp = Timestamp.fromDate(selectedDate);
-    print(myTimeStamp.toString());
+    // print(myTimeStamp.toString());
 
     Navigator.pushReplacement(context,
         MaterialPageRoute(builder: (BuildContext context) {
@@ -3344,9 +3344,9 @@ int index=0;
 //      setState(() {
 //        _currentPosition = position;
 //      });
-    print(_currentPosition);
+//     print(_currentPosition);
     _getAddressFromLatLng();
-    print(_currentPosition);
+    // print(_currentPosition);
   }
 
   _getAddressFromLatLng() async {
@@ -3362,11 +3362,11 @@ int index=0;
       setState(() {
         currentAddress =
             "${first.subLocality}, ${first.locality}, ${first.postalCode}, ${first.countryName},  ${first.adminArea} ";
-        print(currentAddress);
+        // print(currentAddress);
         addressController.text = currentAddress;
       });
     } catch (e) {
-      print(e);
+      // print(e);
     }
   }
 
@@ -3484,7 +3484,7 @@ int index=0;
       addressController.text = result.formattedAddress;
     });
     // Handle the result in your way
-    print(addressController.text);
+    // print(addressController.text);
   }
 
   String _result = '---';
@@ -3522,17 +3522,17 @@ int index=0;
     };
     FlutterPaytabsSdk.startPayment(args, (event) {
       setState(() {
-        print(event);
+        // print(event);
         List<dynamic> eventList = event;
         Map firstEvent = eventList.first;
         if (firstEvent.keys.first == "EventPreparePaypage") {
           //_result = firstEvent.values.first.toString();
 //          _result = firstEvent["pt_response_code"];
-          print(
-              '========================================================================');
+//           print(
+//               '========================================================================');
         } else {
           _result = firstEvent["pt_response_code"];
-          print(_result);
+          // print(_result);
         }
       });
     });
@@ -3563,12 +3563,12 @@ int index=0;
     List quantities = [];
     j = 0;
     for (var v in cartItems) {
-      print(v.productName);
+      // print(v.productName);
       items.add(v.productName);
       prices.add(v.price);
       quantities.add(v.qty);
     }
-    print(selectedTime.split(' ').join().toLowerCase());
+    // print(selectedTime.split(' ').join().toLowerCase());
     var tt = selectedTime.split(' ').join().toLowerCase();
     String s = '';
     for (int i = 0; i < selectedTime.length; i++) {
@@ -3596,7 +3596,7 @@ int index=0;
     HttpClientResponse response = await request.close();
     var reply = await response.transform(utf8.decoder).join();
     httpClient.close();
-    print(reply);
+    // print(reply);
     var decode = jsonDecode(reply);
     map = decode;
 await pr.hide();
@@ -3614,14 +3614,14 @@ await pr.hide();
       val = false;
     });
 
-    print(val);
+    // print(val);
 //    Navigator.push(context,MaterialPageRoute(builder:(context)=>HomeScreen()));
 //         Navigator.push(context,MaterialPageRoute(builder:(context)=>WebviewScreen(map['payment_url'])));
 //   _launchURL(map['payment_url']);
   }
 
   placeOnlinePaidOrder() {
-    print(_result);
+    // print(_result);
     if (_result == '100' || _result == '833') {
       placeOrder(type);
     }
@@ -3647,15 +3647,15 @@ await pr.hide();
   int k = 0;
   int length = 0;
   Future<String> Checksuccess() async {
-    print('running check');
+    // print('running check');
     var coupon;
     (discount != null) ? coupon = discount.title : coupon = '';
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String onlineid = prefs.getString('Orderid');
-    print('----------------------$onlineid');
-    print(selectedDate);
-    print(selectedDate.year);
-    print(selectedTime.split(' ').join().toLowerCase());
+    // print('----------------------$onlineid');
+    // print(selectedDate);
+    // print(selectedDate.year);
+    // print(selectedTime.split(' ').join().toLowerCase());
     var tt = selectedTime.split(' ').join().toLowerCase();
     String s = '';
     for (int i = 0; i < selectedTime.length; i++) {
@@ -3677,8 +3677,8 @@ await pr.hide();
         : dis = ' 0';
     dd = int.parse(s);
     if (selectedTime.contains('PM')) dd = dd + 12;
-    print(
-        'Hours are $dd ${DateTime(selectedDate.year, selectedDate.month, selectedDate.day, dd)}');
+    // print(
+    //     'Hours are $dd ${DateTime(selectedDate.year, selectedDate.month, selectedDate.day, dd)}');
 
     await getUserDetails();
     List items = [];
@@ -3686,7 +3686,7 @@ await pr.hide();
     List quantities = [];
     List qtytags = [];
     for (var v in cartItems) {
-      print(v.productName);
+      // print(v.productName);
       items.add(v.productName);
       prices.add(v.price);
       quantities.add(v.qty);
@@ -3816,7 +3816,7 @@ await pr.hide();
               });
             });
             Timestamp myTimeStamp = Timestamp.fromDate(selectedDate);
-            print(myTimeStamp.toString());
+            // print(myTimeStamp.toString());
 
             pushNewScreen(context, screen: MyOrders(user));
           }

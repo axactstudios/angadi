@@ -9,6 +9,7 @@ import 'package:angadi/widgets/nav_drawer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -80,7 +81,7 @@ class _MainCategoriesScreenState extends State<MainCategoriesScreen> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone: '+971 50 7175406', message: whatsappMessage);
+                  FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
                 },
                 child: Container(
                     alignment: Alignment.center,

@@ -113,16 +113,16 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
   var order;
   var orderid;
   void id() async {
-    print('hiiiiiiiiiiiiiiiiiiiiiiiiiii');
-    print(cartItems.length);
+    // print('hiiiiiiiiiiiiiiiiiiiiiiiiiii');
+    // print(cartItems.length);
     if (cartItems.length == 1) {
       Firestore.instance
           .collection('Orders')
           .document('ordercount')
           .snapshots()
           .listen((event) {
-        print('&&&&&&&&&&&&&&&&');
-        print(event['Numberoforders'].toString());
+        // print('&&&&&&&&&&&&&&&&');
+        // print(event['Numberoforders'].toString());
         setState(() {
           order = event['Numberoforders'];
         });
@@ -197,16 +197,13 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                     borderRadius: BorderRadius.all(Radius.circular(5))),
                 margin: EdgeInsets.only(right: Sizes.MARGIN_16),
                 child: InkWell(
-                  onTap: () async{
-
+                  onTap: () async {
                     user != null
                         ? Navigator.push(context,
                             MaterialPageRoute(builder: (BuildContext context) {
                             return Checkout('', orderid, '', '');
-
                           }))
                         : login();
-
                   },
                   child: Container(
                     child: Padding(
@@ -239,7 +236,7 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
                   return SpaceH8();
                 },
                 itemBuilder: (context, index) {
-                  print(cartItems[index].id);
+                  // print(cartItems[index].id);
                   return Container(
                     width: MediaQuery.of(context).size.width * 0.9,
                     // height: 250,

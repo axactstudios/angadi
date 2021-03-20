@@ -8,6 +8,7 @@ import 'package:angadi/widgets/heading_row.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
@@ -36,32 +37,45 @@ class _MyAddresses2State extends State<MyAddresses2> {
     });
     // Handle the result in your way
     print(location);
-    if(location!=null){
-      Navigator.of(context).push(MaterialPageRoute(builder:(context)=>ConfirmAddress(location)));
+    if (location != null) {
+      Navigator.of(context).push(
+          MaterialPageRoute(builder: (context) => ConfirmAddress(location)));
     }
-
   }
-  List<Address>alladresses=[];
 
-  void alladdresses()async{
+  List<Address> alladresses = [];
+
+  void alladdresses() async {
     setState(() {
       alladresses.clear();
     });
 
     print('--------------');
-    await Firestore.instance.collection('Users').document(widget.id).collection('Address').snapshots().forEach((element) {element.documents.forEach((element) {setState(() {
-      Address add =Address(element['address'],element['hno'],element['landmark'],element['Emirate'],element['Area']);
-      alladresses.add(add);
+    await Firestore.instance
+        .collection('Users')
+        .document(widget.id)
+        .collection('Address')
+        .snapshots()
+        .forEach((element) {
+      element.documents.forEach((element) {
+        setState(() {
+          Address add = Address(element['address'], element['hno'],
+              element['landmark'], element['Emirate'], element['Area']);
+          alladresses.add(add);
+        });
+        print(id);
+        print(alladresses.length);
+      });
     });
-    print(id);
-    print(alladresses.length);});});
   }
+
   @override
   void initState() {
     alladresses.clear();
     alladdresses();
     super.initState();
   }
+
   void launchWhatsApp({
     @required String phone,
     @required String message,
@@ -80,6 +94,7 @@ class _MyAddresses2State extends State<MyAddresses2> {
       throw 'Could not launch ${url()}';
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,13 +114,13 @@ class _MyAddresses2State extends State<MyAddresses2> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(
-                    phone: '+971 50 7175406', message: 'Check out this awesome app');
+                FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
               },
               child: Container(
                   alignment: Alignment.center,
-                  child: FaIcon(FontAwesomeIcons.whatsapp, color: Color(0xFF6b3600)))),
-          SizedBox(width:8),
+                  child: FaIcon(FontAwesomeIcons.whatsapp,
+                      color: Color(0xFF6b3600)))),
+          SizedBox(width: 8),
           InkWell(
               onTap: () {
 //                print(1);
@@ -134,66 +149,128 @@ class _MyAddresses2State extends State<MyAddresses2> {
             children: [
               Padding(
                   padding: const EdgeInsets.all(8.0),
-
                   child: StreamBuilder(
-                      stream: Firestore.instance.collection('Users').document(widget.id).collection('Address').snapshots(),
-                      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snap) {
-                        if (snap.hasData && !snap.hasError && snap.data != null) {
+                      stream: Firestore.instance
+                          .collection('Users')
+                          .document(widget.id)
+                          .collection('Address')
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snap) {
+                        if (snap.hasData &&
+                            !snap.hasError &&
+                            snap.data != null) {
                           alladresses.clear();
                           for (int i = 0; i < snap.data.documents.length; i++) {
                             print(snap.data.documents.length);
-                            Address add=Address(snap.data.documents[i]['address'],snap.data.documents[i]['hno'],snap.data.documents[i]['landmark'],snap.data.documents[i]['Emirate'],snap.data.documents[i]['Area']);
-                            alladresses.add(add);}
-                          return  alladresses.length!=0
-                              ?  Column(
-                            children: [
-                              HeadingRow(
-                                title: 'Saved Addresses',
-                                number: '',
-                              ),
-                              ListView.builder(
-                                itemCount: alladresses.length,
-                                shrinkWrap:true,
-                                physics:ClampingScrollPhysics(),
-                                itemBuilder: (context,index){
-                                  var item=alladresses[index];
-                                  return InkWell(
-                                    onTap:()async{
-                                      SharedPreferences prefs= await SharedPreferences.getInstance();
-                                      var orderid =prefs.getString('Orderid');
-
-                                      (item.hno!=null&&item.hno!=''&&item.landmark!=null&&item.landmark!='')?Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('H.no. ${item.hno} , ${item.address} , near ${item.landmark},Emirate: ${item.emirate}, Area : ${item.area}',orderid,item.area,item.emirate))):(item.hno!=null&&item.hno!='')?Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('H.no. ${item.hno} , ${item.address}, Emirate: ${item.emirate}, Area:${item.area} ',orderid,item.area,item.emirate))):Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>Checkout('${item.address} , Emirate: ${item.emirate} , Area: ${item.area}',orderid,item.area,item.emirate)));
-                                    },
-                                    child: Card(
-                                        child:Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.start,
-                                            children: [
-                                              (item.hno!=null&&item.hno!='')?Text('Address : H.no. ${item.hno} , ${item.address}'):Text('Address :  ${item.address}'),
-
-                                              (item.landmark!=null&&item.landmark!='')?Align(alignment:Alignment.bottomLeft,child: Text('Landmark : ${item.landmark}')):Text(''),
-                                          Align(alignment:Alignment.bottomLeft,child: Text('Emirate : ${item.emirate}')),
-                                          Align(alignment:Alignment.bottomLeft,child: Text('Area: ${item.area}')),
-                                            ],
-                                          ),
-                                        )
+                            Address add = Address(
+                                snap.data.documents[i]['address'],
+                                snap.data.documents[i]['hno'],
+                                snap.data.documents[i]['landmark'],
+                                snap.data.documents[i]['Emirate'],
+                                snap.data.documents[i]['Area']);
+                            alladresses.add(add);
+                          }
+                          return alladresses.length != 0
+                              ? Column(
+                                  children: [
+                                    HeadingRow(
+                                      title: 'Saved Addresses',
+                                      number: '',
                                     ),
-                                  );
-                                },
-                              )
-                            ],
-                          ):Container();
-                        }
-                        else{
+                                    ListView.builder(
+                                      itemCount: alladresses.length,
+                                      shrinkWrap: true,
+                                      physics: ClampingScrollPhysics(),
+                                      itemBuilder: (context, index) {
+                                        var item = alladresses[index];
+                                        return InkWell(
+                                          onTap: () async {
+                                            SharedPreferences prefs =
+                                                await SharedPreferences
+                                                    .getInstance();
+                                            var orderid =
+                                                prefs.getString('Orderid');
+
+                                            (item.hno != null &&
+                                                    item.hno != '' &&
+                                                    item.landmark != null &&
+                                                    item.landmark != '')
+                                                ? Navigator.pushReplacement(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                        builder: (context) =>
+                                                            Checkout(
+                                                                'H.no. ${item.hno} , ${item.address} , near ${item.landmark},Emirate: ${item.emirate}, Area : ${item.area}',
+                                                                orderid,
+                                                                item.area,
+                                                                item.emirate)))
+                                                : (item.hno != null &&
+                                                        item.hno != '')
+                                                    ? Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                Checkout(
+                                                                    'H.no. ${item.hno} , ${item.address}, Emirate: ${item.emirate}, Area:${item.area} ',
+                                                                    orderid,
+                                                                    item.area,
+                                                                    item
+                                                                        .emirate)))
+                                                    : Navigator.pushReplacement(
+                                                        context,
+                                                        MaterialPageRoute(
+                                                            builder: (context) =>
+                                                                Checkout(
+                                                                    '${item.address} , Emirate: ${item.emirate} , Area: ${item.area}',
+                                                                    orderid,
+                                                                    item.area,
+                                                                    item.emirate)));
+                                          },
+                                          child: Card(
+                                              child: Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              children: [
+                                                (item.hno != null &&
+                                                        item.hno != '')
+                                                    ? Text(
+                                                        'Address : H.no. ${item.hno} , ${item.address}')
+                                                    : Text(
+                                                        'Address :  ${item.address}'),
+                                                (item.landmark != null &&
+                                                        item.landmark != '')
+                                                    ? Align(
+                                                        alignment: Alignment
+                                                            .bottomLeft,
+                                                        child: Text(
+                                                            'Landmark : ${item.landmark}'))
+                                                    : Text(''),
+                                                Align(
+                                                    alignment:
+                                                        Alignment.bottomLeft,
+                                                    child: Text(
+                                                        'Emirate : ${item.emirate}')),
+                                                Align(
+                                                    alignment:
+                                                        Alignment.bottomLeft,
+                                                    child: Text(
+                                                        'Area: ${item.area}')),
+                                              ],
+                                            ),
+                                          )),
+                                        );
+                                      },
+                                    )
+                                  ],
+                                )
+                              : Container();
+                        } else {
                           return Container();
                         }
-                      }
-
-
-
-                  )),
-
+                      })),
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: angadiButton(

@@ -120,25 +120,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void launchWhatsApp({
-    @required String phone,
-    @required String message,
-  }) async {
-    String url() {
-      if (Platform.isIOS) {
-        return "whatsapp://send?abid=7060222315&text=Hello%2C%20World!";
-      } else {
-        return "whatsapp://send?abid=7060222315&text=Hello%2C%20World!";
-      }
-    }
-
-    if (await canLaunch(url())) {
-      await launch(url());
-    } else {
-      throw 'Could not launch ${url()}';
-    }
-  }
-
   void Checkgrocery() {
     Firestore.instance
         .collection('AppSettings')
@@ -302,7 +283,28 @@ class _HomeScreenState extends State<HomeScreen> {
         });
       });
     });
+    getcategory();
     super.initState();
+  }
+
+  List<String> cats = [];
+  void getcategory() async {
+    await Firestore.instance
+        .collection('Categories')
+        .snapshots()
+        .forEach((element) {
+      for (int i = 0; i < element.documents.length; i++) {
+        setState(() {
+          cats.add(element.documents[i]['catName'].toString());
+        });
+      }
+    });
+    print('-------------------cat:${cats.length}');
+
+    setState(() {
+      cat = cats[0];
+      print('-------------------cat:$cat');
+    });
   }
 
   int orderCount;
@@ -396,7 +398,6 @@ class _HomeScreenState extends State<HomeScreen> {
           InkWell(
               onTap: () {
                 FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
-                // launchWhatsApp(phone: '7060222315', message: whatsappMessage);
               },
               child: Container(
                   alignment: Alignment.center,
@@ -2016,14 +2017,16 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     });
   }
-carousel(){
+
+  carousel() {
     Firestore.instance.collection('Background').snapshots().listen((event) {
-      for(int i=0;i<event.documents.length;i++){
+      for (int i = 0; i < event.documents.length; i++) {
         imageList.add(event.documents[i]['url'].toString());
       }
       print(imageList.length);
     });
-}
+  }
+
   addFields() {
     Firestore.instance.collection('Dishes').getDocuments().then((value) {
       value.documents.forEach((element) {

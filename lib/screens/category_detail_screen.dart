@@ -12,6 +12,7 @@ import 'package:angadi/values/data.dart';
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -215,7 +216,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(phone: '+971 50 7175406', message: whatsappMessage);
+                FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
               },
               child: Container(
                   alignment: Alignment.center,
@@ -388,7 +389,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                           ['boughtTogether'],
                       allquantities: allquantities,
                       quantities: quantities,
-                  stock:snap.data.documents[i]['stock']));
+                      stock: snap.data.documents[i]['stock']));
                 print(
                   snap.data.documents[i]['price'],
                 );
@@ -447,54 +448,55 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                               return Container(
                                 margin: EdgeInsets.only(right: 4.0),
                                 child: FoodyBiteCard(
-                                    onTap: () async {
-                                      Dish boughtTogether;
-                                      for (int i = 0; i < dishes.length; i++) {
-                                        if (dishes[i].id ==
-                                            dishes[index].boughtTogetherID) {
-                                          boughtTogether = await dishes[i];
-                                        }
+                                  onTap: () async {
+                                    Dish boughtTogether;
+                                    for (int i = 0; i < dishes.length; i++) {
+                                      if (dishes[i].id ==
+                                          dishes[index].boughtTogetherID) {
+                                        boughtTogether = await dishes[i];
                                       }
-                                      pushNewScreen(
-                                        context,
-                                        screen: RestaurantDetailsScreen(
-                                          RestaurantDetails(
-                                              url: dishes[index].url,
-                                              name: dishes[index].name,
-                                              desc: dishes[index].desc,
-                                              productID: dishes[index].id,
-                                              category: dishes[index].category,
-                                              rating: dishes[index].rating,
-                                              price: dishes[index].price,
-                                              boughtTogetherDiscount:
-                                                  dishes[index]
-                                                      .boughtTogetherDiscount,
-                                              boughtTogether: boughtTogether,
-                                              allquantities:
-                                                  dishes[index].allquantities,
-                                              quantities:
-                                                  dishes[index].quantities,
-                                          stock:dishes[index].stock),
-                                        ),
-                                        withNavBar:
-                                            true, // OPTIONAL VALUE. True by default.
-                                        pageTransitionAnimation:
-                                            PageTransitionAnimation.cupertino,
-                                      );
-                                    },
-                                    imagePath: dishes[index].url,
+                                    }
+                                    pushNewScreen(
+                                      context,
+                                      screen: RestaurantDetailsScreen(
+                                        RestaurantDetails(
+                                            url: dishes[index].url,
+                                            name: dishes[index].name,
+                                            desc: dishes[index].desc,
+                                            productID: dishes[index].id,
+                                            category: dishes[index].category,
+                                            rating: dishes[index].rating,
+                                            price: dishes[index].price,
+                                            boughtTogetherDiscount:
+                                                dishes[index]
+                                                    .boughtTogetherDiscount,
+                                            boughtTogether: boughtTogether,
+                                            allquantities:
+                                                dishes[index].allquantities,
+                                            quantities:
+                                                dishes[index].quantities,
+                                            stock: dishes[index].stock),
+                                      ),
+                                      withNavBar:
+                                          true, // OPTIONAL VALUE. True by default.
+                                      pageTransitionAnimation:
+                                          PageTransitionAnimation.cupertino,
+                                    );
+                                  },
+                                  imagePath: dishes[index].url,
 //                            status: status[index],
-                                    cardTitle: dishes[index].name,
-                                    rating: dishes[index].rating,
-                                    price: dishes[index].price,
-                                    iPrice: dishes[index].iPrice,
-                                    category: dishes[index].category,
-                                    orderCount: orderCount,
+                                  cardTitle: dishes[index].name,
+                                  rating: dishes[index].rating,
+                                  price: dishes[index].price,
+                                  iPrice: dishes[index].iPrice,
+                                  category: dishes[index].category,
+                                  orderCount: orderCount,
 //                            distance: distance[index],
-                                    address: dishes[index].desc,
-                                    allquantities: dishes[index].allquantities,
-                                    quantities: dishes[index].quantities,
-                                stock: dishes[index].stock,),
+                                  address: dishes[index].desc,
+                                  allquantities: dishes[index].allquantities,
+                                  quantities: dishes[index].quantities,
+                                  stock: dishes[index].stock,
+                                ),
                               );
                             },
                           ),
@@ -540,7 +542,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                                                   dishes[index].allquantities,
                                               quantities:
                                                   dishes[index].quantities,
-                                          stock: dishes[index].stock),
+                                              stock: dishes[index].stock),
                                         ),
                                         withNavBar:
                                             true, // OPTIONAL VALUE. True by default.
