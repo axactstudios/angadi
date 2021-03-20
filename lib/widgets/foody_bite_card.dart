@@ -311,10 +311,10 @@ class _FoodyBiteCardState extends State<FoodyBiteCard> {
             children: <Widget>[
               Expanded(
                 child: Stack(children: [
-                  Padding(
-                    padding: const EdgeInsets.only(left:8.0),
-                    child: Positioned(
+                  Positioned(
 
+                    child: Padding(
+                      padding: const EdgeInsets.only(left:8.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(4),
                         child: FancyShimmerImage(
