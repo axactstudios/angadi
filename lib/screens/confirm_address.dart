@@ -35,6 +35,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
   List<EmiratesArea> getall = [];
   void alldata(String newemirate) async {
     getall.clear();
+    areaname.clear();
     print(newemirate);
     await Firestore.instance
         .collection('EmiratesArea')
@@ -58,12 +59,12 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
             minOrderPrice = double.parse(getall[0].minOrderPrice);
           });
         }
-        print(event.documents.length);
+//        print(event.documents.length);
         for (int j = i + 1; j < event.documents.length; j++) {
           if (event.documents[i]['name'] == event.documents[j]['name']) {
-//              areaname.add(' ${event.documents[j]['name']}');
-            print('5555555555555${event.documents[j]['name']}');
-            print('Minorder${event.documents[j]['minOrderPrice']}');
+              areaname.add(' ${event.documents[j]['name']}');
+//            print('5555555555555${event.documents[j]['name']}');
+//            print('Minorder${event.documents[j]['minOrderPrice']}');
             EmiratesArea emi2 = EmiratesArea(
                 event.documents[j]['Emirate'],
                 event.documents[j]['deliveryCharge'],
@@ -77,7 +78,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
           }
         }
         if (i != index) {
-//            areaname.add('${.documents[i]['name']}');
+           areaname.add('${event.documents[i]['name']}');
 //                                                print('5555555555555${snap.data.documents[i]['name']}');
           EmiratesArea emi2 = EmiratesArea(
               event.documents[i]['Emirate'],
@@ -88,7 +89,8 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
           getall.add(emi2);
         }
       }
-      if (getall.length > 0) {
+      areaname.add('Others');
+      if (areaname.length > 1) {
         deliveryCharge = double.parse(getall[0].deliveryCharge);
         minOrderPrice = double.parse(getall[0].minOrderPrice);
         setState(() {
@@ -139,6 +141,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
       }
     });
     emirate = savedemirate[0].name;
+    alldata(emirate);
     if (savedarea.length > 0) {
       for (int k = 0; k < savedarea.length; k++) {
         if (emirate == savedarea[k].name) {
@@ -284,7 +287,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: SingleChildScrollView(
-            child: Column(
+            child: areaname.length!=0?Column(
               children: [
                 HeadingRow(
                   title: 'Complete your full Address',
@@ -345,7 +348,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
                                             ? 'field required'
                                             : null,
                                         hint: Text('Emirates'),
-                                        value: emiratesname[0],
+                                        value: emirate,
                                         items: emiratesname.map((String value) {
                                           return new DropdownMenuItem<String>(
                                             value: value,
@@ -384,71 +387,71 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
                         return Container();
                       }
                     }),
-                StreamBuilder(
-                    stream: Firestore.instance
-                        .collection('EmiratesArea')
-                        .where('Emirate', isEqualTo: emirate)
-                        .snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snap) {
-                      if (snap.hasData && !snap.hasError && snap.data != null) {
-                        allareas.clear();
-                        areaname.clear();
-                        index = 0;
-                        for (int i = 0; i < snap.data.documents.length; i++) {
-                          if (i == 0) {
-                            areaname.add('${snap.data.documents[i]['name']}');
-//                                                print('5555555555555${snap.data.documents[i]['name']}');
-                            EmiratesArea emi2 = EmiratesArea(
-                                snap.data.documents[i]['Emirate'],
-                                snap.data.documents[i]['deliveryCharge'],
-                                snap.data.documents[i]['minOrderPrice'],
-                                '${snap.data.documents[i]['name']}',
-                                snap.data.documents[i]['zone']);
-                            allareas.add(emi2);
-                          }
-//                          print(snap.data.documents.length);
-                          for (int j = i + 1;
-                              j < snap.data.documents.length;
-                              j++) {
-                            if (snap.data.documents[i]['name'] ==
-                                snap.data.documents[j]['name']) {
-                              areaname
-                                  .add(' ${snap.data.documents[j]['name']}');
-                              print(
-                                  '5555555555555${snap.data.documents[j]['name']}');
-                              print(
-                                  'Minorder${snap.data.documents[j]['minOrderPrice']}');
-                              EmiratesArea emi2 = EmiratesArea(
-                                  snap.data.documents[j]['Emirate'],
-                                  snap.data.documents[j]['deliveryCharge'],
-                                  snap.data.documents[j]['minOrderPrice'],
-                                  ' ${snap.data.documents[j]['name']}',
-                                  snap.data.documents[j]['zone']);
-                              allareas.add(emi2);
-                              print('length:${areaname.length}');
-                              index = j;
-                              print('Index:${index}');
-                            }
-                          }
-                          if (i != index) {
-                            areaname.add('${snap.data.documents[i]['name']}');
-//                                                print('5555555555555${snap.data.documents[i]['name']}');
-                            EmiratesArea emi2 = EmiratesArea(
-                                snap.data.documents[i]['Emirate'],
-                                snap.data.documents[i]['deliveryCharge'],
-                                snap.data.documents[i]['minOrderPrice'],
-                                '${snap.data.documents[i]['name']}',
-                                snap.data.documents[i]['zone']);
-                            allareas.add(emi2);
-                          }
-                        }
-                        areaname.add('Others');
-                        if (area == null) {
-                          area = allareas[0].name;
-                        }
-                        return areaname.length != 0
-                            ? Column(
+//                StreamBuilder(
+//                    stream: Firestore.instance
+//                        .collection('EmiratesArea')
+//                        .where('Emirate', isEqualTo: emirate)
+//                        .snapshots(),
+//                    builder: (BuildContext context,
+//                        AsyncSnapshot<QuerySnapshot> snap) {
+//                      if (snap.hasData && !snap.hasError && snap.data != null) {
+//                        allareas.clear();
+//                        areaname.clear();
+//                        index = 0;
+//                        for (int i = 0; i < snap.data.documents.length; i++) {
+//                          if (i == 0) {
+//                            areaname.add('${snap.data.documents[i]['name']}');
+////                                                print('5555555555555${snap.data.documents[i]['name']}');
+//                            EmiratesArea emi2 = EmiratesArea(
+//                                snap.data.documents[i]['Emirate'],
+//                                snap.data.documents[i]['deliveryCharge'],
+//                                snap.data.documents[i]['minOrderPrice'],
+//                                '${snap.data.documents[i]['name']}',
+//                                snap.data.documents[i]['zone']);
+//                            allareas.add(emi2);
+//                          }
+////                          print(snap.data.documents.length);
+//                          for (int j = i + 1;
+//                              j < snap.data.documents.length;
+//                              j++) {
+//                            if (snap.data.documents[i]['name'] ==
+//                                snap.data.documents[j]['name']) {
+//                              areaname
+//                                  .add(' ${snap.data.documents[j]['name']}');
+//                              print(
+//                                  '5555555555555${snap.data.documents[j]['name']}');
+//                              print(
+//                                  'Minorder${snap.data.documents[j]['minOrderPrice']}');
+//                              EmiratesArea emi2 = EmiratesArea(
+//                                  snap.data.documents[j]['Emirate'],
+//                                  snap.data.documents[j]['deliveryCharge'],
+//                                  snap.data.documents[j]['minOrderPrice'],
+//                                  ' ${snap.data.documents[j]['name']}',
+//                                  snap.data.documents[j]['zone']);
+//                              allareas.add(emi2);
+//                              print('length:${areaname.length}');
+//                              index = j;
+//                              print('Index:${index}');
+//                            }
+//                          }
+//                          if (i != index) {
+//                            areaname.add('${snap.data.documents[i]['name']}');
+////                                                print('5555555555555${snap.data.documents[i]['name']}');
+//                            EmiratesArea emi2 = EmiratesArea(
+//                                snap.data.documents[i]['Emirate'],
+//                                snap.data.documents[i]['deliveryCharge'],
+//                                snap.data.documents[i]['minOrderPrice'],
+//                                '${snap.data.documents[i]['name']}',
+//                                snap.data.documents[i]['zone']);
+//                            allareas.add(emi2);
+//                          }
+//                        }
+//                        areaname.add('Others');
+//                        if (area == null) {
+//                          area = allareas[0].name;
+//                        }
+//                        return areaname.length != 0
+                             Column(
                                 children: [
                                   Container(
                                       width: MediaQuery.of(context).size.width *
@@ -469,17 +472,18 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
                                                   value: value,
                                                   child: new Text(value),
                                                 );
+
                                               }).toList(),
                                               onChanged: (String newValue) {
                                                 setState(() {
                                                   area = newValue;
                                                   for (int i = 0;
-                                                      i < allareas.length;
+                                                      i < getall.length;
                                                       i++) {
                                                     if (newValue ==
-                                                        allareas[i].name)
+                                                        getall[i].name)
                                                       minimumOrderValue =
-                                                          allareas[i]
+                                                          getall[i]
                                                               .minOrderPrice;
                                                   }
                                                   print('---------------');
@@ -503,12 +507,12 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
                                                 });
                                               })))
                                 ],
-                              )
-                            : Container();
-                      } else {
-                        return Container();
-                      }
-                    }),
+                              ),
+//                            : Container();
+//                      } else {
+//                        return Container();
+//                      }
+//                    }),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: TextFormField(
@@ -552,6 +556,12 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
                   },
                 ),
               ],
+            ):Center(
+              child: Container(
+                  height:100,
+                  width:100,
+                  child:CircularProgressIndicator()
+              ),
             ),
           ),
         ));

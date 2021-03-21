@@ -205,7 +205,10 @@ class _CheckoutState extends State<Checkout> {
   List<EmiratesArea>getall=[];
 void alldata(String newemirate)async {
   getall.clear();
-  // print(newemirate);
+  areaname.clear();
+  print(getall.length);
+  emirate=newemirate;
+   print(newemirate);
 //  length2=0;
 
   await Firestore.instance.collection('EmiratesArea').where(
@@ -228,6 +231,7 @@ void alldata(String newemirate)async {
             event.documents[i]
             ['zone']);
         getall.add(emi2);
+        area=event.documents[i]['name'];
         setState(() {
           deliveryCharge = double.parse(getall[0].deliveryCharge);
           minOrderPrice = double.parse(getall[0].minOrderPrice);
@@ -237,7 +241,7 @@ void alldata(String newemirate)async {
 //      print(event.documents.length);
       for (int j = i + 1; j < event.documents.length; j++) {
         if (event.documents[i]['name'] == event.documents[j]['name']) {
-//              areaname.add(' ${event.documents[j]['name']}');
+              areaname.add(' ${event.documents[j]['name']}');
 //           print('5555555555555${event.documents[j]['name']}');
 //           print('Minorder${ event.documents[j]
 //           ['minOrderPrice']}');
@@ -257,7 +261,7 @@ void alldata(String newemirate)async {
         }
       }
       if (i != index) {
-//            areaname.add('${.documents[i]['name']}');
+           areaname.add('${event.documents[i]['name']}');
 //                                                print('5555555555555${snap.data.documents[i]['name']}');
         EmiratesArea emi2 = EmiratesArea(event.documents[i]
         ['Emirate'],
@@ -271,12 +275,14 @@ void alldata(String newemirate)async {
         getall.add(emi2);
       }
     }
+    areaname.add('Others');
 //    if(getall.length==length2){
 //      pr.hide();
 //    }
-    if (getall.length > 0) {
+    if (areaname.length > 1) {
       deliveryCharge = double.parse(getall[0].deliveryCharge);
       minOrderPrice = double.parse(getall[0].minOrderPrice);
+      area=areaname[0];
     }
     else {
       for (int i =
@@ -319,6 +325,7 @@ void alldata(String newemirate)async {
       }
     });
     emirate = savedemirate[0].name;
+    alldata(emirate);
     await Firestore.instance
         .collection('EmiratesArea')
         .where('Emirate', isEqualTo: emirate)
@@ -1044,7 +1051,7 @@ int index=0;
         ),
         body: SafeArea(
           child: SingleChildScrollView(
-            child: Column(
+            child:(areaname.length!=0)? Column(
               children: [
 //                 Row(
 //                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -1504,7 +1511,7 @@ int index=0;
                                                             hint: Text(
                                                                 'Emirates'),
                                                             value:
-                                                                emiratesname[0],
+                                                                emirate,
                                                             items: emiratesname
                                                                 .map((String
                                                                     value) {
@@ -1538,125 +1545,125 @@ int index=0;
                                             return Container();
                                           }
                                         }),
-                                    StreamBuilder(
-                                        stream: Firestore.instance
-                                            .collection('EmiratesArea')
-                                            .where('Emirate',
-                                                isEqualTo: emirate)
-                                            .snapshots(),
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<QuerySnapshot> snap) {
-
-                                          if (snap.hasData &&
-                                              !snap.hasError &&
-                                              snap.data != null) {
-                                            length2=0;
-//                                            final ProgressDialog pr =  ProgressDialog(context);
-//                                            pr.style(
-//                                                message: 'Please wait ..',
-//                                                backgroundColor: Colors.white,
-//                                                progressWidget: GFLoader(
-//                                                  type: GFLoaderType.ios,
-//                                                ),
-//                                                elevation: 10.0,
-//                                                insetAnimCurve: Curves.easeInOut,
-//                                                progress: 0.0,
-//                                                maxProgress: 100.0,
-//                                                progressTextStyle: TextStyle(
-//                                                    color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-//                                                messageTextStyle: TextStyle(
-//                                                    color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
-//                                            pr.show();
-//                                            final ProgressDialog pr =  ProgressDialog(context);
-//                                            pr.style(
-//                                                message: 'Please wait ..',
-//                                                backgroundColor: Colors.white,
-//                                                progressWidget: GFLoader(
-//                                                  type: GFLoaderType.ios,
-//                                                ),
-//                                                elevation: 10.0,
-//                                                insetAnimCurve: Curves.easeInOut,
-//                                                progress: 0.0,
-//                                                maxProgress: 100.0,
-//                                                progressTextStyle: TextStyle(
-//                                                    color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-//                                                messageTextStyle: TextStyle(
-//                                                    color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
-//                                            pr.show();
-                                            allareas.clear();
-                                            areaname.clear();
-                                            index=0;
+//                                    StreamBuilder(
+//                                        stream: Firestore.instance
+//                                            .collection('EmiratesArea')
+//                                            .where('Emirate',
+//                                                isEqualTo: emirate)
+//                                            .snapshots(),
+//                                        builder: (BuildContext context,
+//                                            AsyncSnapshot<QuerySnapshot> snap) {
+//
+//                                          if (snap.hasData &&
+//                                              !snap.hasError &&
+//                                              snap.data != null) {
 //                                            length2=0;
-//                                             print('Streambuilder');
-                                            for (int i = 0;
-                                                i < snap.data.documents.length;
-                                                i++) {
-                                              length2=snap.data.documents.length;
-                                              if(i==0){
-                                                areaname.add('${snap.data.documents[i]['name']}');
-//                                                print('5555555555555${snap.data.documents[i]['name']}');
-                                                EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
-                                                ['Emirate'],
-                                                    snap.data.documents[i]
-                                                    ['deliveryCharge'],
-                                                    snap.data.documents[i]
-                                                    ['minOrderPrice'],
-                                                    '${snap.data.documents[i]['name']}',
-                                                    snap.data.documents[i]
-                                                    ['zone']);
-                                                allareas.add(emi2);
-                                              }
-//                                              print(snap.data.documents.length);
-                                              for(int j=i+1;j<snap.data.documents.length;j++){
-                                                if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
-                                                  areaname.add(' ${snap.data.documents[j]['name']}');
-                                                  // print('5555555555555${snap.data.documents[j]['name']}');
-                                                  // print('Minorder${  snap.data.documents[j]
-                                                  // ['minOrderPrice']}');
-                                                  EmiratesArea emi2=EmiratesArea( snap.data.documents[j]
-                                                  ['Emirate'],
-                                                      snap.data.documents[j]
-                                                      ['deliveryCharge'],
-                                                      snap.data.documents[j]
-                                                      ['minOrderPrice'],
-                                                      ' ${snap.data.documents[j]['name']}',
-                                                      snap.data.documents[j]
-                                                      ['zone']);
-                                                  allareas.add(emi2);
-                                                  // print('length:${areaname.length}');
-                                                  index=j;
-                                                  // print('Index:${index}');
+////                                            final ProgressDialog pr =  ProgressDialog(context);
+////                                            pr.style(
+////                                                message: 'Please wait ..',
+////                                                backgroundColor: Colors.white,
+////                                                progressWidget: GFLoader(
+////                                                  type: GFLoaderType.ios,
+////                                                ),
+////                                                elevation: 10.0,
+////                                                insetAnimCurve: Curves.easeInOut,
+////                                                progress: 0.0,
+////                                                maxProgress: 100.0,
+////                                                progressTextStyle: TextStyle(
+////                                                    color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+////                                                messageTextStyle: TextStyle(
+////                                                    color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+////                                            pr.show();
+////                                            final ProgressDialog pr =  ProgressDialog(context);
+////                                            pr.style(
+////                                                message: 'Please wait ..',
+////                                                backgroundColor: Colors.white,
+////                                                progressWidget: GFLoader(
+////                                                  type: GFLoaderType.ios,
+////                                                ),
+////                                                elevation: 10.0,
+////                                                insetAnimCurve: Curves.easeInOut,
+////                                                progress: 0.0,
+////                                                maxProgress: 100.0,
+////                                                progressTextStyle: TextStyle(
+////                                                    color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+////                                                messageTextStyle: TextStyle(
+////                                                    color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+////                                            pr.show();
+//                                            allareas.clear();
+//                                            areaname.clear();
+//                                            index=0;
+////                                            length2=0;
+////                                             print('Streambuilder');
+//                                            for (int i = 0;
+//                                                i < snap.data.documents.length;
+//                                                i++) {
+//                                              length2=snap.data.documents.length;
+//                                              if(i==0){
+//                                                areaname.add('${snap.data.documents[i]['name']}');
+////                                                print('5555555555555${snap.data.documents[i]['name']}');
+//                                                EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
+//                                                ['Emirate'],
+//                                                    snap.data.documents[i]
+//                                                    ['deliveryCharge'],
+//                                                    snap.data.documents[i]
+//                                                    ['minOrderPrice'],
+//                                                    '${snap.data.documents[i]['name']}',
+//                                                    snap.data.documents[i]
+//                                                    ['zone']);
+//                                                allareas.add(emi2);
+//                                              }
+////                                              print(snap.data.documents.length);
+//                                              for(int j=i+1;j<snap.data.documents.length;j++){
+//                                                if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
+//                                                  areaname.add(' ${snap.data.documents[j]['name']}');
+//                                                  // print('5555555555555${snap.data.documents[j]['name']}');
+//                                                  // print('Minorder${  snap.data.documents[j]
+//                                                  // ['minOrderPrice']}');
+//                                                  EmiratesArea emi2=EmiratesArea( snap.data.documents[j]
+//                                                  ['Emirate'],
+//                                                      snap.data.documents[j]
+//                                                      ['deliveryCharge'],
+//                                                      snap.data.documents[j]
+//                                                      ['minOrderPrice'],
+//                                                      ' ${snap.data.documents[j]['name']}',
+//                                                      snap.data.documents[j]
+//                                                      ['zone']);
+//                                                  allareas.add(emi2);
+//                                                  // print('length:${areaname.length}');
+//                                                  index=j;
+//                                                  // print('Index:${index}');
+//
+//
+//                                                }
+//
+//                                              }
+//
+//                                               if(index!=i){
+//                                                 areaname.add('${snap.data.documents[i]['name']}');
+////                                                print('5555555555555${snap.data.documents[i]['name']}');
+//                                                 EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
+//                                                 ['Emirate'],
+//                                                     snap.data.documents[i]
+//                                                     ['deliveryCharge'],
+//                                                     snap.data.documents[i]
+//                                                     ['minOrderPrice'],
+//                                                     '${snap.data.documents[i]['name']}',
+//                                                     snap.data.documents[i]
+//                                                     ['zone']);
+//                                                 allareas.add(emi2);
+//                                               }
+//                                               }
+////                                            if(allareas.length==length2){
+////                                              pr.hide();
+////                                            }
+//
+//
+//
+//                                            areaname.add('Others');
 
-
-                                                }
-
-                                              }
-
-                                               if(index!=i){
-                                                 areaname.add('${snap.data.documents[i]['name']}');
-//                                                print('5555555555555${snap.data.documents[i]['name']}');
-                                                 EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
-                                                 ['Emirate'],
-                                                     snap.data.documents[i]
-                                                     ['deliveryCharge'],
-                                                     snap.data.documents[i]
-                                                     ['minOrderPrice'],
-                                                     '${snap.data.documents[i]['name']}',
-                                                     snap.data.documents[i]
-                                                     ['zone']);
-                                                 allareas.add(emi2);
-                                               }
-                                               }
-//                                            if(allareas.length==length2){
-//                                              pr.hide();
-//                                            }
-
-
-
-                                            areaname.add('Others');
-
-                                            return areaname.length != 0
-                                                ? Column(
+//                                            return areaname.length != 0
+                                                 Column(
                                                     children: [
                                                       Container(
                                                         width: MediaQuery.of(
@@ -1728,21 +1735,21 @@ int index=0;
                                                                 }
                                                                 for (int i = 0;
                                                                     i <
-                                                                        allareas
+                                                                        getall
                                                                             .length;
                                                                     i++) {
                                                                   if (area ==
-                                                                      allareas[
+                                                                      getall[
                                                                               i]
                                                                           .name)
                                                                     setState(
                                                                         () {
                                                                       minOrderPrice =
                                                                           double.parse(
-                                                                              allareas[i].minOrderPrice);
+                                                                              getall[i].minOrderPrice);
                                                                       deliveryCharge =
                                                                           double.parse(
-                                                                              allareas[i].deliveryCharge);
+                                                                              getall[i].deliveryCharge);
                                                                     });
                                                                 }
 //                      Navigator.pop(context);
@@ -1752,12 +1759,12 @@ int index=0;
                                                         ),
                                                       ),
                                                     ],
-                                                  )
-                                                : Container();
-                                          } else {
-                                            return Container();
-                                          }
-                                        }),
+                                                  ),
+//                                                : Container();
+//                                          } else {
+//                                            return Container();
+//                                          }
+//                                        }),
 //                                  Padding(
 //                                    padding: const EdgeInsets.all(8.0),
 //                                    child: TextFormField(
@@ -1946,7 +1953,7 @@ int index=0;
                                                             hint: Text(
                                                                 'Emirates'),
                                                             value:
-                                                                emiratesname[0],
+                                                                emirate,
                                                             items: emiratesname
                                                                 .map((String
                                                                     value) {
@@ -1979,67 +1986,66 @@ int index=0;
                                             return Container();
                                           }
                                         }),
-                                    StreamBuilder(
-                                        stream: Firestore.instance
-                                            .collection('EmiratesArea')
-                                            .where('Emirate',
-                                                isEqualTo: emirate)
-                                            .snapshots(),
-                                        builder: (BuildContext context,
-                                            AsyncSnapshot<QuerySnapshot> snap) {
-                                          if (snap.hasData &&
-                                              !snap.hasError &&
-                                              snap.data != null) {
-                                            allareas.clear();
-                                            areaname.clear();
-                                            index=0;
-                                            for (int i = 0;
-                                            i < snap.data.documents.length;
-                                            i++) {
-                                              // print(snap.data.documents.length);
-                                              for(int j=i+1;j<snap.data.documents.length;j++){
-                                                if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
-                                                  areaname.add(' ${snap.data.documents[j]['name']}');
-                                                  // print('5555555555555${snap.data.documents[j]['name']}');
-                                                  // print('Minorder${  snap.data.documents[j]
-                                                  // ['minOrderPrice']}');
-                                                  EmiratesArea emi2=EmiratesArea( snap.data.documents[j]
-                                                  ['Emirate'],
-                                                      snap.data.documents[j]
-                                                      ['deliveryCharge'],
-                                                      snap.data.documents[j]
-                                                      ['minOrderPrice'],
-                                                      ' ${snap.data.documents[j]['name']}',
-                                                      snap.data.documents[j]
-                                                      ['zone']);
-                                                  allareas.add(emi2);
-                                                  // print('length:${areaname.length}');
-                                                  index=j;
-                                                  // print('Index:${index}');
-
-
-                                                }
-
-                                              }
-                                              if(i!=index){
-                                                areaname.add('${snap.data.documents[i]['name']}');
-//                                                print('5555555555555${snap.data.documents[i]['name']}');
-                                                EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
-                                                ['Emirate'],
-                                                    snap.data.documents[i]
-                                                    ['deliveryCharge'],
-                                                    snap.data.documents[i]
-                                                    ['minOrderPrice'],
-                                                    '${snap.data.documents[i]['name']}',
-                                                    snap.data.documents[i]
-                                                    ['zone']);
-                                                allareas.add(emi2);
-                                              }
-
-                                            }
-                                            areaname.add('Others');
-                                            return areaname.length != 0
-                                                ? Column(
+//                                    StreamBuilder(
+//                                        stream: Firestore.instance
+//                                            .collection('EmiratesArea')
+//                                            .where('Emirate',
+//                                                isEqualTo: emirate)
+//                                            .snapshots(),
+//                                        builder: (BuildContext context,
+//                                            AsyncSnapshot<QuerySnapshot> snap) {
+//                                          if (snap.hasData &&
+//                                              !snap.hasError &&
+//                                              snap.data != null) {
+//                                            allareas.clear();
+//                                            areaname.clear();
+//                                            index=0;
+//                                            for (int i = 0;
+//                                            i < snap.data.documents.length;
+//                                            i++) {
+//                                              // print(snap.data.documents.length);
+//                                              for(int j=i+1;j<snap.data.documents.length;j++){
+//                                                if(snap.data.documents[i]['name']==snap.data.documents[j]['name']){
+//                                                  areaname.add(' ${snap.data.documents[j]['name']}');
+//                                                  // print('5555555555555${snap.data.documents[j]['name']}');
+//                                                  // print('Minorder${  snap.data.documents[j]
+//                                                  // ['minOrderPrice']}');
+//                                                  EmiratesArea emi2=EmiratesArea( snap.data.documents[j]
+//                                                  ['Emirate'],
+//                                                      snap.data.documents[j]
+//                                                      ['deliveryCharge'],
+//                                                      snap.data.documents[j]
+//                                                      ['minOrderPrice'],
+//                                                      ' ${snap.data.documents[j]['name']}',
+//                                                      snap.data.documents[j]
+//                                                      ['zone']);
+//                                                  allareas.add(emi2);
+//                                                  // print('length:${areaname.length}');
+//                                                  index=j;
+//                                                  // print('Index:${index}');
+//
+//
+//                                                }
+//
+//                                              }
+//                                              if(i!=index){
+//                                                areaname.add('${snap.data.documents[i]['name']}');
+////                                                print('5555555555555${snap.data.documents[i]['name']}');
+//                                                EmiratesArea emi2=EmiratesArea( snap.data.documents[i]
+//                                                ['Emirate'],
+//                                                    snap.data.documents[i]
+//                                                    ['deliveryCharge'],
+//                                                    snap.data.documents[i]
+//                                                    ['minOrderPrice'],
+//                                                    '${snap.data.documents[i]['name']}',
+//                                                    snap.data.documents[i]
+//                                                    ['zone']);
+//                                                allareas.add(emi2);
+//                                              }
+//
+//                                            }
+//                                            areaname.add('Others');
+                                            Column(
                                                     children: [
                                                       Container(
                                                         width: MediaQuery.of(
@@ -2099,21 +2105,21 @@ int index=0;
 
                                                                 for (int i = 0;
                                                                     i <
-                                                                        allareas
+                                                                        getall
                                                                             .length;
                                                                     i++) {
                                                                   if (area ==
-                                                                      allareas[
+                                                                      getall[
                                                                               i]
                                                                           .name)
                                                                     setState(
                                                                         () {
                                                                       minOrderPrice =
                                                                           double.parse(
-                                                                              allareas[i].minOrderPrice);
+                                                                              getall[i].minOrderPrice);
                                                                       deliveryCharge =
                                                                           double.parse(
-                                                                              allareas[i].deliveryCharge);
+                                                                              getall[i].deliveryCharge);
                                                                     });
                                                                 }
                                                               });
@@ -2122,12 +2128,12 @@ int index=0;
                                                         ),
                                                       ),
                                                     ],
-                                                  )
-                                                : Container();
-                                          } else {
-                                            return Container();
-                                          }
-                                        }),
+                                                  ),
+//                                                : Container();
+//                                          } else {
+//                                            return Container();
+//                                          }
+//                                        }),
 //                                  Padding(
 //                                  padding: const EdgeInsets.all(8.0),
 //                                    child: TextFormField(
@@ -2942,6 +2948,12 @@ int index=0;
                   ],
                 )
               ],
+            ):Center(
+              child: Container(
+                height:100,
+                width:100,
+                child:CircularProgressIndicator()
+              ),
             ),
           ),
         ));
