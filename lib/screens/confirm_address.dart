@@ -12,6 +12,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
+import 'package:getwidget/components/loader/gf_loader.dart';
+import 'package:getwidget/types/gf_loader_type.dart';
+import 'package:progress_dialog/progress_dialog.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ConfirmAddress extends StatefulWidget {
@@ -33,6 +37,143 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
   String emirate2;
   String emirate;
   List<EmiratesArea> getall = [];
+  void alldata2(String newemirate, BuildContext ctx)async{
+
+    final ProgressDialog pr = await ProgressDialog(ctx);
+    pr.style(
+        message: 'Loading...',
+        backgroundColor: Colors.white,
+        progressWidget: GFLoader(
+          type: GFLoaderType.ios,
+        ),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+    await pr.show();
+    setState(() {
+//      showIndicator= true;
+
+    });
+    getall.clear();
+    areaname.clear();
+//    areaname.add('Others');
+    print(getall.length);
+    emirate=newemirate;
+    print(newemirate);
+//  length2=0;
+
+    await Firestore.instance.collection('EmiratesArea').where(
+        'Emirate', isEqualTo: newemirate).snapshots().listen((event) {
+      index = 0;
+      for (int i = 0;
+      i < event.documents.length;
+      i++) {
+//        length2==event.documents.length;
+        if(i==0){
+          areaname.add('${event.documents[i]['name']}');
+//                                                print('5555555555555${snap.data.documents[i]['name']}');
+          EmiratesArea emi2=EmiratesArea( event.documents[i]
+          ['Emirate'],
+              event.documents[i]
+              ['deliveryCharge'],
+              event.documents[i]
+              ['minOrderPrice'],
+              '${event.documents[i]['name']}',
+              event.documents[i]
+              ['zone']);
+          getall.add(emi2);
+          area=event.documents[i]['name'];
+          setState(() {
+            deliveryCharge = double.parse(getall[0].deliveryCharge);
+            minOrderPrice = double.parse(getall[0].minOrderPrice);
+          });
+
+        }
+//      print(event.documents.length);
+        for (int j = i + 1; j < event.documents.length; j++) {
+          if (event.documents[i]['name'] == event.documents[j]['name']) {
+            areaname.add(' ${event.documents[j]['name']}');
+//           print('5555555555555${event.documents[j]['name']}');
+//           print('Minorder${ event.documents[j]
+//           ['minOrderPrice']}');
+            EmiratesArea emi2 = EmiratesArea(event.documents[j]
+            ['Emirate'],
+                event.documents[j]
+                ['deliveryCharge'],
+                event.documents[j]
+                ['minOrderPrice'],
+                ' ${event.documents[j]['name']}',
+                event.documents[j]
+                ['zone']);
+            getall.add(emi2);
+//              print('length:${areaname.length}');
+            index = j;
+            // print('Index:${index}');
+
+
+          }
+          break;
+        }
+        if (i != index) {
+          areaname.add('${event.documents[i]['name']}');
+//                                                print('5555555555555${snap.data.documents[i]['name']}');
+          EmiratesArea emi2 = EmiratesArea(event.documents[i]
+          ['Emirate'],
+              event.documents[i]
+              ['deliveryCharge'],
+              event.documents[i]
+              ['minOrderPrice'],
+              '${event.documents[i]['name']}',
+              event.documents[i]
+              ['zone']);
+          getall.add(emi2);
+        }
+      }
+      areaname.add('Others');
+//    if(getall.length==length2){
+//      pr.hide();
+//    }
+      if (areaname.length > 1) {
+        deliveryCharge = double.parse(getall[0].deliveryCharge);
+        minOrderPrice = double.parse(getall[0].minOrderPrice);
+        area=areaname[0];
+      }
+      else {
+        for (int i =
+        0;
+        i <
+            savedemirate
+                .length;
+        i++) {
+          if (savedemirate[i]
+              .name ==
+              newemirate) {
+            deliveryCharge =
+                double.parse(
+                    savedemirate[i].deliverycharge);
+            minOrderPrice =
+                double.parse(
+                    savedarea[i].minOrderPrice);
+            area =
+            'Others';
+          }
+        }
+
+      }
+
+    });
+
+
+//    setState(() {
+//      showIndicator=false;
+//    });
+    await pr.hide();
+  }
   void alldata(String newemirate) async {
     getall.clear();
     areaname.clear();
@@ -76,6 +217,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
             index = j;
             print('Index:${index}');
           }
+          break;
         }
         if (i != index) {
            areaname.add('${event.documents[i]['name']}');
@@ -360,7 +502,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
                                             emirate = newValue;
                                             emirate2 = newValue;
                                             print(emirate);
-                                            alldata(emirate);
+                                            alldata2(emirate,context);
 //                                            for (int i = 0;
 //                                                i < allemirates.length;
 //                                                i++) {

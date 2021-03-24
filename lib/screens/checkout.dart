@@ -9,6 +9,7 @@ import 'package:angadi/screens/my_addresses.dart';
 import 'package:angadi/screens/my_addresses2.dart';
 import 'package:angadi/screens/my_orders.dart';
 import 'package:angadi/screens/offers_screen.dart';
+import 'package:angadi/screens/root_screen.dart';
 import 'package:angadi/screens/settings_screen.dart';
 import 'package:angadi/screens/webview.dart';
 import 'package:angadi/services/database_helper.dart';
@@ -203,24 +204,24 @@ class _CheckoutState extends State<Checkout> {
 //  }
   }
   List<EmiratesArea>getall=[];
-  void alldata2(String newemirate, BuildContext context)async{
+  void alldata2(String newemirate, BuildContext ctx)async{
 
-//    final ProgressDialog pr = await ProgressDialog(context);
-//    pr.style(
-//        message: 'Loading...',
-//        backgroundColor: Colors.white,
-//        progressWidget: GFLoader(
-//          type: GFLoaderType.ios,
-//        ),
-//        elevation: 10.0,
-//        insetAnimCurve: Curves.easeInOut,
-//        progress: 0.0,
-//        maxProgress: 100.0,
-//        progressTextStyle: TextStyle(
-//            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
-//        messageTextStyle: TextStyle(
-//            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
-//    await pr.show();
+    final ProgressDialog pr = await ProgressDialog(ctx);
+    pr.style(
+        message: 'Loading...',
+        backgroundColor: Colors.white,
+        progressWidget: GFLoader(
+          type: GFLoaderType.ios,
+        ),
+        elevation: 10.0,
+        insetAnimCurve: Curves.easeInOut,
+        progress: 0.0,
+        maxProgress: 100.0,
+        progressTextStyle: TextStyle(
+            color: Colors.black, fontSize: 13.0, fontWeight: FontWeight.w400),
+        messageTextStyle: TextStyle(
+            color: Colors.black, fontSize: 19.0, fontWeight: FontWeight.w600));
+    await pr.show();
   setState(() {
     showIndicator= true;
 
@@ -280,7 +281,10 @@ class _CheckoutState extends State<Checkout> {
 //              print('length:${areaname.length}');
             index = j;
             // print('Index:${index}');
+            
+
           }
+          break;
         }
         if (i != index) {
           areaname.add('${event.documents[i]['name']}');
@@ -335,7 +339,7 @@ class _CheckoutState extends State<Checkout> {
     setState(() {
       showIndicator=false;
     });
-//    await pr.hide();
+    await pr.hide();
   }
 void alldata(String newemirate)async {
 //  final ProgressDialog pr = await ProgressDialog(context);
@@ -410,6 +414,7 @@ void alldata(String newemirate)async {
           index = j;
           // print('Index:${index}');
         }
+        break;
       }
       if (i != index) {
            areaname.add('${event.documents[i]['name']}');
@@ -882,12 +887,17 @@ void indicator()async{
     });
     super.initState();
   }
-
+//@override
+//void dispose(){
+//    BackButtonInterceptor.remove(myInterceptor);
+//    super.dispose();
+//}
   bool myInterceptor(bool stopDefaultButtonEvent) {
+
+
     print("BACK BUTTON!");
     Checksuccess();
-    Navigator.pop(context
-    );
+//   pushNewScreen(context, screen: BookmarksScreen());
     return true;
   }
 
@@ -1207,6 +1217,7 @@ int index=0;
         body: SafeArea(
           child: SingleChildScrollView(
             child:(showIndicator!=true)?
+
             Column(
               children: [
 //                 Row(
@@ -2219,7 +2230,7 @@ int index=0;
                                                                     ? 'field required'
                                                                     : null,
                                                             hint: Text('Area'),
-                                                            value: areaname[0],
+                                                            value: area,
                                                             items: areaname.map(
                                                                 (String value) {
                                                               return new DropdownMenuItem<
@@ -3814,6 +3825,7 @@ await pr.hide();
 
   int k = 0;
   int length = 0;
+  bool yes=false;
   Future<String> Checksuccess() async {
     // print('running check');
     var coupon;
@@ -3863,9 +3875,12 @@ await pr.hide();
     Firestore.instance
         .collection('OnlineOrders')
         .snapshots()
-        .forEach((element) {
+        .listen((element) {
       for (int i = 0; i < element.documents.length; i++) {
         if (onlineid == element.documents[i].documentID) {
+          setState(() {
+            yes=true;
+          });
           Firestore.instance
               .collection('Orders')
               .snapshots()
@@ -4002,6 +4017,13 @@ await pr.hide();
 //      print(contents);
 //      httpClient.close();
 //    });
+
+        }
+       else{
+          BackButtonInterceptor.remove(myInterceptor);
+          Navigator.of(context).popUntil((route)=>route.isFirst);
+//
+        Navigator.pushReplacement(context,MaterialPageRoute(builder:(context)=>HomeScreen()));
 
         }
       }
