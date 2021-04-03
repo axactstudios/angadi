@@ -333,6 +333,8 @@ PODS:
     - FirebaseCore (~> 6.10)
     - GTMSessionFetcher/Core (~> 1.1)
   - Flutter (1.0.0)
+  - flutter_open_whatsapp (0.0.1):
+    - Flutter
   - flutter_paytabs_bridge_emulator (1.0.1-beta):
     - Flutter
     - PayTabs (= 4.1.1)
@@ -475,6 +477,7 @@ DEPENDENCIES:
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - firebase_storage (from `.symlinks/plugins/firebase_storage/ios`)
   - Flutter (from `Flutter`)
+  - flutter_open_whatsapp (from `.symlinks/plugins/flutter_open_whatsapp/ios`)
   - flutter_paytabs_bridge_emulator (from `.symlinks/plugins/flutter_paytabs_bridge_emulator/ios`)
   - fluttertoast (from `.symlinks/plugins/fluttertoast/ios`)
   - geocoder (from `.symlinks/plugins/geocoder/ios`)
@@ -546,6 +549,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_storage/ios"
   Flutter:
     :path: Flutter
+  flutter_open_whatsapp:
+    :path: ".symlinks/plugins/flutter_open_whatsapp/ios"
   flutter_paytabs_bridge_emulator:
     :path: ".symlinks/plugins/flutter_paytabs_bridge_emulator/ios"
   fluttertoast:
@@ -601,6 +606,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 82d75b3770a78bbce470769a6980429608b4c407
   FirebaseStorage: 33b92875a9b556824886cc7a65120c7d2cb3a8d8
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  flutter_open_whatsapp: 4b54cd5403cfe53414e4252fd52fc27f79635f58
   flutter_paytabs_bridge_emulator: 70039710d9105e5ed1a755e0fbda02e47eb0a815
   fluttertoast: 6122fa75143e992b1d3470f61000f591a798cc58
   FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a

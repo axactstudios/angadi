@@ -5,6 +5,7 @@ import 'package:angadi/widgets/dark_overlay.dart';
 import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:location/location.dart';
+import 'dart:io' show Platform;
 
 class SetLocationScreen extends StatefulWidget {
   final String name;
@@ -76,7 +77,11 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
                     SpaceH40(),
                     Align(
                       alignment: Alignment.topRight,
-                      child: _serviceEnabled ? _buildSkipButton() : Container(),
+                      child: !Platform.isIOS
+                          ? _serviceEnabled
+                              ? _buildSkipButton('Next')
+                              : Container()
+                          : _buildSkipButton('Skip'),
                     ),
                     SpaceH200(),
                     Column(
@@ -143,7 +148,7 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
     );
   }
 
-  Widget _buildSkipButton() {
+  Widget _buildSkipButton(btnText) {
     return InkWell(
       onTap: () {
         R.Router.navigator.pushNamedAndRemoveUntil(
@@ -159,7 +164,7 @@ class _SetLocationScreenState extends State<SetLocationScreen> {
         ),
         child: Center(
           child: Text(
-            'Next',
+            btnText,
             textAlign: TextAlign.center,
             style: Styles.customNormalTextStyle(),
           ),
