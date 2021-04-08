@@ -233,6 +233,8 @@ PODS:
     - AppAuth/ExternalUserAgent (= 1.4.0)
   - AppAuth/Core (1.4.0)
   - AppAuth/ExternalUserAgent (1.4.0)
+  - apple_sign_in (0.0.1):
+    - Flutter
   - BIObjCHelpers (0.4.3)
   - BoringSSL-GRPC (0.0.7):
     - BoringSSL-GRPC/Implementation (= 0.0.7)
@@ -471,6 +473,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - apple_sign_in (from `.symlinks/plugins/apple_sign_in/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
   - firebase_auth (from `.symlinks/plugins/firebase_auth/ios`)
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
@@ -537,6 +540,8 @@ SPEC REPOS:
     - Toast
 
 EXTERNAL SOURCES:
+  apple_sign_in:
+    :path: ".symlinks/plugins/apple_sign_in/ios"
   cloud_firestore:
     :path: ".symlinks/plugins/cloud_firestore/ios"
   firebase_auth:
@@ -587,6 +592,7 @@ SPEC CHECKSUMS:
   ActionSheetPicker-3.0: 5b62e07b00bd970509cf5ece99cb7447eae5dd0d
   AFNetworking: 7864c38297c79aaca1500c33288e429c3451fdce
   AppAuth: 31bcec809a638d7bd2f86ea8a52bd45f6e81e7c7
+  apple_sign_in: 7716c7ddfa195aeab7dec0dc374ef4ff45d1adb4
   BIObjCHelpers: 378672b0f9309e4d2cbd4cabfb3afbe1ce225e40
   BoringSSL-GRPC: 8edf627ee524575e2f8d19d56f068b448eea3879
   CardIO: 56983b39b62f495fc6dae9ad7cf875143df06443

@@ -1,6 +1,10 @@
 import 'package:angadi/screens/home_screen.dart';
 import 'package:angadi/screens/root_screen.dart';
+import 'package:angadi/services/auth.dart';
 import 'package:angadi/utils/my_shared_prefs.dart';
+import 'package:apple_sign_in/apple_sign_in_button.dart' as apple;
+import 'dart:io' show Platform;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -20,6 +24,9 @@ import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:progress_dialog/progress_dialog.dart';
+
+import '../theme.dart';
+import '../theme.dart';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -137,6 +144,8 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  AuthService auth = AuthService();
+
   int j = 0;
   int length = 0;
   Future<String> signInWithGoogle() async {
@@ -186,7 +195,7 @@ class _LoginScreenState extends State<LoginScreen> {
           }
         }
         if (j == length) {
-          List<String>titles=[];
+          List<String> titles = [];
           Firestore.instance
               .collection('Users')
               .document(currentUser.uid)
@@ -195,7 +204,7 @@ class _LoginScreenState extends State<LoginScreen> {
             'id': currentUser.uid,
             'mail': googleSignIn.currentUser.email,
             'pUrl': googleSignIn.currentUser.photoUrl,
-            'couponUsed':titles,
+            'couponUsed': titles,
             'role': 'user'
           });
         }
@@ -333,6 +342,27 @@ class _LoginScreenState extends State<LoginScreen> {
           height: Sizes.HEIGHT_20,
         ),
         _signInButton(),
+        Platform.isIOS
+            ? SizedBox(
+                height: Sizes.HEIGHT_20,
+              )
+            : Container(),
+        Platform.isIOS
+            ? Container(
+                width: 350,
+                child: OutlineButton(
+                    splashColor: Colors.grey,
+                    onPressed: () {},
+                    child: apple.AppleSignInButton(
+                      style: apple.ButtonStyle.black,
+                      onPressed: () async {
+                        FirebaseUser user = await auth.appleSignIn();
+                        if (user != null) {
+                          Navigator.pushReplacementNamed(context, '/topics');
+                        }
+                      },
+                    )))
+            : Container(),
         SizedBox(height: Sizes.HEIGHT_60),
         InkWell(
           onTap: () => R.Router.navigator.pushNamed(R.Router.registerScreen),
