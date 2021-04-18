@@ -10,6 +10,7 @@ import 'package:getflutter/components/loader/gf_loader.dart';
 import 'package:getflutter/types/gf_loader_type.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
+import 'package:string_similarity/string_similarity.dart';
 
 class FilteredSearch extends StatefulWidget {
   @override
@@ -266,6 +267,7 @@ class _FilteredSearchState extends State<FilteredSearch> {
       docList.clear();
       dogList.clear();
       snapshot.documents.forEach((f) {
+        var name = f['name'].toString().toLowerCase();
         List<Quantity> allquantities = [];
         List<String> quantities = [];
 
@@ -295,7 +297,9 @@ class _FilteredSearchState extends State<FilteredSearch> {
           breedLowerCase.add(breed.toLowerCase());
         }
         if (dogLowerCase.contains(query.toLowerCase()) ||
-            breedLowerCase.contains(query.toLowerCase())) {
+            breedLowerCase.contains(query.toLowerCase())|| name.toLowerCase().toString().contains(query.toLowerCase())||name.toString().toLowerCase().similarityTo(query.toLowerCase())>0.2){
+
+            print(name.toString().toLowerCase().similarityTo(query.toLowerCase()).toString());
           print('Match found ${f['name']}');
           docList.add(f);
           Dish dog = Dish(

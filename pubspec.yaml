@@ -53,6 +53,7 @@ dependencies:
   google_sign_in: ^4.5.9
   flutter_polyline_points: ^0.2.4
   lottie: ^0.6.0
+  string_similarity: ^1.1.0
 
 #  flutter_paytabs_sdk: ^1.0.0
   path_provider: ^1.6.11
