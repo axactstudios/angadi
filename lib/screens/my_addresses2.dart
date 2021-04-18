@@ -9,6 +9,7 @@ import 'package:angadi/widgets/potbelly_button.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
@@ -94,7 +95,9 @@ class _MyAddresses2State extends State<MyAddresses2> {
       throw 'Could not launch ${url()}';
     }
   }
-
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+          msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +109,7 @@ class _MyAddresses2State extends State<MyAddresses2> {
         actions: [
           InkWell(
               onTap: () {
-                launch('tel:+971 50 7175406');
+                _launchURL('tel:+971 50 7175406');
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -124,7 +127,7 @@ class _MyAddresses2State extends State<MyAddresses2> {
           InkWell(
               onTap: () {
 //                print(1);
-                launch(
+                _launchURL(
                     'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),

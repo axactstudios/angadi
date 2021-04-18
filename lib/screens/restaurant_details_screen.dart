@@ -475,7 +475,9 @@ class _RestaurantDetailsScreenState extends State<RestaurantDetailsScreen> {
   }
 
 //  List sizes = ['500 ML', '1 Ltr', '2 Ltr', '5 Ltr', '10 Ltr'];
-
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+          msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   @override
   Widget build(BuildContext context) {
 //    final RestaurantDetails args = ModalRoute.of(context).settings.arguments;

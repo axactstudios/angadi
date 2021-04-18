@@ -13,6 +13,7 @@ import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/foody_bite_card.dart';
 import 'package:angadi/widgets/spaces.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -67,7 +68,9 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
       throw 'Could not launch ${url()}';
     }
   }
-
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+          msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   String whatsappMessage = '';
   void initState() {
     getOrderCount();
@@ -208,7 +211,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
         actions: [
           InkWell(
               onTap: () {
-                launch('tel:+971 50 7175406');
+                _launchURL('tel:+971 50 7175406');
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -226,7 +229,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           InkWell(
               onTap: () {
 //                print(1);
-                launch(
+                _launchURL(
                     'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),

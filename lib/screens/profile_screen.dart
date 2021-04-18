@@ -86,7 +86,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       throw 'Could not launch ${url()}';
     }
   }
-
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+          msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,7 +100,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           actions: [
             InkWell(
                 onTap: () {
-                  launch('tel:+971 50 7175406');
+                  _launchURL('tel:+971 50 7175406');
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
@@ -116,7 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             InkWell(
                 onTap: () {
 //                print(1);
-                  launch(
+                  _launchURL(
                       'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),

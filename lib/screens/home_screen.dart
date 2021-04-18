@@ -20,6 +20,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:angadi/routes/router.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
@@ -333,6 +334,9 @@ class _HomeScreenState extends State<HomeScreen> {
   var minOrderValue;
 
   var orderStatus, idorder;
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+          msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   @override
   Widget build(BuildContext context) {
     _pickTime() async {
@@ -389,7 +393,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           InkWell(
               onTap: () {
-                launch('tel:+971 50 7175406');
+                _launchURL('tel:+971 50 7175406');
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -406,7 +410,7 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width: 8),
           InkWell(
               onTap: () {
-                launch(
+                _launchURL(
                     'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),

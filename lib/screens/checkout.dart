@@ -846,9 +846,9 @@ int length2=0;
   }
 
 
-void indicator()async{
-
-}
+  void _launchURL2(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+          msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   String whatsappMessage = '';
   bool  showIndicator=false;
   @override
@@ -1176,7 +1176,7 @@ int index=0;
           actions: [
             InkWell(
                 onTap: () {
-                  launch('tel:+971 50 7175406');
+                  _launchURL2('tel:+971 50 7175406');
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
@@ -1197,7 +1197,7 @@ int index=0;
             InkWell(
                 onTap: () {
 //                print(1);
-                  launch(
+                  _launchURL2(
                       'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),

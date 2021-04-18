@@ -11,6 +11,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 import 'package:getwidget/components/loader/gf_loader.dart';
@@ -372,7 +373,9 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
   }
 
   int index = 0;
-
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+          msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -389,7 +392,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
           actions: [
             InkWell(
                 onTap: () {
-                  launch('tel:+971 50 7175406');
+                  _launchURL('tel:+971 50 7175406');
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
@@ -407,7 +410,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
             InkWell(
                 onTap: () {
 //                print(1);
-                  launch(
+                  _launchURL(
                       'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),

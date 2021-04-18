@@ -6,6 +6,7 @@ import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../values/data.dart';
 import 'package:angadi/values/values.dart';
@@ -46,6 +47,9 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
       throw 'Could not launch ${url()}';
     }
   }
+  void _launchURL(String url) async =>
+      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+          msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
 
   String whatsappMessage = '';
   @override
@@ -81,7 +85,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
         actions: [
           InkWell(
               onTap: () {
-                launch('tel:+971 50 7175406');
+                _launchURL('tel:+971 50 7175406');
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -99,7 +103,7 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
           InkWell(
               onTap: () {
 //                print(1);
-                launch(
+                _launchURL(
                     'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),
