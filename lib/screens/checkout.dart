@@ -1176,32 +1176,31 @@ int index=0;
           actions: [
             InkWell(
                 onTap: () {
-                  _launchURL2('tel:+971 50 7175406');
+                  _launchURL(Uri.encodeFull('tel:+971 50 7175406'));
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
-              width: 6,
+              width: 8,
             ),
             InkWell(
                 onTap: () {
-                  FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
-
+                  launchWhatsApp(phone:Uri.encodeFull("+971 50 7175406"),message:' Hi');
                 },
                 child: Container(
                     alignment: Alignment.center,
                     child: FaIcon(FontAwesomeIcons.whatsapp,
                         color: Color(0xFF6b3600)))),
-            SizedBox(
-              width: 6,
-            ),
+            SizedBox(width: 8),
             InkWell(
                 onTap: () {
 //                print(1);
-                  _launchURL2(
-                      'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
+                  _launchURL(Uri.encodeFull( 'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.')
+                  );
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
-            SizedBox(width: 7)
+            SizedBox(
+              width: 10,
+            )
           ],
           elevation: 0.0,
           centerTitle: true,

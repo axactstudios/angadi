@@ -20,12 +20,14 @@
 	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
-	<key>CFBundleURLTypes</key>
 	<key>LSApplicationQueriesSchemes</key>
-    <array>
-      <string>https</string>
-      <string>http</string>
-    </array>
+        <array>
+          <string>tel:+971 50 7175406</string>
+          <string>+971 50 7175406</string>
+           <string>mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.</string>
+        </array>
+	<key>CFBundleURLTypes</key>
+
 	<array>
 		<dict>
 			<key>CFBundleTypeRole</key>

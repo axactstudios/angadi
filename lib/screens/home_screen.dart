@@ -337,6 +337,24 @@ class _HomeScreenState extends State<HomeScreen> {
   void _launchURL(String url) async =>
       await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
           msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
+  void launchWhatsApp({
+    @required String phone,
+    @required String message,
+  }) async {
+    String url() {
+      if (Platform.isIOS) {
+        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+      } else {
+        return "whatsapp://send?   phone=$phone&text=${Uri.parse(message)}";
+      }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
+  }
   @override
   Widget build(BuildContext context) {
     _pickTime() async {
@@ -393,7 +411,7 @@ class _HomeScreenState extends State<HomeScreen> {
         actions: [
           InkWell(
               onTap: () {
-                _launchURL('tel:+971 50 7175406');
+                _launchURL(Uri.encodeFull('tel:+971 50 7175406'));
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -401,7 +419,7 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
           InkWell(
               onTap: () {
-                FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
+                launchWhatsApp(phone:Uri.encodeFull("+971 50 7175406"),message:' Hi');
               },
               child: Container(
                   alignment: Alignment.center,
@@ -410,8 +428,9 @@ class _HomeScreenState extends State<HomeScreen> {
           SizedBox(width: 8),
           InkWell(
               onTap: () {
-                _launchURL(
-                    'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
+//                print(1);
+                _launchURL(Uri.encodeFull( 'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.')
+                );
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),
           SizedBox(

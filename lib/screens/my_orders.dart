@@ -204,7 +204,7 @@ class _MyOrdersState extends State<MyOrders> {
           actions: [
             InkWell(
                 onTap: () {
-                  _launchURL('tel:+971 50 7175406');
+                  _launchURL(Uri.encodeFull('tel:+971 50 7175406'));
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
@@ -212,7 +212,7 @@ class _MyOrdersState extends State<MyOrders> {
             ),
             InkWell(
                 onTap: () {
-                  FlutterOpenWhatsapp.sendSingleMessage("+971 50 7175406", "");
+                  launchWhatsApp(phone:Uri.encodeFull("+971 50 7175406"),message:' Hi');
                 },
                 child: Container(
                     alignment: Alignment.center,
@@ -222,8 +222,8 @@ class _MyOrdersState extends State<MyOrders> {
             InkWell(
                 onTap: () {
 //                print(1);
-                  _launchURL(
-                      'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.');
+                  _launchURL(Uri.encodeFull( 'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.')
+                  );
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
             SizedBox(

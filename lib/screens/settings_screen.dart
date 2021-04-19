@@ -1,12 +1,33 @@
+import 'dart:io';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:angadi/routes/router.gr.dart' as R;
 import 'package:angadi/values/values.dart';
 import 'package:angadi/widgets/custom_app_bar.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class SettingsScreen extends StatelessWidget {
+  void launchWhatsApp({
+    @required String phone,
+    @required String message,
+  }) async {
+    String url() {
+      if (Platform.isIOS) {
+        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
+      } else {
+        return "whatsapp://send?   phone=$phone&text=${Uri.parse(message)}";
+      }
+    }
+
+    if (await canLaunch(url())) {
+      await launch(url());
+    } else {
+      throw 'Could not launch ${url()}';
+    }
+  }
   void _launchURL(String url) async =>
       await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
           msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
@@ -21,7 +42,7 @@ class SettingsScreen extends StatelessWidget {
         actions: [
           InkWell(
               onTap: () {
-                _launchURL('tel:+919027553376');
+                _launchURL(Uri.encodeFull('tel:+971 50 7175406'));
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -29,13 +50,22 @@ class SettingsScreen extends StatelessWidget {
           ),
           InkWell(
               onTap: () {
+                launchWhatsApp(phone:Uri.encodeFull("+971 50 7175406"),message:' Hi');
+              },
+              child: Container(
+                  alignment: Alignment.center,
+                  child: FaIcon(FontAwesomeIcons.whatsapp,
+                      color: Color(0xFF6b3600)))),
+          SizedBox(width: 8),
+          InkWell(
+              onTap: () {
 //                print(1);
-                _launchURL(
-                    'mailto:work.axactstudios@gmail.com?subject=Complaint/Feedback&body=Type your views here.');
+                _launchURL(Uri.encodeFull( 'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.')
+                );
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),
           SizedBox(
-            width: 14,
+            width: 10,
           )
         ],
         elevation: 0.0,
