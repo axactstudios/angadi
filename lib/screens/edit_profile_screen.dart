@@ -94,8 +94,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       throw 'Could not launch ${url()}';
     }
   }
-  void _launchURL(String url) async =>
-      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+
+  void _launchURL(String url) async => await canLaunch(url)
+      ? await launch(url)
+      : throw Fluttertoast.showToast(
           msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   @override
   Widget build(BuildContext context) {
@@ -122,7 +124,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           actions: [
             InkWell(
                 onTap: () {
-                  _launchURL(Uri.encodeFull('tel:+971 50 7175406'));
+                  launch(Uri.encodeFull('tel:+971 50 7175406'));
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
@@ -130,7 +132,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone:Uri.encodeFull("+971 50 7175406"),message:' Hi');
+                  if (Platform.isIOS) {
+                    launch(Uri.encodeFull(
+                        "whatsapp://wa.me/+971 50 7175406/?text= Hi"));
+                  } else {
+                    launch(Uri.encodeFull(
+                        "whatsapp://send?   phone=+971 50 7175406&text= Hi"));
+                  }
                 },
                 child: Container(
                     alignment: Alignment.center,
@@ -139,9 +147,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             SizedBox(width: 8),
             InkWell(
                 onTap: () {
-//                print(1);
-                  _launchURL(Uri.encodeFull( 'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.')
-                  );
+                  launch(Uri.encodeFull(
+                      "mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here."));
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
             SizedBox(
@@ -155,7 +162,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             style: Styles.customTitleTextStyle(
               color: Color(0xFF6b3600),
               fontWeight: FontWeight.w600,
-              fontSize: Sizes.TEXT_SIZE_18,
+              fontSize: Sizes.TEXT_SIZE_22,
             ),
           ),
         ),
