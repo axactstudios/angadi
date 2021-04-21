@@ -635,8 +635,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   children: [
                     InkWell(
                       onTap: () {
-                        FlutterOpenWhatsapp.sendSingleMessage(
-                            "+971 50 7175406", "");
+                        launch(Uri.encodeFull("https://wa.me/971507175406"));
                       },
                       child: Container(
                           height: 50,

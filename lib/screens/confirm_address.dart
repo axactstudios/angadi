@@ -369,14 +369,8 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
             ),
             InkWell(
                 onTap: () {
-                  if (Platform.isIOS) {
-                    launch(Uri.encodeFull(
-                        "whatsapp://wa.me/+971 50 7175406/?text= Hi"));
-                  } else {
-                    launch(Uri.encodeFull(
-                        "whatsapp://send?   phone=+971 50 7175406&text= Hi"));
-                  }
-                },
+  launch(Uri.encodeFull("https://wa.me/971507175406"));
+},
                 child: Container(
                     alignment: Alignment.center,
                     child: FaIcon(FontAwesomeIcons.whatsapp,
