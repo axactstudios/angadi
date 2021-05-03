@@ -427,14 +427,16 @@ class _CheckoutState extends State<Checkout> {
       for (int i = 0; i < value.documents.length; i++) {
 //        print(value.documents.length);
 
-        emiratesname.add(value.documents[i]['name']);
+//        emiratesname.add(value.documents[i]['name']);
         Emirates emi = Emirates(value.documents[i]['deliveryCharge'],
             value.documents[i]['minOrderPrice'], value.documents[i]['name']);
 
         savedemirate.add(emi);
       }
     });
-    emirate = savedemirate[0].name;
+    emiratesname.add('Sharjah');
+    emiratesname.add('Ajman');
+    emirate =emiratesname[0] ;
     alldata(emirate);
     await Firestore.instance
         .collection('EmiratesArea')
@@ -1604,8 +1606,8 @@ class _CheckoutState extends State<Checkout> {
 //                                              print(snap.data.documents.length);
                                                     emirate2 = snap.data
                                                         .documents[0]['name'];
-                                                    emiratesname.add(snap.data
-                                                        .documents[i]['name']);
+//                                                    emiratesname.add(snap.data
+//                                                        .documents[i]['name']);
                                                     Emirates emi = Emirates(
                                                         snap.data.documents[i]
                                                             ['deliveryCharge'],
@@ -1616,7 +1618,8 @@ class _CheckoutState extends State<Checkout> {
 
                                                     allemirates.add(emi);
                                                   }
-
+                                                            emiratesname.add('Sharjah');
+                                                  emiratesname.add('Ajman');
                                                   return allemirates.length != 0
                                                       ? Column(
                                                           children: [
@@ -2064,8 +2067,8 @@ class _CheckoutState extends State<Checkout> {
                                                     // print(snap.data.documents.length);
                                                     emirate2 = snap.data
                                                         .documents[0]['name'];
-                                                    emiratesname.add(snap.data
-                                                        .documents[i]['name']);
+//                                                    emiratesname.add(snap.data
+//                                                        .documents[i]['name']);
                                                     Emirates emi = Emirates(
                                                         snap.data.documents[i]
                                                             ['deliveryCharge'],
@@ -2075,6 +2078,8 @@ class _CheckoutState extends State<Checkout> {
                                                             ['name']);
                                                     allemirates.add(emi);
                                                   }
+                                                  emiratesname.add('Sharjah');
+                                                  emiratesname.add('Ajman');
                                                   return allemirates.length != 0
                                                       ? Column(
                                                           children: [
