@@ -88,8 +88,10 @@ class _MyOrdersState extends State<MyOrders> {
     });
     super.initState();
   }
-  void _launchURL(String url) async =>
-      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+
+  void _launchURL(String url) async => await canLaunch(url)
+      ? await launch(url)
+      : throw Fluttertoast.showToast(
           msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   List<Order> orders = List<Order>();
   @override
@@ -204,7 +206,7 @@ class _MyOrdersState extends State<MyOrders> {
           actions: [
             InkWell(
                 onTap: () {
-                  _launchURL(Uri.encodeFull('tel:+971 50 7175406'));
+                  launch(Uri.encodeFull('tel:+971 50 7175406'));
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
@@ -212,8 +214,8 @@ class _MyOrdersState extends State<MyOrders> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone:Uri.encodeFull("+971 50 7175406"),message:' Hi');
-                },
+  launch(Uri.encodeFull("https://wa.me/971507175406"));
+},
                 child: Container(
                     alignment: Alignment.center,
                     child: FaIcon(FontAwesomeIcons.whatsapp,
@@ -221,9 +223,8 @@ class _MyOrdersState extends State<MyOrders> {
             SizedBox(width: 8),
             InkWell(
                 onTap: () {
-//                print(1);
-                  _launchURL(Uri.encodeFull( 'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.')
-                  );
+                  launch(Uri.encodeFull(
+                      "mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here."));
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
             SizedBox(

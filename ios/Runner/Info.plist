@@ -22,9 +22,8 @@
 	<string>????</string>
 	<key>LSApplicationQueriesSchemes</key>
         <array>
-          <string>tel:+971 50 7175406</string>
-          <string>+971 50 7175406</string>
-           <string>mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.</string>
+          <string>https</string>
+          <string>http</string>
         </array>
 	<key>CFBundleURLTypes</key>
 

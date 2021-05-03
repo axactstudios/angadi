@@ -68,8 +68,10 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
       throw 'Could not launch ${url()}';
     }
   }
-  void _launchURL(String url) async =>
-      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+
+  void _launchURL(String url) async => await canLaunch(url)
+      ? await launch(url)
+      : throw Fluttertoast.showToast(
           msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   String whatsappMessage = '';
   void initState() {
@@ -211,7 +213,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
         actions: [
           InkWell(
               onTap: () {
-                _launchURL(Uri.encodeFull('tel:+971 50 7175406'));
+                launch(Uri.encodeFull('tel:+971 50 7175406'));
               },
               child: Icon(Icons.phone, color: Color(0xFF6b3600))),
           SizedBox(
@@ -219,8 +221,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           ),
           InkWell(
               onTap: () {
-                launchWhatsApp(phone:Uri.encodeFull("+971 50 7175406"),message:' Hi');
-              },
+  launch(Uri.encodeFull("https://wa.me/971507175406"));
+},
               child: Container(
                   alignment: Alignment.center,
                   child: FaIcon(FontAwesomeIcons.whatsapp,
@@ -228,9 +230,8 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
           SizedBox(width: 8),
           InkWell(
               onTap: () {
-//                print(1);
-                _launchURL(Uri.encodeFull( 'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.')
-                );
+                launch(Uri.encodeFull(
+                    "mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here."));
               },
               child: Icon(Icons.mail, color: Color(0xFF6b3600))),
           SizedBox(
@@ -240,11 +241,11 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
         elevation: 0.0,
         centerTitle: true,
         title: Text(
-          widget.categoryName,
+          'Angadi.ae',
           style: Styles.customTitleTextStyle(
             color: Color(0xFF6b3600),
             fontWeight: FontWeight.w600,
-            fontSize: Sizes.TEXT_SIZE_18,
+            fontSize: Sizes.TEXT_SIZE_22,
           ),
         ),
       ),

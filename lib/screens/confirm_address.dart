@@ -38,8 +38,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
   String emirate2;
   String emirate;
   List<EmiratesArea> getall = [];
-  void alldata2(String newemirate, BuildContext ctx)async{
-
+  void alldata2(String newemirate, BuildContext ctx) async {
     final ProgressDialog pr = await ProgressDialog(ctx);
     pr.style(
         message: 'Loading...',
@@ -58,42 +57,38 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
     await pr.show();
     setState(() {
 //      showIndicator= true;
-
     });
     getall.clear();
     areaname.clear();
 //    areaname.add('Others');
     print(getall.length);
-    emirate=newemirate;
+    emirate = newemirate;
     print(newemirate);
 //  length2=0;
 
-    await Firestore.instance.collection('EmiratesArea').where(
-        'Emirate', isEqualTo: newemirate).snapshots().listen((event) {
+    await Firestore.instance
+        .collection('EmiratesArea')
+        .where('Emirate', isEqualTo: newemirate)
+        .snapshots()
+        .listen((event) {
       index = 0;
-      for (int i = 0;
-      i < event.documents.length;
-      i++) {
+      for (int i = 0; i < event.documents.length; i++) {
 //        length2==event.documents.length;
-        if(i==0){
+        if (i == 0) {
           areaname.add('${event.documents[i]['name']}');
 //                                                print('5555555555555${snap.data.documents[i]['name']}');
-          EmiratesArea emi2=EmiratesArea( event.documents[i]
-          ['Emirate'],
-              event.documents[i]
-              ['deliveryCharge'],
-              event.documents[i]
-              ['minOrderPrice'],
+          EmiratesArea emi2 = EmiratesArea(
+              event.documents[i]['Emirate'],
+              event.documents[i]['deliveryCharge'],
+              event.documents[i]['minOrderPrice'],
               '${event.documents[i]['name']}',
-              event.documents[i]
-              ['zone']);
+              event.documents[i]['zone']);
           getall.add(emi2);
-          area=event.documents[i]['name'];
+          area = event.documents[i]['name'];
           setState(() {
             deliveryCharge = double.parse(getall[0].deliveryCharge);
             minOrderPrice = double.parse(getall[0].minOrderPrice);
           });
-
         }
 //      print(event.documents.length);
         for (int j = i + 1; j < event.documents.length; j++) {
@@ -102,20 +97,16 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
 //           print('5555555555555${event.documents[j]['name']}');
 //           print('Minorder${ event.documents[j]
 //           ['minOrderPrice']}');
-            EmiratesArea emi2 = EmiratesArea(event.documents[j]
-            ['Emirate'],
-                event.documents[j]
-                ['deliveryCharge'],
-                event.documents[j]
-                ['minOrderPrice'],
+            EmiratesArea emi2 = EmiratesArea(
+                event.documents[j]['Emirate'],
+                event.documents[j]['deliveryCharge'],
+                event.documents[j]['minOrderPrice'],
                 ' ${event.documents[j]['name']}',
-                event.documents[j]
-                ['zone']);
+                event.documents[j]['zone']);
             getall.add(emi2);
 //              print('length:${areaname.length}');
             index = j;
             // print('Index:${index}');
-
 
           }
           break;
@@ -123,15 +114,12 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
         if (i != index) {
           areaname.add('${event.documents[i]['name']}');
 //                                                print('5555555555555${snap.data.documents[i]['name']}');
-          EmiratesArea emi2 = EmiratesArea(event.documents[i]
-          ['Emirate'],
-              event.documents[i]
-              ['deliveryCharge'],
-              event.documents[i]
-              ['minOrderPrice'],
+          EmiratesArea emi2 = EmiratesArea(
+              event.documents[i]['Emirate'],
+              event.documents[i]['deliveryCharge'],
+              event.documents[i]['minOrderPrice'],
               '${event.documents[i]['name']}',
-              event.documents[i]
-              ['zone']);
+              event.documents[i]['zone']);
           getall.add(emi2);
         }
       }
@@ -142,39 +130,24 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
       if (areaname.length > 1) {
         deliveryCharge = double.parse(getall[0].deliveryCharge);
         minOrderPrice = double.parse(getall[0].minOrderPrice);
-        area=areaname[0];
-      }
-      else {
-        for (int i =
-        0;
-        i <
-            savedemirate
-                .length;
-        i++) {
-          if (savedemirate[i]
-              .name ==
-              newemirate) {
-            deliveryCharge =
-                double.parse(
-                    savedemirate[i].deliverycharge);
-            minOrderPrice =
-                double.parse(
-                    savedarea[i].minOrderPrice);
-            area =
-            'Others';
+        area = areaname[0];
+      } else {
+        for (int i = 0; i < savedemirate.length; i++) {
+          if (savedemirate[i].name == newemirate) {
+            deliveryCharge = double.parse(savedemirate[i].deliverycharge);
+            minOrderPrice = double.parse(savedarea[i].minOrderPrice);
+            area = 'Others';
           }
         }
-
       }
-
     });
-
 
 //    setState(() {
 //      showIndicator=false;
 //    });
     await pr.hide();
   }
+
   void alldata(String newemirate) async {
     getall.clear();
     areaname.clear();
@@ -204,7 +177,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
 //        print(event.documents.length);
         for (int j = i + 1; j < event.documents.length; j++) {
           if (event.documents[i]['name'] == event.documents[j]['name']) {
-              areaname.add(' ${event.documents[j]['name']}');
+            areaname.add(' ${event.documents[j]['name']}');
 //            print('5555555555555${event.documents[j]['name']}');
 //            print('Minorder${event.documents[j]['minOrderPrice']}');
             EmiratesArea emi2 = EmiratesArea(
@@ -221,7 +194,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
           break;
         }
         if (i != index) {
-           areaname.add('${event.documents[i]['name']}');
+          areaname.add('${event.documents[i]['name']}');
 //                                                print('5555555555555${snap.data.documents[i]['name']}');
           EmiratesArea emi2 = EmiratesArea(
               event.documents[i]['Emirate'],
@@ -373,18 +346,14 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
   }
 
   int index = 0;
-  void _launchURL(String url) async =>
-      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+  void _launchURL(String url) async => await canLaunch(url)
+      ? await launch(url)
+      : throw Fluttertoast.showToast(
           msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          leading: InkWell(
-              onTap: () {
-                Navigator.of(context).pop(minimumOrderValue);
-              },
-              child: Icon(Icons.arrow_back_rounded)),
           iconTheme: IconThemeData(
             color: Colors.white,
           ),
@@ -392,7 +361,7 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
           actions: [
             InkWell(
                 onTap: () {
-                  _launchURL(Uri.encodeFull('tel:+971 50 7175406'));
+                  launch(Uri.encodeFull('tel:+971 50 7175406'));
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
@@ -400,8 +369,8 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone:Uri.encodeFull("+971 50 7175406"),message:' Hi');
-                },
+  launch(Uri.encodeFull("https://wa.me/971507175406"));
+},
                 child: Container(
                     alignment: Alignment.center,
                     child: FaIcon(FontAwesomeIcons.whatsapp,
@@ -409,9 +378,8 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
             SizedBox(width: 8),
             InkWell(
                 onTap: () {
-//                print(1);
-                  _launchURL(Uri.encodeFull( 'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.')
-                  );
+                  launch(Uri.encodeFull(
+                      "mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here."));
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
             SizedBox(
@@ -434,80 +402,94 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
         body: Padding(
           padding: const EdgeInsets.all(10),
           child: SingleChildScrollView(
-            child: areaname.length!=0?Column(
-              children: [
-                HeadingRow(
-                  title: 'Complete your full Address',
-                  number: '',
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.03),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(2),
-                          borderSide: BorderSide(color: Colors.grey)),
-                      enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(2),
-                          borderSide: BorderSide(color: Colors.grey)),
-                      focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(2),
-                          borderSide: BorderSide(color: Color(0xFF6b3600))),
-                    ),
-                    maxLines: 2,
-                    controller: locationselected,
-                  ),
-                ),
-                StreamBuilder(
-                    stream:
-                        Firestore.instance.collection('Emirates').snapshots(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<QuerySnapshot> snap) {
-                      if (snap.hasData && !snap.hasError && snap.data != null) {
-                        allemirates.clear();
-                        emiratesname.clear();
-                        for (int i = 0; i < snap.data.documents.length; i++) {
-                          print(snap.data.documents.length);
-                          emirate2 = snap.data.documents[0]['name'];
-                          emiratesname.add(snap.data.documents[i]['name']);
-                          Emirates emi = Emirates(
-                              snap.data.documents[i]['deliveryCharge'],
-                              snap.data.documents[i]['minOrderPrice'],
-                              snap.data.documents[i]['name']);
+            child: areaname.length != 0
+                ? Column(
+                    children: [
+                      HeadingRow(
+                        title: 'Complete your full Address',
+                        number: '',
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.03),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2),
+                                borderSide: BorderSide(color: Colors.grey)),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2),
+                                borderSide: BorderSide(color: Colors.grey)),
+                            focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(2),
+                                borderSide:
+                                    BorderSide(color: Color(0xFF6b3600))),
+                          ),
+                          maxLines: 2,
+                          controller: locationselected,
+                        ),
+                      ),
+                      StreamBuilder(
+                          stream: Firestore.instance
+                              .collection('Emirates')
+                              .snapshots(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<QuerySnapshot> snap) {
+                            if (snap.hasData &&
+                                !snap.hasError &&
+                                snap.data != null) {
+                              allemirates.clear();
+                              emiratesname.clear();
+                              for (int i = 0;
+                                  i < snap.data.documents.length;
+                                  i++) {
+                                print(snap.data.documents.length);
+                                emirate2 = snap.data.documents[0]['name'];
+                                emiratesname
+                                    .add(snap.data.documents[i]['name']);
+                                Emirates emi = Emirates(
+                                    snap.data.documents[i]['deliveryCharge'],
+                                    snap.data.documents[i]['minOrderPrice'],
+                                    snap.data.documents[i]['name']);
 
-                          allemirates.add(emi);
-                        }
-                        if (emirate == null) {
-                          emirate = allemirates[0].name;
-                        }
-                        // minimumOrderValue = allemirates[0].minorderprice;
-                        return allemirates.length != 0
-                            ? Column(
-                                children: [
-                                  Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.9,
-                                    child: DropdownButtonHideUnderline(
-                                      child:
-                                          new DropdownButtonFormField<String>(
-                                        validator: (value) => value == null
-                                            ? 'field required'
-                                            : null,
-                                        hint: Text('Emirates'),
-                                        value: emirate,
-                                        items: emiratesname.map((String value) {
-                                          return new DropdownMenuItem<String>(
-                                            value: value,
-                                            child: new Text(value),
-                                          );
-                                        }).toList(),
-                                        onChanged: (String newValue) {
-                                          setState(() {
-                                            emirate = newValue;
-                                            emirate2 = newValue;
-                                            print(emirate);
-                                            alldata2(emirate,context);
+                                allemirates.add(emi);
+                              }
+                              if (emirate == null) {
+                                emirate = allemirates[0].name;
+                              }
+                              // minimumOrderValue = allemirates[0].minorderprice;
+                              return allemirates.length != 0
+                                  ? Column(
+                                      children: [
+                                        Container(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.9,
+                                          child: DropdownButtonHideUnderline(
+                                            child: new DropdownButtonFormField<
+                                                String>(
+                                              validator: (value) =>
+                                                  value == null
+                                                      ? 'field required'
+                                                      : null,
+                                              hint: Text('Emirates'),
+                                              value: emirate,
+                                              items: emiratesname
+                                                  .map((String value) {
+                                                return new DropdownMenuItem<
+                                                    String>(
+                                                  value: value,
+                                                  child: new Text(value),
+                                                );
+                                              }).toList(),
+                                              onChanged: (String newValue) {
+                                                setState(() {
+                                                  emirate = newValue;
+                                                  emirate2 = newValue;
+                                                  print(emirate);
+                                                  alldata2(emirate, context);
 //                                            for (int i = 0;
 //                                                i < allemirates.length;
 //                                                i++) {
@@ -522,18 +504,18 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
 //                                              }
 //                                            }
 //                      Navigator.pop(context);
-                                          });
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Container();
-                      } else {
-                        return Container();
-                      }
-                    }),
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : Container();
+                            } else {
+                              return Container();
+                            }
+                          }),
 //                StreamBuilder(
 //                    stream: Firestore.instance
 //                        .collection('EmiratesArea')
@@ -598,118 +580,113 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
 //                          area = allareas[0].name;
 //                        }
 //                        return areaname.length != 0
-                             Column(
-                                children: [
-                                  Container(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.9,
-                                      child: DropdownButtonHideUnderline(
-                                          child: new DropdownButtonFormField<
-                                                  String>(
-                                              validator: (value) =>
-                                                  value == null
-                                                      ? 'field required'
-                                                      : null,
-                                              hint: Text('Area'),
-                                              value: areaname[0],
-                                              items:
-                                                  areaname.map((String value) {
-                                                return new DropdownMenuItem<
-                                                    String>(
-                                                  value: value,
-                                                  child: new Text(value),
-                                                );
-
-                                              }).toList(),
-                                              onChanged: (String newValue) {
-                                                setState(() {
-                                                  area = newValue;
-                                                  for (int i = 0;
-                                                      i < getall.length;
-                                                      i++) {
-                                                    if (newValue ==
-                                                        getall[i].name)
-                                                      minimumOrderValue =
-                                                          getall[i]
-                                                              .minOrderPrice;
-                                                  }
-                                                  print('---------------');
-                                                  print(area);
-                                                  if (area == 'Others') {
-                                                    for (int i = 0;
-                                                        i < allemirates.length;
-                                                        i++) {
-                                                      if (emirate ==
-                                                          allemirates[i].name) {
-                                                        print('check');
-                                                        print(emirate);
-                                                        print(allemirates[i]);
-                                                        minimumOrderValue =
-                                                            allemirates[i]
-                                                                .minorderprice;
-                                                        setState(() {});
-                                                      }
-                                                    }
-                                                  }
-                                                });
-                                              })))
-                                ],
-                              ),
+                      Column(
+                        children: [
+                          Container(
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              child: DropdownButtonHideUnderline(
+                                  child: new DropdownButtonFormField<String>(
+                                      validator: (value) => value == null
+                                          ? 'field required'
+                                          : null,
+                                      hint: Text('Area'),
+                                      value: areaname[0],
+                                      items: areaname.map((String value) {
+                                        return new DropdownMenuItem<String>(
+                                          value: value,
+                                          child: new Text(value),
+                                        );
+                                      }).toList(),
+                                      onChanged: (String newValue) {
+                                        setState(() {
+                                          area = newValue;
+                                          for (int i = 0;
+                                              i < getall.length;
+                                              i++) {
+                                            if (newValue == getall[i].name)
+                                              minimumOrderValue =
+                                                  getall[i].minOrderPrice;
+                                          }
+                                          print('---------------');
+                                          print(area);
+                                          if (area == 'Others') {
+                                            for (int i = 0;
+                                                i < allemirates.length;
+                                                i++) {
+                                              if (emirate ==
+                                                  allemirates[i].name) {
+                                                print('check');
+                                                print(emirate);
+                                                print(allemirates[i]);
+                                                minimumOrderValue =
+                                                    allemirates[i]
+                                                        .minorderprice;
+                                                setState(() {});
+                                              }
+                                            }
+                                          }
+                                        });
+                                      })))
+                        ],
+                      ),
 //                            : Container();
 //                      } else {
 //                        return Container();
 //                      }
 //                    }),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(2),
-                            borderSide: BorderSide(color: Colors.grey)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(2),
-                            borderSide: BorderSide(color: Colors.grey)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(2),
-                            borderSide: BorderSide(color: Color(0xFF6b3600))),
-                        hintText: 'House No.(Optional)'),
-                    controller: hnocontroller,
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(2),
+                                  borderSide: BorderSide(color: Colors.grey)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(2),
+                                  borderSide: BorderSide(color: Colors.grey)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(2),
+                                  borderSide:
+                                      BorderSide(color: Color(0xFF6b3600))),
+                              hintText: 'House No.(Optional)'),
+                          controller: hnocontroller,
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(2),
+                                  borderSide: BorderSide(color: Colors.grey)),
+                              enabledBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(2),
+                                  borderSide: BorderSide(color: Colors.grey)),
+                              focusedBorder: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(2),
+                                  borderSide:
+                                      BorderSide(color: Color(0xFF6b3600))),
+                              hintText: 'Landmark(Optional)'),
+                          controller: localitycontroller,
+                        ),
+                      ),
+                      SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.04),
+                      angadiButton(
+                        'Save Address',
+                        buttonWidth: MediaQuery.of(context).size.width,
+                        onTap: () async {
+                          setaddress(id);
+                        },
+                      ),
+                    ],
+                  )
+                : Center(
+                    child: Container(
+                        height: 100,
+                        width: 100,
+                        child: CircularProgressIndicator()),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextFormField(
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(2),
-                            borderSide: BorderSide(color: Colors.grey)),
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(2),
-                            borderSide: BorderSide(color: Colors.grey)),
-                        focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(2),
-                            borderSide: BorderSide(color: Color(0xFF6b3600))),
-                        hintText: 'Landmark(Optional)'),
-                    controller: localitycontroller,
-                  ),
-                ),
-                SizedBox(height: MediaQuery.of(context).size.height * 0.04),
-                angadiButton(
-                  'Save Address',
-                  buttonWidth: MediaQuery.of(context).size.width,
-                  onTap: () async {
-                    setaddress(id);
-                  },
-                ),
-              ],
-            ):Center(
-              child: Container(
-                  height:100,
-                  width:100,
-                  child:CircularProgressIndicator()
-              ),
-            ),
           ),
         ));
   }

@@ -68,26 +68,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   List<Order> orders = List<Order>();
-  void launchWhatsApp({
-    @required String phone,
-    @required String message,
-  }) async {
-    String url() {
-      if (Platform.isIOS) {
-        return "whatsapp://wa.me/$phone/?text=${Uri.parse(message)}";
-      } else {
-        return "whatsapp://send?   phone=$phone&text=${Uri.parse(message)}";
-      }
-    }
 
-    if (await canLaunch(url())) {
-      await launch(url());
-    } else {
-      throw 'Could not launch ${url()}';
-    }
-  }
-  void _launchURL(String url) async =>
-      await canLaunch(url) ? await launch(url) : throw Fluttertoast.showToast(
+  void _launchURL(String url) async => await canLaunch(url)
+      ? await launch(url)
+      : throw Fluttertoast.showToast(
           msg: 'Could not launch URL', toastLength: Toast.LENGTH_SHORT);
   @override
   Widget build(BuildContext context) {
@@ -100,7 +84,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           actions: [
             InkWell(
                 onTap: () {
-                  _launchURL(Uri.encodeFull('tel:+971 50 7175406'));
+                  launch(Uri.encodeFull('tel:+971 50 7175406'));
                 },
                 child: Icon(Icons.phone, color: Color(0xFF6b3600))),
             SizedBox(
@@ -108,8 +92,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
             InkWell(
                 onTap: () {
-                  launchWhatsApp(phone:Uri.encodeFull("+971 50 7175406"),message:' Hi');
-                },
+  launch(Uri.encodeFull("https://wa.me/971507175406"));
+},
                 child: Container(
                     alignment: Alignment.center,
                     child: FaIcon(FontAwesomeIcons.whatsapp,
@@ -117,9 +101,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             SizedBox(width: 8),
             InkWell(
                 onTap: () {
-//                print(1);
-                  _launchURL(Uri.encodeFull( 'mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here.')
-                  );
+                  launch(Uri.encodeFull(
+                      "mailto:info@angadi.ae?subject=Complaint/Feedback&body=Type your views here."));
                 },
                 child: Icon(Icons.mail, color: Color(0xFF6b3600))),
             SizedBox(
