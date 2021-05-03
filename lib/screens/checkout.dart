@@ -476,14 +476,16 @@ void alldata(String newemirate)async {
       for (int i = 0; i < value.documents.length; i++) {
 //        print(value.documents.length);
 
-        emiratesname.add(value.documents[i]['name']);
+//        emiratesname.add(value.documents[i]['name']);
         Emirates emi = Emirates(value.documents[i]['deliveryCharge'],
             value.documents[i]['minOrderPrice'], value.documents[i]['name']);
 
         savedemirate.add(emi);
       }
     });
-    emirate = savedemirate[0].name;
+    emiratesname.add('Sharjah');
+    emiratesname.add('Ajman');
+    emirate = emiratesname[0];
     alldata(emirate);
     await Firestore.instance
         .collection('EmiratesArea')
@@ -1643,8 +1645,9 @@ int index=0;
 //                                              print(snap.data.documents.length);
                                               emirate2 = snap.data.documents[0]
                                                   ['name'];
-                                              emiratesname.add(snap
-                                                  .data.documents[i]['name']);
+//                                              emiratesname.add(snap
+//                                                  .data.documents[i]['name']);
+
                                               Emirates emi = Emirates(
                                                   snap.data.documents[i]
                                                       ['deliveryCharge'],
@@ -1655,7 +1658,8 @@ int index=0;
 
                                               allemirates.add(emi);
                                             }
-
+                                                emiratesname.add('Sharjah');
+                                            emiratesname.add('Ajman');
                                             return allemirates.length != 0
                                                 ? Column(
                                                     children: [
@@ -2087,8 +2091,8 @@ int index=0;
                                               // print(snap.data.documents.length);
                                               emirate2 = snap.data.documents[0]
                                                   ['name'];
-                                              emiratesname.add(snap
-                                                  .data.documents[i]['name']);
+//                                              emiratesname.add(snap
+//                                                  .data.documents[i]['name']);
                                               Emirates emi = Emirates(
                                                   snap.data.documents[i]
                                                       ['deliveryCharge'],
@@ -2098,6 +2102,8 @@ int index=0;
                                                       ['name']);
                                               allemirates.add(emi);
                                             }
+                                            emiratesname.add('Sharjah');
+                                            emiratesname.add('Ajman');
                                             return allemirates.length != 0
                                                 ? Column(
                                                     children: [
