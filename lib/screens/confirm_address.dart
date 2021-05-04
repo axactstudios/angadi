@@ -249,14 +249,16 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
       for (int i = 0; i < value.documents.length; i++) {
         print(value.documents.length);
 
-        emiratesname.add(value.documents[i]['name']);
+//        emiratesname.add(value.documents[i]['name']);
         Emirates emi = Emirates(value.documents[i]['deliveryCharge'],
             value.documents[i]['minOrderPrice'], value.documents[i]['name']);
 
         savedemirate.add(emi);
       }
     });
-    emirate = savedemirate[0].name;
+    emiratesname.add('Sharjah');
+    emiratesname.add('Ajman');
+    emirate = emiratesname[0];
     alldata(emirate);
     if (savedarea.length > 0) {
       for (int k = 0; k < savedarea.length; k++) {
@@ -446,8 +448,8 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
                                   i++) {
                                 print(snap.data.documents.length);
                                 emirate2 = snap.data.documents[0]['name'];
-                                emiratesname
-                                    .add(snap.data.documents[i]['name']);
+//                                emiratesname
+//                                    .add(snap.data.documents[i]['name']);
                                 Emirates emi = Emirates(
                                     snap.data.documents[i]['deliveryCharge'],
                                     snap.data.documents[i]['minOrderPrice'],
@@ -455,8 +457,10 @@ class _ConfirmAddressState extends State<ConfirmAddress> {
 
                                 allemirates.add(emi);
                               }
+                              emiratesname.add('Sharjah');
+                              emiratesname.add('Ajman');
                               if (emirate == null) {
-                                emirate = allemirates[0].name;
+                                emirate = emiratesname[0];
                               }
                               // minimumOrderValue = allemirates[0].minorderprice;
                               return allemirates.length != 0
