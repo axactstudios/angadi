@@ -1152,7 +1152,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               ? () {
                                   Navigator.push(context, MaterialPageRoute(
                                       builder: (BuildContext context) {
-                                    return CategoriesScreen('Food');
+                                    return CategoriesScreen('Grocery');
                                   }));
                                 }
                               : () {},
@@ -1195,46 +1195,46 @@ class _HomeScreenState extends State<HomeScreen> {
                                   ),
                                 ),
                               ),
-                              Positioned(
-                                right: 2,
-                                // right: 16.0,
-                                top: 2,
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.end,
-                                  children: <Widget>[
-                                    Card(
-                                      // elevation: widget.ratingsAndStatusCardElevation,
-                                      child: Container(
-                                        padding: EdgeInsets.symmetric(
-                                          horizontal: 4,
-                                          vertical: 2,
-                                        ),
-                                        child: Row(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.end,
-                                          children: <Widget>[
-//                                  Image.asset(
-//                                    ImagePath.starIcon,
-//                                    height: Sizes.WIDTH_14,
-//                                    width: Sizes.WIDTH_14,
-//                                  ),
-
-                                            Text(
-                                              ('Coming Soon'),
-                                              style:
-                                                  Styles.customTitleTextStyle(
-                                                color: Colors.deepOrangeAccent,
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 14,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              ),
+//                              Positioned(
+//                                right: 2,
+//                                // right: 16.0,
+//                                top: 2,
+//                                child: Row(
+//                                  mainAxisAlignment: MainAxisAlignment.end,
+//                                  children: <Widget>[
+//                                    Card(
+//                                      // elevation: widget.ratingsAndStatusCardElevation,
+//                                      child: Container(
+//                                        padding: EdgeInsets.symmetric(
+//                                          horizontal: 4,
+//                                          vertical: 2,
+//                                        ),
+//                                        child: Row(
+//                                          crossAxisAlignment:
+//                                              CrossAxisAlignment.end,
+//                                          children: <Widget>[
+////                                  Image.asset(
+////                                    ImagePath.starIcon,
+////                                    height: Sizes.WIDTH_14,
+////                                    width: Sizes.WIDTH_14,
+////                                  ),
+//
+//                                            Text(
+//                                              ('Coming Soon'),
+//                                              style:
+//                                                  Styles.customTitleTextStyle(
+//                                                color: Colors.deepOrangeAccent,
+//                                                fontWeight: FontWeight.w600,
+//                                                fontSize: 14,
+//                                              ),
+//                                            ),
+//                                          ],
+//                                        ),
+//                                      ),
+//                                    )
+//                                  ],
+//                                ),
+//                              ),
                             ],
                           ),
                         ),

@@ -377,7 +377,7 @@ class _CategoryDetailScreenState extends State<CategoryDetailScreen> {
                       '${snap.data.documents[i]['Quantity'][j]['quantity']}');
                 }
 
-                if (snap.data.documents[i]['category'] == widget.categoryName)
+                if (snap.data.documents[i]['category'] == widget.categoryName&&snap.data.documents[i]['stock']==true)
                   dishes.add(Dish(
                       id: snap.data.documents[i]['productId'],
                       name: snap.data.documents[i]['name'],
