@@ -1930,6 +1930,11 @@ class _HomeScreenState extends State<HomeScreen> {
                               timeSlots.add(
                                   snap.data.documents[0].data['Timeslots'][i]);
                             }
+                            if (snap.data.documents[0].data['Timeslots'][i]
+                                .contains('PM')) {
+                              timeSlots.add(
+                                  snap.data.documents[0].data['Timeslots'][i]);
+                            }
                           }
                         }
                         if (timeSlots.length == 0) {

@@ -377,13 +377,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
-                          Padding(
-                              padding: const EdgeInsets.all(15.0),
-                              child: CircleAvatar(
-                                backgroundColor: Colors.white,
-                                backgroundImage: NetworkImage(url),
-                                radius: 30,
-                              )),
+                          url != null
+                              ? Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    backgroundImage: NetworkImage(url),
+                                    radius: 30,
+                                  ))
+                              : Padding(
+                                  padding: const EdgeInsets.all(15.0),
+                                  child: CircleAvatar(
+                                    backgroundColor: Colors.white,
+                                    radius: 30,
+                                  )),
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,

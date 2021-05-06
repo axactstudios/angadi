@@ -436,7 +436,7 @@ class _CheckoutState extends State<Checkout> {
     });
     emiratesname.add('Sharjah');
     emiratesname.add('Ajman');
-    emirate =emiratesname[0] ;
+    emirate = emiratesname[0];
     alldata(emirate);
     await Firestore.instance
         .collection('EmiratesArea')
@@ -589,6 +589,11 @@ class _CheckoutState extends State<Checkout> {
                             if (d > (dt.hour) &&
                                 snap.data.documents[0].data['Timeslots'][i]
                                     .contains('AM')) {
+                              timeSlots.add(
+                                  snap.data.documents[0].data['Timeslots'][i]);
+                            }
+                            if (snap.data.documents[0].data['Timeslots'][i]
+                                .contains('PM')) {
                               timeSlots.add(
                                   snap.data.documents[0].data['Timeslots'][i]);
                             }
@@ -1137,8 +1142,8 @@ class _CheckoutState extends State<Checkout> {
             ),
             InkWell(
                 onTap: () {
-  launch(Uri.encodeFull("https://wa.me/971507175406"));
-},
+                  launch(Uri.encodeFull("https://wa.me/971507175406"));
+                },
                 child: Container(
                     alignment: Alignment.center,
                     child: FaIcon(FontAwesomeIcons.whatsapp,
@@ -1618,7 +1623,7 @@ class _CheckoutState extends State<Checkout> {
 
                                                     allemirates.add(emi);
                                                   }
-                                                            emiratesname.add('Sharjah');
+                                                  emiratesname.add('Sharjah');
                                                   emiratesname.add('Ajman');
                                                   return allemirates.length != 0
                                                       ? Column(
