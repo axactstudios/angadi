@@ -52,9 +52,8 @@ class _BookmarksScreenState extends State<BookmarksScreen> {
       String qtyTag,
       String details}) async {
     // row to update
-    Cart item = Cart(id, name, imgUrl, price, qty, qtyTag);
+    Cart item = Cart(id, name, imgUrl, price, 30, qtyTag);
     final rowsAffected = await dbHelper.update(item);
-    Fluttertoast.showToast(msg: 'Updated', toastLength: Toast.LENGTH_SHORT);
     getAllItems();
   }
 

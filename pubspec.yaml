@@ -22,7 +22,7 @@ dependencies:
   firebase_storage: ^3.1.6
   shared_preferences: ^0.5.12
   fancy_shimmer_image: ^1.2.0
-  google_fonts: ^0.3.10
+  google_fonts:
   webview_flutter: ^1.0.7
   fluttertoast: ^7.1.1
   flutter_open_whatsapp: ^0.1.2
@@ -61,6 +61,8 @@ dependencies:
   firebase_messaging: ^6.0.16
   flutter_feather_icons: ^1.0.3
   font_awesome_flutter: ^8.10.0
+  twilio_flutter: 0.0.5
+  mailer2: 1.2.5
 
 
 dev_dependencies:

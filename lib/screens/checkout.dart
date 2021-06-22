@@ -33,11 +33,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:getwidget/components/loader/gf_loader.dart';
 import 'package:getwidget/types/gf_loader_type.dart';
 import 'package:location/location.dart';
+import 'package:mailer2/mailer.dart';
 import 'package:persistent_bottom_nav_bar/persistent-tab-view.dart';
 import 'package:place_picker/entities/location_result.dart';
 import 'package:place_picker/widgets/place_picker.dart';
 import 'package:progress_dialog/progress_dialog.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:twilio_flutter/twilio_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'bookmarks_screen.dart';
@@ -3180,6 +3182,37 @@ class _CheckoutState extends State<Checkout> {
     });
   }
 
+  TwilioFlutter twilioFlutter = TwilioFlutter(
+      accountSid:
+          'AC88a8448d0a8b43fe42e5a75abf494c66', // replace *** with Account SID
+      authToken:
+          '10026062638aa681a90b74c127293ee6', // replace xxx with Auth Token
+      twilioNumber: '+18573424327' // replace .... with Twilio Number
+      );
+
+  send(orderNumber) async {
+    print(user.email);
+    var options = new GmailSmtpOptions()
+      ..username = 'axactstudios@gmail.com'
+      ..password = 'aascaasc3838';
+
+    var emailTransport = new SmtpTransport(options);
+
+    // Create our mail/envelope.
+    var envelope = new Envelope()
+      ..from = 'axactstudios@gmail.com'
+      ..recipients.add(user.email)
+      ..subject = 'YOUR ORDER $orderNumber THROUGH ANGADI.AE'
+      ..text =
+          'Your order $orderNumber is successfully placed and confirmed! Check your order details on the app.';
+
+    // Email it.
+    emailTransport
+        .send(envelope)
+        .then((envelope) => print('Email sent!'))
+        .catchError((e) => print('Error occurred: $e'));
+  }
+
   placeOrder(orderType) async {
     var dis;
     var coupon;
@@ -3192,6 +3225,7 @@ class _CheckoutState extends State<Checkout> {
 //    else{
 //      dis=double.parse(discount.discount).toString();
 //    }
+
     discount != null
         ? dis =
             ('${(totalAmount() * (double.parse(discount.discount) / 100)).toStringAsFixed(2)}')
@@ -3457,6 +3491,13 @@ class _CheckoutState extends State<Checkout> {
       'Type': orderType,
       'GrandTotal': ((totalAmount() * 0.18) + totalAmount()).toStringAsFixed(2),
     });
+    print('+91${PhoneNumber.text}');
+    send(orderid);
+    await twilioFlutter.sendSMS(
+        toNumber: '+91${PhoneNumber.text}',
+        messageBody:
+            'Sent from a Twilio trial account. Your order $orderid is successfully placed and confirmed! Check your order details on the app.');
+
     // for (int i = 0; i < cartItems.length; i++) {
     //   await databaseReference
     //       .collection('Orders')
